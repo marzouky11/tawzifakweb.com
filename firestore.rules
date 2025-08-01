@@ -1,0 +1,39 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // User profile
+    match /users/{userId} {
+      allow read: if true;
+      allow create, update: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Job Ads
+    match /ads/{adId} {
+      allow read: if true;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
+      
+      allow update: if request.auth != null && (
+        // The owner can update the document, but cannot change the likes count directly.
+        (request.auth.uid == resource.data.userId &&
+         request.resource.data.likes == resource.data.likes
+        ) ||
+        // Or, any authenticated user can change ONLY the likes count by exactly 1.
+        (
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes']) &&
+          (request.resource.data.likes == resource.data.likes + 1 || request.resource.data.likes == resource.data.likes - 1)
+        )
+      );
+      
+      allow delete: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+
+    // Interests (Likes)
+    match /interests/{interestId} {
+      allow read: if true;
+      // The interestId is formatted as {userId}_{adId}
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
+      allow delete: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+  }
+}
