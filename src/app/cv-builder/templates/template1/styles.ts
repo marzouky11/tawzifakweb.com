@@ -113,5 +113,12 @@ const styles = `
     font-size: 0.9em;
     font-weight: 500;
   }
+  .grid-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
 `;
 export default styles;
+
+    

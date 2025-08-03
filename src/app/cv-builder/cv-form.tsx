@@ -10,7 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlusCircle, Trash2, Loader2, Download, Image as ImageIcon, RotateCw, Crop } from 'lucide-react';
+import { PlusCircle, Trash2, Loader2, Download, Image as ImageIcon, RotateCw, Crop, User, Briefcase, Mail, Phone, MapPin, GraduationCap, Award, Star, Info, MessageSquare, Instagram, Link as LinkIcon, Building2, Users2, ClipboardList, FileText, Globe } from 'lucide-react';
 import { templates } from './templates/templates';
 import Image from 'next/image';
 import { useAuth } from '@/context/auth-context';
@@ -52,6 +52,9 @@ const formSchema = z.object({
   })),
   skills: z.array(z.object({
     name: z.string().min(1, 'اسم المهارة مطلوب'),
+  })),
+  languages: z.array(z.object({
+    name: z.string().min(1, 'اسم اللغة مطلوب'),
   })),
 });
 
@@ -96,13 +99,15 @@ export function CVForm() {
       profilePicture: '',
       experiences: [{ title: '', company: '', date: '', description: '' }],
       educations: [{ degree: '', school: '', date: '' }],
-      skills: [{ name: '' }],
+      skills: [{ name: 'مهارة 1' }, { name: 'مهارة 2'}, { name: 'مهارة 3' }],
+      languages: [{ name: 'العربية' }],
     },
   });
 
   const { fields: expFields, append: appendExp, remove: removeExp } = useFieldArray({ control: form.control, name: "experiences" });
   const { fields: eduFields, append: appendEdu, remove: removeEdu } = useFieldArray({ control: form.control, name: "educations" });
   const { fields: skillFields, append: appendSkill, remove: removeSkill } = useFieldArray({ control: form.control, name: "skills" });
+  const { fields: langFields, append: appendLang, remove: removeLang } = useFieldArray({ control: form.control, name: "languages" });
   
   const profilePictureValue = form.watch('profilePicture');
 
@@ -149,7 +154,6 @@ export function CVForm() {
             throw new Error('Could not find the template element to print.');
         }
 
-        // Create a copy of data and convert image URL to data URI if it exists
         const dataForPdf = { ...data };
         if (dataForPdf.profilePicture) {
             try {
@@ -161,23 +165,19 @@ export function CVForm() {
                     title: 'خطأ في تحميل الصورة',
                     description: 'لم نتمكن من تحميل الصورة الشخصية، سيتم إنشاء السيرة الذاتية بدونها.'
                 });
-                dataForPdf.profilePicture = ''; // Clear the picture if it fails
+                dataForPdf.profilePicture = '';
             }
         }
         
-        // This is a bit of a hack. We need to render the component with the new data URI.
-        // We'll quickly set the state, render, and then revert.
-        // For this to work well, we can use a temporary state.
         const originalData = form.getValues();
-        form.reset(dataForPdf); // Temporarily update form with data URI
+        form.reset(dataForPdf);
         
-        // Allow time for the hidden component to re-render with the data URI
         await new Promise(resolve => setTimeout(resolve, 50));
 
 
         const dataUrl = await toPng(printRef.current, { cacheBust: true, pixelRatio: 2 });
         
-        form.reset(originalData); // Revert to original data with blob URL
+        form.reset(originalData);
 
         const pdf = new jsPDF('p', 'mm', 'a4');
         const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -207,9 +207,15 @@ export function CVForm() {
   
   const TemplateComponent = selectedTemplate.component;
 
+  const FormLabelIcon = ({icon: Icon, label}: {icon: React.ElementType, label: string}) => (
+    <FormLabel className="flex items-center gap-2">
+      <Icon className='h-4 w-4 text-primary' />
+      {label}
+    </FormLabel>
+  );
+
   return (
     <>
-      {/* Hidden container for rendering the template for PDF generation */}
       <div className="fixed -left-[9999px] top-0 opacity-0 pointer-events-none" aria-hidden="true">
           <div ref={printRef} style={{ width: '210mm', minHeight: '297mm', backgroundColor: 'white' }}>
               <style>{`
@@ -220,7 +226,6 @@ export function CVForm() {
           </div>
       </div>
       
-       {/* Image Cropper Dialog */}
       <Dialog open={!!imageSrc} onOpenChange={(isOpen) => !isOpen && setImageSrc(null)}>
         <DialogContent className="max-w-xl">
           <DialogHeader>
@@ -262,14 +267,14 @@ export function CVForm() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <Card>
-                <CardHeader><CardTitle>المعلومات الشخصية</CardTitle></CardHeader>
+                <CardHeader><CardTitle className="flex items-center gap-2"><User className="h-5 w-5"/> المعلومات الشخصية</CardTitle></CardHeader>
                 <CardContent className="space-y-4">
                   <FormField
                     control={form.control}
                     name="profilePicture"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>الصورة الشخصية (اختياري)</FormLabel>
+                        <FormLabelIcon icon={ImageIcon} label="الصورة الشخصية (اختياري)"/>
                         <FormControl>
                           <div className="flex items-center gap-4">
                             <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center overflow-hidden">
@@ -297,28 +302,28 @@ export function CVForm() {
                     )}
                   />
                   <div className="grid sm:grid-cols-2 gap-4">
-                    <FormField control={form.control} name="fullName" render={({ field }) => (<FormItem><FormLabel>الاسم الكامل</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
-                    <FormField control={form.control} name="jobTitle" render={({ field }) => (<FormItem><FormLabel>المسمى الوظيفي</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
-                    <FormField control={form.control} name="email" render={({ field }) => (<FormItem><FormLabel>البريد الإلكتروني</FormLabel><FormControl><Input type="email" {...field} /></FormControl><FormMessage /></FormItem>)} />
-                    <FormField control={form.control} name="phone" render={({ field }) => (<FormItem><FormLabel>رقم الهاتف</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="fullName" render={({ field }) => (<FormItem><FormLabelIcon icon={User} label="الاسم الكامل"/><FormControl><Input placeholder="مثال: محمد الأحمدي" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="jobTitle" render={({ field }) => (<FormItem><FormLabelIcon icon={Briefcase} label="المسمى الوظيفي"/><FormControl><Input placeholder="مثال: مطور ويب" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="email" render={({ field }) => (<FormItem><FormLabelIcon icon={Mail} label="البريد الإلكتروني"/><FormControl><Input type="email" placeholder="email@example.com" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="phone" render={({ field }) => (<FormItem><FormLabelIcon icon={Phone} label="رقم الهاتف"/><FormControl><Input placeholder="+xxxxxxxxxxx" {...field} /></FormControl><FormMessage /></FormItem>)} />
                   </div>
-                  <FormField control={form.control} name="address" render={({ field }) => (<FormItem><FormLabel>العنوان</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
-                  <FormField control={form.control} name="summary" render={({ field }) => (<FormItem><FormLabel>ملخص احترافي</FormLabel><FormControl><Textarea rows={4} {...field} /></FormControl><FormMessage /></FormItem>)} />
+                  <FormField control={form.control} name="address" render={({ field }) => (<FormItem><FormLabelIcon icon={MapPin} label="العنوان"/><FormControl><Input placeholder="المدينة، الدولة" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                  <FormField control={form.control} name="summary" render={({ field }) => (<FormItem><FormLabelIcon icon={Info} label="ملخص احترافي"/><FormControl><Textarea rows={4} placeholder="اكتب نبذة مختصرة عنك وعن خبراتك وأهدافك المهنية..." {...field} /></FormControl><FormMessage /></FormItem>)} />
                 </CardContent>
               </Card>
 
               <Card>
-                <CardHeader><CardTitle>الخبرة العملية</CardTitle></CardHeader>
+                <CardHeader><CardTitle className="flex items-center gap-2"><Briefcase className="h-5 w-5"/> الخبرة العملية</CardTitle></CardHeader>
                 <CardContent className="space-y-4">
                   {expFields.map((field, index) => (
                     <div key={field.id} className="p-4 border rounded-md space-y-4 relative">
                       <div className="grid sm:grid-cols-2 gap-4">
-                        <FormField control={form.control} name={`experiences.${index}.title`} render={({ field }) => (<FormItem><FormLabel>المسمى الوظيفي</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
-                        <FormField control={form.control} name={`experiences.${index}.company`} render={({ field }) => (<FormItem><FormLabel>الشركة</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name={`experiences.${index}.title`} render={({ field }) => (<FormItem><FormLabel>المسمى الوظيفي</FormLabel><FormControl><Input placeholder="مثال: مدير مشروع" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name={`experiences.${index}.company`} render={({ field }) => (<FormItem><FormLabel>الشركة</FormLabel><FormControl><Input placeholder="اسم الشركة" {...field} /></FormControl><FormMessage /></FormItem>)} />
                       </div>
                       <FormField control={form.control} name={`experiences.${index}.date`} render={({ field }) => (<FormItem><FormLabel>التاريخ</FormLabel><FormControl><Input placeholder="مثال: يناير 2020 - الحالي" {...field} /></FormControl><FormMessage /></FormItem>)} />
-                      <FormField control={form.control} name={`experiences.${index}.description`} render={({ field }) => (<FormItem><FormLabel>الوصف</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>)} />
-                      <Button type="button" variant="destructive" size="sm" onClick={() => removeExp(index)} className="absolute top-2 left-2"><Trash2 className="h-4 w-4" /></Button>
+                      <FormField control={form.control} name={`experiences.${index}.description`} render={({ field }) => (<FormItem><FormLabel>الوصف</FormLabel><FormControl><Textarea placeholder="صف مهامك وإنجازاتك الرئيسية في هذه الوظيفة..." {...field} /></FormControl><FormMessage /></FormItem>)} />
+                      <Button type="button" variant="ghost" size="icon" onClick={() => removeExp(index)} className="absolute top-1 left-1 text-destructive hover:bg-destructive/10"><Trash2 className="h-4 w-4" /></Button>
                     </div>
                   ))}
                   <Button type="button" variant="outline" onClick={() => appendExp({ title: '', company: '', date: '', description: '' })}><PlusCircle className="ml-2 h-4 w-4" /> إضافة خبرة</Button>
@@ -326,16 +331,16 @@ export function CVForm() {
               </Card>
 
               <Card>
-                <CardHeader><CardTitle>التعليم</CardTitle></CardHeader>
+                <CardHeader><CardTitle className="flex items-center gap-2"><GraduationCap className="h-5 w-5"/> التعليم</CardTitle></CardHeader>
                 <CardContent className="space-y-4">
                   {eduFields.map((field, index) => (
                     <div key={field.id} className="p-4 border rounded-md space-y-4 relative">
                        <div className="grid sm:grid-cols-2 gap-4">
-                        <FormField control={form.control} name={`educations.${index}.degree`} render={({ field }) => (<FormItem><FormLabel>الشهادة</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
-                        <FormField control={form.control} name={`educations.${index}.school`} render={({ field }) => (<FormItem><FormLabel>المؤسسة التعليمية</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name={`educations.${index}.degree`} render={({ field }) => (<FormItem><FormLabel>الشهادة</FormLabel><FormControl><Input placeholder="مثال: بكالوريوس في علوم الحاسب" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name={`educations.${index}.school`} render={({ field }) => (<FormItem><FormLabel>المؤسسة التعليمية</FormLabel><FormControl><Input placeholder="اسم الجامعة أو المعهد" {...field} /></FormControl><FormMessage /></FormItem>)} />
                       </div>
                       <FormField control={form.control} name={`educations.${index}.date`} render={({ field }) => (<FormItem><FormLabel>التاريخ</FormLabel><FormControl><Input placeholder="مثال: 2016 - 2020" {...field} /></FormControl><FormMessage /></FormItem>)} />
-                      <Button type="button" variant="destructive" size="sm" onClick={() => removeEdu(index)} className="absolute top-2 left-2"><Trash2 className="h-4 w-4" /></Button>
+                      <Button type="button" variant="ghost" size="icon" onClick={() => removeEdu(index)} className="absolute top-1 left-1 text-destructive hover:bg-destructive/10"><Trash2 className="h-4 w-4" /></Button>
                     </div>
                   ))}
                   <Button type="button" variant="outline" onClick={() => appendEdu({ degree: '', school: '', date: '' })}><PlusCircle className="ml-2 h-4 w-4" /> إضافة تعليم</Button>
@@ -343,17 +348,32 @@ export function CVForm() {
               </Card>
 
                <Card>
-                <CardHeader><CardTitle>المهارات</CardTitle></CardHeader>
+                <CardHeader><CardTitle className="flex items-center gap-2"><Star className="h-5 w-5"/> المهارات</CardTitle></CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {skillFields.map((field, index) => (
                       <div key={field.id} className="relative">
-                        <FormField control={form.control} name={`skills.${index}.name`} render={({ field }) => (<FormItem><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name={`skills.${index}.name`} render={({ field }) => (<FormItem><FormControl><Input placeholder="مثال: Photoshop" {...field} /></FormControl><FormMessage /></FormItem>)} />
                         <Button type="button" variant="ghost" size="icon" className="absolute -top-3 -left-3 h-6 w-6 text-destructive" onClick={() => removeSkill(index)}><Trash2 className="h-4 w-4" /></Button>
                       </div>
                     ))}
                   </div>
                   <Button type="button" variant="outline" onClick={() => appendSkill({ name: '' })}><PlusCircle className="ml-2 h-4 w-4" /> إضافة مهارة</Button>
+                </CardContent>
+              </Card>
+              
+               <Card>
+                <CardHeader><CardTitle className="flex items-center gap-2"><Globe className="h-5 w-5"/> اللغات</CardTitle></CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {langFields.map((field, index) => (
+                      <div key={field.id} className="relative">
+                        <FormField control={form.control} name={`languages.${index}.name`} render={({ field }) => (<FormItem><FormControl><Input placeholder="مثال: الإنجليزية" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <Button type="button" variant="ghost" size="icon" className="absolute -top-3 -left-3 h-6 w-6 text-destructive" onClick={() => removeLang(index)}><Trash2 className="h-4 w-4" /></Button>
+                      </div>
+                    ))}
+                  </div>
+                  <Button type="button" variant="outline" onClick={() => appendLang({ name: '' })}><PlusCircle className="ml-2 h-4 w-4" /> إضافة لغة</Button>
                 </CardContent>
               </Card>
 
@@ -371,16 +391,21 @@ export function CVForm() {
             {templates.map((template) => (
               <div
                 key={template.id}
-                className={`border-4 rounded-lg cursor-pointer transition-all ${selectedTemplate.id === template.id ? 'border-primary' : 'border-transparent'}`}
+                className={`border-4 rounded-lg cursor-pointer transition-all ${selectedTemplate.id === template.id ? 'border-primary' : 'border-transparent hover:border-primary/50'}`}
                 onClick={() => setSelectedTemplate(template)}
               >
-                <Image
-                  src={template.thumbnail}
-                  alt={template.name}
-                  width={200}
-                  height={282}
-                  className="rounded-md w-full h-auto"
-                />
+                <div className="relative">
+                    <Image
+                    src={template.thumbnail}
+                    alt={template.name}
+                    width={200}
+                    height={282}
+                    className="rounded-md w-full h-auto"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-center text-xs py-1 rounded-b-md">
+                        {template.name}
+                    </div>
+                </div>
               </div>
             ))}
           </div>
@@ -389,5 +414,7 @@ export function CVForm() {
     </>
   );
 }
+
+    
 
     

@@ -1,3 +1,4 @@
+
 import type { Timestamp } from 'firebase/firestore';
 
 export interface Category {
@@ -71,3 +72,28 @@ export interface Country {
   name: string;
   cities: string[];
 }
+
+export interface CVData {
+    fullName: string;
+    jobTitle: string;
+    email: string;
+    phone: string;
+    address: string;
+    summary: string;
+    profilePicture?: string;
+    experiences: {
+        title: string;
+        company: string;
+        date: string;
+        description: string;
+    }[];
+    educations: {
+        degree: string;
+        school: string;
+        date: string;
+    }[];
+    skills: { name: string }[];
+    languages: { name: string }[];
+}
+
+    

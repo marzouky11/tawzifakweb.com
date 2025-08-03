@@ -103,5 +103,12 @@ const styles = `
     border-radius: 4px;
     font-size: 0.9em;
   }
+  .grid-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
 `;
 export default styles;
+
+    

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import type { CVData } from '../../cv-form';
-import { Mail, Phone, MapPin, User, Briefcase, GraduationCap, Star } from 'lucide-react';
+import { Mail, Phone, MapPin, User, Briefcase, GraduationCap, Star, Globe } from 'lucide-react';
 
 
 interface Props {
@@ -38,8 +38,16 @@ const Template6: React.FC<Props> = ({ data }) => {
           <section className="skills">
             <h3><Star size={18}/> المهارات</h3>
             <ul>
-              {data.skills.map((skill, index) => (
+              {data.skills?.map((skill, index) => (
                 <li key={index}>{skill.name}</li>
+              ))}
+            </ul>
+          </section>
+           <section className="skills">
+            <h3><Globe size={18}/> اللغات</h3>
+            <ul>
+              {data.languages?.map((lang, index) => (
+                <li key={index}>{lang.name}</li>
               ))}
             </ul>
           </section>
@@ -66,3 +74,5 @@ const Template6: React.FC<Props> = ({ data }) => {
 };
 
 export default Template6;
+
+    

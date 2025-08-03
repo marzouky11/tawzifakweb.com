@@ -1,7 +1,7 @@
 
 import React from 'react';
 import type { CVData } from '../../cv-form';
-import { Mail, Phone, MapPin, User, Briefcase, GraduationCap, Star } from 'lucide-react';
+import { Mail, Phone, MapPin, User, Briefcase, GraduationCap, Star, Globe } from 'lucide-react';
 
 interface Props {
   data: CVData;
@@ -64,20 +64,36 @@ const Template3: React.FC<Props> = ({ data }) => {
           </div>
         </section>
 
-        <section>
-          <div className="section-title">
-            <Star size={18} />
-            <span>المهارات</span>
-          </div>
-          <div className="section-content skills">
-            {data.skills.map((skill, index) => (
-              <span key={index} className="skill-tag">{skill.name}</span>
-            ))}
-          </div>
-        </section>
+        <div className="grid-section">
+            <section>
+                <div className="section-title">
+                    <Star size={18} />
+                    <span>المهارات</span>
+                </div>
+                <div className="section-content skills">
+                    {data.skills?.map((skill, index) => (
+                    <span key={index} className="skill-tag">{skill.name}</span>
+                    ))}
+                </div>
+            </section>
+            <section>
+                <div className="section-title">
+                    <Globe size={18} />
+                    <span>اللغات</span>
+                </div>
+                <div className="section-content skills">
+                    {data.languages?.map((lang, index) => (
+                    <span key={index} className="skill-tag">{lang.name}</span>
+                    ))}
+                </div>
+            </section>
+        </div>
+
       </div>
     </div>
   );
 };
 
 export default Template3;
+
+    
