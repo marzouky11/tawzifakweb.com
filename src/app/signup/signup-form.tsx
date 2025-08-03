@@ -2,7 +2,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
@@ -18,6 +18,7 @@ import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 
 export function SignupForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { toast } = useToast();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -75,7 +76,8 @@ export function SignupForm() {
       });
 
       toast({ title: 'تم إنشاء الحساب بنجاح!' });
-      router.push('/');
+      const redirectUrl = searchParams.get('redirect');
+      router.push(redirectUrl || '/');
     } catch (error: any) {
       let errorMessage = "حدث خطأ غير متوقع.";
        if (error.code === 'auth/email-already-in-use') {
@@ -210,7 +212,7 @@ export function SignupForm() {
             </form>
             <p className="text-center text-sm text-muted-foreground mt-4">
               لديك حساب بالفعل؟{' '}
-              <Link href="/login" className="text-primary hover:underline font-semibold">
+              <Link href={`/login?${searchParams.toString()}`} className="text-primary hover:underline font-semibold">
                 سجل الدخول
               </Link>
             </p>

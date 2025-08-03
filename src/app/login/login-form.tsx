@@ -2,7 +2,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,6 +16,7 @@ import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { toast } = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,7 +31,8 @@ export function LoginForm() {
         title: `👋 مرحبًا ${userCredential.user.displayName || 'بعودتك'}!`,
         description: 'سعيدون بعودتك إلى توظيفك! تصفح فرص العمل أو أنشر إعلانك الآن.',
       });
-      router.push('/');
+      const redirectUrl = searchParams.get('redirect');
+      router.push(redirectUrl || '/');
     } catch (error: any) {
        let errorMessage = "الرجاء التحقق من البريد الإلكتروني أو كلمة المرور.";
        if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
@@ -100,7 +102,7 @@ export function LoginForm() {
             </form>
             <p className="text-center text-sm text-muted-foreground mt-4">
               ليس لديك حساب؟{' '}
-              <Link href="/signup" className="text-primary hover:underline font-semibold">
+              <Link href={`/signup?${searchParams.toString()}`} className="text-primary hover:underline font-semibold">
                 أنشئ حسابًا جديدًا
               </Link>
             </p>
