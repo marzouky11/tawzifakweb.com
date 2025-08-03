@@ -24,7 +24,7 @@ export async function POST(request: Request) {
         source: htmlContent,
         landscape: false,
         use_print: true,
-        sandbox: true,
+        sandbox: false,
       })
     });
     
