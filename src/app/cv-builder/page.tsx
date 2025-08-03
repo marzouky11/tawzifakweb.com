@@ -1,4 +1,3 @@
-
 'use client';
 import { AppLayout } from '@/components/layout/app-layout';
 import { CVForm } from './cv-form';

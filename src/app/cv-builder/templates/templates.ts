@@ -29,6 +29,7 @@ export interface CVTemplate {
   thumbnail: string;
   styles: string;
   icon: LucideIcon;
+  color: string;
 }
 
 export const templates: CVTemplate[] = [
@@ -39,6 +40,7 @@ export const templates: CVTemplate[] = [
     thumbnail: 'https://i.ibb.co/3sHwM3r/template1.png',
     styles: styles1,
     icon: Palette,
+    color: '#0056b3'
   },
   {
     id: 'template2',
@@ -47,6 +49,7 @@ export const templates: CVTemplate[] = [
     thumbnail: 'https://i.ibb.co/6P0p2my/template2.png',
     styles: styles2,
     icon: Feather,
+    color: '#1abc9c'
   },
    {
     id: 'template3',
@@ -54,7 +57,8 @@ export const templates: CVTemplate[] = [
     component: Template3,
     thumbnail: 'https://i.ibb.co/Q8Q49p4/template3.png',
     styles: styles3,
-    icon: Award
+    icon: Award,
+    color: '#C0392B'
   },
   {
     id: 'template4',
@@ -62,7 +66,8 @@ export const templates: CVTemplate[] = [
     component: Template4,
     thumbnail: 'https://i.ibb.co/CBrz3fT/template4.png',
     styles: styles4,
-    icon: FileText
+    icon: FileText,
+    color: '#007bff'
   },
     {
     id: 'template5',
@@ -71,6 +76,7 @@ export const templates: CVTemplate[] = [
     thumbnail: 'https://i.ibb.co/68gPZYC/template5.png',
     styles: styles5,
     icon: Briefcase,
+    color: '#333333'
   },
    {
     id: 'template6',
@@ -78,7 +84,8 @@ export const templates: CVTemplate[] = [
     component: Template6,
     thumbnail: 'https://i.ibb.co/pLgX9n9/template6.png',
     styles: styles6,
-    icon: Sparkles
+    icon: Sparkles,
+    color: '#3498DB'
   },
   {
     id: 'template7',
@@ -86,7 +93,8 @@ export const templates: CVTemplate[] = [
     component: Template7,
     thumbnail: 'https://i.ibb.co/tZ5G7qd/template7.png',
     styles: styles7,
-    icon: Gem
+    icon: Gem,
+    color: '#10b981'
   },
   {
     id: 'template8',
@@ -94,7 +102,8 @@ export const templates: CVTemplate[] = [
     component: Template8,
     thumbnail: 'https://i.ibb.co/Kz2gVq5/template8.png',
     styles: styles8,
-    icon: Star
+    icon: Star,
+    color: '#a0aec0'
   },
   {
     id: 'template9',
@@ -102,7 +111,8 @@ export const templates: CVTemplate[] = [
     component: Template9,
     thumbnail: 'https://i.ibb.co/L5Qyv2k/template9.png',
     styles: styles9,
-    icon: Newspaper
+    icon: Newspaper,
+    color: '#f1c40f'
   },
   {
     id: 'template10',
@@ -110,6 +120,7 @@ export const templates: CVTemplate[] = [
     component: Template10,
     thumbnail: 'https://i.ibb.co/rfn3Y2r/template10.png',
     styles: styles10,
-    icon: FolderArchive
+    icon: FolderArchive,
+    color: '#333333'
   },
 ];

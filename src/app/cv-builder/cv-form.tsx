@@ -397,9 +397,14 @@ export function CVForm() {
                 className={`border-4 rounded-lg cursor-pointer transition-all ${selectedTemplate.id === template.id ? 'border-primary' : 'border-transparent hover:border-primary/50'}`}
                 onClick={() => setSelectedTemplate(template)}
               >
-                <Card className="flex flex-col items-center justify-center p-4 h-full aspect-[1/1.41]">
-                  <template.icon className="w-8 h-8 text-primary mb-2" />
-                  <p className="font-semibold text-center text-sm">{template.name}</p>
+                <Card
+                  className="flex flex-col items-center justify-center p-2 h-full aspect-[1/1.41]"
+                  style={{ backgroundColor: `${template.color}1A` }} // ~10% opacity
+                >
+                  <FileText className="w-7 h-7 mb-2" style={{ color: template.color }} />
+                  <p className="font-semibold text-center text-xs" style={{ color: template.color }}>
+                    {template.name}
+                  </p>
                 </Card>
               </div>
             ))}
@@ -413,3 +418,4 @@ export function CVForm() {
     
 
     
+
