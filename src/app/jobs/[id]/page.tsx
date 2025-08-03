@@ -13,6 +13,7 @@
 
 
 
+
 import { notFound, redirect } from 'next/navigation';
 import { getJobById, getCategoryById, getJobs } from '@/lib/data';
 import { AppLayout } from '@/components/layout/app-layout';
@@ -164,6 +165,19 @@ const InfoItem = ({ icon: Icon, label, value }: { icon: React.ElementType; label
     );
 };
 
+const DetailSection = ({ icon: Icon, title, children, color }: { icon: React.ElementType, title: string, children: React.ReactNode, color: string }) => (
+    <div>
+        <h3 className="text-xl font-bold flex items-center gap-2 mb-3" style={{ color: color }}>
+            <Icon className="h-5 w-5" />
+            {title}
+        </h3>
+        <div className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
+            {children}
+        </div>
+    </div>
+);
+
+
 export default async function JobDetailPage({ params }: JobDetailPageProps) {
     const job = await getJobById(params.id);
 
@@ -210,7 +224,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                     <div className="p-2 sm:p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${finalColor}1A` }}>
                                         <CategoryIcon name={finalIconName} className="w-6 h-6 sm:w-8 sm:h-8" style={{ color: finalColor }} />
                                     </div>
-                                    <h1 className="text-2xl sm:text-3xl font-bold" style={{ color: finalColor }}>
+                                    <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                                         {job.title || 'عنوان غير متوفر'}
                                     </h1>
                                 </div>
@@ -232,25 +246,34 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                             <InfoItem icon={LayoutGrid} label="الفئة" value={categoryName} />
                             {translatedWorkType && <InfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} />}
                             <InfoItem icon={Wallet} label="الأجر" value={job.salary ? job.salary : 'عند الطلب'} />
-                            <InfoItem icon={Award} label="الخبرة" value={job.experience || 'غير محدد'} />
-                            {job.qualifications && <InfoItem icon={GraduationCap} label="المؤهلات" value={job.qualifications} />}
                             {job.companyName && <InfoItem icon={Building2} label="الشركة" value={job.companyName} />}
                             {job.openPositions && <InfoItem icon={Users2} label="شواغر" value={job.openPositions} />}
-                            {job.conditions && <InfoItem icon={ClipboardList} label="الشروط" value={job.conditions} />}
                         </div>
                         
                         <Separator />
 
                         {job.description && (
-                            <div>
-                                <h3 className="text-xl font-bold flex items-center gap-2 mb-3" style={{ color: finalColor }}>
-                                    <Briefcase className="h-5 w-5" />
-                                    وصف الوظيفة
-                                </h3>
-                                <p className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
-                                    {job.description}
-                                </p>
-                            </div>
+                           <DetailSection icon={Briefcase} title="وصف الوظيفة" color={finalColor}>
+                                <p>{job.description}</p>
+                           </DetailSection>
+                        )}
+                        
+                        {job.experience && (
+                           <DetailSection icon={Award} title="الخبرة المطلوبة" color={finalColor}>
+                                <p>{job.experience}</p>
+                           </DetailSection>
+                        )}
+                        
+                        {job.qualifications && (
+                           <DetailSection icon={GraduationCap} title="المؤهلات" color={finalColor}>
+                                <p>{job.qualifications}</p>
+                           </DetailSection>
+                        )}
+
+                        {job.conditions && (
+                           <DetailSection icon={ClipboardList} title="الشروط" color={finalColor}>
+                                <p>{job.conditions}</p>
+                           </DetailSection>
                         )}
 
                     </CardContent>

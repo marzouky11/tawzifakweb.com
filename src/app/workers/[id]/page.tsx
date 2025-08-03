@@ -1,4 +1,5 @@
 
+
 import { notFound } from 'next/navigation';
 import { getJobById, getCategoryById, getJobs } from '@/lib/data';
 import { AppLayout } from '@/components/layout/app-layout';
@@ -144,6 +145,18 @@ const SeekerInfoItem = ({ icon: Icon, label, value }: { icon: React.ElementType;
     );
 };
 
+const DetailSection = ({ icon: Icon, title, children, color }: { icon: React.ElementType, title: string, children: React.ReactNode, color: string }) => (
+    <div>
+        <h3 className="text-xl font-bold flex items-center gap-2 mb-3" style={{ color: color }}>
+            <Icon className="h-5 w-5" />
+            {title}
+        </h3>
+        <div className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
+            {children}
+        </div>
+    </div>
+);
+
 
 export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
     const job = await getJobById(params.id);
@@ -187,7 +200,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                                     <CategoryIcon name={finalIconName} className="w-6 h-6 sm:w-8 sm:h-8" style={{ color: finalColor }} />
                                 </div>
                                 <div className="flex-grow">
-                                    <h1 className="text-2xl sm:text-3xl font-bold" style={{ color: finalColor }}>
+                                    <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                                         {job.title || 'عنوان غير متوفر'}
                                     </h1>
                                 </div>
@@ -206,25 +219,30 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                     </CardHeader>
                     <CardContent className="p-4 sm:p-6 space-y-6">
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                            <SeekerInfoItem icon={LayoutGrid} label="الفئة" value={categoryName} />
                             {job.workType && <SeekerInfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} />}
-                            {job.experience && <SeekerInfoItem icon={Award} label="الخبرة" value={job.experience} />}
-                            {job.qualifications && <SeekerInfoItem icon={GraduationCap} label="المؤهلات" value={job.qualifications} />}
                         </div>
 
-                         {job.description && (
-                            <>
-                                <Separator/>
-                                <div>
-                                    <h3 className="text-xl font-bold flex items-center gap-2 mb-3" style={{ color: finalColor }}>
-                                        <Briefcase className="h-5 w-5" />
-                                        وصف المهارات والخبرة
-                                    </h3>
-                                    <p className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
-                                        {job.description}
-                                    </p>
-                                </div>
-                            </>
-                         )}
+                        <Separator/>
+                        
+                        {job.description && (
+                           <DetailSection icon={Briefcase} title="وصف المهارات والخبرة" color={finalColor}>
+                                <p>{job.description}</p>
+                           </DetailSection>
+                        )}
+                        
+                        {job.experience && (
+                           <DetailSection icon={Award} title="الخبرة" color={finalColor}>
+                                <p>{job.experience}</p>
+                           </DetailSection>
+                        )}
+                        
+                        {job.qualifications && (
+                           <DetailSection icon={GraduationCap} title="المؤهلات" color={finalColor}>
+                                <p>{job.qualifications}</p>
+                           </DetailSection>
+                        )}
+
                     </CardContent>
                 </Card>
 
