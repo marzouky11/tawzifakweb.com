@@ -57,6 +57,18 @@ const formSchema = z.object({
 
 export type CVData = z.infer<typeof formSchema>;
 
+// Function to convert a URL to a data URI
+async function toDataURL(url: string) {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+    });
+}
+
 export function CVForm() {
   const { user } = useAuth();
   const router = useRouter();
@@ -137,8 +149,36 @@ export function CVForm() {
             throw new Error('Could not find the template element to print.');
         }
 
+        // Create a copy of data and convert image URL to data URI if it exists
+        const dataForPdf = { ...data };
+        if (dataForPdf.profilePicture) {
+            try {
+                dataForPdf.profilePicture = await toDataURL(dataForPdf.profilePicture);
+            } catch (error) {
+                console.error("Failed to convert image to data URL", error);
+                toast({
+                    variant: 'destructive',
+                    title: 'خطأ في تحميل الصورة',
+                    description: 'لم نتمكن من تحميل الصورة الشخصية، سيتم إنشاء السيرة الذاتية بدونها.'
+                });
+                dataForPdf.profilePicture = ''; // Clear the picture if it fails
+            }
+        }
+        
+        // This is a bit of a hack. We need to render the component with the new data URI.
+        // We'll quickly set the state, render, and then revert.
+        // For this to work well, we can use a temporary state.
+        const originalData = form.getValues();
+        form.reset(dataForPdf); // Temporarily update form with data URI
+        
+        // Allow time for the hidden component to re-render with the data URI
+        await new Promise(resolve => setTimeout(resolve, 50));
+
+
         const dataUrl = await toPng(printRef.current, { cacheBust: true, pixelRatio: 2 });
         
+        form.reset(originalData); // Revert to original data with blob URL
+
         const pdf = new jsPDF('p', 'mm', 'a4');
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = pdf.internal.pageSize.getHeight();
@@ -349,3 +389,5 @@ export function CVForm() {
     </>
   );
 }
+
+    
