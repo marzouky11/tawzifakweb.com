@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -24,7 +23,6 @@ import { cn } from '@/lib/utils';
 
 interface JobFiltersProps {
   categories: Category[];
-  showSort?: boolean;
   className?: string;
   showPostTypeSelect?: boolean;
 }
@@ -36,12 +34,7 @@ const workTypeTranslations: { [key in WorkType]: string } = {
   remote: 'عن بعد',
 };
 
-const sortTypeTranslations: { [key in SortByType]: string } = {
-  newest: 'الأحدث',
-  oldest: 'الأقدم',
-};
-
-export function JobFilters({ categories, showSort = false, className, showPostTypeSelect = false }: JobFiltersProps) {
+export function JobFilters({ categories, className, showPostTypeSelect = false }: JobFiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -52,7 +45,6 @@ export function JobFilters({ categories, showSort = false, className, showPostTy
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedWorkType, setSelectedWorkType] = useState('all');
-  const [sortBy, setSortBy] = useState<SortByType>('newest');
   
   // This state will hold the target path for the search, e.g., '/jobs' or '/workers'
   const [postTypePath, setPostTypePath] = useState('/jobs');
@@ -65,7 +57,6 @@ export function JobFilters({ categories, showSort = false, className, showPostTy
     setSelectedCountry(searchParams.get('country') || '');
     setSelectedCity(searchParams.get('city') || '');
     setSelectedWorkType(searchParams.get('workType') || 'all');
-    setSortBy(searchParams.get('sortBy') as SortByType || 'newest');
     
     // Set the initial postTypePath based on the current page, not for search logic
     if (pathname.startsWith('/workers')) {
@@ -83,9 +74,6 @@ export function JobFilters({ categories, showSort = false, className, showPostTy
     if (selectedCountry) params.set('country', selectedCountry);
     if (selectedCity) params.set('city', selectedCity);
     if (selectedWorkType && selectedWorkType !== 'all') params.set('workType', selectedWorkType);
-    if (showSort && sortBy) {
-        params.set('sortBy', sortBy);
-    }
     
     // Use the state `postTypePath` which is controlled by the radio buttons
     const targetPath = showPostTypeSelect ? postTypePath : pathname;
@@ -188,19 +176,6 @@ export function JobFilters({ categories, showSort = false, className, showPostTy
                     </SelectContent>
                   </Select>
                </div>
-              {showSort && (
-                <div>
-                  <Label className="mb-2 block">ترتيب حسب</Label>
-                  <RadioGroup value={sortBy} onValueChange={(v) => setSortBy(v as SortByType)} dir="rtl" className="flex gap-4">
-                    {Object.entries(sortTypeTranslations).map(([value, label]) => (
-                        <div key={value} className="flex items-center space-x-2 space-x-reverse">
-                            <RadioGroupItem value={value} id={`sort_${value}`} />
-                            <Label htmlFor={`sort_${value}`} className="font-normal cursor-pointer">{label}</Label>
-                        </div>
-                    ))}
-                  </RadioGroup>
-                </div>
-              )}
             </div>
           </div>
           <SheetFooter className="mt-4 pt-4 border-t">

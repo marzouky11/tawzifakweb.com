@@ -185,14 +185,14 @@ export default async function HomePage() {
       
       <div className="md:hidden container mt-4">
         <Suspense fallback={<JobFiltersSkeleton />}>
-          <JobFilters categories={categories} showPostTypeSelect={true} showSort={true} />
+          <JobFilters categories={categories} showPostTypeSelect={true} />
         </Suspense>
       </div>
       
       <div className="container hidden md:block pt-6">
         <Card className="p-2 rounded-2xl shadow-lg">
           <Suspense fallback={<JobFiltersSkeleton />}>
-            <JobFilters categories={categories} showPostTypeSelect={true} showSort={true} />
+            <JobFilters categories={categories} showPostTypeSelect={true} />
           </Suspense>
         </Card>
       </div>

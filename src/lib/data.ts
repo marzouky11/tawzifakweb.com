@@ -1,6 +1,6 @@
 import { db } from '@/lib/firebase';
 import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, QueryConstraint, and, or, QueryFilterConstraint } from 'firebase/firestore';
-import type { Job, Category, PostType, User, WorkType, Testimonial, SortByType } from './types';
+import type { Job, Category, PostType, User, WorkType, Testimonial } from './types';
 import Fuse from 'fuse.js';
 
 const categories: Category[] = [
@@ -121,7 +121,6 @@ export async function getJobs(
     city?: string;
     categoryId?: string;
     workType?: WorkType;
-    sortBy?: SortByType;
     excludeId?: string;
   } = {}
 ): Promise<Job[]> {
@@ -134,7 +133,6 @@ export async function getJobs(
       city,
       categoryId,
       workType,
-      sortBy = 'newest',
       excludeId,
     } = options;
 
@@ -160,12 +158,9 @@ export async function getJobs(
         queryConstraints.push(where('city', '==', city));
     }
     
-    // Sorting constraint
-    if (sortBy === 'oldest') {
-        queryConstraints.push(orderBy('createdAt', 'asc'));
-    } else {
-        queryConstraints.push(orderBy('createdAt', 'desc'));
-    }
+    // Sorting constraint (always newest)
+    queryConstraints.push(orderBy('createdAt', 'desc'));
+    
     
     // Limit constraint for non-fuzzy searches
     if (count && !searchQuery && !country && !city) {

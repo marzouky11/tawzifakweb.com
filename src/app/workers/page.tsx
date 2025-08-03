@@ -4,7 +4,7 @@ import { AppLayout } from '@/components/layout/app-layout';
 import { JobCard } from '@/components/job-card';
 import { getJobs, getCategories } from '@/lib/data';
 import { JobFilters } from '@/components/job-filters';
-import type { SortByType, WorkType } from '@/lib/types';
+import type { WorkType } from '@/lib/types';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card } from '@/components/ui/card';
@@ -40,7 +40,6 @@ async function WorkerList({ searchParams }: { searchParams?: { [key: string]: st
       city: typeof searchParams?.city === 'string' ? searchParams.city : undefined,
       categoryId: typeof searchParams?.category === 'string' ? searchParams.category : undefined,
       workType: typeof searchParams?.workType === 'string' ? searchParams.workType as WorkType : undefined,
-      sortBy: typeof searchParams?.sortBy === 'string' ? searchParams.sortBy as SortByType : 'newest',
   });
 
   if (jobs.length > 0) {
@@ -73,7 +72,7 @@ export default async function WorkersPage({
       <div className="container py-6">
         <div className="mb-6">
            <Suspense fallback={<JobFiltersSkeleton />}>
-            <JobFilters categories={categories} showSort={true} />
+            <JobFilters categories={categories} />
           </Suspense>
         </div>
         
