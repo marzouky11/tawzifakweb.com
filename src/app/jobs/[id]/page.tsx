@@ -206,6 +206,18 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
     const finalColor = category?.color || 'hsl(var(--primary))';
     const finalIconName = category?.iconName || 'Briefcase';
     
+    const jobTitle = job.title || 'هذا الإعلان';
+    const whatsappMessage = `مرحبًا، اطلعت على إعلانكم لوظيفة '${jobTitle}' على منصة توظيفك وأنا مهتم بالتقديم. هل يمكن تزويدي بمزيد من التفاصيل؟ شكرًا.`;
+    const emailSubject = `استفسار بخصوص وظيفة: ${jobTitle}`;
+    const emailBody = `مرحبًا،
+
+اطلعت على إعلانكم لوظيفة '${jobTitle}' على منصة توظيفك وأنا مهتم بالتقديم.
+
+أرجو منكم تزويدي بالمزيد من التفاصيل حول كيفية التقديم أو المتطلبات الإضافية.
+
+شكرًا لكم.`;
+
+    
     // Default Layout for Job Offers
     return (
         <AppLayout>
@@ -304,14 +316,14 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                 )}
                                 {job.whatsapp && (
                                     <Button asChild className="bg-green-600 hover:bg-green-700 text-primary-foreground">
-                                        <a href={`https://wa.me/${job.whatsapp.replace(/\+/g, '')}`} target="_blank" rel="noopener noreferrer">
+                                        <a href={`https://wa.me/${job.whatsapp.replace(/\+/g, '')}?text=${encodeURIComponent(whatsappMessage)}`} target="_blank" rel="noopener noreferrer">
                                             <MessageSquare className="ml-2 h-4 w-4" />واتساب
                                         </a>
                                     </Button>
                                 )}
                                 {job.email && (
                                     <Button asChild className="bg-gray-600 hover:bg-gray-700 text-primary-foreground">
-                                        <a href={`mailto:${job.email}`}><Mail className="ml-2 h-4 w-4" />البريد الإلكتروني</a>
+                                        <a href={`mailto:${job.email}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`}><Mail className="ml-2 h-4 w-4" />البريد الإلكتروني</a>
                                     </Button>
                                 )}
                                 {job.instagram && (
