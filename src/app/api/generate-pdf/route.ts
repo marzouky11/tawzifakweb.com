@@ -18,7 +18,6 @@ export async function POST(request: Request) {
     const response = await fetch('https://api.pdfshift.io/v3/convert/pdf', {
       method: 'POST',
       headers: {
-        // Corrected Authorization header as per pdfshift v3 docs
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json'
       },
@@ -26,7 +25,7 @@ export async function POST(request: Request) {
         source: htmlContent,
         landscape: false,
         use_print: true,
-        sandbox: false, // Use false for production with a real API key
+        sandbox: false,
       })
     });
     
