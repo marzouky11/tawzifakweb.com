@@ -19,7 +19,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Search, SlidersHorizontal } from 'lucide-react';
-import type { Category, WorkType } from '@/lib/types';
+import type { Category, WorkType, SortByType } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
 interface JobFiltersProps {
@@ -36,6 +36,11 @@ const workTypeTranslations: { [key in WorkType]: string } = {
   remote: 'عن بعد',
 };
 
+const sortTypeTranslations: { [key in SortByType]: string } = {
+  newest: 'الأحدث',
+  oldest: 'الأقدم',
+};
+
 export function JobFilters({ categories, showSort = false, className, showPostTypeSelect = false }: JobFiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -47,7 +52,7 @@ export function JobFilters({ categories, showSort = false, className, showPostTy
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedWorkType, setSelectedWorkType] = useState('all');
-  const [sortBy, setSortBy] = useState('newest');
+  const [sortBy, setSortBy] = useState<SortByType>('newest');
   
   // This state will hold the target path for the search, e.g., '/jobs' or '/workers'
   const [postTypePath, setPostTypePath] = useState('/jobs');
@@ -60,7 +65,7 @@ export function JobFilters({ categories, showSort = false, className, showPostTy
     setSelectedCountry(searchParams.get('country') || '');
     setSelectedCity(searchParams.get('city') || '');
     setSelectedWorkType(searchParams.get('workType') || 'all');
-    setSortBy(searchParams.get('sortBy') || 'newest');
+    setSortBy(searchParams.get('sortBy') as SortByType || 'newest');
     
     // Set the initial postTypePath based on the current page, not for search logic
     if (pathname.startsWith('/workers')) {
@@ -186,11 +191,13 @@ export function JobFilters({ categories, showSort = false, className, showPostTy
               {showSort && (
                 <div>
                   <Label className="mb-2 block">ترتيب حسب</Label>
-                  <RadioGroup value={sortBy} onValueChange={setSortBy} dir="rtl" className="flex gap-4">
-                    <div className="flex items-center space-x-2 space-x-reverse">
-                      <RadioGroupItem value="newest" id="r1" />
-                      <Label htmlFor="r1">الأحدث</Label>
-                    </div>
+                  <RadioGroup value={sortBy} onValueChange={(v) => setSortBy(v as SortByType)} dir="rtl" className="flex gap-4">
+                    {Object.entries(sortTypeTranslations).map(([value, label]) => (
+                        <div key={value} className="flex items-center space-x-2 space-x-reverse">
+                            <RadioGroupItem value={value} id={`sort_${value}`} />
+                            <Label htmlFor={`sort_${value}`} className="font-normal cursor-pointer">{label}</Label>
+                        </div>
+                    ))}
                   </RadioGroup>
                 </div>
               )}

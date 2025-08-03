@@ -10,6 +10,7 @@ export interface Category {
 
 export type WorkType = 'full_time' | 'part_time' | 'freelance' | 'remote';
 export type PostType = 'seeking_worker' | 'seeking_job';
+export type SortByType = 'newest' | 'oldest';
 
 export interface Job {
   id: string;
