@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { getJobs, getTestimonials } from '@/lib/data';
 import React, { Suspense } from 'react';
-import { Handshake, Newspaper, Briefcase, Users, ArrowLeft } from 'lucide-react';
+import { Handshake, Newspaper, Briefcase, Users, ArrowLeft, FileText } from 'lucide-react';
 import { JobFilters } from '@/components/job-filters';
 import { ThemeToggleButton } from '@/components/theme-toggle';
 import { HomeCarousel } from './home-carousel';
@@ -15,6 +15,7 @@ import { HomeExtraSections } from './home-extra-sections';
 import { Separator } from '@/components/ui/separator';
 import { getCategories } from '@/lib/data';
 import { Footer } from '@/components/layout/footer';
+import Image from 'next/image';
 
 export const revalidate = 60; // Revalidate every 60 seconds
 
@@ -149,6 +150,44 @@ function SectionHeader({ icon: Icon, title, description, href }: SectionHeaderPr
   );
 }
 
+function CVBuilderSection() {
+  return (
+    <section>
+      <Card className="bg-muted/30 overflow-hidden">
+        <div className="grid md:grid-cols-2 items-center">
+          <div className="p-8 md:p-12 order-2 md:order-1">
+            <div className="max-w-md">
+              <div className="p-3 bg-primary/10 rounded-full w-fit mb-4">
+                <FileText className="h-8 w-8 text-primary" />
+              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground">أنشئ سيرتك الذاتية الآن</h2>
+              <p className="text-muted-foreground mt-2 mb-6">
+                استخدم أداة إنشاء السيرة الذاتية المجانية لدينا للحصول على سيرة ذاتية احترافية في دقائق. اختر من بين عدة قوالب مصممة لجذب انتباه أصحاب العمل.
+              </p>
+              <Button asChild size="lg">
+                <Link href="/cv-builder">
+                  ابدأ الآن مجانًا
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+          <div className="order-1 md:order-2 h-64 md:h-full">
+             <Image 
+                src="https://i.postimg.cc/yN7V7rkS/78.jpg" 
+                alt="CV Builder" 
+                width={600} 
+                height={400}
+                className="w-full h-full object-cover"
+                data-ai-hint="cv resume builder"
+            />
+          </div>
+        </div>
+      </Card>
+    </section>
+  )
+}
+
 export default async function HomePage() {
   const categories = getCategories();
   
@@ -198,6 +237,10 @@ export default async function HomePage() {
               <JobSeekersSection />
             </Suspense>
           </section>
+
+          <Separator />
+
+          <CVBuilderSection />
           
           <Separator />
 
