@@ -90,11 +90,6 @@ export function JobCard({ job }: JobCardProps) {
 
       <CardContent className="p-4 flex-grow space-y-3">
         <div className="flex flex-wrap items-center gap-2">
-            <InfoBadge
-                icon={MapPin}
-                text={`${job.country}, ${job.city}`}
-                className="bg-red-100/60 text-red-700 dark:bg-red-900/40 dark:text-red-300"
-            />
             {isSeekingJob && (
                 <InfoBadge
                     icon={UserIcon}
@@ -102,6 +97,11 @@ export function JobCard({ job }: JobCardProps) {
                     className="bg-purple-100/60 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300"
                 />
             )}
+            <InfoBadge
+                icon={MapPin}
+                text={`${job.country}, ${job.city}`}
+                className="bg-red-100/60 text-red-700 dark:bg-red-900/40 dark:text-red-300"
+            />
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
