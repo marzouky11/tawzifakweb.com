@@ -28,6 +28,7 @@ import { Separator } from '@/components/ui/separator';
 import { ReportAdDialog } from '@/app/jobs/[id]/report-ad-dialog';
 import { JobCard } from '@/components/job-card';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
+import { CvBuilderCta } from '@/app/cv-builder/cv-builder-cta';
 
 interface JobDetailPageProps {
   params: { id: string };
@@ -283,6 +284,8 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                 <div className="text-center pt-4">
                     <ReportAdDialog adId={job.id} />
                 </div>
+                
+                <CvBuilderCta />
 
                 {similarJobs.length > 0 && (
                     <div className="space-y-4 pt-6 mt-6 border-t">

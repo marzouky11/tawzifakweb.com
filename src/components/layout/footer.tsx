@@ -17,7 +17,7 @@ import {
     Shield,
     FileText,
     HelpCircle,
-    ArrowLeft
+    ArrowLeft,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -29,6 +29,7 @@ const importantLinks = [
     { label: 'الوظائف', href: '/jobs', icon: Briefcase },
     { label: 'العمال', href: '/workers', icon: Users },
     { label: 'نشر إعلان', href: '/post-job/select-type', icon: PlusCircle },
+    { label: 'إنشاء سيرة ذاتية', href: '/cv-builder', icon: FileText },
     { label: 'الإعدادات', href: '/profile', icon: Settings },
 ];
 
@@ -37,7 +38,7 @@ const platformLinks = [
     { label: 'من نحن', href: '/about', icon: Info },
     { label: 'اتصل بنا', href: '/contact', icon: Mail },
     { label: 'سياسة الخصوصية', href: '/privacy', icon: Shield },
-    { label: 'الشروط والأحكام', href: '/terms', icon: FileText },
+    { label: 'شروط الاستخدام', href: '/terms', icon: FileText },
     { label: 'الأسئلة الشائعة', href: '/faq', icon: HelpCircle },
 ];
 

@@ -12,6 +12,7 @@
 
 
 
+
 import { notFound, redirect } from 'next/navigation';
 import { getJobById, getCategoryById, getJobs } from '@/lib/data';
 import { AppLayout } from '@/components/layout/app-layout';
@@ -47,6 +48,7 @@ import { Separator } from '@/components/ui/separator';
 import { ReportAdDialog } from './report-ad-dialog';
 import { JobCard } from '@/components/job-card';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
+import { CvBuilderCta } from '@/app/cv-builder/cv-builder-cta';
 
 interface JobDetailPageProps {
   params: { id: string };
@@ -316,6 +318,8 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                     <ReportAdDialog adId={job.id} />
                 </div>
                 
+                 <CvBuilderCta />
+
                  {similarJobs.length > 0 && (
                     <div className="space-y-4 pt-6 mt-6 border-t">
                         <h2 className="text-2xl font-bold">إعلانات مشابهة</h2>
