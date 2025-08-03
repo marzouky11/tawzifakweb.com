@@ -14,6 +14,7 @@
 
 
 
+
 import { notFound, redirect } from 'next/navigation';
 import { getJobById, getCategoryById, getJobs } from '@/lib/data';
 import { AppLayout } from '@/components/layout/app-layout';
@@ -41,6 +42,7 @@ import {
   Flag,
   LayoutGrid,
   ClipboardList,
+  FileText,
 } from 'lucide-react';
 import type { WorkType } from '@/lib/types';
 import { CategoryIcon } from '@/components/icons';
@@ -165,9 +167,9 @@ const InfoItem = ({ icon: Icon, label, value }: { icon: React.ElementType; label
     );
 };
 
-const DetailSection = ({ icon: Icon, title, children, color }: { icon: React.ElementType, title: string, children: React.ReactNode, color: string }) => (
+const DetailSection = ({ icon: Icon, title, children }: { icon: React.ElementType, title: string, children: React.ReactNode }) => (
     <div>
-        <h3 className="text-xl font-bold flex items-center gap-2 mb-3" style={{ color: color }}>
+        <h3 className="text-xl font-bold flex items-center gap-2 mb-3 text-primary">
             <Icon className="h-5 w-5" />
             {title}
         </h3>
@@ -251,27 +253,33 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                         </div>
                         
                         <Separator />
-
-                        {job.description && (
-                           <DetailSection icon={Briefcase} title="وصف الوظيفة" color={finalColor}>
-                                <p>{job.description}</p>
-                           </DetailSection>
-                        )}
                         
                         {job.experience && (
-                           <DetailSection icon={Award} title="الخبرة المطلوبة" color={finalColor}>
+                           <DetailSection icon={Award} title="الخبرة المطلوبة">
                                 <p>{job.experience}</p>
                            </DetailSection>
                         )}
-                        
+
+                        {job.experience && (job.qualifications || job.description || job.conditions) && <Separator />}
+
                         {job.qualifications && (
-                           <DetailSection icon={GraduationCap} title="المؤهلات" color={finalColor}>
+                           <DetailSection icon={GraduationCap} title="المؤهلات">
                                 <p>{job.qualifications}</p>
                            </DetailSection>
                         )}
+                        
+                        {job.qualifications && (job.description || job.conditions) && <Separator />}
+
+                        {job.description && (
+                           <DetailSection icon={FileText} title="وصف الوظيفة">
+                                <p>{job.description}</p>
+                           </DetailSection>
+                        )}
+
+                        {job.description && job.conditions && <Separator />}
 
                         {job.conditions && (
-                           <DetailSection icon={ClipboardList} title="الشروط" color={finalColor}>
+                           <DetailSection icon={ClipboardList} title="الشروط">
                                 <p>{job.conditions}</p>
                            </DetailSection>
                         )}

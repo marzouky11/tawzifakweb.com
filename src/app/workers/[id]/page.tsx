@@ -14,13 +14,13 @@ import {
   MapPin,
   CalendarDays,
   User as UserIcon,
-  Briefcase,
   Award,
   Clock,
   Instagram,
   GraduationCap,
   Mail,
   LayoutGrid,
+  FileText,
 } from 'lucide-react';
 import type { WorkType } from '@/lib/types';
 import { CategoryIcon } from '@/components/icons';
@@ -145,9 +145,9 @@ const SeekerInfoItem = ({ icon: Icon, label, value }: { icon: React.ElementType;
     );
 };
 
-const DetailSection = ({ icon: Icon, title, children, color }: { icon: React.ElementType, title: string, children: React.ReactNode, color: string }) => (
+const DetailSection = ({ icon: Icon, title, children }: { icon: React.ElementType, title: string, children: React.ReactNode }) => (
     <div>
-        <h3 className="text-xl font-bold flex items-center gap-2 mb-3" style={{ color: color }}>
+        <h3 className="text-xl font-bold flex items-center gap-2 mb-3 text-primary">
             <Icon className="h-5 w-5" />
             {title}
         </h3>
@@ -225,24 +225,27 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
 
                         <Separator/>
                         
-                        {job.description && (
-                           <DetailSection icon={Briefcase} title="وصف المهارات والخبرة" color={finalColor}>
-                                <p>{job.description}</p>
-                           </DetailSection>
-                        )}
-                        
                         {job.experience && (
-                           <DetailSection icon={Award} title="الخبرة" color={finalColor}>
+                           <DetailSection icon={Award} title="الخبرة">
                                 <p>{job.experience}</p>
                            </DetailSection>
                         )}
+
+                        {job.experience && (job.qualifications || job.description) && <Separator />}
                         
                         {job.qualifications && (
-                           <DetailSection icon={GraduationCap} title="المؤهلات" color={finalColor}>
+                           <DetailSection icon={GraduationCap} title="المؤهلات">
                                 <p>{job.qualifications}</p>
                            </DetailSection>
                         )}
+                        
+                        {job.qualifications && job.description && <Separator />}
 
+                        {job.description && (
+                           <DetailSection icon={FileText} title="وصف المهارات والخبرة">
+                                <p>{job.description}</p>
+                           </DetailSection>
+                        )}
                     </CardContent>
                 </Card>
 
