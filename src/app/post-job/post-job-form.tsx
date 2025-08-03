@@ -362,7 +362,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
           
           {postType === 'seeking_worker' && (
             <FormField control={form.control} name="conditions" render={({ field }) => (
-              <FormItem><FormLabelIcon icon={ClipboardList} label="الشروط (اختياري)" /><FormControl><Textarea placeholder="اكتب الشروط الإضافية هنا، مثل: العمر، توفر وسيلة نقل، أوقات العمل..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
+              <FormItem><FormLabelIcon icon={ClipboardList} label="الشروط المطلوبة (اختياري)" /><FormControl><Textarea placeholder="اكتب الشروط الإضافية هنا، مثل: العمر، توفر وسيلة نقل، أوقات العمل..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
             )} />
           )}
           

@@ -14,7 +14,6 @@
 
 
 
-
 import { notFound, redirect } from 'next/navigation';
 import { getJobById, getCategoryById, getJobs } from '@/lib/data';
 import { AppLayout } from '@/components/layout/app-layout';
@@ -272,27 +271,27 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                            </DetailSection>
                         )}
 
-                        {job.experience && (job.qualifications || job.description || job.conditions) && <Separator />}
+                        {job.experience && (job.qualifications || job.conditions || job.description) && <Separator />}
 
                         {job.qualifications && (
-                           <DetailSection icon={GraduationCap} title="المؤهلات">
+                           <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة">
                                 <p>{job.qualifications}</p>
                            </DetailSection>
                         )}
                         
-                        {job.qualifications && (job.description || job.conditions) && <Separator />}
+                        {job.qualifications && (job.conditions || job.description) && <Separator />}
+
+                        {job.conditions && (
+                           <DetailSection icon={ClipboardList} title="الشروط المطلوبة">
+                                <p>{job.conditions}</p>
+                           </DetailSection>
+                        )}
+
+                        {job.conditions && job.description && <Separator />}
 
                         {job.description && (
                            <DetailSection icon={FileText} title="وصف الوظيفة">
                                 <p>{job.description}</p>
-                           </DetailSection>
-                        )}
-
-                        {job.description && job.conditions && <Separator />}
-
-                        {job.conditions && (
-                           <DetailSection icon={ClipboardList} title="الشروط">
-                                <p>{job.conditions}</p>
                            </DetailSection>
                         )}
 
