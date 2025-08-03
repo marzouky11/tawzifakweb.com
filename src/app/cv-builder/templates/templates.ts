@@ -20,7 +20,7 @@ import Template9 from './template9/component';
 import styles9 from './template9/styles';
 import Template10 from './template10/component';
 import styles10 from './template10/styles';
-
+import { FileText, Palette, Feather, Award, Gem, Briefcase, Star, Newspaper, Sparkles, FolderArchive, LucideIcon } from 'lucide-react';
 
 export interface CVTemplate {
   id: string;
@@ -28,6 +28,7 @@ export interface CVTemplate {
   component: React.FC<{ data: CVData }>;
   thumbnail: string;
   styles: string;
+  icon: LucideIcon;
 }
 
 export const templates: CVTemplate[] = [
@@ -37,6 +38,7 @@ export const templates: CVTemplate[] = [
     component: Template1,
     thumbnail: 'https://i.ibb.co/3sHwM3r/template1.png',
     styles: styles1,
+    icon: Palette,
   },
   {
     id: 'template2',
@@ -44,6 +46,7 @@ export const templates: CVTemplate[] = [
     component: Template2,
     thumbnail: 'https://i.ibb.co/6P0p2my/template2.png',
     styles: styles2,
+    icon: Feather,
   },
    {
     id: 'template3',
@@ -51,6 +54,7 @@ export const templates: CVTemplate[] = [
     component: Template3,
     thumbnail: 'https://i.ibb.co/Q8Q49p4/template3.png',
     styles: styles3,
+    icon: Award
   },
   {
     id: 'template4',
@@ -58,6 +62,7 @@ export const templates: CVTemplate[] = [
     component: Template4,
     thumbnail: 'https://i.ibb.co/CBrz3fT/template4.png',
     styles: styles4,
+    icon: FileText
   },
     {
     id: 'template5',
@@ -65,6 +70,7 @@ export const templates: CVTemplate[] = [
     component: Template5,
     thumbnail: 'https://i.ibb.co/68gPZYC/template5.png',
     styles: styles5,
+    icon: Briefcase,
   },
    {
     id: 'template6',
@@ -72,6 +78,7 @@ export const templates: CVTemplate[] = [
     component: Template6,
     thumbnail: 'https://i.ibb.co/pLgX9n9/template6.png',
     styles: styles6,
+    icon: Sparkles
   },
   {
     id: 'template7',
@@ -79,6 +86,7 @@ export const templates: CVTemplate[] = [
     component: Template7,
     thumbnail: 'https://i.ibb.co/tZ5G7qd/template7.png',
     styles: styles7,
+    icon: Gem
   },
   {
     id: 'template8',
@@ -86,6 +94,7 @@ export const templates: CVTemplate[] = [
     component: Template8,
     thumbnail: 'https://i.ibb.co/Kz2gVq5/template8.png',
     styles: styles8,
+    icon: Star
   },
   {
     id: 'template9',
@@ -93,6 +102,7 @@ export const templates: CVTemplate[] = [
     component: Template9,
     thumbnail: 'https://i.ibb.co/L5Qyv2k/template9.png',
     styles: styles9,
+    icon: Newspaper
   },
   {
     id: 'template10',
@@ -100,7 +110,6 @@ export const templates: CVTemplate[] = [
     component: Template10,
     thumbnail: 'https://i.ibb.co/rfn3Y2r/template10.png',
     styles: styles10,
+    icon: FolderArchive
   },
 ];
-
-    

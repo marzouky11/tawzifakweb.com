@@ -96,7 +96,7 @@ export function CVForm() {
       phone: '',
       address: '',
       summary: '',
-      profilePicture: '',
+      profilePicture: user?.photoURL || '',
       experiences: [{ title: '', company: '', date: '', description: '' }],
       educations: [{ degree: '', school: '', date: '' }],
       skills: [{ name: 'مهارة 1' }, { name: 'مهارة 2'}, { name: 'مهارة 3' }],
@@ -132,7 +132,9 @@ export function CVForm() {
         croppedAreaPixels,
         rotation
       );
-      form.setValue('profilePicture', croppedImage as string);
+      if(croppedImage) {
+        form.setValue('profilePicture', croppedImage);
+      }
       setImageSrc(null); // Close the dialog
     } catch (e) {
       console.error(e);
@@ -155,7 +157,7 @@ export function CVForm() {
         }
 
         const dataForPdf = { ...data };
-        if (dataForPdf.profilePicture) {
+        if (dataForPdf.profilePicture && !dataForPdf.profilePicture.startsWith('data:')) {
             try {
                 dataForPdf.profilePicture = await toDataURL(dataForPdf.profilePicture);
             } catch (error) {
@@ -197,6 +199,7 @@ export function CVForm() {
   };
   
    if (!user) {
+    // This case is handled by the page component, but as a fallback:
     return (
       <div className="text-center py-12">
         <p className="mb-4">يجب عليك تسجيل الدخول لإنشاء سيرة ذاتية.</p>
@@ -394,18 +397,10 @@ export function CVForm() {
                 className={`border-4 rounded-lg cursor-pointer transition-all ${selectedTemplate.id === template.id ? 'border-primary' : 'border-transparent hover:border-primary/50'}`}
                 onClick={() => setSelectedTemplate(template)}
               >
-                <div className="relative">
-                    <Image
-                    src={template.thumbnail}
-                    alt={template.name}
-                    width={200}
-                    height={282}
-                    className="rounded-md w-full h-auto"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-center text-xs py-1 rounded-b-md">
-                        {template.name}
-                    </div>
-                </div>
+                <Card className="flex flex-col items-center justify-center p-4 h-full aspect-[1/1.41]">
+                  <template.icon className="w-8 h-8 text-primary mb-2" />
+                  <p className="font-semibold text-center text-sm">{template.name}</p>
+                </Card>
               </div>
             ))}
           </div>
