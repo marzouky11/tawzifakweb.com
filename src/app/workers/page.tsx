@@ -11,6 +11,7 @@ import { Card } from '@/components/ui/card';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Users } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
+import { CvBuilderCta } from '../cv-builder/cv-builder-cta';
 
 export const metadata: Metadata = {
   title: 'باحثون عن عمل من جميع الدول العربية – سِيَر ذاتية جاهزة للتوظيف',
@@ -79,6 +80,10 @@ export default async function WorkersPage({
         <Suspense fallback={<WorkerListSkeleton />}>
           <WorkerList searchParams={searchParams} />
         </Suspense>
+
+        <div className="mt-8">
+          <CvBuilderCta />
+        </div>
       </div>
     </AppLayout>
   );
