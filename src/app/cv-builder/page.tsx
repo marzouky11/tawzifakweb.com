@@ -10,13 +10,10 @@ import { useRouter } from 'next/navigation';
 import type { Metadata } from 'next';
 
 
-// This is a client component, so we can't export metadata directly.
-// We can handle this in a parent layout or by using the Head component from next/head if needed,
-// but for App Router, moving metadata to a server component parent/layout is preferred.
-// For this case, we'll assume the page can be structured to have a server component wrapper if needed.
-// Or, we can modify the page to be a server component that wraps a client component.
-// As a simple approach, we'll just add it here for reference, but it won't work in a 'use client' file.
-// Let's remove 'use client' and wrap the logic in a client component.
+export const metadata: Metadata = {
+  title: 'أنشئ سيرتك الذاتية مجانًا',
+  description: 'أنشئ سيرة ذاتية احترافية باللغة العربية مجانًا عبر منصة توظيفك، واختر من بين عدة قوالب جاهزة تساعدك في الحصول على وظيفة أحلامك.',
+};
 
 function CVBuilderClient() {
   const { user, loading } = useAuth();
