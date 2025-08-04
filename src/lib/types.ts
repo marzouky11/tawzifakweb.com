@@ -10,6 +10,7 @@ export interface Category {
 
 export type WorkType = 'full_time' | 'part_time' | 'freelance' | 'remote';
 export type PostType = 'seeking_worker' | 'seeking_job';
+export type SortByType = 'latest' | 'oldest';
 
 export interface Job {
   id: string;
@@ -40,6 +41,8 @@ export interface Job {
   qualifications?: string;
   conditions?: string;
   education?: string;
+  status?: 'open' | 'closed';
+  views?: number;
 }
 
 export interface User {
