@@ -7,7 +7,8 @@ import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { useAuth } from '@/context/auth-context';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
+
 
 // This is a client component, so we can't export metadata directly.
 // We can handle this in a parent layout or by using the Head component from next/head if needed,
@@ -52,17 +53,12 @@ function CVBuilderClient() {
   );
 }
 
-
-export const metadata: Metadata = {
-  title: 'أنشئ سيرتك الذاتية مجانا',
-  description: 'أنشئ سيرة ذاتية احترافية باللغة العربية مجانًا عبر منصة توظيفك، واختر من بين عدة قوالب جاهزة تساعدك في الحصول على وظيفة أحلامك.',
-};
-
-
-export default function CVBuilderPage() {
+const CVBuilderPageWrapper = () => {
     return (
         <AppLayout>
             <CVBuilderClient />
         </AppLayout>
     )
 }
+
+export default CVBuilderPageWrapper;
