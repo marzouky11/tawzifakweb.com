@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -46,6 +47,17 @@ const slidesData = [
     buttonText: "استكشف الآن",
     buttonLink: "/workers",
     buttonClass: "bg-red-600 hover:bg-red-700"
+  },
+  {
+    key: 'cv-builder',
+    src: "/slide4.webp",
+    alt: "إنشاء سيرة ذاتية احترافية",
+    hint: "cv builder",
+    title: "أنشئ سيرتك الذاتية بسهولة",
+    description: "استخدم أداتنا المجانية لإنشاء سيرة ذاتية احترافية تجذب انتباه أصحاب العمل.",
+    buttonText: "أنشئ سيرتك الذاتية الآن",
+    buttonLink: "/cv-builder",
+    buttonClass: "bg-yellow-500 hover:bg-yellow-600"
   }
 ];
 
@@ -72,11 +84,11 @@ export function HomeCarousel() {
     >
       <CarouselContent>
         {slidesData.map((slide, index) => {
-          const isFirstSlide = index === 0;
-          const title = isFirstSlide ? (user ? slide.authTitle : slide.guestTitle) : slide.title;
-          const description = isFirstSlide ? (user ? slide.authDescription : slide.guestDescription) : slide.description;
-          const buttonText = isFirstSlide ? (user ? slide.authButtonText : slide.guestButtonText) : slide.buttonText;
-          const buttonLink = isFirstSlide ? (user ? slide.authButtonLink : slide.guestButtonLink) : slide.buttonLink;
+          const isFirstSlideAuth = index === 0;
+          const title = isFirstSlideAuth ? (user ? slide.authTitle : slide.guestTitle) : slide.title;
+          const description = isFirstSlideAuth ? (user ? slide.authDescription : slide.guestDescription) : slide.description;
+          const buttonText = isFirstSlideAuth ? (user ? slide.authButtonText : slide.guestButtonText) : slide.buttonText;
+          const buttonLink = isFirstSlideAuth ? (user ? slide.authButtonLink : slide.guestButtonLink) : slide.buttonLink;
 
           return (
             <CarouselItem key={slide.key}>
@@ -85,7 +97,7 @@ export function HomeCarousel() {
                   src={slide.src}
                   alt={slide.alt}
                   className="absolute inset-0 w-full h-full object-cover"
-                  loading="eager"
+                  loading={index === 0 ? "eager" : "lazy"}
                   data-ai-hint={slide.hint}
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent flex items-center p-6 md:p-12">
@@ -104,4 +116,4 @@ export function HomeCarousel() {
       </CarouselContent>
     </Carousel>
   );
-                                              }
+}
