@@ -11,7 +11,6 @@ import { Card } from '@/components/ui/card';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Briefcase } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
-import { CvBuilderCta } from '../cv-builder/cv-builder-cta';
 
 export const metadata: Metadata = {
   title: 'وظائف شاغرة في الوطن العربي - فرص عمل جديدة يوميًا',
@@ -80,9 +79,6 @@ export default async function JobsPage({
           <JobList searchParams={searchParams} />
         </Suspense>
 
-        <div className="mt-8">
-          <CvBuilderCta />
-        </div>
       </div>
     </AppLayout>
   );
