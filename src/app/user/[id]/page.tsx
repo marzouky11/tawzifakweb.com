@@ -79,13 +79,11 @@ export default function UserAdsPage() {
             />
             <div className="container mx-auto max-w-4xl px-4 pb-8 space-y-6">
                 <Card>
-                    <CardHeader>
-                        <div className="flex items-center gap-4">
-                            <UserAvatar name={user.name} color={user.avatarColor} className="h-20 w-20 text-3xl" />
-                            <div>
-                                <CardTitle className="text-2xl font-bold">{user.name}</CardTitle>
-                                {user.description && <p className="text-muted-foreground mt-1">{user.description}</p>}
-                            </div>
+                    <CardHeader className="flex flex-row items-center gap-4">
+                        <UserAvatar name={user.name} color={user.avatarColor} className="h-20 w-20 text-3xl" />
+                        <div>
+                            <CardTitle className="text-2xl font-bold">{user.name}</CardTitle>
+                            {user.description && <p className="text-muted-foreground mt-1">{user.description}</p>}
                         </div>
                     </CardHeader>
                 </Card>
@@ -115,4 +113,3 @@ export default function UserAdsPage() {
         </AppLayout>
     );
 }
-
