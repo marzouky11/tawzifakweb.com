@@ -1,68 +1,29 @@
 
 
-'use client';
-
-import { useEffect, useMemo, useState } from 'react';
-import { notFound, useParams } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { AppLayout } from '@/components/layout/app-layout';
 import { getUserById, getJobsByUserId } from '@/lib/data';
 import { JobCard } from '@/components/job-card';
 import { UserAvatar } from '@/components/user-avatar';
 import type { Job, User } from '@/lib/types';
-import { Loader2, User as UserIcon } from 'lucide-react';
+import { User as UserIcon } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
+import { UserAdsClient } from './user-ads-client';
 
-export default function UserAdsPage() {
-    const params = useParams<{ id: string }>();
+interface UserAdsPageProps {
+  params: { id: string };
+}
+
+export default async function UserAdsPage({ params }: UserAdsPageProps) {
     const userId = params.id;
 
-    const [user, setUser] = useState<User | null>(null);
-    const [jobs, setJobs] = useState<Job[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState<'all' | 'seeking_worker' | 'seeking_job'>('all');
+    const [user, jobs] = await Promise.all([
+        getUserById(userId),
+        getJobsByUserId(userId),
+    ]);
 
-    useEffect(() => {
-        if (userId) {
-            const fetchData = async () => {
-                setLoading(true);
-                const [userData, userJobs] = await Promise.all([
-                    getUserById(userId),
-                    getJobsByUserId(userId),
-                ]);
-
-                if (!userData) {
-                    notFound();
-                    return;
-                }
-                
-                setUser(userData);
-                setJobs(userJobs);
-                setLoading(false);
-            };
-            fetchData();
-        }
-    }, [userId]);
-    
-    const filteredJobs = useMemo(() => {
-        if (activeTab === 'all') {
-          return jobs;
-        }
-        return jobs.filter(job => job.postType === activeTab);
-    }, [jobs, activeTab]);
-
-    if (loading) {
-        return (
-            <AppLayout>
-                <div className="flex h-full items-center justify-center p-8 min-h-[50vh]">
-                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                </div>
-            </AppLayout>
-        );
-    }
-    
     if (!user) {
         notFound();
     }
@@ -88,27 +49,7 @@ export default function UserAdsPage() {
                     </CardHeader>
                 </Card>
                 
-                <Tabs defaultValue="all" value={activeTab} onValueChange={(value) => setActiveTab(value as any)} className="w-full sm:w-auto sm:mx-auto">
-                    <TabsList className="grid w-full grid-cols-3">
-                        <TabsTrigger value="all">الكل</TabsTrigger>
-                        <TabsTrigger value="seeking_worker">عروض العمل</TabsTrigger>
-                        <TabsTrigger value="seeking_job">طلبات العمل</TabsTrigger>
-                    </TabsList>
-                </Tabs>
-
-                {filteredJobs.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        {filteredJobs.map((job) => (
-                            <JobCard key={job.id} job={job} />
-                        ))}
-                    </div>
-                ) : (
-                    <Card>
-                        <CardContent className="flex flex-col items-center justify-center text-center text-muted-foreground min-h-[30vh] p-8">
-                            <p className="text-lg">لا توجد إعلانات من هذا النوع حاليًا.</p>
-                        </CardContent>
-                    </Card>
-                )}
+                <UserAdsClient initialJobs={jobs} />
             </div>
         </AppLayout>
     );

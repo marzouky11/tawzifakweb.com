@@ -211,15 +211,15 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
     return (
         <AppLayout>
             <ViewCounter adId={params.id} />
+            <MobilePageHeader title="تفاصيل عرض العمل">
+                <Briefcase className="h-5 w-5" style={{ color: finalColor }} />
+            </MobilePageHeader>
+            <DesktopPageHeader
+                icon={Briefcase}
+                title="تفاصيل عرض العمل"
+                description="هنا تجد جميع المعلومات المتعلقة بفرصة العمل هذه."
+            />
             <div className="container mx-auto max-w-4xl px-4 pb-8">
-                <MobilePageHeader title="تفاصيل عرض العمل">
-                    <Briefcase className="h-5 w-5" style={{ color: finalColor }} />
-                </MobilePageHeader>
-                <DesktopPageHeader
-                    icon={Briefcase}
-                    title="تفاصيل عرض العمل"
-                    description="هنا تجد جميع المعلومات المتعلقة بفرصة العمل هذه."
-                />
                 <div className="space-y-6">
                     <Card className="overflow-hidden shadow-lg border-t-4" style={{ borderColor: finalColor }}>
                         <CardHeader className="bg-muted/30 p-4 sm:p-6">

@@ -200,15 +200,15 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
     return (
         <AppLayout>
             <ViewCounter adId={params.id} />
+            <MobilePageHeader title="ملف باحث عن عمل">
+                <UserIcon className="h-5 w-5" style={{ color: finalColor }} />
+            </MobilePageHeader>
+            <DesktopPageHeader
+                icon={UserIcon}
+                title="ملف باحث عن عمل"
+                description="استعرض مهارات وخبرات هذا المرشح وتواصل معه مباشرة."
+            />
             <div className="container mx-auto max-w-4xl px-4 pb-8">
-                <MobilePageHeader title="ملف باحث عن عمل">
-                    <UserIcon className="h-5 w-5" style={{ color: finalColor }} />
-                </MobilePageHeader>
-                <DesktopPageHeader
-                    icon={UserIcon}
-                    title="ملف باحث عن عمل"
-                    description="استعرض مهارات وخبرات هذا المرشح وتواصل معه مباشرة."
-                />
                 <div className="space-y-6">
                     <Card 
                         className="overflow-hidden shadow-lg border-2 border-dashed"
