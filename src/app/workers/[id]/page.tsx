@@ -1,7 +1,7 @@
 
 
 import { notFound } from 'next/navigation';
-import { getJobById, getCategoryById, getJobs } from '@/lib/data';
+import { getJobById, getCategoryById, getJobs, getViewsCount } from '@/lib/data';
 import { AppLayout } from '@/components/layout/app-layout';
 import type { Metadata } from 'next';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
@@ -21,6 +21,7 @@ import {
   Mail,
   LayoutGrid,
   FileText,
+  Eye,
 } from 'lucide-react';
 import type { WorkType } from '@/lib/types';
 import { CategoryIcon } from '@/components/icons';
@@ -31,6 +32,8 @@ import { JobCard } from '@/components/job-card';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { CvBuilderCta } from '@/app/cv-builder/cv-builder-cta';
 import Link from 'next/link';
+import { ViewCounter } from '@/app/jobs/[id]/view-counter';
+
 
 interface JobDetailPageProps {
   params: { id: string };
@@ -166,12 +169,16 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
         notFound();
     }
     
-    const similarJobs = await getJobs({
-      categoryId: job.categoryId,
-      postType: job.postType,
-      count: 4,
-      excludeId: job.id,
-    });
+    const [similarJobs, viewsCount] = await Promise.all([
+      getJobs({
+        categoryId: job.categoryId,
+        postType: job.postType,
+        count: 4,
+        excludeId: job.id,
+      }),
+      getViewsCount(params.id)
+    ]);
+
 
     const category = getCategoryById(job.categoryId || '');
     const categoryName = category?.name || job.categoryName;
@@ -192,6 +199,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
 
     return (
         <AppLayout>
+            <ViewCounter adId={params.id} />
             <MobilePageHeader title="ملف باحث عن عمل">
                 <UserIcon className="h-5 w-5" style={{ color: finalColor }} />
             </MobilePageHeader>
@@ -217,7 +225,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                                     </h1>
                                 </div>
                            </div>
-                           <div className="flex items-center gap-4 text-muted-foreground mt-2 text-sm">
+                           <div className="flex flex-wrap items-center gap-4 text-muted-foreground mt-2 text-sm">
                                 <div className="flex items-center gap-1.5">
                                     <MapPin className="h-4 w-4" />
                                     <span>{job.country || 'دولة غير محددة'}, {job.city || 'مدينة غير محددة'}</span>
@@ -225,6 +233,10 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                                 <div className="flex items-center gap-1.5">
                                     <CalendarDays className="h-4 w-4" />
                                     <span>نُشر: {job.postedAt}</span>
+                                </div>
+                                <div className="flex items-center gap-1.5">
+                                    <Eye className="h-4 w-4" />
+                                    <span>{viewsCount} مشاهدات</span>
                                 </div>
                             </div>
                        </div>

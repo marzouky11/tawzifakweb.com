@@ -153,9 +153,6 @@ export async function getJobs(
         q.push(limit(count));
       }
     } else {
-      // If we use Fuse.js for searching, we might need to fetch more documents initially.
-      // Fetching without a limit and then slicing might be an option, but could be inefficient.
-      // For now, let's keep sorting by date.
       q.push(orderBy('createdAt', 'desc'));
     }
 
@@ -199,7 +196,7 @@ export async function getJobs(
       const fuse = new Fuse(jobs, fuseOptions);
       const results = searchPatterns.length > 0 
         ? fuse.search({ $and: searchPatterns }) 
-        : jobs.map(job => ({ item: job })); // Return all if no patterns
+        : jobs.map(job => ({ item: job }));
         
       jobs = results.map(result => result.item);
     }
@@ -208,7 +205,6 @@ export async function getJobs(
       jobs = jobs.filter(job => job.id !== excludeId);
     }
     
-    // Apply count limit after filtering if it was a Fuse search
     if (useFuse && count) {
       return jobs.slice(0, count);
     }
@@ -430,11 +426,30 @@ export async function deleteTestimonial(testimonialId: string) {
     }
 }
 
-export async function hasUserLikedJob(jobId: string, userId: string): Promise<boolean> {
-    const interestRef = doc(db, 'interests', `${userId}_${jobId}`);
-    const interestDoc = await getDoc(interestRef);
-    return interestDoc.exists();
+export async function getViewsCount(adId: string): Promise<number> {
+    try {
+        const viewsCollectionRef = collection(db, 'ads', adId, 'views');
+        const snapshot = await getDocs(viewsCollectionRef);
+        return snapshot.size;
+    } catch (error) {
+        console.error(`Error getting views for ad ${adId}:`, error);
+        return 0;
+    }
 }
+
+export async function recordView(adId: string, userId: string) {
+    if (!adId || !userId) return;
+    try {
+        const viewDocRef = doc(db, 'ads', adId, 'views', userId);
+        const docSnap = await getDoc(viewDocRef);
+        if (!docSnap.exists()) {
+            await setDoc(viewDocRef, { viewedAt: serverTimestamp() });
+        }
+    } catch (error) {
+        console.error(`Error recording view for ad ${adId} by user ${userId}:`, error);
+    }
+}
+
 
 export function getCategories() {
   return categories;
