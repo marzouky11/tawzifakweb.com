@@ -14,6 +14,7 @@
 
 
 
+
 import { notFound, redirect } from 'next/navigation';
 import { getJobById, getCategoryById, getJobs } from '@/lib/data';
 import { AppLayout } from '@/components/layout/app-layout';
@@ -51,6 +52,7 @@ import { ReportAdDialog } from './report-ad-dialog';
 import { JobCard } from '@/components/job-card';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { CvBuilderCta } from '@/app/cv-builder/cv-builder-cta';
+import Link from 'next/link';
 
 interface JobDetailPageProps {
   params: { id: string };
@@ -351,7 +353,9 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                         </CardHeader>
                         <CardContent className="flex items-center gap-4">
                             <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-16 w-16 text-2xl" />
-                            <p className="font-semibold text-lg">{job.ownerName || 'صاحب الإعلان'}</p>
+                            <Link href={`/user/${job.userId}`} className="font-semibold text-lg hover:underline hover:text-primary transition-colors">
+                                {job.ownerName || 'صاحب الإعلان'}
+                            </Link>
                         </CardContent>
                     </Card>
                 </div>

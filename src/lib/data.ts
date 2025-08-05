@@ -260,6 +260,24 @@ export async function getJobById(id: string): Promise<Job | null> {
   }
 }
 
+export async function getUserById(id: string): Promise<User | null> {
+  try {
+    const docRef = doc(db, 'users', id);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      return { id: docSnap.id, ...docSnap.data() } as User;
+    } else {
+      console.log("No such user document!");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching user by ID: ", error);
+    return null;
+  }
+}
+
+
 export async function postJob(jobData: Omit<Job, 'id' | 'createdAt' | 'likes' | 'rating' | 'postedAt'>): Promise<{ id: string }> {
     try {
         const adsCollection = collection(db, 'ads');
