@@ -17,6 +17,7 @@
 
 
 
+
 import { notFound, redirect } from 'next/navigation';
 import { getJobById, getCategoryById, getJobs, getViewsCount } from '@/lib/data';
 import { AppLayout } from '@/components/layout/app-layout';
@@ -354,19 +355,21 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                         </CardContent>
                     </Card>
 
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2 text-lg">
-                                <UserIcon className="h-5 w-5 text-primary" />
-                                صاحب الإعلان
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="flex items-center gap-4">
-                            <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-16 w-16 text-2xl" />
-                            <Link href={`/user/${job.userId}`} className="font-semibold text-lg hover:underline hover:text-primary transition-colors">
-                                {job.ownerName || 'صاحب الإعلان'}
-                            </Link>
-                        </CardContent>
+                    <Card asChild>
+                        <Link href={`/user/${job.userId}`} className="group block">
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-lg group-hover:text-primary transition-colors">
+                                    <UserIcon className="h-5 w-5 text-primary" />
+                                    صاحب الإعلان
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="flex items-center gap-4">
+                                <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-16 w-16 text-2xl" />
+                                <div className="font-semibold text-lg group-hover:underline">
+                                    {job.ownerName || 'صاحب الإعلان'}
+                                </div>
+                            </CardContent>
+                        </Link>
                     </Card>
                 </div>
                 
