@@ -275,7 +275,13 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                 >
                   <FormControl><SelectTrigger><SelectValue placeholder="اختر فئة العمل من القائمة" /></SelectTrigger></FormControl>
                   <SelectContent>
-                    <div className="p-2 sticky top-0 bg-popover z-10">
+                    <div 
+                        className="p-2 sticky top-0 bg-popover z-10"
+                        onMouseDown={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }}
+                    >
                         <div className="relative">
                             <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                             <Input 
@@ -283,7 +289,6 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                                 className="pr-9"
                                 value={categorySearch}
                                 onChange={(e) => setCategorySearch(e.target.value)}
-                                onKeyDownCapture={(e) => e.stopPropagation()}
                             />
                         </div>
                     </div>
