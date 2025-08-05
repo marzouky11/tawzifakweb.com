@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -18,11 +19,12 @@ import {
   Loader2, Briefcase, Users, FileText, FileSignature, 
   LayoutGrid, Globe, MapPin, Wallet, Phone, MessageSquare, Mail,
   Building2, Award, Users2, Info, Instagram, GraduationCap, Link as LinkIcon,
-  ClipboardList
+  ClipboardList, Search
 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const formSchema = z.object({
   postType: z.enum(['seeking_worker', 'seeking_job'], { required_error: 'الرجاء تحديد نوع الإعلان.' }),
@@ -89,6 +91,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [categorySearch, setCategorySearch] = useState('');
 
   useEffect(() => {
     if (preselectedType) {
@@ -106,6 +109,11 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
   }, [categoryId, categories]);
   
   const categoryThemeColor = selectedCategoryData?.color;
+
+  const filteredCategories = React.useMemo(() => {
+    if (!categorySearch) return categories;
+    return categories.filter(c => c.name.toLowerCase().includes(categorySearch.toLowerCase()));
+  }, [categorySearch, categories]);
 
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -276,7 +284,26 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                   disabled={!!customCategory}
                 >
                   <FormControl><SelectTrigger><SelectValue placeholder="اختر فئة العمل من القائمة" /></SelectTrigger></FormControl>
-                  <SelectContent>{categories.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
+                  <SelectContent>
+                    <div className="p-2">
+                        <div className="relative">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input 
+                                placeholder="ابحث عن فئة..." 
+                                className="pl-9"
+                                value={categorySearch}
+                                onChange={(e) => setCategorySearch(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    <ScrollArea className="h-[200px]">
+                      {filteredCategories.length > 0 ? (
+                         filteredCategories.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)
+                      ) : (
+                        <p className="p-2 text-center text-sm text-muted-foreground">لم يتم العثور على فئة.</p>
+                      )}
+                    </ScrollArea>
+                  </SelectContent>
                 </Select>
                 <FormMessage />
               </FormItem>
