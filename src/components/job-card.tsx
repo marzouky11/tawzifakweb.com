@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, Clock, Wallet, User as UserIcon, Briefcase } from 'lucide-react';
+import { MapPin, Clock, Wallet, User as UserIcon, Briefcase, CalendarDays } from 'lucide-react';
 import type { Job, WorkType } from '@/lib/types';
 import { getCategoryById } from '@/lib/data';
 import { CategoryIcon } from '@/components/icons';
@@ -122,10 +122,13 @@ export function JobCard({ job }: JobCardProps) {
       </CardContent>
 
       <CardFooter className="p-4 pt-0 mt-auto flex items-center justify-between">
-        <span className="text-xs text-muted-foreground">{job.postedAt}</span>
         <Button asChild size="sm" className="text-sm rounded-lg" variant="secondary">
           <Link href={detailUrl}>{isSeekingJob ? 'عرض الملف' : 'عرض التفاصيل'}</Link>
         </Button>
+        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <CalendarDays className="h-3.5 w-3.5" />
+            <span>{job.postedAt}</span>
+        </div>
       </CardFooter>
     </Card>
   );
