@@ -1,5 +1,6 @@
+
 import { db } from '@/lib/firebase';
-import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, QueryConstraint, and, or, QueryFilterConstraint } from 'firebase/firestore';
+import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, Query, QueryConstraint, and, or, QueryFilterConstraint } from 'firebase/firestore';
 import type { Job, Category, PostType, User, WorkType, Testimonial } from './types';
 
 const categories: Category[] = [
@@ -151,28 +152,26 @@ export async function getJobs(
     } = options;
 
     const adsRef = collection(db, 'ads');
-    const queryConstraints: QueryConstraint[] = [];
+    let q: Query;
 
-    const filterClauses: QueryFilterConstraint[] = [];
-
+    const whereClauses: QueryFilterConstraint[] = [];
     if (postType) {
-        filterClauses.push(where('postType', '==', postType));
+        whereClauses.push(where('postType', '==', postType));
     }
     if (categoryId) {
-        filterClauses.push(where('categoryId', '==', categoryId));
+        whereClauses.push(where('categoryId', '==', categoryId));
     }
     if (workType) {
-        filterClauses.push(where('workType', '==', workType));
+        whereClauses.push(where('workType', '==', workType));
     }
-
-    if (filterClauses.length > 0) {
-      queryConstraints.push(...filterClauses);
-    }
-
-    queryConstraints.push(orderBy('createdAt', 'desc'));
     
-    const finalQuery = query(adsRef, ...queryConstraints);
-    const querySnapshot = await getDocs(finalQuery);
+    if (whereClauses.length > 0) {
+      q = query(adsRef, and(...whereClauses), orderBy('createdAt', 'desc'));
+    } else {
+      q = query(adsRef, orderBy('createdAt', 'desc'));
+    }
+
+    const querySnapshot = await getDocs(q);
 
     let jobs = querySnapshot.docs.map(doc => {
       const data = doc.data();
@@ -436,7 +435,7 @@ export async function recordView(adId: string, viewerId: string): Promise<void> 
   }
   try {
     const viewDocRef = doc(db, 'ads', adId, 'views', viewerId);
-    await setDoc(viewDocRef, { viewedAt: serverTimestamp() }, { merge: true });
+    await setDoc(viewDocRef, { viewedAt: serverTimestamp() });
   } catch (error) {
     console.error(`Error recording view for ad ${adId} by user ${viewerId}:`, error);
   }
