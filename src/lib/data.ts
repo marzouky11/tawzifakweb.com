@@ -1,10 +1,10 @@
 
 import { db } from '@/lib/firebase';
-import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, Query, QueryConstraint, and, or, QueryFilterConstraint } from 'firebase/firestore';
+import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, Query, and, QueryConstraint, QueryFilterConstraint } from 'firebase/firestore';
 import type { Job, Category, PostType, User, WorkType, Testimonial } from './types';
 
 const categories: Category[] = [
-  { id: 'it', name: 'تكنولوجيا المعلومات (IT)', iconName: 'Code', color: '#3b82f6' },
+  { id: 'it', name: 'تكنولوجيا المعلومات', iconName: 'Code', color: '#3b82f6' },
   { id: 'engineering', name: 'الهندسة', iconName: 'CircuitBoard', color: '#10b981' },
   { id: 'construction', name: 'البناء والأشغال العامة', iconName: 'HardHat', color: '#f97316' },
   { id: 'healthcare', name: 'الصحة والتمريض', iconName: 'Stethoscope', color: '#ef4444' },
@@ -152,24 +152,29 @@ export async function getJobs(
     } = options;
 
     const adsRef = collection(db, 'ads');
+    
+    // Start with a base query
     let q: Query;
 
-    const whereClauses: QueryFilterConstraint[] = [];
+    // Array to hold all our constraints
+    const queryConstraints: QueryConstraint[] = [];
+
     if (postType) {
-        whereClauses.push(where('postType', '==', postType));
+        queryConstraints.push(where('postType', '==', postType));
     }
     if (categoryId) {
-        whereClauses.push(where('categoryId', '==', categoryId));
+        queryConstraints.push(where('categoryId', '==', categoryId));
     }
     if (workType) {
-        whereClauses.push(where('workType', '==', workType));
+        queryConstraints.push(where('workType', '==', workType));
     }
     
-    if (whereClauses.length > 0) {
-      q = query(adsRef, and(...whereClauses), orderBy('createdAt', 'desc'));
-    } else {
-      q = query(adsRef, orderBy('createdAt', 'desc'));
-    }
+    // Always sort by creation date
+    queryConstraints.push(orderBy('createdAt', 'desc'));
+
+    // Apply the constraints to the query
+    q = query(adsRef, ...queryConstraints);
+
 
     const querySnapshot = await getDocs(q);
 

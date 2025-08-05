@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter, useParams, notFound } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
 import { AppLayout } from '@/components/layout/app-layout';
 import { Card, CardContent } from '@/components/ui/card';
@@ -33,7 +33,8 @@ export default function EditJobPage() {
         
         // Ownership check
         if (!jobData || jobData.userId !== user?.uid) {
-          notFound();
+          // Instead of notFound(), redirect or show an error
+          router.push('/');
           return;
         }
 
@@ -45,7 +46,7 @@ export default function EditJobPage() {
     if (user) {
         fetchJob();
     }
-  }, [params.id, user]);
+  }, [params.id, user, router]);
 
   const categories = getCategories();
 
@@ -74,10 +75,12 @@ export default function EditJobPage() {
           <Card>
             <CardContent className="pt-6">
               <AnimatePresence>
-                <PostJobForm
-                  categories={categories}
-                  job={job}
-                />
+                {job && (
+                  <PostJobForm
+                    categories={categories}
+                    job={job}
+                  />
+                )}
               </AnimatePresence>
             </CardContent>
           </Card>

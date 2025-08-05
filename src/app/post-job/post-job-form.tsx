@@ -57,7 +57,7 @@ const formSchema = z.object({
 });
 
 const stepFields = [
-  ['title', 'categoryId', 'customCategory', 'workType', 'country', 'city'],
+  ['postType', 'title', 'categoryId', 'customCategory', 'workType', 'country', 'city'],
   ['companyName', 'experience', 'qualifications', 'salary', 'openPositions', 'conditions', 'description'],
   ['phone', 'whatsapp', 'email', 'instagram', 'applyUrl'],
 ];
@@ -171,7 +171,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
           title: "تم تحديث الإعلان بنجاح!",
           description: "تم حفظ التغييرات على إعلانك.",
         });
-        router.push(`/profile`);
+        router.push(`/profile/my-ads`);
       } else {
         const newJobData = {
           userId: user.uid,
@@ -275,15 +275,15 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                 >
                   <FormControl><SelectTrigger><SelectValue placeholder="اختر فئة العمل من القائمة" /></SelectTrigger></FormControl>
                   <SelectContent>
-                    <div className="p-2">
+                    <div className="p-2 sticky top-0 bg-popover z-10">
                         <div className="relative">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                             <Input 
                                 placeholder="ابحث عن فئة..." 
-                                className="pl-9"
+                                className="pr-9"
                                 value={categorySearch}
                                 onChange={(e) => setCategorySearch(e.target.value)}
-                                onClick={(e) => e.stopPropagation()}
+                                onKeyDown={(e) => e.stopPropagation()}
                             />
                         </div>
                     </div>
@@ -423,7 +423,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
         <div className="flex gap-4 items-center justify-between mt-8 pt-4 border-t">
           {currentStep > 0 && (
             <Button type="button" variant="outline" onClick={prevStep}>
-              <ArrowRight className="mr-2 h-4 w-4" />
+              <ArrowRight className="ml-2 h-4 w-4" />
               السابق
             </Button>
           )}
