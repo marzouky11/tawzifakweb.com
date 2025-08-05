@@ -82,7 +82,6 @@ export function JobCard({ job }: JobCardProps) {
                 {categoryName}
               </p>
           </div>
-          <div className="text-xs text-muted-foreground pt-1 flex-shrink-0">{job.postedAt}</div>
         </div>
       </CardHeader>
       
@@ -122,10 +121,11 @@ export function JobCard({ job }: JobCardProps) {
         </div>
       </CardContent>
 
-      <CardFooter className="p-4 pt-0 mt-auto">
-         <Button asChild size="sm" className="w-full text-sm rounded-lg" variant="secondary">
+      <CardFooter className="p-4 pt-0 mt-auto flex items-center justify-between">
+        <Button asChild size="sm" className="text-sm rounded-lg" variant="secondary">
           <Link href={detailUrl}>{isSeekingJob ? 'عرض الملف' : 'عرض التفاصيل'}</Link>
         </Button>
+        <span className="text-xs text-muted-foreground">{job.postedAt}</span>
       </CardFooter>
     </Card>
   );
