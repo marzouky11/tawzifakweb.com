@@ -11,6 +11,7 @@ import { Loader2, Edit } from 'lucide-react';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import type { Job } from '@/lib/types';
+import { AnimatePresence } from 'framer-motion';
 
 export default function EditJobPage() {
   const { user, loading: authLoading } = useAuth();
@@ -72,10 +73,12 @@ export default function EditJobPage() {
         <div className="container mx-auto max-w-3xl px-4 pb-8">
           <Card>
             <CardContent className="pt-6">
-              <PostJobForm
-                categories={categories}
-                job={job}
-              />
+              <AnimatePresence>
+                <PostJobForm
+                  categories={categories}
+                  job={job}
+                />
+              </AnimatePresence>
             </CardContent>
           </Card>
         </div>

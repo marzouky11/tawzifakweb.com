@@ -19,12 +19,13 @@ import {
   Loader2, Briefcase, Users, FileText, FileSignature, 
   LayoutGrid, Globe, MapPin, Wallet, Phone, MessageSquare, Mail,
   Building2, Award, Users2, Info, Instagram, GraduationCap, Link as LinkIcon,
-  ClipboardList, Search
+  ClipboardList, Search, ArrowLeft, ArrowRight
 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const formSchema = z.object({
   postType: z.enum(['seeking_worker', 'seeking_job'], { required_error: 'الرجاء تحديد نوع الإعلان.' }),
@@ -32,15 +33,17 @@ const formSchema = z.object({
   categoryId: z.string().optional(),
   customCategory: z.string().optional(),
   workType: z.enum(['full_time', 'part_time', 'freelance', 'remote'], { required_error: 'نوع العمل مطلوب.' }),
-  companyName: z.string().optional(),
   country: z.string().min(1, { message: 'الدولة مطلوبة.' }),
   city: z.string().min(1, { message: 'المدينة مطلوبة.' }),
-  salary: z.string().optional(),
+  
+  companyName: z.string().optional(),
   experience: z.string().optional(),
   qualifications: z.string().optional(),
+  salary: z.string().optional(),
   openPositions: z.coerce.number().int().positive().optional(),
-  description: z.string().optional(),
   conditions: z.string().optional(),
+  description: z.string().optional(),
+  
   phone: z.string().optional(),
   whatsapp: z.string().optional(),
   email: z.string().email({ message: "الرجاء إدخال بريد إلكتروني صحيح." }).optional().or(z.literal('')),
@@ -53,6 +56,12 @@ const formSchema = z.object({
   path: ['phone'],
 });
 
+const stepFields = [
+  ['title', 'categoryId', 'customCategory', 'workType', 'country', 'city'],
+  ['companyName', 'experience', 'qualifications', 'salary', 'openPositions', 'conditions', 'description'],
+  ['phone', 'whatsapp', 'email', 'instagram', 'applyUrl'],
+];
+
 interface PostJobFormProps {
   categories: Category[];
   job?: Job | null;
@@ -64,6 +73,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
   const { user, userData } = useAuth();
   const router = useRouter();
   const isEditing = !!job;
+  const [currentStep, setCurrentStep] = useState(0);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -99,7 +109,6 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
     }
   }, [preselectedType, form]);
 
-
   const postType = form.watch('postType');
   const categoryId = form.watch('categoryId');
   const customCategory = form.watch('customCategory');
@@ -114,6 +123,18 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
     if (!categorySearch) return categories;
     return categories.filter(c => c.name.toLowerCase().includes(categorySearch.toLowerCase()));
   }, [categorySearch, categories]);
+
+  const nextStep = async () => {
+    const fieldsToValidate = stepFields[currentStep] as (keyof z.infer<typeof formSchema>)[];
+    const isValid = await form.trigger(fieldsToValidate);
+    if (isValid) {
+        setCurrentStep(prev => prev + 1);
+    }
+  };
+
+  const prevStep = () => {
+    setCurrentStep(prev => prev - 1);
+  };
 
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -183,7 +204,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
           description: "تم نشر إعلانك وسيظهر في القسم المناسب.",
         });
         form.reset();
-        router.push(`/jobs/${id}`);
+        router.push(values.postType === 'seeking_job' ? `/workers/${id}` : `/jobs/${id}`);
       }
     } catch (error) {
        toast({
@@ -213,43 +234,13 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
     </FormLabel>
   )
 
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FormField
-          control={form.control}
-          name="postType"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                 <RadioGroup
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    className="hidden" // Visually hide the radio group
-                  >
-                    <FormItem>
-                      <FormControl>
-                        <RadioGroupItem value="seeking_worker" />
-                      </FormControl>
-                    </FormItem>
-                    <FormItem>
-                      <FormControl>
-                        <RadioGroupItem value="seeking_job" />
-                      </FormControl>
-                    </FormItem>
-                  </RadioGroup>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        
-        <fieldset disabled={!postType} className="space-y-6 disabled:opacity-50">
-          <FormField control={form.control} name="title" render={({ field }) => (
+  const stepsContent = [
+    // Step 1: Basic Info
+    <div className="space-y-6" key="step1">
+        <FormField control={form.control} name="title" render={({ field }) => (
             <FormItem><FormLabelIcon icon={FileText} label="عنوان الإعلان" /><FormControl><Input placeholder={postType === 'seeking_job' ? "مثال: مصمم جرافيك يبحث عن فرصة..." : "مثال: مطلوب مهندس مدني..."} {...field} /></FormControl><FormMessage /></FormItem>
-          )} />
-          
-          <div className="space-y-4 border p-4 rounded-lg">
+        )} />
+        <div className="space-y-4 border p-4 rounded-lg">
             <div className="flex justify-between items-center">
                 <FormLabelIcon icon={LayoutGrid} label="الفئة (اختياري)"/>
                 {(categoryId || customCategory) && (
@@ -270,7 +261,6 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
              <p className="text-sm text-muted-foreground -mt-2">
                 اختر من القائمة أو أدخل فئة مخصصة. لا يمكن اختيار الاثنين معاً.
             </p>
-            
             <FormField control={form.control} name="categoryId" render={({ field }) => (
               <FormItem>
                 <Select 
@@ -308,13 +298,11 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                 <FormMessage />
               </FormItem>
             )} />
-
             <div className="relative flex items-center">
                 <div className="flex-grow border-t border-border"></div>
                 <span className="flex-shrink mx-4 text-xs text-muted-foreground">أو</span>
                 <div className="flex-grow border-t border-border"></div>
             </div>
-
             <FormField control={form.control} name="customCategory" render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -333,44 +321,33 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                 <FormMessage />
               </FormItem>
             )} />
-          </div>
-
-
-          <FormField control={form.control} name="workType" render={({ field }) => (
+        </div>
+        <FormField control={form.control} name="workType" render={({ field }) => (
             <FormItem><FormLabelIcon icon={Briefcase} label="نوع العمل" /><Select onValueChange={field.onChange} value={field.value}><FormControl><SelectTrigger><SelectValue placeholder="اختر نوع العمل" /></SelectTrigger></FormControl><SelectContent><SelectItem value="full_time">دوام كامل</SelectItem><SelectItem value="part_time">دوام جزئي</SelectItem><SelectItem value="freelance">عمل حر</SelectItem><SelectItem value="remote">عن بعد</SelectItem></SelectContent></Select><FormMessage /></FormItem>
-          )} />
-
-          {postType === 'seeking_worker' && (
-            <FormField control={form.control} name="companyName" render={({ field }) => (
-              <FormItem><FormLabelIcon icon={Building2} label="اسم الشركة (اختياري)" /><FormControl><Input placeholder="اسم الشركة أو الجهة" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
-            )} />
-          )}
-
-          {postType === 'seeking_worker' && (
-            <FormField control={form.control} name="applyUrl" render={({ field }) => (
-              <FormItem><FormLabelIcon icon={LinkIcon} label="رابط التقديم (اختياري)" /><FormControl><Input type="url" placeholder="https://example.com/apply" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
-            )} />
-          )}
-
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        )} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
              <FormField control={form.control} name="country" render={({ field }) => (
                 <FormItem><FormLabelIcon icon={Globe} label="الدولة" /><FormControl><Input placeholder="مثال: المغرب" {...field} /></FormControl><FormMessage /></FormItem>
             )} />
             <FormField control={form.control} name="city" render={({ field }) => (
                 <FormItem><FormLabelIcon icon={MapPin} label="المدينة"/><FormControl><Input placeholder="مثال: الدار البيضاء" {...field} /></FormControl><FormMessage /></FormItem>
             )} />
-          </div>
+        </div>
+    </div>,
 
+    // Step 2: Job/Candidate Details
+    <div className="space-y-6" key="step2">
+         {postType === 'seeking_worker' && (
+            <FormField control={form.control} name="companyName" render={({ field }) => (
+              <FormItem><FormLabelIcon icon={Building2} label="اسم الشركة (اختياري)" /><FormControl><Input placeholder="اسم الشركة أو الجهة" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
+            )} />
+          )}
            <FormField control={form.control} name="experience" render={({ field }) => (
               <FormItem><FormLabelIcon icon={Award} label={postType === 'seeking_job' ? 'الخبرة' : 'الخبرة المطلوبة'} /><FormControl><Input placeholder="مثال: 5 سنوات، بدون خبرة..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
            )} />
-           
            <FormField control={form.control} name="qualifications" render={({ field }) => (
               <FormItem><FormLabelIcon icon={GraduationCap} label={postType === 'seeking_job' ? 'الشهادات والمؤهلات' : 'المؤهلات المطلوبة (اختياري)'} /><FormControl><Input placeholder="مثال: بكالوريوس هندسة، دبلوم تقني..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
             )} />
-
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField control={form.control} name="salary" render={({ field }) => (
               <FormItem><FormLabelIcon icon={Wallet} label="الأجر (اختياري)" /><FormControl><Input placeholder="مثال: 5000 درهم / شهري" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
@@ -386,44 +363,93 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                 )} />
             )}
           </div>
-          
           {postType === 'seeking_worker' && (
             <FormField control={form.control} name="conditions" render={({ field }) => (
               <FormItem><FormLabelIcon icon={ClipboardList} label="الشروط المطلوبة (اختياري)" /><FormControl><Textarea placeholder="اكتب الشروط الإضافية هنا، مثل: العمر، توفر وسيلة نقل، أوقات العمل..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
             )} />
           )}
-          
           <FormField control={form.control} name="description" render={({ field }) => (
             <FormItem><FormLabelIcon icon={FileSignature} label={postType === 'seeking_job' ? "وصف المهارات والخبرة" : "وصف الوظيفة (اختياري)"}/><FormControl><Textarea placeholder={postType === 'seeking_job' ? "اكتب تفاصيل عن مهاراتك وخبراتك..." : "اكتب تفاصيل إضافية عن الوظيفة، المتطلبات، إلخ."} {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
           )} />
+    </div>,
 
-          <div className="border p-4 rounded-lg space-y-4">
+    // Step 3: Contact Info
+    <div className="space-y-6" key="step3">
+        <div className="border p-4 rounded-lg space-y-4">
             <h3 className="font-semibold flex items-center gap-2"><Info className="h-5 w-5" style={{color: getThemeColor()}} />طرق التواصل</h3>
+            <p className="text-sm text-muted-foreground -mt-2">
+                أدخل وسيلة تواصل واحدة على الأقل. كلما أضفت طرقًا أكثر، زادت فرصة تواصل المهتمين معك.
+            </p>
             <FormField control={form.control} name="phone" render={({ field }) => (
-              <FormItem><FormLabelIcon icon={Phone} label="رقم الهاتف (اختياري)" /><FormControl><Input placeholder="+xxxxxxxxxx" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
+                <FormItem><FormLabelIcon icon={Phone} label="رقم الهاتف (اختياري)" /><FormControl><Input placeholder="+xxxxxxxxxx" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
             )} />
             <FormField control={form.control} name="whatsapp" render={({ field }) => (
-              <FormItem><FormLabelIcon icon={MessageSquare} label="رقم واتساب (اختياري)" /><FormControl><Input placeholder="+xxxxxxxxxx" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
+                <FormItem><FormLabelIcon icon={MessageSquare} label="رقم واتساب (اختياري)" /><FormControl><Input placeholder="+xxxxxxxxxx" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
             )} />
             <FormField control={form.control} name="email" render={({ field }) => (
-              <FormItem><FormLabelIcon icon={Mail} label="البريد الإلكتروني (اختياري)" /><FormControl><Input type="email" placeholder="example@mail.com" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
+                <FormItem><FormLabelIcon icon={Mail} label="البريد الإلكتروني (اختياري)" /><FormControl><Input type="email" placeholder="example@mail.com" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
             )} />
-             <FormField control={form.control} name="instagram" render={({ field }) => (
-              <FormItem><FormLabelIcon icon={Instagram} label="حساب إنستغرام (اختياري)" /><FormControl><Input placeholder="username" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
+            <FormField control={form.control} name="instagram" render={({ field }) => (
+                <FormItem><FormLabelIcon icon={Instagram} label="حساب إنستغرام (اختياري)" /><FormControl><Input placeholder="username" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
             )} />
+             {postType === 'seeking_worker' && (
+                <FormField control={form.control} name="applyUrl" render={({ field }) => (
+                    <FormItem><FormLabelIcon icon={LinkIcon} label="رابط التقديم (اختياري)" /><FormControl><Input type="url" placeholder="https://example.com/apply" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
+                )} />
+             )}
+              <FormMessage>{form.formState.errors.phone?.message}</FormMessage>
+        </div>
+    </div>
+  ];
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <div className="relative overflow-hidden">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentStep}
+              initial={{ x: 300, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: -300, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              {stepsContent[currentStep]}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+        
+        <div className="flex gap-4 items-center justify-between mt-8 pt-4 border-t">
+          {currentStep > 0 && (
+            <Button type="button" variant="outline" onClick={prevStep}>
+              <ArrowRight className="mr-2 h-4 w-4" />
+              السابق
+            </Button>
+          )}
+
+          <div className="flex-grow text-center text-sm text-muted-foreground">
+             الخطوة {currentStep + 1} من {stepsContent.length}
           </div>
 
-          <Button
-            type="submit"
-            size="lg"
-            disabled={isSubmitting}
-            className="w-full text-primary-foreground"
-            style={{ backgroundColor: getThemeColor() }}
-          >
-            {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-            {isEditing ? 'تحديث الإعلان' : 'نشر الإعلان'}
-          </Button>
-        </fieldset>
+          {currentStep < stepsContent.length - 1 && (
+            <Button type="button" onClick={nextStep} style={{ backgroundColor: getThemeColor() }} className="text-primary-foreground">
+              التالي
+              <ArrowLeft className="mr-2 h-4 w-4" />
+            </Button>
+          )}
+
+          {currentStep === stepsContent.length - 1 && (
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              style={{ backgroundColor: getThemeColor() }}
+              className="text-primary-foreground"
+            >
+              {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+              {isEditing ? 'تحديث الإعلان' : 'نشر الإعلان'}
+            </Button>
+          )}
+        </div>
       </form>
     </Form>
   );

@@ -1,7 +1,6 @@
 import { db } from '@/lib/firebase';
 import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, QueryConstraint, and, or, QueryFilterConstraint } from 'firebase/firestore';
 import type { Job, Category, PostType, User, WorkType, Testimonial } from './types';
-import Fuse from 'fuse.js';
 
 const categories: Category[] = [
   { id: 'it', name: 'تكنولوجيا المعلومات (IT)', iconName: 'Code', color: '#3b82f6' },
@@ -154,17 +153,15 @@ export async function getJobs(
     } = options;
 
     const adsRef = collection(db, 'ads');
-    let whereClauses: QueryFilterConstraint[] = [];
+    const queryConstraints: QueryConstraint[] = [];
 
-    if (postType) whereClauses.push(where('postType', '==', postType));
-    if (categoryId) whereClauses.push(where('categoryId', '==', categoryId));
-    if (workType) whereClauses.push(where('workType', '==', workType));
+    if (postType) queryConstraints.push(where('postType', '==', postType));
+    if (categoryId) queryConstraints.push(where('categoryId', '==', categoryId));
+    if (workType) queryConstraints.push(where('workType', '==', workType));
+    
+    queryConstraints.push(orderBy('createdAt', 'desc'));
 
-    const finalQuery = query(
-        adsRef, 
-        ...(whereClauses.length > 0 ? [and(...whereClauses)] : []),
-        orderBy('createdAt', 'desc')
-    );
+    const finalQuery = query(adsRef, ...queryConstraints);
     
     const querySnapshot = await getDocs(finalQuery);
 
@@ -178,21 +175,21 @@ export async function getJobs(
     });
 
     if (searchQuery || country || city) {
-      const fuseOptions = {
-        includeScore: true,
-        threshold: 0.4,
-        keys: ['title', 'description', 'categoryName', 'ownerName', 'country', 'city'],
-      };
-      const fuse = new Fuse(jobs, fuseOptions);
-      
-      const searchTerms = [];
-      if (searchQuery) searchTerms.push({ $or: [{title: searchQuery}, {description: searchQuery}, {categoryName: searchQuery}] });
-      if (country) searchTerms.push({ country: country });
-      if (city) searchTerms.push({ city: city });
+      jobs = jobs.filter(job => {
+        const queryLower = searchQuery?.toLowerCase() || '';
+        const countryLower = country?.toLowerCase() || '';
+        const cityLower = city?.toLowerCase() || '';
 
-      if (searchTerms.length > 0) {
-        jobs = fuse.search({ $and: searchTerms }).map(result => result.item);
-      }
+        const matchesQuery = !searchQuery || 
+          (job.title?.toLowerCase().includes(queryLower)) ||
+          (job.description?.toLowerCase().includes(queryLower)) ||
+          (job.categoryName?.toLowerCase().includes(queryLower));
+
+        const matchesCountry = !country || (job.country?.toLowerCase().includes(countryLower));
+        const matchesCity = !city || (job.city?.toLowerCase().includes(cityLower));
+
+        return matchesQuery && matchesCountry && matchesCity;
+      });
     }
     
     if (excludeId) {
@@ -437,8 +434,8 @@ export async function recordView(adId: string, viewerId: string): Promise<void> 
     return;
   }
   try {
-    const viewDocRef = doc(collection(db, 'ads', adId, 'views'));
-    await setDoc(viewDocRef, { viewerId, viewedAt: serverTimestamp() });
+    const viewDocRef = doc(db, 'ads', adId, 'views', viewerId);
+    await setDoc(viewDocRef, { viewedAt: serverTimestamp() });
   } catch (error) {
     console.error(`Error recording view for ad ${adId} by user ${viewerId}:`, error);
   }

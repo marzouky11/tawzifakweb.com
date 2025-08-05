@@ -10,6 +10,7 @@ import { Loader2, PlusCircle } from 'lucide-react';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import type { Category, PostType } from '@/lib/types';
+import { AnimatePresence } from 'framer-motion';
 
 interface PostJobClientPageProps {
     categories: Category[];
@@ -23,12 +24,12 @@ export default function PostJobClientPage({ categories }: PostJobClientPageProps
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push('/login');
+      router.push(`/login?redirect=/post-job?${searchParams.toString()}`);
     }
-    if (!postType) {
+    if (!loading && !postType && !window.location.pathname.includes('edit-job')) {
         router.push('/post-job/select-type');
     }
-  }, [user, loading, router, postType]);
+  }, [user, loading, router, postType, searchParams]);
 
   const pageTitle = postType === 'seeking_job' ? 'نشر طلب عمل' : 'نشر عرض عمل';
   const pageDescription = postType === 'seeking_job' 
@@ -54,7 +55,9 @@ export default function PostJobClientPage({ categories }: PostJobClientPageProps
             <div className="container mx-auto max-w-3xl px-4 pb-8">
                 <Card>
                 <CardContent className="pt-6">
-                    {postType && <PostJobForm categories={categories} preselectedType={postType} />}
+                    <AnimatePresence>
+                        {postType && <PostJobForm categories={categories} preselectedType={postType} />}
+                    </AnimatePresence>
                 </CardContent>
                 </Card>
             </div>
