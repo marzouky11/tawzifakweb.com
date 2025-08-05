@@ -1,28 +1,37 @@
 
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { recordView } from '@/lib/data';
 import { v4 as uuidv4 } from 'uuid';
 
 // Function to get or create a unique visitor ID
-const getVisitorId = () => {
-    let visitorId = localStorage.getItem('visitorId');
-    if (!visitorId) {
-        visitorId = uuidv4();
-        localStorage.setItem('visitorId', visitorId);
+const getVisitorId = (): string | null => {
+    // Check if we are in a browser environment
+    if (typeof window !== 'undefined' && window.localStorage) {
+        let visitorId = localStorage.getItem('visitorId');
+        if (!visitorId) {
+            visitorId = uuidv4();
+            localStorage.setItem('visitorId', visitorId);
+        }
+        return visitorId;
     }
-    return visitorId;
+    return null; // Return null if not in a browser
 };
 
 export function ViewCounter({ adId }: { adId: string }) {
   const { user } = useAuth();
   const viewRecordedRef = useRef(false);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    // We only want to record the view once per page load.
-    if (!adId || viewRecordedRef.current) {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    // We only want to record the view once per page load and only on the client.
+    if (!adId || !isClient || viewRecordedRef.current) {
       return;
     }
 
@@ -36,10 +45,12 @@ export function ViewCounter({ adId }: { adId: string }) {
         record(user.uid);
     } else {
         const visitorId = getVisitorId();
-        record(visitorId);
+        if (visitorId) {
+            record(visitorId);
+        }
     }
 
-  }, [adId, user]);
+  }, [adId, user, isClient]);
 
   return null;
 }
