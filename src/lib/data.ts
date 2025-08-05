@@ -30,7 +30,6 @@ const categories: Category[] = [
   { id: '8', name: 'خياط', iconName: 'Scissors', color: '#ec4899' },
   { id: '9', name: 'مصمم أزياء', iconName: 'Shirt', color: '#d946ef' },
   { id: '10', name: 'صباغ', iconName: 'Paintbrush', color: '#a855f7' },
-  { id: '11', name: 'بناء', iconName: 'HardHat', color: '#f97316' },
   { id: '12', name: 'عامل بلاط', iconName: 'Layers', color: '#78716c' },
   { id: '13', name: 'عامل زليج', iconName: 'Layers', color: '#78716c' },
   { id: '14', name: 'ميكانيكي سيارات', iconName: 'Wrench', color: '#ef4444' },
@@ -88,7 +87,6 @@ const categories: Category[] = [
   { id: '66', name: 'عامل نظافة شوارع', iconName: 'Trash2', color: '#e11d48' },
   { id: '67', name: 'عامل مغسلة ملابس', iconName: 'Shirt', color: '#7c3aed' },
   { id: '68', name: 'موزع إعلانات', iconName: 'Megaphone', color: '#be123c' },
-  { id: '69', name: 'متطوع', iconName: 'Handshake', color: '#10b981' }
 ];
 
 function formatTimeAgo(timestamp: any) {
@@ -155,14 +153,25 @@ export async function getJobs(
     const adsRef = collection(db, 'ads');
     const queryConstraints: QueryConstraint[] = [];
 
-    if (postType) queryConstraints.push(where('postType', '==', postType));
-    if (categoryId) queryConstraints.push(where('categoryId', '==', categoryId));
-    if (workType) queryConstraints.push(where('workType', '==', workType));
-    
-    queryConstraints.push(orderBy('createdAt', 'desc'));
+    const filterClauses: QueryFilterConstraint[] = [];
 
-    const finalQuery = query(adsRef, ...queryConstraints);
+    if (postType) {
+        filterClauses.push(where('postType', '==', postType));
+    }
+    if (categoryId) {
+        filterClauses.push(where('categoryId', '==', categoryId));
+    }
+    if (workType) {
+        filterClauses.push(where('workType', '==', workType));
+    }
+
+    if (filterClauses.length > 0) {
+      queryConstraints.push(...filterClauses);
+    }
+
+    queryConstraints.push(orderBy('createdAt', 'desc'));
     
+    const finalQuery = query(adsRef, ...queryConstraints);
     const querySnapshot = await getDocs(finalQuery);
 
     let jobs = querySnapshot.docs.map(doc => {
@@ -172,29 +181,21 @@ export async function getJobs(
         ...data,
         postedAt: formatTimeAgo(data.createdAt),
       } as Job;
+    }).filter(job => {
+       if (excludeId && job.id === excludeId) {
+        return false;
+      }
+
+      const matchesSearch = !searchQuery ||
+        (job.title?.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (job.description?.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (job.categoryName?.toLowerCase().includes(searchQuery.toLowerCase()));
+
+      const matchesCountry = !country || (job.country?.toLowerCase().includes(country.toLowerCase()));
+      const matchesCity = !city || (job.city?.toLowerCase().includes(city.toLowerCase()));
+      
+      return matchesSearch && matchesCountry && matchesCity;
     });
-
-    if (searchQuery || country || city) {
-      jobs = jobs.filter(job => {
-        const queryLower = searchQuery?.toLowerCase() || '';
-        const countryLower = country?.toLowerCase() || '';
-        const cityLower = city?.toLowerCase() || '';
-
-        const matchesQuery = !searchQuery || 
-          (job.title?.toLowerCase().includes(queryLower)) ||
-          (job.description?.toLowerCase().includes(queryLower)) ||
-          (job.categoryName?.toLowerCase().includes(queryLower));
-
-        const matchesCountry = !country || (job.country?.toLowerCase().includes(countryLower));
-        const matchesCity = !city || (job.city?.toLowerCase().includes(cityLower));
-
-        return matchesQuery && matchesCountry && matchesCity;
-      });
-    }
-    
-    if (excludeId) {
-      jobs = jobs.filter(job => job.id !== excludeId);
-    }
     
     if (count) {
       return jobs.slice(0, count);
@@ -435,7 +436,7 @@ export async function recordView(adId: string, viewerId: string): Promise<void> 
   }
   try {
     const viewDocRef = doc(db, 'ads', adId, 'views', viewerId);
-    await setDoc(viewDocRef, { viewedAt: serverTimestamp() });
+    await setDoc(viewDocRef, { viewedAt: serverTimestamp() }, { merge: true });
   } catch (error) {
     console.error(`Error recording view for ad ${adId} by user ${viewerId}:`, error);
   }
