@@ -137,41 +137,23 @@ export async function getJobs(
     } = options;
 
     const adsRef = collection(db, 'ads');
-    let q: QueryConstraint[] = [];
+    let constraints: QueryConstraint[] = [];
 
-    // Base filters that are always applied to the Firestore query
-    let whereClauses: QueryFilterConstraint[] = [];
-
-    if (postType) whereClauses.push(where('postType', '==', postType));
-    if (categoryId) whereClauses.push(where('categoryId', '==', categoryId));
-    if (workType) whereClauses.push(where('workType', '==', workType));
-
-    // Combine where clauses with and()
-    if (whereClauses.length > 0) {
-      q.push(and(...whereClauses));
-    }
+    // Server-side filtering
+    if (postType) constraints.push(where('postType', '==', postType));
+    if (categoryId) constraints.push(where('categoryId', '==', categoryId));
+    if (workType) constraints.push(where('workType', '==', workType));
     
     // Add sorting
-    q.push(orderBy('createdAt', 'desc'));
-
-    // Handle search query with OR condition
-    if (searchQuery) {
-        // Firestore does not support mixing `in` or `array-contains-any` with `!=` or `not-in`,
-        // and has limitations on OR queries. A client-side search or a more complex backend
-        // (like using a dedicated search service) would be better.
-        // For simplicity, we'll stick to a client-side search if there's a query.
-    }
+    constraints.push(orderBy('createdAt', 'desc'));
     
-    // Client-side filtering logic for text search, country, and city
     const useClientSideSearch = !!searchQuery || !!country || !!city;
 
-    if (!useClientSideSearch) {
-      if (count) {
-        q.push(limit(count));
-      }
+    if (!useClientSideSearch && count) {
+      constraints.push(limit(count));
     }
-
-    const finalQuery = query(adsRef, ...q);
+    
+    const finalQuery = query(adsRef, ...constraints);
     const querySnapshot = await getDocs(finalQuery);
 
     let jobs = querySnapshot.docs.map(doc => {
@@ -183,37 +165,29 @@ export async function getJobs(
       } as Job;
     });
 
+    // Client-side filtering for search query, country, and city
     if (useClientSideSearch) {
       const fuseOptions = {
         includeScore: true,
         threshold: 0.4,
-        keys: ['title', 'description', 'categoryName', 'ownerName', 'country', 'city'],
+        keys: ['title', 'description', 'categoryName', 'ownerName'],
       };
+      
+      let filteredJobs = jobs;
 
-      const searchPatterns: any[] = [];
-      if (searchQuery) {
-        searchPatterns.push({ 
-          $or: [
-            { title: searchQuery }, 
-            { description: searchQuery }, 
-            { categoryName: searchQuery },
-            { ownerName: searchQuery }
-          ] 
-        });
+      if(country) {
+          filteredJobs = filteredJobs.filter(job => job.country && job.country.toLowerCase().includes(country.toLowerCase()));
       }
-      if (country) {
-        searchPatterns.push({ country: `=${country}` });
-      }
-      if (city) {
-        searchPatterns.push({ city: `=${city}` });
+      if(city) {
+          filteredJobs = filteredJobs.filter(job => job.city && job.city.toLowerCase().includes(city.toLowerCase()));
       }
       
-      const fuse = new Fuse(jobs, fuseOptions);
-      const results = searchPatterns.length > 0 
-        ? fuse.search({ $and: searchPatterns }) 
-        : jobs.map(job => ({ item: job }));
-        
-      jobs = results.map(result => result.item);
+      if (searchQuery) {
+          const fuse = new Fuse(filteredJobs, fuseOptions);
+          jobs = fuse.search(searchQuery).map(result => result.item);
+      } else {
+          jobs = filteredJobs;
+      }
     }
     
     if (excludeId) {
