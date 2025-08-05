@@ -137,38 +137,29 @@ export async function getJobs(
     } = options;
 
     const adsRef = collection(db, 'ads');
-    const queryConstraints: QueryConstraint[] = [];
+    let q: QueryConstraint[] = [];
 
-    // Filtering constraints
-    if (postType) {
-      queryConstraints.push(where('postType', '==', postType));
-    }
-    if (categoryId) {
-      queryConstraints.push(where('categoryId', '==', categoryId));
-    }
-    if (workType) {
-      queryConstraints.push(where('workType', '==', workType));
-    }
-    // Location filters are handled client-side by Fuse.js if a search query is also present.
-    // If not, they can be handled by Firestore.
-    if (country && !searchQuery) {
-        queryConstraints.push(where('country', '==', country));
-    }
-     if (city && !searchQuery) {
-        queryConstraints.push(where('city', '==', city));
-    }
-    
-    // Sorting constraint (always newest)
-    queryConstraints.push(orderBy('createdAt', 'desc'));
-    
-    
-    // Limit constraint for non-fuzzy searches
-    if (count && !searchQuery && !country && !city) {
-        queryConstraints.push(limit(count));
-    }
-    
-    const finalQuery = query(adsRef, ...queryConstraints);
+    // Base filters that are always applied to the Firestore query
+    if (postType) q.push(where('postType', '==', postType));
+    if (categoryId) q.push(where('categoryId', '==', categoryId));
+    if (workType) q.push(where('workType', '==', workType));
 
+    // Client-side filtering logic
+    const useFuse = !!searchQuery || !!country || !!city;
+
+    if (!useFuse) {
+      q.push(orderBy('createdAt', 'desc'));
+      if (count) {
+        q.push(limit(count));
+      }
+    } else {
+      // If we use Fuse.js for searching, we might need to fetch more documents initially.
+      // Fetching without a limit and then slicing might be an option, but could be inefficient.
+      // For now, let's keep sorting by date.
+      q.push(orderBy('createdAt', 'desc'));
+    }
+
+    const finalQuery = query(adsRef, ...q);
     const querySnapshot = await getDocs(finalQuery);
 
     let jobs = querySnapshot.docs.map(doc => {
@@ -179,49 +170,47 @@ export async function getJobs(
         postedAt: formatTimeAgo(data.createdAt),
       } as Job;
     });
-    
-    // Client-side fuzzy search if a search query, country, or city is provided
-    if (searchQuery || country || city) {
-        const fuseOptions = {
-            includeScore: true,
-            threshold: 0.4,
-            keys: ['title', 'description', 'categoryName', 'ownerName', 'country', 'city'],
-        };
-        
-        const searchPatterns = [];
-        if (searchQuery) {
-            searchPatterns.push({ 
-              $or: [
-                { title: searchQuery }, 
-                { description: searchQuery }, 
-                { categoryName: searchQuery },
-                { ownerName: searchQuery }
-              ] 
-            });
-        }
-        if (country) {
-            searchPatterns.push({ country: country });
-        }
-        if (city) {
-            searchPatterns.push({ city: city });
-        }
-        
-        const fuse = new Fuse(jobs, fuseOptions);
-        
-        const results = searchPatterns.length > 0 
-          ? fuse.search({ $and: searchPatterns })
-          : fuse.search(searchQuery || ''); // Fallback for just a query string
 
-        jobs = results.map(result => result.item);
+    if (useFuse) {
+      const fuseOptions = {
+        includeScore: true,
+        threshold: 0.4,
+        keys: ['title', 'description', 'categoryName', 'ownerName', 'country', 'city'],
+      };
+
+      const searchPatterns: any[] = [];
+      if (searchQuery) {
+        searchPatterns.push({ 
+          $or: [
+            { title: searchQuery }, 
+            { description: searchQuery }, 
+            { categoryName: searchQuery },
+            { ownerName: searchQuery }
+          ] 
+        });
+      }
+      if (country) {
+        searchPatterns.push({ country: country });
+      }
+      if (city) {
+        searchPatterns.push({ city: city });
+      }
+      
+      const fuse = new Fuse(jobs, fuseOptions);
+      const results = searchPatterns.length > 0 
+        ? fuse.search({ $and: searchPatterns }) 
+        : jobs.map(job => ({ item: job })); // Return all if no patterns
+        
+      jobs = results.map(result => result.item);
     }
     
     if (excludeId) {
-        jobs = jobs.filter(job => job.id !== excludeId);
+      jobs = jobs.filter(job => job.id !== excludeId);
     }
     
-    // Apply limit after fuzzy search
-    if (count && (searchQuery || country || city)) {
-        jobs = jobs.slice(0, count);
+    // Apply count limit after filtering if it was a Fuse search
+    if (useFuse && count) {
+      return jobs.slice(0, count);
     }
 
     return jobs;
