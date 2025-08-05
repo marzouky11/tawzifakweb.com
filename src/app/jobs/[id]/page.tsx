@@ -211,15 +211,15 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
     return (
         <AppLayout>
             <ViewCounter adId={params.id} />
-            <MobilePageHeader title="تفاصيل عرض العمل">
-                <Briefcase className="h-5 w-5" style={{ color: finalColor }} />
-            </MobilePageHeader>
-            <DesktopPageHeader
-                icon={Briefcase}
-                title="تفاصيل عرض العمل"
-                description="هنا تجد جميع المعلومات المتعلقة بفرصة العمل هذه."
-            />
             <div className="container mx-auto max-w-4xl px-4 pb-8">
+                <MobilePageHeader title="تفاصيل عرض العمل">
+                    <Briefcase className="h-5 w-5" style={{ color: finalColor }} />
+                </MobilePageHeader>
+                <DesktopPageHeader
+                    icon={Briefcase}
+                    title="تفاصيل عرض العمل"
+                    description="هنا تجد جميع المعلومات المتعلقة بفرصة العمل هذه."
+                />
                 <div className="space-y-6">
                     <Card className="overflow-hidden shadow-lg border-t-4" style={{ borderColor: finalColor }}>
                         <CardHeader className="bg-muted/30 p-4 sm:p-6">
@@ -295,7 +295,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                     </Card>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                         <Card>
+                        <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2 text-lg">
                                     <Phone className="h-5 w-5 text-primary" />
@@ -345,14 +345,14 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                     صاحب الإعلان
                                 </CardTitle>
                             </CardHeader>
-                            <CardContent className="flex flex-row items-center gap-4">
-                                <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-16 w-16 text-2xl flex-shrink-0" />
-                                <div className="flex-grow text-right">
-                                    <div className="font-semibold text-lg">
+                            <CardContent className="flex flex-col gap-4">
+                                <div className="flex flex-row items-center gap-4">
+                                    <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-16 w-16 text-2xl flex-shrink-0" />
+                                    <div className="font-semibold text-lg text-right flex-grow">
                                         {job.ownerName || 'صاحب الإعلان'}
                                     </div>
                                 </div>
-                                <Button asChild variant="outline" size="sm" className="w-full sm:w-auto mt-0 flex-shrink-0">
+                                <Button asChild variant="outline" size="sm" className="w-full">
                                     <Link href={`/user/${job.userId}`}>
                                         <Search className="mr-2 h-4 w-4" />
                                         عرض جميع إعلاناته

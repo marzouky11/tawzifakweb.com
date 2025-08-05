@@ -200,15 +200,15 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
     return (
         <AppLayout>
             <ViewCounter adId={params.id} />
-            <MobilePageHeader title="ملف باحث عن عمل">
-                <UserIcon className="h-5 w-5" style={{ color: finalColor }} />
-            </MobilePageHeader>
-            <DesktopPageHeader
-                icon={UserIcon}
-                title="ملف باحث عن عمل"
-                description="استعرض مهارات وخبرات هذا المرشح وتواصل معه مباشرة."
-            />
             <div className="container mx-auto max-w-4xl px-4 pb-8">
+                <MobilePageHeader title="ملف باحث عن عمل">
+                    <UserIcon className="h-5 w-5" style={{ color: finalColor }} />
+                </MobilePageHeader>
+                <DesktopPageHeader
+                    icon={UserIcon}
+                    title="ملف باحث عن عمل"
+                    description="استعرض مهارات وخبرات هذا المرشح وتواصل معه مباشرة."
+                />
                 <div className="space-y-6">
                     <Card 
                         className="overflow-hidden shadow-lg border-2 border-dashed"
@@ -278,29 +278,6 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                         <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2 text-lg">
-                                    <UserIcon className="h-5 w-5 text-primary" />
-                                    صاحب الإعلان
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="flex flex-row items-center gap-4">
-                                <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-16 w-16 text-2xl flex-shrink-0" />
-                                <div className="flex-grow text-right">
-                                    <div className="font-semibold text-lg">
-                                        {job.ownerName || 'صاحب الإعلان'}
-                                    </div>
-                                </div>
-                                <Button asChild variant="outline" size="sm" className="w-full sm:w-auto mt-0 flex-shrink-0">
-                                    <Link href={`/user/${job.userId}`}>
-                                        <Search className="mr-2 h-4 w-4" />
-                                        عرض جميع إعلاناته
-                                    </Link>
-                                </Button>
-                            </CardContent>
-                        </Card>
-
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2 text-lg">
                                     <Phone className="h-5 w-5 text-primary" />
                                     معلومات التواصل
                                 </CardTitle>
@@ -335,6 +312,30 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                                 <ShareButton title={job.title || ''} text={job.description || ''} />
                             </CardContent>
                         </Card>
+                        
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-lg">
+                                    <UserIcon className="h-5 w-5 text-primary" />
+                                    صاحب الإعلان
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="flex flex-col gap-4">
+                                <div className="flex flex-row items-center gap-4">
+                                    <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-16 w-16 text-2xl flex-shrink-0" />
+                                    <div className="font-semibold text-lg text-right flex-grow">
+                                        {job.ownerName || 'صاحب الإعلان'}
+                                    </div>
+                                </div>
+                                <Button asChild variant="outline" size="sm" className="w-full">
+                                    <Link href={`/user/${job.userId}`}>
+                                        <Search className="mr-2 h-4 w-4" />
+                                        عرض جميع إعلاناته
+                                    </Link>
+                                </Button>
+                            </CardContent>
+                        </Card>
+
                     </div>
                     
                     <div className="text-center pt-4">
