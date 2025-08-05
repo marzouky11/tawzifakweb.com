@@ -283,7 +283,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                                 className="pr-9"
                                 value={categorySearch}
                                 onChange={(e) => setCategorySearch(e.target.value)}
-                                onKeyDown={(e) => e.stopPropagation()}
+                                onKeyDownCapture={(e) => e.stopPropagation()}
                             />
                         </div>
                     </div>
