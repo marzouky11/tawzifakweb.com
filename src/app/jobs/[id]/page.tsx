@@ -1,3 +1,4 @@
+
 import { notFound, redirect } from 'next/navigation';
 import { getJobById, getCategoryById, getJobs, getViewsCount } from '@/lib/data';
 import { AppLayout } from '@/components/layout/app-layout';
@@ -334,8 +335,8 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                         </CardContent>
                     </Card>
 
-                    <Card asChild>
-                        <Link href={`/user/${job.userId}`} className="group block">
+                    <Link href={`/user/${job.userId}`} className="group block">
+                        <Card className="h-full group-hover:bg-muted/50 transition-colors">
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2 text-lg group-hover:text-primary transition-colors">
                                     <UserIcon className="h-5 w-5 text-primary" />
@@ -348,8 +349,8 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                     {job.ownerName || 'صاحب الإعلان'}
                                 </div>
                             </CardContent>
-                        </Link>
-                    </Card>
+                        </Card>
+                    </Link>
                 </div>
                 
                 <div className="text-center pt-4">

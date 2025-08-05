@@ -273,8 +273,8 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                 </Card>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Card asChild>
-                        <Link href={`/user/${job.userId}`} className="group block">
+                    <Link href={`/user/${job.userId}`} className="group block">
+                        <Card className="h-full group-hover:bg-muted/50 transition-colors">
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2 text-lg group-hover:text-primary transition-colors">
                                     <UserIcon className="h-5 w-5 text-primary" />
@@ -287,8 +287,8 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                                     {job.ownerName || 'صاحب الإعلان'}
                                 </div>
                             </CardContent>
-                        </Link>
-                    </Card>
+                        </Card>
+                    </Link>
 
                     <Card>
                         <CardHeader>
