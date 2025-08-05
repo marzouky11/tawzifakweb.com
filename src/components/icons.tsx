@@ -54,6 +54,7 @@ import {
   Trash2,
   Handshake,
   Users,
+  Newspaper,
 } from 'lucide-react';
 import type { CSSProperties } from 'react';
 
@@ -111,6 +112,7 @@ const iconMap: { [key: string]: LucideIcon } = {
   Trash2,
   Handshake,
   Users,
+  Newspaper,
   Default: Briefcase,
 };
 

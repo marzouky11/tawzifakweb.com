@@ -4,6 +4,23 @@ import type { Job, Category, PostType, User, WorkType, Testimonial } from './typ
 import Fuse from 'fuse.js';
 
 const categories: Category[] = [
+  { id: 'it', name: 'تكنولوجيا المعلومات (IT)', iconName: 'Code', color: '#3b82f6' },
+  { id: 'engineering', name: 'الهندسة', iconName: 'CircuitBoard', color: '#10b981' },
+  { id: 'construction', name: 'البناء والأشغال العامة', iconName: 'HardHat', color: '#f97316' },
+  { id: 'healthcare', name: 'الصحة والتمريض', iconName: 'Stethoscope', color: '#ef4444' },
+  { id: 'education', name: 'التعليم والتدريب', iconName: 'BookOpen', color: '#8b5cf6' },
+  { id: 'finance', name: 'المالية والمحاسبة', iconName: 'Calculator', color: '#14b8a6' },
+  { id: 'admin', name: 'الإدارة والسكرتارية', iconName: 'KanbanSquare', color: '#64748b' },
+  { id: 'marketing', name: 'التسويق والمبيعات', iconName: 'Megaphone', color: '#ec4899' },
+  { id: 'hr', name: 'الموارد البشرية', iconName: 'Users', color: '#0ea5e9' },
+  { id: 'hospitality', name: 'الفندقة والسياحة', iconName: 'ConciergeBell', color: '#f59e0b' },
+  { id: 'logistics', name: 'النقل واللوجستيك', iconName: 'Truck', color: '#0284c7' },
+  { id: 'security', name: 'الخدمات الأمنية', iconName: 'Shield', color: '#1d4ed8' },
+  { id: 'crafts', name: 'الحرف والصناعات التقليدية', iconName: 'PenTool', color: '#a16207' },
+  { id: 'manufacturing', name: 'الصناعة والإنتاج', iconName: 'Factory', color: '#4b5563' },
+  { id: 'law', name: 'القانون والشؤون القانونية', iconName: 'Gavel', color: '#78716c' },
+  { id: 'media', name: 'الإعلام والاتصال', iconName: 'Newspaper', color: '#475569' },
+  { id: 'retail', name: 'التجارة والتوزيع', iconName: 'ShoppingCart', color: '#22c55e' },
   { id: '1', name: 'نجار', iconName: 'Hammer', color: '#a16207' },
   { id: '2', name: 'حداد', iconName: 'Wrench', color: '#475569' },
   { id: '3', name: 'سباك', iconName: 'ShowerHead', color: '#0ea5e9' },
@@ -137,23 +154,18 @@ export async function getJobs(
     } = options;
 
     const adsRef = collection(db, 'ads');
-    let constraints: QueryConstraint[] = [];
+    let whereClauses: QueryFilterConstraint[] = [];
 
-    // Server-side filtering
-    if (postType) constraints.push(where('postType', '==', postType));
-    if (categoryId) constraints.push(where('categoryId', '==', categoryId));
-    if (workType) constraints.push(where('workType', '==', workType));
-    
-    // Add sorting
-    constraints.push(orderBy('createdAt', 'desc'));
-    
-    const useClientSideSearch = !!searchQuery || !!country || !!city;
+    if (postType) whereClauses.push(where('postType', '==', postType));
+    if (categoryId) whereClauses.push(where('categoryId', '==', categoryId));
+    if (workType) whereClauses.push(where('workType', '==', workType));
 
-    if (!useClientSideSearch && count) {
-      constraints.push(limit(count));
-    }
+    const finalQuery = query(
+        adsRef, 
+        ...(whereClauses.length > 0 ? [and(...whereClauses)] : []),
+        orderBy('createdAt', 'desc')
+    );
     
-    const finalQuery = query(adsRef, ...constraints);
     const querySnapshot = await getDocs(finalQuery);
 
     let jobs = querySnapshot.docs.map(doc => {
@@ -165,28 +177,21 @@ export async function getJobs(
       } as Job;
     });
 
-    // Client-side filtering for search query, country, and city
-    if (useClientSideSearch) {
+    if (searchQuery || country || city) {
       const fuseOptions = {
         includeScore: true,
         threshold: 0.4,
-        keys: ['title', 'description', 'categoryName', 'ownerName'],
+        keys: ['title', 'description', 'categoryName', 'ownerName', 'country', 'city'],
       };
+      const fuse = new Fuse(jobs, fuseOptions);
       
-      let filteredJobs = jobs;
+      const searchTerms = [];
+      if (searchQuery) searchTerms.push({ $or: [{title: searchQuery}, {description: searchQuery}, {categoryName: searchQuery}] });
+      if (country) searchTerms.push({ country: country });
+      if (city) searchTerms.push({ city: city });
 
-      if(country) {
-          filteredJobs = filteredJobs.filter(job => job.country && job.country.toLowerCase().includes(country.toLowerCase()));
-      }
-      if(city) {
-          filteredJobs = filteredJobs.filter(job => job.city && job.city.toLowerCase().includes(city.toLowerCase()));
-      }
-      
-      if (searchQuery) {
-          const fuse = new Fuse(filteredJobs, fuseOptions);
-          jobs = fuse.search(searchQuery).map(result => result.item);
-      } else {
-          jobs = filteredJobs;
+      if (searchTerms.length > 0) {
+        jobs = fuse.search({ $and: searchTerms }).map(result => result.item);
       }
     }
     
@@ -194,7 +199,7 @@ export async function getJobs(
       jobs = jobs.filter(job => job.id !== excludeId);
     }
     
-    if (useClientSideSearch && count) {
+    if (count) {
       return jobs.slice(0, count);
     }
 
@@ -432,8 +437,8 @@ export async function recordView(adId: string, viewerId: string): Promise<void> 
     return;
   }
   try {
-    const viewDocRef = doc(db, 'ads', adId, 'views', viewerId);
-    await setDoc(viewDocRef, { viewedAt: serverTimestamp() }, { merge: true });
+    const viewDocRef = doc(collection(db, 'ads', adId, 'views'));
+    await setDoc(viewDocRef, { viewerId, viewedAt: serverTimestamp() });
   } catch (error) {
     console.error(`Error recording view for ad ${adId} by user ${viewerId}:`, error);
   }

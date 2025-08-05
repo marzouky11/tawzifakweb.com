@@ -1,4 +1,5 @@
 
+
 import { notFound, redirect } from 'next/navigation';
 import { getJobById, getCategoryById, getJobs, getViewsCount } from '@/lib/data';
 import { AppLayout } from '@/components/layout/app-layout';
@@ -28,6 +29,7 @@ import {
   ClipboardList,
   FileText,
   Eye,
+  Search,
 } from 'lucide-react';
 import type { WorkType } from '@/lib/types';
 import { CategoryIcon } from '@/components/icons';
@@ -295,6 +297,29 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-lg">
+                                <UserIcon className="h-5 w-5 text-primary" />
+                                صاحب الإعلان
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="flex flex-col sm:flex-row items-center gap-4">
+                            <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-16 w-16 text-2xl flex-shrink-0" />
+                            <div className="flex-grow text-center sm:text-right">
+                                <div className="font-semibold text-lg">
+                                    {job.ownerName || 'صاحب الإعلان'}
+                                </div>
+                            </div>
+                            <Button asChild variant="outline" size="sm" className="w-full sm:w-auto mt-2 sm:mt-0 flex-shrink-0">
+                                <Link href={`/user/${job.userId}`}>
+                                    <Search className="mr-2 h-4 w-4" />
+                                    عرض جميع إعلاناته
+                                </Link>
+                            </Button>
+                        </CardContent>
+                    </Card>
+
+                     <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2 text-lg">
                                 <Phone className="h-5 w-5 text-primary" />
                                 معلومات التواصل
                             </CardTitle>
@@ -334,23 +359,6 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                             <ShareButton title={job.title || ''} text={job.description || ''} />
                         </CardContent>
                     </Card>
-
-                    <Link href={`/user/${job.userId}`} className="group block">
-                        <Card className="h-full group-hover:bg-muted/50 transition-colors">
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2 text-lg group-hover:text-primary transition-colors">
-                                    <UserIcon className="h-5 w-5 text-primary" />
-                                    صاحب الإعلان
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="flex items-center gap-4">
-                                <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-16 w-16 text-2xl" />
-                                <div className="font-semibold text-lg group-hover:underline">
-                                    {job.ownerName || 'صاحب الإعلان'}
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </Link>
                 </div>
                 
                 <div className="text-center pt-4">
