@@ -444,9 +444,9 @@ export async function recordView(adId: string, userId: string): Promise<void> {
   }
   try {
     const viewDocRef = doc(db, 'ads', adId, 'views', userId);
-    // We only set the document, which will create it if it doesn't exist,
-    // or overwrite it if it does. This prevents duplicate views from a single user.
-    // The security rules prevent a user from writing to another user's view document.
+    // Use setDoc with merge:true to create or update the document.
+    // This ensures that a user's view is recorded without overwriting
+    // the document if it already exists, and creates it if it's new.
     await setDoc(viewDocRef, { viewedAt: serverTimestamp() }, { merge: true });
   } catch (error) {
     console.error(`Error recording view for ad ${adId} by user ${userId}:`, error);
