@@ -437,17 +437,20 @@ export async function getViewsCount(adId: string): Promise<number> {
     }
 }
 
-export async function recordView(adId: string, userId: string) {
-    if (!adId || !userId) return;
-    try {
-        const viewDocRef = doc(db, 'ads', adId, 'views', userId);
-        const docSnap = await getDoc(viewDocRef);
-        if (!docSnap.exists()) {
-            await setDoc(viewDocRef, { viewedAt: serverTimestamp() });
-        }
-    } catch (error) {
-        console.error(`Error recording view for ad ${adId} by user ${userId}:`, error);
-    }
+export async function recordView(adId: string, userId: string): Promise<void> {
+  if (!adId || !userId) {
+    console.warn("recordView: adId or userId is missing.");
+    return;
+  }
+  try {
+    const viewDocRef = doc(db, 'ads', adId, 'views', userId);
+    // We only set the document, which will create it if it doesn't exist,
+    // or overwrite it if it does. This prevents duplicate views from a single user.
+    // The security rules prevent a user from writing to another user's view document.
+    await setDoc(viewDocRef, { viewedAt: serverTimestamp() }, { merge: true });
+  } catch (error) {
+    console.error(`Error recording view for ad ${adId} by user ${userId}:`, error);
+  }
 }
 
 
