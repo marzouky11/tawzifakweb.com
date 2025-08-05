@@ -16,43 +16,25 @@ const getVisitorId = () => {
     return visitorId;
 };
 
-// Function to check if an ad has been viewed by the current visitor
-const hasViewedAd = (adId: string) => {
-    const viewedAds = JSON.parse(localStorage.getItem('viewedAds') || '{}');
-    return !!viewedAds[adId];
-};
-
-// Function to mark an ad as viewed
-const markAdAsViewed = (adId: string) => {
-    const viewedAds = JSON.parse(localStorage.getItem('viewedAds') || '{}');
-    viewedAds[adId] = true;
-    // Keep the list clean, store for ~30 days
-    localStorage.setItem('viewedAds', JSON.stringify(viewedAds));
-};
-
-
 export function ViewCounter({ adId }: { adId: string }) {
   const { user } = useAuth();
   const viewRecordedRef = useRef(false);
 
   useEffect(() => {
+    // We only want to record the view once per page load.
     if (!adId || viewRecordedRef.current) {
       return;
     }
 
     const record = (viewerId: string) => {
-        if (!hasViewedAd(adId)) {
-            recordView(adId, viewerId);
-            markAdAsViewed(adId);
-            viewRecordedRef.current = true;
-        }
+        recordView(adId, viewerId);
+        viewRecordedRef.current = true; // Mark as recorded for this session
     };
 
+    // Determine the viewer ID (either logged-in user or guest) and record the view.
     if (user) {
-        // Logged-in user
         record(user.uid);
     } else {
-        // Guest user
         const visitorId = getVisitorId();
         record(visitorId);
     }
