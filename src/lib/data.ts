@@ -140,20 +140,35 @@ export async function getJobs(
     let q: QueryConstraint[] = [];
 
     // Base filters that are always applied to the Firestore query
-    if (postType) q.push(where('postType', '==', postType));
-    if (categoryId) q.push(where('categoryId', '==', categoryId));
-    if (workType) q.push(where('workType', '==', workType));
+    let whereClauses: QueryFilterConstraint[] = [];
 
-    // Client-side filtering logic
-    const useFuse = !!searchQuery || !!country || !!city;
+    if (postType) whereClauses.push(where('postType', '==', postType));
+    if (categoryId) whereClauses.push(where('categoryId', '==', categoryId));
+    if (workType) whereClauses.push(where('workType', '==', workType));
 
-    if (!useFuse) {
-      q.push(orderBy('createdAt', 'desc'));
+    // Combine where clauses with and()
+    if (whereClauses.length > 0) {
+      q.push(and(...whereClauses));
+    }
+    
+    // Add sorting
+    q.push(orderBy('createdAt', 'desc'));
+
+    // Handle search query with OR condition
+    if (searchQuery) {
+        // Firestore does not support mixing `in` or `array-contains-any` with `!=` or `not-in`,
+        // and has limitations on OR queries. A client-side search or a more complex backend
+        // (like using a dedicated search service) would be better.
+        // For simplicity, we'll stick to a client-side search if there's a query.
+    }
+    
+    // Client-side filtering logic for text search, country, and city
+    const useClientSideSearch = !!searchQuery || !!country || !!city;
+
+    if (!useClientSideSearch) {
       if (count) {
         q.push(limit(count));
       }
-    } else {
-      q.push(orderBy('createdAt', 'desc'));
     }
 
     const finalQuery = query(adsRef, ...q);
@@ -168,7 +183,7 @@ export async function getJobs(
       } as Job;
     });
 
-    if (useFuse) {
+    if (useClientSideSearch) {
       const fuseOptions = {
         includeScore: true,
         threshold: 0.4,
@@ -187,10 +202,10 @@ export async function getJobs(
         });
       }
       if (country) {
-        searchPatterns.push({ country: country });
+        searchPatterns.push({ country: `=${country}` });
       }
       if (city) {
-        searchPatterns.push({ city: city });
+        searchPatterns.push({ city: `=${city}` });
       }
       
       const fuse = new Fuse(jobs, fuseOptions);
@@ -205,7 +220,7 @@ export async function getJobs(
       jobs = jobs.filter(job => job.id !== excludeId);
     }
     
-    if (useFuse && count) {
+    if (useClientSideSearch && count) {
       return jobs.slice(0, count);
     }
 
@@ -437,19 +452,16 @@ export async function getViewsCount(adId: string): Promise<number> {
     }
 }
 
-export async function recordView(adId: string, userId: string): Promise<void> {
-  if (!adId || !userId) {
-    console.warn("recordView: adId or userId is missing.");
+export async function recordView(adId: string, viewerId: string): Promise<void> {
+  if (!adId || !viewerId) {
+    console.warn("recordView: adId or viewerId is missing.");
     return;
   }
   try {
-    const viewDocRef = doc(db, 'ads', adId, 'views', userId);
-    // Use setDoc with merge:true to create or update the document.
-    // This ensures that a user's view is recorded without overwriting
-    // the document if it already exists, and creates it if it's new.
+    const viewDocRef = doc(db, 'ads', adId, 'views', viewerId);
     await setDoc(viewDocRef, { viewedAt: serverTimestamp() }, { merge: true });
   } catch (error) {
-    console.error(`Error recording view for ad ${adId} by user ${userId}:`, error);
+    console.error(`Error recording view for ad ${adId} by user ${viewerId}:`, error);
   }
 }
 
