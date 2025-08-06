@@ -384,7 +384,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="p-6">
+        <CardContent className="pt-6">
           <div className="relative overflow-hidden">
               <AnimatePresence mode="wait">
                   <motion.div
@@ -398,7 +398,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                   </motion.div>
               </AnimatePresence>
           </div>
-        </div>
+        </CardContent>
         
         <div className="flex gap-4 items-center justify-between mt-8 p-6 border-t">
           {currentStep > 0 && (
