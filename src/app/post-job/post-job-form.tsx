@@ -101,7 +101,6 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [categorySearch, setCategorySearch] = useState('');
 
   useEffect(() => {
     if (preselectedType) {
@@ -118,11 +117,6 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
   }, [categoryId, categories]);
   
   const categoryThemeColor = selectedCategoryData?.color;
-
-  const filteredCategories = React.useMemo(() => {
-    if (!categorySearch) return categories;
-    return categories.filter(c => c.name.toLowerCase().includes(categorySearch.toLowerCase()));
-  }, [categorySearch, categories]);
 
   const nextStep = async () => {
     const fieldsToValidate = stepFields[currentStep] as (keyof z.infer<typeof formSchema>)[];
@@ -275,24 +269,8 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                 >
                   <FormControl><SelectTrigger><SelectValue placeholder="اختر فئة العمل من القائمة" /></SelectTrigger></FormControl>
                   <SelectContent>
-                    <div className="p-2 sticky top-0 bg-popover z-10">
-                        <div className="relative">
-                            <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                            <Input 
-                                placeholder="ابحث عن فئة..." 
-                                className="pr-9"
-                                value={categorySearch}
-                                onChange={(e) => setCategorySearch(e.target.value)}
-                                onKeyDownCapture={(e) => e.stopPropagation()}
-                            />
-                        </div>
-                    </div>
-                    <ScrollArea className="h-[200px]">
-                      {filteredCategories.length > 0 ? (
-                         filteredCategories.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)
-                      ) : (
-                        <p className="p-2 text-center text-sm text-muted-foreground">لم يتم العثور على فئة.</p>
-                      )}
+                    <ScrollArea className="h-[250px]">
+                      {categories.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
                     </ScrollArea>
                   </SelectContent>
                 </Select>
@@ -455,3 +433,5 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
     </Form>
   );
 }
+
+    
