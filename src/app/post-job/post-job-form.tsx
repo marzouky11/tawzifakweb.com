@@ -72,9 +72,13 @@ interface PostJobFormProps {
 const StepsIndicator = ({ currentStep, steps, onStepClick }: { currentStep: number; steps: { id: number; name: string, description: string; icon: React.ElementType }[]; onStepClick: (step: number) => void; }) => {
   return (
     <div className="relative">
-      <div className="absolute inset-0 flex items-center" aria-hidden="true">
-        <div className="w-full border-t border-gray-300 dark:border-gray-700" />
+      <div className="absolute left-0 top-1/2 w-full -translate-y-1/2" aria-hidden="true">
+        <div className="h-0.5 w-full bg-border" />
       </div>
+      <div
+        className="absolute left-0 top-1/2 h-0.5 -translate-y-1/2 bg-primary transition-all duration-300"
+        style={{ width: `calc(${currentStep} / ${steps.length - 1} * 100%)` }}
+      />
       <div className="relative flex justify-between">
         {steps.map((step, stepIdx) => {
           const isCompleted = stepIdx < currentStep;
@@ -86,10 +90,10 @@ const StepsIndicator = ({ currentStep, steps, onStepClick }: { currentStep: numb
                 type="button"
                 onClick={() => stepIdx <= currentStep && onStepClick(stepIdx)}
                 className={cn(
-                  "relative z-10 w-10 h-10 flex items-center justify-center rounded-full font-bold text-lg transition-all duration-300",
-                  isCurrent ? "bg-primary text-primary-foreground scale-110" :
-                  isCompleted ? "bg-primary/80 text-primary-foreground" :
-                  "bg-muted text-muted-foreground",
+                  "relative z-10 w-10 h-10 flex items-center justify-center rounded-full font-bold text-lg transition-all duration-300 border-2",
+                  isCurrent ? "bg-primary text-primary-foreground border-primary scale-110" :
+                  isCompleted ? "bg-primary text-primary-foreground border-primary" :
+                  "bg-muted border-border text-muted-foreground",
                   "hover:scale-105"
                 )}
                 aria-current={isCurrent ? "step" : undefined}
@@ -104,9 +108,13 @@ const StepsIndicator = ({ currentStep, steps, onStepClick }: { currentStep: numb
                 <p className="text-xs text-muted-foreground">{step.description}</p>
               </div>
                {/* Mobile Label */}
-              <p className={cn("md:hidden text-center mt-2 text-xs font-semibold", isCurrent ? "text-primary" : "text-muted-foreground")}>
-                {step.name}
-              </p>
+               <div className="md:hidden text-center mt-2 h-5">
+                {isCurrent && (
+                    <p className="text-xs font-semibold text-primary">
+                        {step.name}
+                    </p>
+                )}
+               </div>
             </div>
           );
         })}
