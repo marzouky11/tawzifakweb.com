@@ -20,7 +20,7 @@ import {
   Loader2, Briefcase, Users, FileText, FileSignature, 
   LayoutGrid, Globe, MapPin, Wallet, Phone, MessageSquare, Mail,
   Building2, Award, Users2, Info, Instagram, GraduationCap, Link as LinkIcon,
-  ClipboardList, ArrowLeft, ArrowRight, CheckSquare,
+  ClipboardList, ArrowLeft, ArrowRight, CheckSquare, Check,
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -70,30 +70,39 @@ interface PostJobFormProps {
 }
 
 const StepsIndicator = ({ currentStep, steps }: { currentStep: number; steps: { id: number; name: string }[] }) => {
-    return (
-        <nav aria-label="Progress">
-            <ol role="list" className="flex items-center">
-                {steps.map((step, stepIdx) => (
-                    <li key={step.name} className={cn("relative", stepIdx !== steps.length - 1 ? "pr-8 sm:pr-20 flex-1" : "")}>
-                        {stepIdx < currentStep ? (
-                             <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                                <div className="h-0.5 w-full bg-primary"></div>
-                            </div>
-                        ) : (
-                             <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                                <div className="h-0.5 w-full bg-gray-200"></div>
-                            </div>
-                        )}
+  return (
+    <nav aria-label="Progress">
+      <ol role="list" className="flex items-center">
+        {steps.map((step, stepIdx) => (
+          <li key={step.name} className={cn("relative", stepIdx !== steps.length - 1 ? "flex-1" : "")}>
+            <div className="flex items-center">
+              <span
+                className={cn(
+                  "flex h-9 w-9 items-center justify-center rounded-full",
+                  stepIdx <= currentStep ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+                )}
+              >
+                {stepIdx < currentStep ? <Check className="h-5 w-5" /> : <span>{step.id}</span>}
+              </span>
+              <span className={cn("hidden sm:inline-flex ml-4 text-sm font-medium", stepIdx <= currentStep ? "text-primary" : "text-muted-foreground")}>
+                {step.name}
+              </span>
+            </div>
 
-                        <div className="relative flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                            <span>{step.id}</span>
-                        </div>
-                        <p className="text-center mt-2 text-sm font-medium text-primary">{step.name}</p>
-                    </li>
-                ))}
-            </ol>
-        </nav>
-    );
+            {stepIdx < steps.length - 1 ? (
+              <div
+                className={cn(
+                  "absolute left-0 top-4 -z-10 h-0.5 w-full -translate-x-1/2 bg-gray-200",
+                   stepIdx < currentStep && "bg-primary"
+                )}
+                aria-hidden="true"
+              />
+            ) : null}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
 };
 
 
@@ -432,15 +441,14 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
   ];
 
   return (
-    <CardContent className="p-0">
         <Form {...form}>
-           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full">
+           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full space-y-8">
                 
-                <div className="mb-8 p-6 border-b">
+                <div className="px-6 pt-6">
                      <StepsIndicator currentStep={currentStep} steps={steps} />
                 </div>
                 
-                <div className="px-6 pb-6 flex-grow">
+                <div className="px-6 flex-grow">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={currentStep}
@@ -483,6 +491,5 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                 </div>
             </form>
         </Form>
-    </CardContent>
   );
 }
