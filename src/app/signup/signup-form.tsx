@@ -15,6 +15,7 @@ import Link from 'next/link';
 import { Loader2, UserPlus, Mail, Lock, User, MapPin, Globe } from 'lucide-react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
+import { Checkbox } from '@/components/ui/checkbox';
 
 export function SignupForm() {
   const router = useRouter();
@@ -26,6 +27,7 @@ export function SignupForm() {
   const [gender, setGender] = useState<'male' | 'female' | ''>('');
   const [country, setCountry] = useState('');
   const [city, setCity] = useState('');
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -49,6 +51,14 @@ export function SignupForm() {
     if (!city) {
       toast({ variant: 'destructive', title: 'خطأ', description: 'الرجاء تحديد المدينة.' });
       return;
+    }
+    if (!agreedToTerms) {
+        toast({
+            variant: 'destructive',
+            title: 'مطلوب الموافقة على الشروط',
+            description: 'يجب عليك الموافقة على شروط الاستخدام وسياسة الخصوصية للمتابعة.',
+        });
+        return;
     }
 
     setLoading(true);
@@ -203,6 +213,15 @@ export function SignupForm() {
                   required
                   placeholder="المدينة التي تقيم بها"
                 />
+              </div>
+              
+              <div className="flex items-start space-x-2 space-x-reverse pt-2">
+                <Checkbox id="terms" checked={agreedToTerms} onCheckedChange={(checked) => setAgreedToTerms(checked as boolean)} />
+                <div className="grid gap-1.5 leading-none">
+                  <Label htmlFor="terms" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    أوافق على <Link href="/terms" target="_blank" className="text-primary hover:underline">شروط الاستخدام</Link> و <Link href="/privacy" target="_blank" className="text-primary hover:underline">سياسة الخصوصية</Link>.
+                  </Label>
+                </div>
               </div>
 
               <Button type="submit" className="w-full" disabled={loading}>
