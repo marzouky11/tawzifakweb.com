@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -19,7 +20,7 @@ import {
   Loader2, Briefcase, Users, FileText, FileSignature, 
   LayoutGrid, Globe, MapPin, Wallet, Phone, MessageSquare, Mail,
   Building2, Award, Users2, Info, Instagram, GraduationCap, Link as LinkIcon,
-  ClipboardList, ArrowLeft, ArrowRight
+  ClipboardList, ArrowLeft, ArrowRight, CheckSquare,
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -41,6 +42,7 @@ const formSchema = z.object({
   salary: z.string().optional(),
   openPositions: z.coerce.number().int().positive().optional(),
   conditions: z.string().optional(),
+  tasks: z.string().optional(),
   description: z.string().optional(),
   
   phone: z.string().optional(),
@@ -57,7 +59,7 @@ const formSchema = z.object({
 
 const stepFields = [
   ['postType', 'title', 'categoryId', 'customCategory', 'workType', 'country', 'city'],
-  ['companyName', 'experience', 'qualifications', 'salary', 'openPositions', 'conditions', 'description'],
+  ['companyName', 'experience', 'qualifications', 'salary', 'openPositions', 'conditions', 'tasks', 'description'],
   ['phone', 'whatsapp', 'email', 'instagram', 'applyUrl'],
 ];
 
@@ -67,35 +69,33 @@ interface PostJobFormProps {
   preselectedType?: PostType;
 }
 
-const StepsIndicator = ({ currentStep }: { currentStep: number }) => {
-    const steps = [
-        { id: 1, name: "المعلومات الأساسية" },
-        { id: 2, name: "التفاصيل" },
-        { id: 3, name: "التواصل" },
-    ];
-
+const StepsIndicator = ({ currentStep, steps }: { currentStep: number; steps: { id: number; name: string }[] }) => {
     return (
         <nav aria-label="Progress">
-            <ol role="list" className="space-y-4 md:flex md:space-x-8 md:space-y-0">
+            <ol role="list" className="flex items-center">
                 {steps.map((step, stepIdx) => (
-                    <li key={step.name} className="md:flex-1">
-                        {stepIdx <= currentStep ? (
-                            <div className="group flex w-full flex-col border-l-4 border-primary py-2 pl-4 transition-colors md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
-                                <span className="text-sm font-medium text-primary transition-colors">{`الخطوة ${step.id}`}</span>
-                                <span className="text-sm font-medium">{step.name}</span>
+                    <li key={step.name} className={cn("relative", stepIdx !== steps.length - 1 ? "pr-8 sm:pr-20 flex-1" : "")}>
+                        {stepIdx < currentStep ? (
+                             <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                                <div className="h-0.5 w-full bg-primary"></div>
                             </div>
                         ) : (
-                            <div className="group flex w-full flex-col border-l-4 border-gray-200 py-2 pl-4 transition-colors md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
-                                <span className="text-sm font-medium text-gray-500 transition-colors">{`الخطوة ${step.id}`}</span>
-                                <span className="text-sm font-medium">{step.name}</span>
+                             <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                                <div className="h-0.5 w-full bg-gray-200"></div>
                             </div>
                         )}
+
+                        <div className="relative flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                            <span>{step.id}</span>
+                        </div>
+                        <p className="text-center mt-2 text-sm font-medium text-primary">{step.name}</p>
                     </li>
                 ))}
             </ol>
         </nav>
     );
 };
+
 
 export function PostJobForm({ categories, job, preselectedType }: PostJobFormProps) {
   const { toast } = useToast();
@@ -121,6 +121,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
       openPositions: job?.openPositions || undefined,
       description: job?.description || '',
       conditions: job?.conditions || '',
+      tasks: job?.tasks || '',
       phone: job?.phone || '',
       whatsapp: job?.whatsapp || '',
       email: job?.email || '',
@@ -151,7 +152,9 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
     const fieldsToValidate = stepFields[currentStep] as (keyof z.infer<typeof formSchema>)[];
     const isValid = await form.trigger(fieldsToValidate);
     if (isValid) {
-        setCurrentStep(prev => prev + 1);
+        if (currentStep < stepsContent.length - 1) {
+            setCurrentStep(prev => prev + 1);
+        }
     } else {
         toast({
             variant: "destructive",
@@ -218,6 +221,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
           experience: values.experience,
           qualifications: values.qualifications,
           conditions: values.conditions,
+          tasks: values.tasks,
           openPositions: values.openPositions,
           description: values.description,
           phone: values.phone,
@@ -262,6 +266,12 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
       {label}
     </FormLabel>
   )
+
+  const steps = [
+        { id: 1, name: "المعلومات الأساسية" },
+        { id: 2, name: "التفاصيل" },
+        { id: 3, name: "التواصل" },
+    ];
 
   const stepsContent = [
     // Step 1: Basic Info
@@ -378,9 +388,14 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
             )}
           </div>
           {postType === 'seeking_worker' && (
-            <FormField control={form.control} name="conditions" render={({ field }) => (
-              <FormItem><FormLabelIcon icon={ClipboardList} label="الشروط المطلوبة (اختياري)" /><FormControl><Textarea placeholder="اكتب الشروط الإضافية هنا، مثل: العمر، توفر وسيلة نقل، أوقات العمل..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
-            )} />
+            <>
+              <FormField control={form.control} name="conditions" render={({ field }) => (
+                <FormItem><FormLabelIcon icon={ClipboardList} label="الشروط المطلوبة (اختياري)" /><FormControl><Textarea placeholder="اكتب الشروط الإضافية هنا، مثل: العمر، توفر وسيلة نقل، أوقات العمل..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
+              )} />
+               <FormField control={form.control} name="tasks" render={({ field }) => (
+                <FormItem><FormLabelIcon icon={CheckSquare} label="المهام المطلوبة (اختياري)" /><FormControl><Textarea placeholder="اكتب قائمة بالمهام والمسؤوليات للوظيفة..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
+              )} />
+            </>
           )}
           <FormField control={form.control} name="description" render={({ field }) => (
             <FormItem><FormLabelIcon icon={FileSignature} label={postType === 'seeking_job' ? "وصف المهارات والخبرة" : "وصف الوظيفة (اختياري)"}/><FormControl><Textarea placeholder={postType === 'seeking_job' ? "اكتب تفاصيل عن مهاراتك وخبراتك..." : "اكتب تفاصيل إضافية عن الوظيفة، المتطلبات، إلخ."} {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
@@ -417,55 +432,57 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
   ];
 
   return (
-    <Form {...form}>
-       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full">
-            
-            <div className="mb-8 p-6 border-b">
-                <StepsIndicator currentStep={currentStep} />
-            </div>
-            
-            <div className="px-6 pb-6 flex-grow">
-                <AnimatePresence mode="wait">
-                    <motion.div
-                        key={currentStep}
-                        initial={{ x: currentStep > 0 ? 300 : -300, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        exit={{ x: currentStep > 0 ? -300 : 300, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                    >
-                        {stepsContent[currentStep]}
-                    </motion.div>
-                </AnimatePresence>
-            </div>
+    <CardContent className="p-0">
+        <Form {...form}>
+           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full">
+                
+                <div className="mb-8 p-6 border-b">
+                     <StepsIndicator currentStep={currentStep} steps={steps} />
+                </div>
+                
+                <div className="px-6 pb-6 flex-grow">
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={currentStep}
+                            initial={{ x: currentStep > 0 ? 300 : -300, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            exit={{ x: currentStep > 0 ? -300 : 300, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                        >
+                            {stepsContent[currentStep]}
+                        </motion.div>
+                    </AnimatePresence>
+                </div>
 
-            <div className="flex gap-4 items-center justify-between p-6 border-t bg-muted/50 rounded-b-lg mt-auto">
-                {currentStep > 0 ? (
-                    <Button type="button" variant="outline" onClick={prevStep}>
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                        السابق
-                    </Button>
-                ) : <div />}
+                <div className="flex gap-4 items-center justify-between p-6 border-t bg-muted/50 rounded-b-lg mt-auto">
+                    {currentStep > 0 ? (
+                        <Button type="button" variant="outline" onClick={prevStep}>
+                            <ArrowRight className="ml-2 h-4 w-4" />
+                            السابق
+                        </Button>
+                    ) : <div />}
 
-                {currentStep < stepsContent.length - 1 && (
-                    <Button type="button" onClick={nextStep} style={{ backgroundColor: getThemeColor() }} className="text-primary-foreground">
-                        التالي
-                        <ArrowLeft className="mr-2 h-4 w-4" />
-                    </Button>
-                )}
+                    {currentStep < stepsContent.length - 1 && (
+                        <Button type="button" onClick={nextStep} style={{ backgroundColor: getThemeColor() }} className="text-primary-foreground">
+                            التالي
+                            <ArrowLeft className="mr-2 h-4 w-4" />
+                        </Button>
+                    )}
 
-                {currentStep === stepsContent.length - 1 && (
-                    <Button
-                        type="submit"
-                        disabled={isSubmitting}
-                        style={{ backgroundColor: getThemeColor() }}
-                        className="text-primary-foreground"
-                    >
-                        {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                        {isEditing ? 'تحديث الإعلان' : 'نشر الإعلان'}
-                    </Button>
-                )}
-            </div>
-        </form>
-    </Form>
+                    {currentStep === stepsContent.length - 1 && (
+                        <Button
+                            type="submit"
+                            disabled={isSubmitting}
+                            style={{ backgroundColor: getThemeColor() }}
+                            className="text-primary-foreground"
+                        >
+                            {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                            {isEditing ? 'تحديث الإعلان' : 'نشر الإعلان'}
+                        </Button>
+                    )}
+                </div>
+            </form>
+        </Form>
+    </CardContent>
   );
 }

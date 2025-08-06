@@ -30,6 +30,7 @@ import {
   FileText,
   Eye,
   Search,
+  CheckSquare,
 } from 'lucide-react';
 import type { WorkType } from '@/lib/types';
 import { CategoryIcon } from '@/components/icons';
@@ -199,13 +200,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
     const jobTitle = job.title || 'هذا الإعلان';
     const whatsappMessage = `مرحبًا، اطلعت على إعلانكم لوظيفة '${jobTitle}' على منصة توظيفك وأنا مهتم بالتقديم. هل يمكن تزويدي بمزيد من التفاصيل؟ شكرًا.`;
     const emailSubject = `استفسار بخصوص وظيفة: ${jobTitle}`;
-    const emailBody = `مرحبًا،
-
-اطلعت على إعلانكم لوظيفة '${jobTitle}' على منصة توظيفك وأنا مهتم بالتقديم.
-
-أرجو منكم تزويدي بالمزيد من التفاصيل حول كيفية التقديم أو المتطلبات الإضافية.
-
-شكرًا لكم.`;
+    const emailBody = ``;
 
     
     return (
@@ -267,7 +262,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                </DetailSection>
                             )}
 
-                            {job.experience && (job.qualifications || job.conditions || job.description) && <Separator />}
+                            {job.experience && (job.qualifications || job.conditions || job.description || job.tasks) && <Separator />}
 
                             {job.qualifications && (
                                <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة">
@@ -275,7 +270,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                </DetailSection>
                             )}
                             
-                            {job.qualifications && (job.conditions || job.description) && <Separator />}
+                            {job.qualifications && (job.conditions || job.description || job.tasks) && <Separator />}
 
                             {job.conditions && (
                                <DetailSection icon={ClipboardList} title="الشروط المطلوبة">
@@ -283,7 +278,15 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                </DetailSection>
                             )}
 
-                            {job.conditions && job.description && <Separator />}
+                             {job.conditions && (job.tasks || job.description) && <Separator />}
+
+                            {job.tasks && (
+                               <DetailSection icon={CheckSquare} title="المهام المطلوبة">
+                                    <p>{job.tasks}</p>
+                               </DetailSection>
+                            )}
+
+                            {job.tasks && job.description && <Separator />}
 
                             {job.description && (
                                <DetailSection icon={FileText} title="وصف الوظيفة">

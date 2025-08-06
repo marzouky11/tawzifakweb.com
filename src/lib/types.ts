@@ -1,4 +1,5 @@
 
+
 import type { Timestamp } from 'firebase/firestore';
 
 export interface Category {
@@ -40,6 +41,7 @@ export interface Job {
   applyUrl?: string;
   qualifications?: string;
   conditions?: string;
+  tasks?: string;
   education?: string;
   status?: 'open' | 'closed';
   views?: number;
