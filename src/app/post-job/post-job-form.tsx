@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, 'useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -24,6 +24,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { Card, CardContent } from '@/components/ui/card';
 
 const formSchema = z.object({
   postType: z.enum(['seeking_worker', 'seeking_job'], { required_error: 'الرجاء تحديد نوع الإعلان.' }),
@@ -422,56 +423,57 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <div className="mb-8 p-4 border-b">
-            <StepsIndicator currentStep={currentStep} />
-        </div>
-          
-        <div className="px-6 pb-6">
-             <div className="relative overflow-hidden">
-                <AnimatePresence mode="wait">
-                    <motion.div
-                    key={currentStep}
-                    initial={{ x: currentStep > 0 ? 300 : -300, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    exit={{ x: currentStep > 0 ? -300 : 300, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
+       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full">
+            <CardContent className="p-0">
+                <div className="mb-8 p-4 border-b">
+                    <StepsIndicator currentStep={currentStep} />
+                </div>
+                
+                <div className="px-6 pb-6 flex-grow">
+                    <div className="relative overflow-hidden">
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={currentStep}
+                                initial={{ x: currentStep > 0 ? 300 : -300, opacity: 0 }}
+                                animate={{ x: 0, opacity: 1 }}
+                                exit={{ x: currentStep > 0 ? -300 : 300, opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                {stepsContent[currentStep]}
+                            </motion.div>
+                        </AnimatePresence>
+                    </div>
+                </div>
+            </CardContent>
+
+            <div className="flex gap-4 items-center justify-between p-6 border-t bg-muted/50 rounded-b-lg mt-auto">
+                {currentStep > 0 ? (
+                    <Button type="button" variant="outline" onClick={prevStep}>
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                        السابق
+                    </Button>
+                ) : <div />}
+
+                {currentStep < stepsContent.length - 1 && (
+                    <Button type="button" onClick={nextStep} style={{ backgroundColor: getThemeColor() }} className="text-primary-foreground">
+                        التالي
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                    </Button>
+                )}
+
+                {currentStep === stepsContent.length - 1 && (
+                    <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        style={{ backgroundColor: getThemeColor() }}
+                        className="text-primary-foreground"
                     >
-                    {stepsContent[currentStep]}
-                    </motion.div>
-                </AnimatePresence>
+                        {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                        {isEditing ? 'تحديث الإعلان' : 'نشر الإعلان'}
+                    </Button>
+                )}
             </div>
-        </div>
-
-        <div className="flex gap-4 items-center justify-between p-6 border-t bg-muted/50 rounded-b-lg">
-          {currentStep > 0 ? (
-            <Button type="button" variant="outline" onClick={prevStep}>
-              <ArrowRight className="ml-2 h-4 w-4" />
-              السابق
-            </Button>
-          ) : <div />}
-
-          {currentStep < stepsContent.length - 1 && (
-            <Button type="button" onClick={nextStep} style={{ backgroundColor: getThemeColor() }} className="text-primary-foreground">
-              التالي
-              <ArrowLeft className="mr-2 h-4 w-4" />
-            </Button>
-          )}
-
-          {currentStep === stepsContent.length - 1 && (
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              style={{ backgroundColor: getThemeColor() }}
-              className="text-primary-foreground"
-            >
-              {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-              {isEditing ? 'تحديث الإعلان' : 'نشر الإعلان'}
-            </Button>
-          )}
-        </div>
-      </form>
+        </form>
     </Form>
   );
 }
-
