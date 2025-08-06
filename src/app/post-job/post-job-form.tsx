@@ -99,14 +99,12 @@ const StepsIndicator = ({ currentStep, steps, onStepClick }: { currentStep: numb
               >
                 {isCompleted ? <Check className="w-6 h-6" /> : <step.icon className="w-5 h-5" />}
               </button>
-               {/* Desktop Label */}
               <div className="hidden md:block text-center mt-2">
                 <p className={cn("font-bold", isCurrent ? "text-primary" : "text-foreground")}>
                   {step.name}
                 </p>
                 <p className="text-xs text-muted-foreground">{step.description}</p>
               </div>
-               {/* Mobile Label */}
                <div className="md:hidden text-center mt-2 h-5">
                 {isCurrent && (
                     <p className="text-xs font-semibold text-primary">
@@ -483,10 +481,10 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={currentStep}
-                            initial={{ x: currentStep > 0 ? 300 : -300, opacity: 0 }}
-                            animate={{ x: 0, opacity: 1 }}
-                            exit={{ x: currentStep > 0 ? -300 : 300, opacity: 0 }}
-                            transition={{ duration: 0.3 }}
+                            initial={{ y: 10, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: -10, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
                         >
                             {stepsContent[currentStep]}
                         </motion.div>
