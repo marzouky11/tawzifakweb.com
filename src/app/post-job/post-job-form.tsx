@@ -71,11 +71,11 @@ interface PostJobFormProps {
 const StepsIndicator = ({ currentStep, steps, onStepClick }: { currentStep: number; steps: { id: number; name: string, description: string; icon: React.ElementType }[]; onStepClick: (step: number) => void; }) => {
   return (
     <div className="relative">
-      <div className="absolute left-0 top-1/2 w-full -translate-y-1/2" aria-hidden="true">
+      <div className="absolute right-0 top-1/2 w-full -translate-y-1/2" aria-hidden="true">
         <div className="h-0.5 w-full bg-border" />
       </div>
       <div
-        className="absolute left-0 top-1/2 h-0.5 -translate-y-1/2 bg-primary transition-all duration-300"
+        className="absolute right-0 top-1/2 h-0.5 -translate-y-1/2 bg-primary transition-all duration-300"
         style={{ width: `calc(${currentStep} / ${steps.length - 1} * 100%)` }}
       />
       <div className="relative flex justify-between">
