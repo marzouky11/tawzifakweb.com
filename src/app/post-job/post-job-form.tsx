@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, 'useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -19,13 +19,11 @@ import {
   Loader2, Briefcase, Users, FileText, FileSignature, 
   LayoutGrid, Globe, MapPin, Wallet, Phone, MessageSquare, Mail,
   Building2, Award, Users2, Info, Instagram, GraduationCap, Link as LinkIcon,
-  ClipboardList, Search, ArrowLeft, ArrowRight
+  ClipboardList, ArrowLeft, ArrowRight
 } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
 const formSchema = z.object({
   postType: z.enum(['seeking_worker', 'seeking_job'], { required_error: 'الرجاء تحديد نوع الإعلان.' }),
@@ -67,6 +65,41 @@ interface PostJobFormProps {
   job?: Job | null;
   preselectedType?: PostType;
 }
+
+const StepsIndicator = ({ currentStep }: { currentStep: number }) => {
+    const steps = [
+        { id: 1, name: "المعلومات الأساسية" },
+        { id: 2, name: "التفاصيل" },
+        { id: 3, name: "التواصل" },
+    ];
+
+    return (
+        <nav aria-label="Progress">
+            <ol role="list" className="flex items-center">
+                {steps.map((step, stepIdx) => (
+                    <li key={step.name} className={cn("relative", stepIdx !== steps.length - 1 ? "pr-8 sm:pr-20" : "")}>
+                        {stepIdx < currentStep ? (
+                             <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                                <div className="h-0.5 w-full bg-primary" />
+                            </div>
+                        ) : (
+                             <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                                <div className="h-0.5 w-full bg-gray-200" />
+                            </div>
+                        )}
+                        <div className="relative flex h-8 w-8 items-center justify-center rounded-full"
+                             style={{ backgroundColor: stepIdx <= currentStep ? 'hsl(var(--primary))' : 'hsl(var(--muted))' }}>
+                            <span className="text-sm font-medium" 
+                                  style={{ color: stepIdx <= currentStep ? 'hsl(var(--primary-foreground))' : 'hsl(var(--muted-foreground))' }}>
+                                {step.id}
+                            </span>
+                        </div>
+                    </li>
+                ))}
+            </ol>
+        </nav>
+    );
+};
 
 export function PostJobForm({ categories, job, preselectedType }: PostJobFormProps) {
   const { toast } = useToast();
@@ -123,6 +156,12 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
     const isValid = await form.trigger(fieldsToValidate);
     if (isValid) {
         setCurrentStep(prev => prev + 1);
+    } else {
+        toast({
+            variant: "destructive",
+            title: "حقول ناقصة",
+            description: "الرجاء تعبئة جميع الحقول المطلوبة للمتابعة.",
+        });
     }
   };
 
@@ -383,34 +422,34 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <CardContent className="pt-6">
-          <div className="relative overflow-hidden">
-              <AnimatePresence mode="wait">
-                  <motion.div
-                  key={currentStep}
-                  initial={{ x: 300, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  exit={{ x: -300, opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  >
-                  {stepsContent[currentStep]}
-                  </motion.div>
-              </AnimatePresence>
-          </div>
-        </CardContent>
-        
-        <div className="flex gap-4 items-center justify-between mt-8 p-6 border-t">
-          {currentStep > 0 && (
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <div className="mb-8 p-4 border-b">
+            <StepsIndicator currentStep={currentStep} />
+        </div>
+          
+        <div className="px-6 pb-6">
+             <div className="relative overflow-hidden">
+                <AnimatePresence mode="wait">
+                    <motion.div
+                    key={currentStep}
+                    initial={{ x: currentStep > 0 ? 300 : -300, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: currentStep > 0 ? -300 : 300, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    >
+                    {stepsContent[currentStep]}
+                    </motion.div>
+                </AnimatePresence>
+            </div>
+        </div>
+
+        <div className="flex gap-4 items-center justify-between p-6 border-t bg-muted/50 rounded-b-lg">
+          {currentStep > 0 ? (
             <Button type="button" variant="outline" onClick={prevStep}>
               <ArrowRight className="ml-2 h-4 w-4" />
               السابق
             </Button>
-          )}
-
-          <div className="flex-grow text-center text-sm text-muted-foreground">
-             الخطوة {currentStep + 1} من {stepsContent.length}
-          </div>
+          ) : <div />}
 
           {currentStep < stepsContent.length - 1 && (
             <Button type="button" onClick={nextStep} style={{ backgroundColor: getThemeColor() }} className="text-primary-foreground">
@@ -435,3 +474,4 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
     </Form>
   );
 }
+
