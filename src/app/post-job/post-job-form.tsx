@@ -75,35 +75,39 @@ const StepsIndicator = ({ currentStep, steps }: { currentStep: number; steps: { 
       <ol role="list" className="flex items-center">
         {steps.map((step, stepIdx) => (
           <li key={step.name} className={cn("relative", stepIdx !== steps.length - 1 ? "flex-1" : "")}>
-            <div className="flex items-center">
-              <span
+            <div
                 className={cn(
-                  "flex h-9 w-9 items-center justify-center rounded-full",
-                  stepIdx <= currentStep ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-                )}
-              >
-                {stepIdx < currentStep ? <Check className="h-5 w-5" /> : <span>{step.id}</span>}
-              </span>
-              <span className={cn("hidden sm:inline-flex ml-4 text-sm font-medium", stepIdx <= currentStep ? "text-primary" : "text-muted-foreground")}>
-                {step.name}
-              </span>
-            </div>
-
-            {stepIdx < steps.length - 1 ? (
-              <div
-                className={cn(
-                  "absolute left-0 top-4 -z-10 h-0.5 w-full -translate-x-1/2 bg-gray-200",
-                   stepIdx < currentStep && "bg-primary"
+                    "absolute left-0 top-1/2 h-0.5 w-full -translate-y-1/2 bg-border transition-colors",
+                    stepIdx < currentStep && "bg-primary"
                 )}
                 aria-hidden="true"
               />
-            ) : null}
+            <div className="relative flex h-8 w-8 items-center justify-center rounded-full bg-background border-2 border-border transition-colors"
+                style={{
+                    borderColor: stepIdx <= currentStep ? 'hsl(var(--primary))' : 'hsl(var(--border))',
+                }}
+            >
+                {stepIdx < currentStep ? (
+                    <Check className="h-5 w-5 text-primary" />
+                ) : (
+                    <span className={cn("text-sm", stepIdx <= currentStep ? "text-primary" : "text-muted-foreground")}>{step.id}</span>
+                )}
+            </div>
+             <div className="hidden sm:block absolute top-10 left-1/2 -translate-x-1/2 w-max text-center">
+                <span className={cn(
+                    "text-xs font-medium transition-opacity", 
+                    stepIdx === currentStep ? "opacity-100 text-primary" : "opacity-0"
+                )}>
+                    {step.name}
+                </span>
+            </div>
           </li>
         ))}
       </ol>
     </nav>
   );
 };
+
 
 
 export function PostJobForm({ categories, job, preselectedType }: PostJobFormProps) {
