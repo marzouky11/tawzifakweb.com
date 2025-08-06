@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
@@ -13,6 +13,7 @@ import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import { Loader2, LogIn, Mail, Lock } from 'lucide-react';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 export function LoginForm() {
   const router = useRouter();
@@ -21,11 +22,25 @@ export function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!recaptchaToken) {
+      toast({
+        variant: 'destructive',
+        title: 'مطلوب التحقق',
+        description: 'الرجاء إثبات أنك لست روبوتًا.',
+      });
+      return;
+    }
+
     setLoading(true);
     try {
+      // NOTE: Server-side verification of the recaptchaToken is required for security.
+      // This front-end implementation is for UI purposes only.
+
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       toast({
         title: `👋 مرحبًا ${userCredential.user.displayName || 'بعودتك'}!`,
@@ -43,6 +58,8 @@ export function LoginForm() {
         title: 'خطأ في تسجيل الدخول',
         description: errorMessage,
       });
+      recaptchaRef.current?.reset();
+      setRecaptchaToken(null);
     } finally {
       setLoading(false);
     }
@@ -95,6 +112,17 @@ export function LoginForm() {
                     🔐 كلمة المرور الخاصة بك مشفرة ومحمية بالكامل.
                 </p>
               </div>
+
+              <div className="flex justify-center pt-2">
+                 <ReCAPTCHA
+                    ref={recaptchaRef}
+                    sitekey="6LcuupwrAAAAAP7d9JIkTUu8H2qeGMmyRE1T81Ga"
+                    onChange={setRecaptchaToken}
+                    onExpired={() => setRecaptchaToken(null)}
+                    hl="ar"
+                  />
+              </div>
+
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {loading ? 'جاري تسجيل الدخول...' : 'تسجيل الدخول'}

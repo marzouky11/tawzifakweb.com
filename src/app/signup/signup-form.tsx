@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
@@ -16,6 +16,7 @@ import { Loader2, UserPlus, Mail, Lock, User, MapPin, Globe } from 'lucide-react
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Checkbox } from '@/components/ui/checkbox';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 export function SignupForm() {
   const router = useRouter();
@@ -29,6 +30,8 @@ export function SignupForm() {
   const [city, setCity] = useState('');
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,14 +63,24 @@ export function SignupForm() {
         });
         return;
     }
+    if (!recaptchaToken) {
+        toast({
+            variant: 'destructive',
+            title: 'مطلوب التحقق',
+            description: 'الرجاء إثبات أنك لست روبوتًا.',
+        });
+        return;
+    }
 
     setLoading(true);
     try {
+      // NOTE: Server-side verification of the recaptchaToken is required for security.
+      // This front-end implementation is for UI purposes only.
+
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
       await updateProfile(user, { displayName: name });
-
 
       const colors = [
         '#ef4444', '#f97316', '#eab308', '#84cc16', '#22c55e', '#10b981', '#14b8a6', 
@@ -98,6 +111,8 @@ export function SignupForm() {
         title: 'خطأ في إنشاء الحساب',
         description: errorMessage,
       });
+      recaptchaRef.current?.reset();
+      setRecaptchaToken(null);
     } finally {
       setLoading(false);
     }
@@ -223,6 +238,17 @@ export function SignupForm() {
                   </Label>
                 </div>
               </div>
+              
+              <div className="flex justify-center">
+                 <ReCAPTCHA
+                    ref={recaptchaRef}
+                    sitekey="6LcuupwrAAAAAP7d9JIkTUu8H2qeGMmyRE1T81Ga"
+                    onChange={setRecaptchaToken}
+                    onExpired={() => setRecaptchaToken(null)}
+                    hl="ar"
+                  />
+              </div>
+
 
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
