@@ -71,42 +71,47 @@ interface PostJobFormProps {
 
 const StepsIndicator = ({ currentStep, steps, onStepClick }: { currentStep: number; steps: { id: number; name: string, description: string; icon: React.ElementType }[]; onStepClick: (step: number) => void; }) => {
   return (
-    <nav aria-label="Progress">
-      <ol role="list" className="space-y-4 md:flex md:space-x-8 md:space-y-0">
-        {steps.map((step, stepIdx) => (
-          <li key={step.name} className="md:flex-1">
-            <div
-              onClick={() => stepIdx <= currentStep && onStepClick(stepIdx)}
-              className={cn(
-                "group flex flex-col border-l-4 py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4 transition-colors",
-                stepIdx < currentStep ? 'border-primary cursor-pointer hover:border-primary/80' : 
-                stepIdx === currentStep ? 'border-primary' : 
-                'border-border group-hover:border-gray-300'
-              )}
-            >
-              <div className="flex items-center gap-3">
-                  <div className={cn(
-                      "flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-colors",
-                      stepIdx <= currentStep ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
-                  )}>
-                    {stepIdx < currentStep ? <Check className="w-6 h-6" /> : <step.icon className="w-6 h-6" />}
-                  </div>
-                  <div>
-                    <span className={cn(
-                        "text-sm font-bold transition-colors",
-                        stepIdx <= currentStep ? 'text-primary' : 'text-muted-foreground'
-                    )}>
-                        الخطوة {step.id}
-                    </span>
-                    <h3 className="text-base font-bold text-foreground">{step.name}</h3>
-                  </div>
+    <div className="relative">
+      <div className="absolute inset-0 flex items-center" aria-hidden="true">
+        <div className="w-full border-t border-gray-300 dark:border-gray-700" />
+      </div>
+      <div className="relative flex justify-between">
+        {steps.map((step, stepIdx) => {
+          const isCompleted = stepIdx < currentStep;
+          const isCurrent = stepIdx === currentStep;
+          
+          return (
+            <div key={step.name} className="flex flex-col items-center">
+              <button
+                type="button"
+                onClick={() => stepIdx <= currentStep && onStepClick(stepIdx)}
+                className={cn(
+                  "relative z-10 w-10 h-10 flex items-center justify-center rounded-full font-bold text-lg transition-all duration-300",
+                  isCurrent ? "bg-primary text-primary-foreground scale-110" :
+                  isCompleted ? "bg-primary/80 text-primary-foreground" :
+                  "bg-muted text-muted-foreground",
+                  "hover:scale-105"
+                )}
+                aria-current={isCurrent ? "step" : undefined}
+              >
+                {isCompleted ? <Check className="w-6 h-6" /> : <step.icon className="w-5 h-5" />}
+              </button>
+               {/* Desktop Label */}
+              <div className="hidden md:block text-center mt-2">
+                <p className={cn("font-bold", isCurrent ? "text-primary" : "text-foreground")}>
+                  {step.name}
+                </p>
+                <p className="text-xs text-muted-foreground">{step.description}</p>
               </div>
-              <p className="mt-2 text-sm text-muted-foreground hidden md:block">{step.description}</p>
+               {/* Mobile Label */}
+              <p className={cn("md:hidden text-center mt-2 text-xs font-semibold", isCurrent ? "text-primary" : "text-muted-foreground")}>
+                {step.name}
+              </p>
             </div>
-          </li>
-        ))}
-      </ol>
-    </nav>
+          );
+        })}
+      </div>
+    </div>
   );
 };
 
@@ -297,9 +302,9 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
   )
 
   const steps = [
-    { id: 1, name: "معلومات أساسية", description: "حدد نوع الإعلان وتفاصيله الرئيسية.", icon: FileText },
-    { id: 2, name: "تفاصيل الإعلان", description: "أضف معلومات إضافية عن الوظيفة أو خبرتك.", icon: FileSignature },
-    { id: 3, name: "معلومات التواصل", description: "كيف يمكن للمهتمين التواصل معك.", icon: Phone },
+    { id: 1, name: "المعلومات الأساسية", description: "نوع الإعلان وتفاصيله الرئيسية.", icon: FileText },
+    { id: 2, name: "التفاصيل", description: "معلومات إضافية عن الوظيفة أو خبرتك.", icon: FileSignature },
+    { id: 3, name: "التواصل", description: "كيف يمكن للمهتمين التواصل معك.", icon: Phone },
   ];
 
   const stepsContent = [
@@ -463,7 +468,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
   return (
         <Form {...form}>
            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full">
-                <div className="p-6">
+                <div className="p-6 md:p-8">
                      <StepsIndicator currentStep={currentStep} steps={steps} onStepClick={handleStepClick} />
                 </div>
                 
