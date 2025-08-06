@@ -76,25 +76,20 @@ const StepsIndicator = ({ currentStep }: { currentStep: number }) => {
 
     return (
         <nav aria-label="Progress">
-            <ol role="list" className="flex items-center">
+            <ol role="list" className="space-y-4 md:flex md:space-x-8 md:space-y-0">
                 {steps.map((step, stepIdx) => (
-                    <li key={step.name} className={cn("relative", stepIdx !== steps.length - 1 ? "pr-8 sm:pr-20" : "")}>
-                        {stepIdx < currentStep ? (
-                             <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                                <div className="h-0.5 w-full bg-primary" />
+                    <li key={step.name} className="md:flex-1">
+                        {stepIdx <= currentStep ? (
+                            <div className="group flex w-full flex-col border-l-4 border-primary py-2 pl-4 transition-colors md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
+                                <span className="text-sm font-medium text-primary transition-colors">{`الخطوة ${step.id}`}</span>
+                                <span className="text-sm font-medium">{step.name}</span>
                             </div>
                         ) : (
-                             <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                                <div className="h-0.5 w-full bg-gray-200" />
+                            <div className="group flex w-full flex-col border-l-4 border-gray-200 py-2 pl-4 transition-colors md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
+                                <span className="text-sm font-medium text-gray-500 transition-colors">{`الخطوة ${step.id}`}</span>
+                                <span className="text-sm font-medium">{step.name}</span>
                             </div>
                         )}
-                        <div className="relative flex h-8 w-8 items-center justify-center rounded-full"
-                             style={{ backgroundColor: stepIdx <= currentStep ? 'hsl(var(--primary))' : 'hsl(var(--muted))' }}>
-                            <span className="text-sm font-medium" 
-                                  style={{ color: stepIdx <= currentStep ? 'hsl(var(--primary-foreground))' : 'hsl(var(--muted-foreground))' }}>
-                                {step.id}
-                            </span>
-                        </div>
                     </li>
                 ))}
             </ol>
@@ -424,27 +419,24 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
   return (
     <Form {...form}>
        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full">
-            <CardContent className="p-0">
-                <div className="mb-8 p-4 border-b">
-                    <StepsIndicator currentStep={currentStep} />
-                </div>
-                
-                <div className="px-6 pb-6 flex-grow">
-                    <div className="relative overflow-hidden">
-                        <AnimatePresence mode="wait">
-                            <motion.div
-                                key={currentStep}
-                                initial={{ x: currentStep > 0 ? 300 : -300, opacity: 0 }}
-                                animate={{ x: 0, opacity: 1 }}
-                                exit={{ x: currentStep > 0 ? -300 : 300, opacity: 0 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                {stepsContent[currentStep]}
-                            </motion.div>
-                        </AnimatePresence>
-                    </div>
-                </div>
-            </CardContent>
+            
+            <div className="mb-8 p-6 border-b">
+                <StepsIndicator currentStep={currentStep} />
+            </div>
+            
+            <div className="px-6 pb-6 flex-grow">
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={currentStep}
+                        initial={{ x: currentStep > 0 ? 300 : -300, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        exit={{ x: currentStep > 0 ? -300 : 300, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        {stepsContent[currentStep]}
+                    </motion.div>
+                </AnimatePresence>
+            </div>
 
             <div className="flex gap-4 items-center justify-between p-6 border-t bg-muted/50 rounded-b-lg mt-auto">
                 {currentStep > 0 ? (
