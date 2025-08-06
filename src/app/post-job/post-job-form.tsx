@@ -21,7 +21,7 @@ import {
   Building2, Award, Users2, Info, Instagram, GraduationCap, Link as LinkIcon,
   ClipboardList, Search, ArrowLeft, ArrowRight
 } from 'lucide-react';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -383,22 +383,24 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 p-6">
-        <div className="relative overflow-hidden">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentStep}
-              initial={{ x: 300, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -300, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              {stepsContent[currentStep]}
-            </motion.div>
-          </AnimatePresence>
-        </div>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <CardContent className="p-6">
+            <div className="relative overflow-hidden">
+                <AnimatePresence mode="wait">
+                    <motion.div
+                    key={currentStep}
+                    initial={{ x: 300, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: -300, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    >
+                    {stepsContent[currentStep]}
+                    </motion.div>
+                </AnimatePresence>
+            </div>
+        </CardContent>
         
-        <div className="flex gap-4 items-center justify-between mt-8 pt-4 border-t">
+        <div className="flex gap-4 items-center justify-between mt-8 pt-6 p-6 border-t">
           {currentStep > 0 && (
             <Button type="button" variant="outline" onClick={prevStep}>
               <ArrowRight className="ml-2 h-4 w-4" />
