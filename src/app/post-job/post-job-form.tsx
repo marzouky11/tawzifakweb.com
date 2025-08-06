@@ -69,37 +69,39 @@ interface PostJobFormProps {
   preselectedType?: PostType;
 }
 
-const StepsIndicator = ({ currentStep, steps }: { currentStep: number; steps: { id: number; name: string }[] }) => {
+const StepsIndicator = ({ currentStep, steps, onStepClick }: { currentStep: number; steps: { id: number; name: string, description: string; icon: React.ElementType }[]; onStepClick: (step: number) => void; }) => {
   return (
     <nav aria-label="Progress">
-      <ol role="list" className="flex items-center">
+      <ol role="list" className="space-y-4 md:flex md:space-x-8 md:space-y-0">
         {steps.map((step, stepIdx) => (
-          <li key={step.name} className={cn("relative", stepIdx !== steps.length - 1 ? "flex-1" : "")}>
+          <li key={step.name} className="md:flex-1">
             <div
-                className={cn(
-                    "absolute left-0 top-1/2 h-0.5 w-full -translate-y-1/2 bg-border transition-colors",
-                    stepIdx < currentStep && "bg-primary"
-                )}
-                aria-hidden="true"
-              />
-            <div className="relative flex h-8 w-8 items-center justify-center rounded-full bg-background border-2 border-border transition-colors"
-                style={{
-                    borderColor: stepIdx <= currentStep ? 'hsl(var(--primary))' : 'hsl(var(--border))',
-                }}
+              onClick={() => stepIdx <= currentStep && onStepClick(stepIdx)}
+              className={cn(
+                "group flex flex-col border-l-4 py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4 transition-colors",
+                stepIdx < currentStep ? 'border-primary cursor-pointer hover:border-primary/80' : 
+                stepIdx === currentStep ? 'border-primary' : 
+                'border-border group-hover:border-gray-300'
+              )}
             >
-                {stepIdx < currentStep ? (
-                    <Check className="h-5 w-5 text-primary" />
-                ) : (
-                    <span className={cn("text-sm", stepIdx <= currentStep ? "text-primary" : "text-muted-foreground")}>{step.id}</span>
-                )}
-            </div>
-             <div className="hidden sm:block absolute top-10 left-1/2 -translate-x-1/2 w-max text-center">
-                <span className={cn(
-                    "text-xs font-medium transition-opacity", 
-                    stepIdx === currentStep ? "opacity-100 text-primary" : "opacity-0"
-                )}>
-                    {step.name}
-                </span>
+              <div className="flex items-center gap-3">
+                  <div className={cn(
+                      "flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-colors",
+                      stepIdx <= currentStep ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
+                  )}>
+                    {stepIdx < currentStep ? <Check className="w-6 h-6" /> : <step.icon className="w-6 h-6" />}
+                  </div>
+                  <div>
+                    <span className={cn(
+                        "text-sm font-bold transition-colors",
+                        stepIdx <= currentStep ? 'text-primary' : 'text-muted-foreground'
+                    )}>
+                        الخطوة {step.id}
+                    </span>
+                    <h3 className="text-base font-bold text-foreground">{step.name}</h3>
+                  </div>
+              </div>
+              <p className="mt-2 text-sm text-muted-foreground hidden md:block">{step.description}</p>
             </div>
           </li>
         ))}
@@ -176,6 +178,20 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
         });
     }
   };
+  
+  const handleStepClick = async (stepIndex: number) => {
+    if (stepIndex < currentStep) {
+        setCurrentStep(stepIndex);
+        return;
+    }
+
+    const fieldsToValidate = stepFields[currentStep] as (keyof z.infer<typeof formSchema>)[];
+    const isValid = await form.trigger(fieldsToValidate);
+
+    if(isValid) {
+        setCurrentStep(stepIndex);
+    }
+  }
 
   const prevStep = () => {
     setCurrentStep(prev => prev - 1);
@@ -281,10 +297,10 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
   )
 
   const steps = [
-        { id: 1, name: "المعلومات الأساسية" },
-        { id: 2, name: "التفاصيل" },
-        { id: 3, name: "التواصل" },
-    ];
+    { id: 1, name: "معلومات أساسية", description: "حدد نوع الإعلان وتفاصيله الرئيسية.", icon: FileText },
+    { id: 2, name: "تفاصيل الإعلان", description: "أضف معلومات إضافية عن الوظيفة أو خبرتك.", icon: FileSignature },
+    { id: 3, name: "معلومات التواصل", description: "كيف يمكن للمهتمين التواصل معك.", icon: Phone },
+  ];
 
   const stepsContent = [
     // Step 1: Basic Info
@@ -446,13 +462,12 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
 
   return (
         <Form {...form}>
-           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full space-y-8">
-                
-                <div className="px-6 pt-6">
-                     <StepsIndicator currentStep={currentStep} steps={steps} />
+           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full">
+                <div className="p-6">
+                     <StepsIndicator currentStep={currentStep} steps={steps} onStepClick={handleStepClick} />
                 </div>
                 
-                <div className="px-6 flex-grow">
+                <div className="p-6 flex-grow">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={currentStep}
