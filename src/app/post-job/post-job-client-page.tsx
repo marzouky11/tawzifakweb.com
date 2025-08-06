@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect } from 'react';
@@ -54,11 +55,9 @@ export default function PostJobClientPage({ categories }: PostJobClientPageProps
         ) : (
             <div className="container mx-auto max-w-3xl px-4 pb-8">
                 <Card>
-                <CardContent className="p-0">
-                    <AnimatePresence>
-                        {postType && <PostJobForm categories={categories} preselectedType={postType} />}
-                    </AnimatePresence>
-                </CardContent>
+                  <AnimatePresence>
+                      {postType && <PostJobForm categories={categories} preselectedType={postType} />}
+                  </AnimatePresence>
                 </Card>
             </div>
         )}

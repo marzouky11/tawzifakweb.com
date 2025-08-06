@@ -304,7 +304,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
         <FormField control={form.control} name="workType" render={({ field }) => (
             <FormItem><FormLabelIcon icon={Briefcase} label="نوع العمل" /><Select onValueChange={field.onChange} value={field.value}><FormControl><SelectTrigger><SelectValue placeholder="اختر نوع العمل" /></SelectTrigger></FormControl><SelectContent><SelectItem value="full_time">دوام كامل</SelectItem><SelectItem value="part_time">دوام جزئي</SelectItem><SelectItem value="freelance">عمل حر</SelectItem><SelectItem value="remote">عن بعد</SelectItem></SelectContent></Select><FormMessage /></FormItem>
         )} />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
              <FormField control={form.control} name="country" render={({ field }) => (
                 <FormItem><FormLabelIcon icon={Globe} label="الدولة" /><FormControl><Input placeholder="مثال: المغرب" {...field} /></FormControl><FormMessage /></FormItem>
             )} />
@@ -327,7 +327,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
            <FormField control={form.control} name="qualifications" render={({ field }) => (
               <FormItem><FormLabelIcon icon={GraduationCap} label={postType === 'seeking_job' ? 'الشهادات والمؤهلات' : 'المؤهلات المطلوبة (اختياري)'} /><FormControl><Input placeholder="مثال: بكالوريوس هندسة، دبلوم تقني..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
             )} />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField control={form.control} name="salary" render={({ field }) => (
               <FormItem><FormLabelIcon icon={Wallet} label="الأجر (اختياري)" /><FormControl><Input placeholder="مثال: 5000 درهم / شهري" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
             )} />
@@ -384,23 +384,23 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <CardContent className="p-6">
-            <div className="relative overflow-hidden">
-                <AnimatePresence mode="wait">
-                    <motion.div
-                    key={currentStep}
-                    initial={{ x: 300, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    exit={{ x: -300, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    >
-                    {stepsContent[currentStep]}
-                    </motion.div>
-                </AnimatePresence>
-            </div>
-        </CardContent>
+        <div className="p-6">
+          <div className="relative overflow-hidden">
+              <AnimatePresence mode="wait">
+                  <motion.div
+                  key={currentStep}
+                  initial={{ x: 300, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: -300, opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  >
+                  {stepsContent[currentStep]}
+                  </motion.div>
+              </AnimatePresence>
+          </div>
+        </div>
         
-        <div className="flex gap-4 items-center justify-between mt-8 pt-6 p-6 border-t">
+        <div className="flex gap-4 items-center justify-between mt-8 p-6 border-t">
           {currentStep > 0 && (
             <Button type="button" variant="outline" onClick={prevStep}>
               <ArrowRight className="ml-2 h-4 w-4" />
