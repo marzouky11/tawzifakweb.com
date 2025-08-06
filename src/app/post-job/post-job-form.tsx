@@ -234,7 +234,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
         <FormField control={form.control} name="title" render={({ field }) => (
             <FormItem><FormLabelIcon icon={FileText} label="عنوان الإعلان" /><FormControl><Input placeholder={postType === 'seeking_job' ? "مثال: مصمم جرافيك يبحث عن فرصة..." : "مثال: مطلوب مهندس مدني..."} {...field} /></FormControl><FormMessage /></FormItem>
         )} />
-        <div className="space-y-4 border p-4 rounded-lg">
+        <div className="space-y-4">
             <div className="flex justify-between items-center">
                 <FormLabelIcon icon={LayoutGrid} label="الفئة (اختياري)"/>
                 {(categoryId || customCategory) && (
@@ -354,7 +354,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
 
     // Step 3: Contact Info
     <div className="space-y-6" key="step3">
-        <div className="border p-4 rounded-lg space-y-4">
+        <div className="space-y-4">
             <h3 className="font-semibold flex items-center gap-2"><Info className="h-5 w-5" style={{color: getThemeColor()}} />طرق التواصل</h3>
             <p className="text-sm text-muted-foreground -mt-2">
                 أدخل وسيلة تواصل واحدة على الأقل. كلما أضفت طرقًا أكثر، زادت فرصة تواصل المهتمين معك.
