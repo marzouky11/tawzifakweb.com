@@ -383,7 +383,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 p-6">
         <div className="relative overflow-hidden">
           <AnimatePresence mode="wait">
             <motion.div
@@ -433,7 +433,3 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
     </Form>
   );
 }
-
-    
-
-    

@@ -54,7 +54,7 @@ export default function PostJobClientPage({ categories }: PostJobClientPageProps
         ) : (
             <div className="container mx-auto max-w-3xl px-4 pb-8">
                 <Card>
-                <CardContent className="pt-6">
+                <CardContent className="p-0">
                     <AnimatePresence>
                         {postType && <PostJobForm categories={categories} preselectedType={postType} />}
                     </AnimatePresence>

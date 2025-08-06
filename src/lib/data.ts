@@ -2,6 +2,7 @@
 import { db } from '@/lib/firebase';
 import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, Query, and, QueryConstraint, QueryFilterConstraint } from 'firebase/firestore';
 import type { Job, Category, PostType, User, WorkType, Testimonial } from './types';
+import Fuse from 'fuse.js';
 
 const categories: Category[] = [
   { id: 'it', name: 'تكنولوجيا المعلومات', iconName: 'Code', color: '#3b82f6' },
@@ -185,22 +186,43 @@ export async function getJobs(
         ...data,
         postedAt: formatTimeAgo(data.createdAt),
       } as Job;
-    }).filter(job => {
+    });
+    
+    // Client-side filtering
+    jobs = jobs.filter(job => {
        if (excludeId && job.id === excludeId) {
         return false;
       }
-
-      const matchesSearch = !searchQuery ||
-        (job.title?.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        (job.description?.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        (job.categoryName?.toLowerCase().includes(searchQuery.toLowerCase()));
-
-      const matchesCountry = !country || (job.country?.toLowerCase().includes(country.toLowerCase()));
-      const matchesCity = !city || (job.city?.toLowerCase().includes(city.toLowerCase()));
-      
-      return matchesSearch && matchesCountry && matchesCity;
+      return true;
     });
-    
+
+    // Fuzzy search using Fuse.js if a search query is provided
+    if (searchQuery || country || city) {
+        const searchList = jobs;
+        let results = searchList;
+
+        if(searchQuery) {
+            const fuse = new Fuse(results, {
+                keys: ['title', 'description', 'categoryName', 'country', 'city'],
+                includeScore: true,
+                threshold: 0.4, // Adjust threshold for more or less strict matching
+            });
+            results = fuse.search(searchQuery).map(result => result.item);
+        }
+
+        if(country) {
+            const fuse = new Fuse(results, { keys: ['country'], includeScore: true, threshold: 0.3 });
+            results = fuse.search(country).map(result => result.item);
+        }
+
+        if(city) {
+            const fuse = new Fuse(results, { keys: ['city'], includeScore: true, threshold: 0.3 });
+            results = fuse.search(city).map(result => result.item);
+        }
+
+        jobs = results;
+    }
+
     if (count) {
       return jobs.slice(0, count);
     }
