@@ -14,7 +14,6 @@ import { HomeCarousel } from './home-carousel';
 import { HomeExtraSections } from './home-extra-sections';
 import { Separator } from '@/components/ui/separator';
 import { getCategories } from '@/lib/data';
-import { Footer } from '@/components/layout/footer';
 import Image from 'next/image';
 
 export const revalidate = 60; // Revalidate every 60 seconds
@@ -236,7 +235,6 @@ export default async function HomePage() {
             <ExtraSections />
           </Suspense>
       </div>
-      <Footer isHomePage />
     </AppLayout>
   );
 }

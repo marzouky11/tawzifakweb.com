@@ -63,7 +63,12 @@ const FooterLinkItem = ({ href, icon: Icon, label }: { href: string; icon: React
 
 const MobileFooter = () => {
   const { user } = useAuth();
+  const pathname = usePathname();
   const filteredImportantLinks = importantLinks.filter(link => !link.guestOnly || !user);
+  
+  if (pathname !== '/') {
+    return null;
+  }
   
   return (
     <footer className="md:hidden bg-card border-t py-6">
@@ -130,13 +135,10 @@ const DesktopFooter = () => (
   </footer>
 );
 
-export function Footer({ isHomePage }: { isHomePage?: boolean }) {
-  const pathname = usePathname();
-  const showMobileFooter = isHomePage || (pathname === '/' && isHomePage === undefined);
-
+export function Footer() {
   return (
     <>
-      {showMobileFooter && <MobileFooter />}
+      <MobileFooter />
       <DesktopFooter />
     </>
   );
