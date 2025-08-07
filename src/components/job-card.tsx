@@ -75,7 +75,9 @@ export function JobCard({ job }: JobCardProps) {
              <div className="flex items-center gap-2 mb-2">
                  <CategoryIcon name={categoryIcon} className="w-5 h-5 flex-shrink-0" style={{ color: categoryColor }} />
                  <h3 className="font-bold text-base leading-tight text-foreground line-clamp-2">
-                    {job.title}
+                    <Link href={detailUrl} className="hover:underline">
+                        {job.title}
+                    </Link>
                 </h3>
             </div>
              <p className="text-sm font-medium mr-7 truncate" style={{ color: categoryColor }}>
