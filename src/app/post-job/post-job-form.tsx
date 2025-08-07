@@ -25,6 +25,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Card, CardContent } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 
 const formSchema = z.object({
   postType: z.enum(['seeking_worker', 'seeking_job'], { required_error: 'الرجاء تحديد نوع الإعلان.' }),
@@ -477,6 +478,8 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                      <StepsIndicator currentStep={currentStep} steps={steps} onStepClick={handleStepClick} />
                 </div>
                 
+                <Separator className="mx-auto w-[calc(100%-3rem)]" />
+
                 <div className="p-6 flex-grow">
                     <AnimatePresence mode="wait">
                         <motion.div
