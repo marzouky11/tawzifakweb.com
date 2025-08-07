@@ -1,16 +1,22 @@
 
 import type { Metadata } from 'next';
-import { PT_Sans } from 'next/font/google';
+import { Cairo, Tajawal } from 'next/font/google';
 import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
 import { AuthProvider } from '@/context/auth-context';
 import { ThemeProvider } from '@/components/theme-provider';
 import { cn } from '@/lib/utils';
 
-const ptSans = PT_Sans({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-pt-sans',
+const cairo = Cairo({
+  subsets: ['arabic'],
+  weight: ['400', '700', '900'],
+  variable: '--font-cairo',
+});
+
+const tajawal = Tajawal({
+  subsets: ['arabic'],
+  weight: ['400', '500', '700'],
+  variable: '--font-tajawal',
 });
 
 const baseUrl = 'https://www.tawzifak.com';
@@ -119,7 +125,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={cn("font-body antialiased", ptSans.variable)}>
+      <body className={cn("antialiased", cairo.variable, tajawal.variable)}>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

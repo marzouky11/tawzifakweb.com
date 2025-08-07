@@ -56,4 +56,15 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Desktop-specific font overrides */
+  @screen md {
+    body {
+      font-family: var(--font-tajawal), sans-serif;
+    }
+
+    h1, h2, h3, h4, h5, h6, .font-headline {
+      font-family: var(--font-cairo), sans-serif;
+    }
+  }
 }

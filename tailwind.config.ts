@@ -20,8 +20,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['var(--font-pt-sans)', 'sans-serif'],
-        headline: ['var(--font-pt-sans)', 'sans-serif'],
+        body: ['var(--font-tajawal)', 'sans-serif'],
+        headline: ['var(--font-cairo)', 'sans-serif'],
         code: ['monospace'],
       },
       colors: {
