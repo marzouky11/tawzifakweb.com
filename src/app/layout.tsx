@@ -1,21 +1,15 @@
 
 import type { Metadata } from 'next';
-import { Cairo, Tajawal } from 'next/font/google';
+import { Tajawal } from 'next/font/google';
 import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
 import { AuthProvider } from '@/context/auth-context';
 import { ThemeProvider } from '@/components/theme-provider';
 import { cn } from '@/lib/utils';
 
-const cairo = Cairo({
-  subsets: ['arabic'],
-  weight: ['400', '700', '900'],
-  variable: '--font-cairo',
-});
-
 const tajawal = Tajawal({
   subsets: ['arabic'],
-  weight: ['400', '500', '700'],
+  weight: ['200', '300', '400', '500', '700', '800', '900'],
   variable: '--font-tajawal',
 });
 
@@ -125,7 +119,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={cn("antialiased", cairo.variable, tajawal.variable)}>
+      <body className={cn("antialiased", tajawal.variable)}>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
