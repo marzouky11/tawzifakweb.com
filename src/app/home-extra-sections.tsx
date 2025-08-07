@@ -1,8 +1,7 @@
-
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Briefcase, Star, Users, MessageSquare } from 'lucide-react';
 import { UserAvatar } from '@/components/user-avatar';
 import { motion, useInView } from "framer-motion";
@@ -30,7 +29,7 @@ const CountUp = ({ end, duration = 2 }: { end: number, duration?: number }) => {
         start += increment;
         setCount(Math.floor(start));
         if (currentFrame === totalFrames) {
-            setCount(end); // Ensure it ends on the exact number
+            setCount(end);
             clearInterval(timer);
         }
     }, frameDuration);
@@ -41,8 +40,7 @@ const CountUp = ({ end, duration = 2 }: { end: number, duration?: number }) => {
   return <span ref={ref}>{count.toLocaleString('ar-EG')}</span>;
 };
 
-
-// Stats Section Component
+// Stats Section
 function StatsSection({ stats }: { stats: { jobs: number, seekers: number } }) {
   return (
     <section className="relative overflow-hidden py-12 bg-muted/50 rounded-2xl">
@@ -85,7 +83,7 @@ function StatsSection({ stats }: { stats: { jobs: number, seekers: number } }) {
             transition={{ duration: 0.5, delay: 0.4 }}
           >
             <Card className="p-6 text-center flex flex-col items-center gap-4 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-destructive border-transparent border bg-background">
-               <div className="p-4 bg-destructive/10 rounded-full text-destructive">
+              <div className="p-4 bg-destructive/10 rounded-full text-destructive">
                 <Users className="h-10 w-10" />
               </div>
               <p className="text-lg font-semibold text-foreground">باحث عن عمل</p>
@@ -100,8 +98,7 @@ function StatsSection({ stats }: { stats: { jobs: number, seekers: number } }) {
   );
 }
 
-
-// Testimonials Section Component
+// Testimonials Section
 const INITIAL_DISPLAY_COUNT = 2;
 
 function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Testimonial[] }) {
@@ -113,7 +110,7 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
   const hasMoreTestimonials = initialTestimonials.length > INITIAL_DISPLAY_COUNT;
 
   return (
-    <section ref={ref} className="py-12">
+    <section ref={ref} className="py-12 mb-0 pb-0"> {/* ✅ تعديل هنا */}
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -155,20 +152,20 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
             ))}
           </div>
         ) : (
-           <Card className="text-center text-muted-foreground p-8 flex flex-col items-center gap-4">
-                <MessageSquare className="w-16 h-16 text-muted-foreground/30" />
-                <p className="text-lg">كن أول من يشاركنا رأيه في المنصة!</p>
-            </Card>
+          <Card className="text-center text-muted-foreground p-8 flex flex-col items-center gap-4">
+            <MessageSquare className="w-16 h-16 text-muted-foreground/30" />
+            <p className="text-lg">كن أول من يشاركنا رأيه في المنصة!</p>
+          </Card>
         )}
 
         <div className="mt-10 text-center flex flex-col sm:flex-row justify-center items-center gap-4">
           {hasMoreTestimonials && !showAll && (
-             <Button onClick={() => setShowAll(true)} variant="outline" size="lg">
+            <Button onClick={() => setShowAll(true)} variant="outline" size="lg">
               عرض كل الآراء
             </Button>
           )}
-           {showAll && (
-             <Button onClick={() => setShowAll(false)} variant="outline" size="lg">
+          {showAll && (
+            <Button onClick={() => setShowAll(false)} variant="outline" size="lg">
               عرض أقل
             </Button>
           )}
@@ -181,20 +178,20 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
   );
 }
 
+// Main Component
 interface HomeExtraSectionsProps {
   testimonials: Testimonial[];
   jobOffersCount: number;
   jobSeekersCount: number;
 }
 
-// Main component to export
 export function HomeExtraSections({ testimonials, jobOffersCount, jobSeekersCount }: HomeExtraSectionsProps) {
-    const stats = { jobs: jobOffersCount, seekers: jobSeekersCount };
+  const stats = { jobs: jobOffersCount, seekers: jobSeekersCount };
 
-    return (
-        <div className="space-y-16">
-            <StatsSection stats={stats} />
-            <TestimonialsSection initialTestimonials={testimonials} />
-        </div>
-    );
-}
+  return (
+    <div className="space-y-8"> {/* ✅ تعديل هنا */}
+      <StatsSection stats={stats} />
+      <TestimonialsSection initialTestimonials={testimonials} />
+    </div>
+  );
+    }
