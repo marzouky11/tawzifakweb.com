@@ -61,6 +61,7 @@
   @screen md {
     body {
       font-family: var(--font-tajawal), sans-serif;
+      font-size: 15px; /* Increase base font size for desktop */
     }
 
     h1, h2, h3, h4, h5, h6, .font-headline {
