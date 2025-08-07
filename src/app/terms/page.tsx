@@ -27,7 +27,7 @@ export default function TermsOfServicePage() {
               شروط الاستخدام
             </h1>
           </CardHeader>
-          <CardContent className="space-y-4 text-muted-foreground pt-0 md:pt-2 prose-lg dark:prose-invert max-w-none prose-p:leading-relaxed prose-a:text-primary">
+          <CardContent className="prose prose-lg dark:prose-invert max-w-none prose-p:leading-relaxed prose-headings:text-green-600 prose-a:text-primary pt-0 md:pt-2">
             
             <p>
                 مرحبًا بك في منصة "توظيفك". تمثل هذه الشروط والأحكام ("الشروط") اتفاقية قانونية ملزمة بينك (كمستخدم) وبين منصة "توظيفك" ("المنصة"، "نحن"). يرجى قراءة هذه الشروط بعناية قبل استخدام خدماتنا. من خلال الوصول إلى المنصة أو استخدامها، فإنك تقر بأنك قد قرأت وفهمت وتوافق على الالتزام بهذه الشروط.

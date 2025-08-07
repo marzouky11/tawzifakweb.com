@@ -27,7 +27,7 @@ export default function PrivacyPolicyPage() {
               سياسة الخصوصية
             </h1>
           </CardHeader>
-          <CardContent className="space-y-4 text-muted-foreground pt-0 md:pt-2 prose-lg dark:prose-invert max-w-none prose-p:leading-relaxed prose-a:text-primary">
+          <CardContent className="prose prose-lg dark:prose-invert max-w-none prose-p:leading-relaxed prose-headings:text-green-600 prose-a:text-primary pt-0 md:pt-2">
             
             <p>
               أهلاً بك في منصة "توظيفك". نحن ندرك أهمية الخصوصية وأمن المعلومات الشخصية لمستخدمينا. تهدف سياسة الخصوصية هذه إلى توضيح أنواع المعلومات التي نجمعها، وكيفية استخدامها وحمايتها، والخيارات المتاحة لك فيما يتعلق ببياناتك. باستخدامك لخدمات "توظيفك"، فإنك توافق على الممارسات الموضحة في هذه السياسة.

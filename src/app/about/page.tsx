@@ -26,7 +26,7 @@ export default function AboutUsPage() {
               من نحن
             </h1>
           </CardHeader>
-          <CardContent className="space-y-4 text-muted-foreground pt-0 md:pt-2 prose-lg dark:prose-invert max-w-none prose-p:leading-relaxed prose-a:text-primary">
+          <CardContent className="prose prose-lg dark:prose-invert max-w-none prose-p:leading-relaxed prose-headings:text-green-600 prose-a:text-primary pt-0 md:pt-2">
             
             <p>
               أهلاً بك في منصة "توظيفك"، الجسر الرقمي الذي يربط بين الطموحات والفرص في قلب العالم العربي. نحن لسنا مجرد موقع إعلانات وظائف، بل مجتمع مهني متكامل يسعى لتمكين كل فرد من تحقيق ذاته، وكل شركة من العثور على الكفاءات التي تدفعها نحو النجاح.
