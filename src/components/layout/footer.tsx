@@ -2,6 +2,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { 
     Facebook, 
     Handshake, 
@@ -60,74 +61,83 @@ const FooterLinkItem = ({ href, icon: Icon, label }: { href: string; icon: React
     </Link>
 );
 
-
-export function Footer() {
+const MobileFooter = () => {
   const { user } = useAuth();
   const filteredImportantLinks = importantLinks.filter(link => !link.guestOnly || !user);
   
   return (
-    <>
-      {/* Mobile Footer */}
-      <footer className="md:hidden bg-card border-t py-6">
-        <div className="container mx-auto px-4 space-y-6">
-            <div>
-                <h3 className="font-bold text-lg mb-3 px-2">روابط مهمة</h3>
-                <div className="space-y-1">
-                    {filteredImportantLinks.map((link) => <FooterLinkItem key={link.href} {...link} />)}
-                </div>
-            </div>
-            
-            <Separator />
+    <footer className="md:hidden bg-card border-t py-6">
+      <div className="container mx-auto px-4 space-y-6">
+          <div>
+              <h3 className="font-bold text-lg mb-3 px-2">روابط مهمة</h3>
+              <div className="space-y-1">
+                  {filteredImportantLinks.map((link) => <FooterLinkItem key={link.href} {...link} />)}
+              </div>
+          </div>
+          
+          <Separator />
 
+          <div>
+              <h3 className="font-bold text-lg mb-3 px-2">معلومات المنصة</h3>
+               <div className="space-y-1">
+                  {platformLinks.map((link) => <FooterLinkItem key={link.href} {...link} />)}
+                  <a href="https://www.facebook.com/profile.php?id=61578748771269" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 rounded-lg hover:bg-muted transition-colors">
+                      <div className="flex items-center gap-3">
+                          <Facebook className="h-5 w-5 text-primary" />
+                          <span className="font-medium text-sm">صفحتنا على فيسبوك</span>
+                      </div>
+                      <ArrowLeft className="h-4 w-4 text-muted-foreground" />
+                  </a>
+              </div>
+          </div>
+
+          <Separator />
+          
+          <div className="text-center text-muted-foreground text-xs pt-4">
+              &copy; {new Date().getFullYear()} توظيفك. جميع الحقوق محفوظة.
+          </div>
+      </div>
+    </footer>
+  );
+};
+
+const DesktopFooter = () => (
+  <footer className="hidden md:flex bg-card border-t mt-auto py-8">
+    <div className="container mx-auto px-4">
+        <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-right gap-6">
+            <div className="flex items-center gap-2">
+                <Handshake className="h-6 w-6 text-primary" />
+                <p className="text-sm text-muted-foreground">
+                    &copy; {new Date().getFullYear()} توظيفك. جميع الحقوق محفوظة.
+                </p>
+            </div>
+            <div className="flex items-center gap-x-6 gap-y-2 flex-wrap justify-center">
+              {desktopFooterLinks.map((link) => (
+                <Link key={link.href} href={link.href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  {link.label}
+                </Link>
+              ))}
+            </div>
             <div>
-                <h3 className="font-bold text-lg mb-3 px-2">معلومات المنصة</h3>
-                 <div className="space-y-1">
-                    {platformLinks.map((link) => <FooterLinkItem key={link.href} {...link} />)}
-                    <a href="https://www.facebook.com/profile.php?id=61578748771269" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 rounded-lg hover:bg-muted transition-colors">
-                        <div className="flex items-center gap-3">
-                            <Facebook className="h-5 w-5 text-primary" />
-                            <span className="font-medium text-sm">صفحتنا على فيسبوك</span>
-                        </div>
-                        <ArrowLeft className="h-4 w-4 text-muted-foreground" />
+                 <Button asChild variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
+                    <a href="https://www.facebook.com/profile.php?id=61578748771269" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                        <Facebook className="h-5 w-5" />
                     </a>
-                </div>
-            </div>
-
-            <Separator />
-            
-            <div className="text-center text-muted-foreground text-xs pt-4">
-                &copy; {new Date().getFullYear()} توظيفك. جميع الحقوق محفوظة.
+                </Button>
             </div>
         </div>
-      </footer>
+    </div>
+  </footer>
+);
 
-      {/* Desktop Footer */}
-      <footer className="hidden md:flex bg-card border-t mt-auto py-8">
-        <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-right gap-6">
-                <div className="flex items-center gap-2">
-                    <Handshake className="h-6 w-6 text-primary" />
-                    <p className="text-sm text-muted-foreground">
-                        &copy; {new Date().getFullYear()} توظيفك. جميع الحقوق محفوظة.
-                    </p>
-                </div>
-                <div className="flex items-center gap-x-6 gap-y-2 flex-wrap justify-center">
-                  {desktopFooterLinks.map((link) => (
-                    <Link key={link.href} href={link.href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                      {link.label}
-                    </Link>
-                  ))}
-                </div>
-                <div>
-                     <Button asChild variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
-                        <a href="https://www.facebook.com/profile.php?id=61578748771269" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                            <Facebook className="h-5 w-5" />
-                        </a>
-                    </Button>
-                </div>
-            </div>
-        </div>
-      </footer>
+export function Footer({ isHomePage }: { isHomePage?: boolean }) {
+  const pathname = usePathname();
+  const showMobileFooter = isHomePage || (pathname === '/' && isHomePage === undefined);
+
+  return (
+    <>
+      {showMobileFooter && <MobileFooter />}
+      <DesktopFooter />
     </>
   );
 }

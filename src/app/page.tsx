@@ -236,7 +236,7 @@ export default async function HomePage() {
             <ExtraSections />
           </Suspense>
       </div>
-      <Footer />
+      <Footer isHomePage />
     </AppLayout>
   );
 }
