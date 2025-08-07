@@ -37,7 +37,18 @@ const CountUp = ({ end, duration = 2 }: { end: number, duration?: number }) => {
     return () => clearInterval(timer);
   }, [end, duration, isInView]);
 
-  return <span ref={ref}>{count.toLocaleString('ar-EG')}</span>;
+  return (
+    <span 
+      ref={ref} 
+      className="inline-block min-w-[5ch] text-center" 
+      style={{ 
+        fontFeatureSettings: "'tnum', 'lnum'", 
+        fontVariantNumeric: "tabular-nums" 
+      }}
+    >
+      {count.toLocaleString('ar-EG')}
+    </span>
+  );
 };
 
 
@@ -72,7 +83,7 @@ function StatsSection({ stats }: { stats: { jobs: number, seekers: number } }) {
                 <Briefcase className="h-10 w-10" />
               </div>
               <p className="text-lg font-semibold text-foreground">عرض عمل منشور</p>
-              <div className="text-5xl font-bold text-accent">
+              <div className="text-5xl font-bold text-accent text-[3.5rem] md:text-5xl leading-none">
                 <CountUp end={stats.jobs} />
               </div>
             </Card>
@@ -88,7 +99,7 @@ function StatsSection({ stats }: { stats: { jobs: number, seekers: number } }) {
                 <Users className="h-10 w-10" />
               </div>
               <p className="text-lg font-semibold text-foreground">باحث عن عمل</p>
-              <div className="text-5xl font-bold text-destructive">
+              <div className="text-5xl font-bold text-destructive text-[3.5rem] md:text-5xl leading-none">
                 <CountUp end={stats.seekers} />
               </div>
             </Card>
@@ -112,7 +123,7 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
   const hasMoreTestimonials = initialTestimonials.length > INITIAL_DISPLAY_COUNT;
 
   return (
-    <section ref={ref} className="pb-8 sm:pb-12 mb-0 sm:mb-12">
+    <section ref={ref} className="py-12">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -196,4 +207,4 @@ export function HomeExtraSections({ testimonials, jobOffersCount, jobSeekersCoun
             <TestimonialsSection initialTestimonials={testimonials} />
         </div>
     );
-                }
+}
