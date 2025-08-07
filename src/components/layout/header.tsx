@@ -1,6 +1,7 @@
+
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, 'useState', 'useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
@@ -23,6 +24,7 @@ import {
   Handshake,
   Newspaper,
   Settings,
+  FileText,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -33,6 +35,7 @@ const navLinks = [
     { href: '/', label: 'الرئيسية' },
     { href: '/jobs', label: 'الوظائف' },
     { href: '/workers', label: 'العمال' },
+    { href: '/cv-builder', label: 'إنشاء سيرة ذاتية' },
 ];
 
 export function Header() {
@@ -81,15 +84,15 @@ export function Header() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href="/profile/edit">
-                <Settings className="mr-2 h-4 w-4" />
-                <span>تعديل الملف الشخصي</span>
+              <Link href="/profile/my-ads">
+                <FileText className="mr-2 h-4 w-4" />
+                <span>إعلاناتي</span>
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
+             <DropdownMenuItem asChild>
               <Link href="/profile">
-                <UserIcon className="mr-2 h-4 w-4" />
-                <span>إعدادات الحساب</span>
+                <Settings className="mr-2 h-4 w-4" />
+                <span>الإعدادات</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
@@ -145,16 +148,21 @@ export function Header() {
                 </Link>
               );
             })}
+             {user && (
+                 <Link
+                  href="/profile/my-ads"
+                  className={cn(
+                    'text-sm font-medium transition-colors hover:text-primary',
+                    pathname.startsWith('/profile/my-ads') ? 'text-primary' : 'text-muted-foreground'
+                  )}
+                >
+                  إعلاناتي
+                </Link>
+            )}
           </div>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-4">
-          <Button variant="ghost" asChild>
-            <Link href="/articles" className="flex items-center gap-2 text-muted-foreground hover:text-primary">
-              <Newspaper className="h-5 w-5" />
-              <span className="hidden sm:inline">مقالات</span>
-            </Link>
-          </Button>
           <ThemeToggleButton />
           <Button asChild>
             <Link href="/post-job/select-type">
