@@ -162,7 +162,7 @@ const DetailSection = ({ icon: Icon, title, children }: { icon: React.ElementTyp
             <Icon className="h-5 w-5" />
             {title}
         </h3>
-        <div className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
+        <div className="prose dark:prose-invert max-w-none text-foreground">
             {children}
         </div>
     </div>
