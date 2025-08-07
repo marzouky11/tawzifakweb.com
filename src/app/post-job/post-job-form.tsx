@@ -298,7 +298,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
   }
 
   const FormLabelIcon = ({icon: Icon, label}: {icon: React.ElementType, label: string}) => (
-    <FormLabel className="flex items-center gap-2 text-lg">
+    <FormLabel className="flex items-center gap-2 text-base md:text-lg">
       <Icon 
         className='h-4 w-4'
         style={{ color: getThemeColor() }}
@@ -445,7 +445,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
     // Step 3: Contact Info
     <div className="space-y-6" key="step3">
         <div className="space-y-4">
-            <h3 className="font-semibold flex items-center gap-2 text-lg"><Info className="h-5 w-5" style={{color: getThemeColor()}} />طرق التواصل</h3>
+            <h3 className="font-semibold flex items-center gap-2 text-base md:text-lg"><Info className="h-5 w-5" style={{color: getThemeColor()}} />طرق التواصل</h3>
             <p className="text-sm text-muted-foreground -mt-2">
                 أدخل وسيلة تواصل واحدة على الأقل. كلما أضفت طرقًا أكثر، زادت فرصة تواصل المهتمين معك.
             </p>
@@ -496,14 +496,14 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
 
                 <div className="flex gap-4 items-center justify-between p-6 border-t bg-muted/50 rounded-b-lg mt-auto">
                     {currentStep > 0 ? (
-                        <Button type="button" variant="outline" onClick={prevStep} className="text-lg">
+                        <Button type="button" variant="outline" onClick={prevStep} className="text-base md:text-lg">
                             <ArrowRight className="ml-2 h-4 w-4" />
                             السابق
                         </Button>
                     ) : <div />}
 
                     {currentStep < stepsContent.length - 1 && (
-                        <Button type="button" onClick={nextStep} style={{ backgroundColor: getThemeColor() }} className="text-primary-foreground text-lg">
+                        <Button type="button" onClick={nextStep} style={{ backgroundColor: getThemeColor() }} className="text-primary-foreground text-base md:text-lg">
                             التالي
                             <ArrowLeft className="mr-2 h-4 w-4" />
                         </Button>
@@ -514,7 +514,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                             type="submit"
                             disabled={isSubmitting}
                             style={{ backgroundColor: getThemeColor() }}
-                            className="text-primary-foreground text-lg"
+                            className="text-primary-foreground text-base md:text-lg"
                         >
                             {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                             {isEditing ? 'تحديث الإعلان' : 'نشر الإعلان'}
@@ -525,3 +525,4 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
         </Form>
   );
 }
+
