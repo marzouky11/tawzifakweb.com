@@ -17,46 +17,45 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Loader2, Edit, Trash2, FileText, Frown } from 'lucide-react';
-import { getJobsByUserId, deleteAd } from '@/lib/data';
+import { Loader2, Edit, Trash2, PenSquare } from 'lucide-react';
+import { getJobs, deleteAd } from '@/lib/data';
 import type { Job } from '@/lib/types';
 import { JobCard } from '@/components/job-card';
 import { useToast } from '@/hooks/use-toast';
-import { MobilePageHeader } from '@/components/layout/mobile-page-header';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 
-export default function MyAdsPage() {
+export default function ManageAdsPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const { user, loading: authLoading } = useAuth();
-  const [myAds, setMyAds] = useState<Job[]>([]);
+  const { user, userData, loading: authLoading } = useAuth();
+  const [allAds, setAllAds] = useState<Job[]>([]);
   const [adsLoading, setAdsLoading] = useState(true);
   const [adToDelete, setAdToDelete] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!authLoading && !user) {
+    if (!authLoading && (!user || !userData?.isAdmin)) {
       router.push('/login');
     }
-  }, [user, authLoading, router]);
+  }, [user, userData, authLoading, router]);
 
   useEffect(() => {
-    if (user) {
+    if (user && userData?.isAdmin) {
         const fetchAds = async () => {
             setAdsLoading(true);
-            const ads = await getJobsByUserId(user.uid);
-            setMyAds(ads);
+            const ads = await getJobs();
+            setAllAds(ads);
             setAdsLoading(false);
         };
         fetchAds();
     }
-  }, [user]);
+  }, [user, userData]);
 
   const handleDeleteAd = async () => {
     if (!adToDelete) return;
     try {
         await deleteAd(adToDelete);
-        setMyAds(prevAds => prevAds.filter(ad => ad.id !== adToDelete));
+        setAllAds(prevAds => prevAds.filter(ad => ad.id !== adToDelete));
         toast({ title: "تم حذف الإعلان بنجاح" });
     } catch (error) {
         toast({ variant: 'destructive', title: 'فشل حذف الإعلان' });
@@ -65,22 +64,24 @@ export default function MyAdsPage() {
     }
   };
 
+  if (authLoading || !userData?.isAdmin) {
+    return (
+        <AppLayout>
+            <div className="flex h-screen items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+        </AppLayout>
+    );
+  }
+
   return (
     <AppLayout>
-      <MobilePageHeader title="إعلاناتي">
-        <FileText className="h-5 w-5 text-primary" />
-      </MobilePageHeader>
        <DesktopPageHeader
-        icon={FileText}
-        title="إعلاناتي"
-        description="هنا يمكنك إدارة جميع إعلاناتك، تعديلها، أو حذفها."
+        icon={PenSquare}
+        title={'إدارة جميع الإعلانات'}
+        description={"هنا يمكنك إدارة جميع إعلانات المستخدمين."}
       />
       <div className="flex-grow">
-        {authLoading ? (
-          <div className="flex h-full items-center justify-center p-8 min-h-[50vh]">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          </div>
-        ) : (
           <div className="container mx-auto max-w-5xl px-4 pb-8">
             <Card>
                 <CardContent>
@@ -88,9 +89,9 @@ export default function MyAdsPage() {
                         <div className="flex justify-center p-8">
                             <Loader2 className="h-8 w-8 animate-spin text-primary" />
                         </div>
-                    ) : myAds.length > 0 ? (
+                    ) : allAds.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-6">
-                            {myAds.map(ad => (
+                            {allAds.map(ad => (
                                 <div key={ad.id} className="flex flex-col gap-2">
                                     <JobCard job={ad} />
                                     <div className="flex gap-2">
@@ -109,25 +110,20 @@ export default function MyAdsPage() {
                             ))}
                         </div>
                     ) : (
-                        <div className="text-center text-muted-foreground p-8 flex flex-col items-center gap-4">
-                            <Frown className="w-16 h-16 text-muted-foreground/50" />
-                            <p>لم تقم بنشر أي إعلانات بعد.</p>
-                            <Button asChild>
-                                <Link href="/post-job/select-type">نشر إعلان جديد</Link>
-                            </Button>
+                        <div className="text-center text-muted-foreground p-8">
+                            <p>لا توجد أي إعلانات منشورة حاليًا.</p>
                         </div>
                     )}
                 </CardContent>
               </Card>
           </div>
-        )}
       </div>
       <AlertDialog open={!!adToDelete} onOpenChange={(open) => !open && setAdToDelete(null)}>
         <AlertDialogContent>
             <AlertDialogHeader>
             <AlertDialogTitle>هل أنت متأكد؟</AlertDialogTitle>
             <AlertDialogDescription>
-                هذا الإجراء سيقوم بحذف إعلانك بشكل نهائي. لا يمكن التراجع عن هذا القرار.
+                هذا الإجراء سيقوم بحذف هذا الإعلان بشكل نهائي. لا يمكن التراجع عن هذا القرار.
             </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
