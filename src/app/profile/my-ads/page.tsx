@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -17,7 +18,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Loader2, Edit, Trash2, FileText, Frown } from 'lucide-react';
-import { getJobsByUserId, deleteAd } from '@/lib/data';
+import { getJobsByUserId, deleteAd, getJobs } from '@/lib/data';
 import type { Job } from '@/lib/types';
 import { JobCard } from '@/components/job-card';
 import { useToast } from '@/hooks/use-toast';
@@ -28,7 +29,7 @@ import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 export default function MyAdsPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const { user, loading: authLoading } = useAuth();
+  const { user, userData, loading: authLoading } = useAuth();
   const [myAds, setMyAds] = useState<Job[]>([]);
   const [adsLoading, setAdsLoading] = useState(true);
   const [adToDelete, setAdToDelete] = useState<string | null>(null);
@@ -43,13 +44,15 @@ export default function MyAdsPage() {
     if (user) {
         const fetchAds = async () => {
             setAdsLoading(true);
-            const ads = await getJobsByUserId(user.uid);
+            const ads = userData?.isAdmin 
+                ? await getJobs()
+                : await getJobsByUserId(user.uid);
             setMyAds(ads);
             setAdsLoading(false);
         };
         fetchAds();
     }
-  }, [user]);
+  }, [user, userData]);
 
   const handleDeleteAd = async () => {
     if (!adToDelete) return;
@@ -71,8 +74,8 @@ export default function MyAdsPage() {
       </MobilePageHeader>
        <DesktopPageHeader
         icon={FileText}
-        title="إعلاناتي"
-        description="هنا يمكنك إدارة جميع إعلاناتك، تعديلها، أو حذفها."
+        title={userData?.isAdmin ? 'إدارة جميع الإعلانات' : 'إعلاناتي'}
+        description={userData?.isAdmin ? "هنا يمكنك إدارة جميع إعلانات المستخدمين." : "هنا يمكنك إدارة جميع إعلاناتك، تعديلها، أو حذفها."}
       />
       <div className="flex-grow">
         {authLoading ? (
@@ -80,7 +83,7 @@ export default function MyAdsPage() {
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
           </div>
         ) : (
-          <div className="container mx-auto max-w-3xl px-4 pb-8">
+          <div className="container mx-auto max-w-5xl px-4 pb-8">
             <Card>
                 <CardContent>
                     {adsLoading ? (
@@ -88,7 +91,7 @@ export default function MyAdsPage() {
                             <Loader2 className="h-8 w-8 animate-spin text-primary" />
                         </div>
                     ) : myAds.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-6">
                             {myAds.map(ad => (
                                 <div key={ad.id} className="flex flex-col gap-2">
                                     <JobCard job={ad} />
