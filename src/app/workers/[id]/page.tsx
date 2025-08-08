@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
   const baseUrl = 'https://www.tawzifak.com';
   const siteThumbnail = 'https://i.postimg.cc/YCz0LvMj/Screenshot-20250704-173231.jpg';
   
-  if (!job) {
+  if (!job || job.postType !== 'seeking_job') {
     return {
       title: 'الإعلان غير موجود',
       description: 'لم نتمكن من العثور على الإعلان الذي تبحث عنه.',
@@ -173,7 +173,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
       getJobs({
         categoryId: job.categoryId,
         postType: job.postType,
-        count: 4,
+        count: 2,
         excludeId: job.id,
       }),
       getViewsCount(params.id)
@@ -201,7 +201,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
         <AppLayout>
             <ViewCounter adId={params.id} />
             <MobilePageHeader title="ملف باحث عن عمل">
-                <UserIcon className="h-5 w-5" style={{ color: finalColor }} />
+                <UserIcon className="h-5 w-5 text-primary" />
             </MobilePageHeader>
             <DesktopPageHeader
                 icon={UserIcon}
@@ -345,7 +345,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                     {similarJobs.length > 0 && (
                         <div className="space-y-4 pt-6 mt-6 border-t">
                             <h2 className="text-2xl font-bold">باحثون عن عمل مشابهون</h2>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {similarJobs.map((similarJob) => (
                                 <JobCard key={similarJob.id} job={similarJob} />
                             ))}

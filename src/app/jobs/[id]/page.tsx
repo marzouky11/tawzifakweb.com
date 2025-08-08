@@ -1,6 +1,6 @@
 
 
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { getJobById, getCategoryById, getJobs, getViewsCount } from '@/lib/data';
 import { AppLayout } from '@/components/layout/app-layout';
 import type { Metadata } from 'next';
@@ -51,7 +51,7 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
   const baseUrl = 'https://www.tawzifak.com';
   const siteThumbnail = 'https://i.postimg.cc/YCz0LvMj/Screenshot-20250704-173231.jpg';
   
-  if (!job) {
+  if (!job || job.postType !== 'seeking_worker') {
     return {
       title: 'الإعلان غير موجود',
       description: 'لم نتمكن من العثور على الإعلان الذي تبحث عنه.',
@@ -172,19 +172,15 @@ const DetailSection = ({ icon: Icon, title, children }: { icon: React.ElementTyp
 export default async function JobDetailPage({ params }: JobDetailPageProps) {
     const job = await getJobById(params.id);
 
-    if (!job) {
+    if (!job || job.postType !== 'seeking_worker') {
         notFound();
-    }
-    
-    if (job.postType === 'seeking_job') {
-      redirect(`/workers/${job.id}`);
     }
 
     const [similarJobs, viewsCount] = await Promise.all([
         getJobs({
             categoryId: job.categoryId,
             postType: 'seeking_worker',
-            count: 4,
+            count: 2,
             excludeId: job.id,
         }),
         getViewsCount(params.id)
@@ -207,7 +203,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
         <AppLayout>
             <ViewCounter adId={params.id} />
             <MobilePageHeader title="تفاصيل عرض العمل">
-                <Briefcase className="h-5 w-5" style={{ color: finalColor }} />
+                <Briefcase className="h-5 w-5 text-primary" />
             </MobilePageHeader>
             <DesktopPageHeader
                 icon={Briefcase}
@@ -372,7 +368,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                      {similarJobs.length > 0 && (
                         <div className="space-y-4 pt-6 mt-6 border-t">
                             <h2 className="text-2xl font-bold">إعلانات مشابهة</h2>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {similarJobs.map((similarJob) => (
                                 <JobCard key={similarJob.id} job={similarJob} />
                             ))}
