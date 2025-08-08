@@ -21,7 +21,7 @@ const categories: Category[] = [
   { id: 'crafts', name: 'الحرف والصناعات التقليدية', iconName: 'PenTool', color: '#a16207' },
   { id: 'manufacturing', name: 'الصناعة والإنتاج', iconName: 'Factory', color: '#4b5563' },
   { id: 'law', name: 'القانون والشؤون القانونية', iconName: 'Gavel', color: '#78716c' },
-  { id: 'gov', name: 'وظائف حكومية', iconName: 'Gavel', color: '#334155' },
+  { id: 'gov', name: 'وظائف حكومية', iconName: 'Gavel', color: '#1d4ed8' },
   { id: 'media', name: 'الإعلام والاتصال', iconName: 'Newspaper', color: '#475569' },
   { id: 'retail', name: 'التجارة والتوزيع', iconName: 'ShoppingCart', color: '#22c55e' },
   { id: '1', name: 'نجار', iconName: 'Hammer', color: '#a16207' },
@@ -76,7 +76,7 @@ const categories: Category[] = [
   { id: '51', name: 'بائع متجول', iconName: 'ShoppingCart', color: '#10b981' },
   { id: '52', name: 'بائع في متجر', iconName: 'Store', color: '#059669' },
   { id: '53', name: 'مساعد بائع', iconName: 'Store', color: '#047857' },
-  { id: '54', name: 'موظف كاشير', iconName: 'Calculator', color: '#0891b2' },
+  { id: '54', 'name': 'موظف كاشير', 'iconName': 'Calculator', 'color': '#0891b2' },
   { id: '55', name: 'عامل تعبئة وتغليف', iconName: 'Package', color: '#ca8a04' },
   { id: '56', name: 'معلم حدائق وتشجير', iconName: 'Sprout', color: '#65a30d' },
   { id: '57', name: 'مبلط', iconName: 'Layers', color: '#84cc16' },
@@ -478,4 +478,5 @@ export function getCategories() {
 export function getCategoryById(id: string) {
     return categories.find((cat) => cat.id === id);
 }
+
 

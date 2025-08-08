@@ -208,6 +208,14 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
     const emailSubject = `استفسار بخصوص وظيفة: ${jobTitle}`;
     const emailBody = ``;
 
+    const contactButtons = [
+        job.phone && { type: 'phone', href: `tel:${job.phone}`, label: 'اتصال', icon: Phone, color: finalColor, className: 'text-primary-foreground hover:opacity-90' },
+        job.whatsapp && { type: 'whatsapp', href: `https://wa.me/${job.whatsapp.replace(/\+/g, '')}?text=${encodeURIComponent(whatsappMessage)}`, label: 'واتساب', icon: MessageSquare, color: '#25D366', className: 'bg-green-600 hover:bg-green-700 text-primary-foreground' },
+        job.email && { type: 'email', href: `mailto:${job.email}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`, label: 'البريد الإلكتروني', icon: Mail, color: '#7f8c8d', className: 'bg-gray-600 hover:bg-gray-700 text-primary-foreground' },
+        job.instagram && { type: 'instagram', href: `https://instagram.com/${job.instagram.replace(/@/g, '')}`, label: 'إنستغرام', icon: Instagram, color: '#E4405F', className: 'text-primary-foreground bg-gradient-to-r from-pink-500 to-orange-500 hover:opacity-90' },
+        job.applyUrl && { type: 'applyUrl', href: job.applyUrl, label: 'تسجيل عبر الموقع', icon: LinkIcon, color: '#007bff', className: 'bg-blue-600 hover:bg-blue-700 text-primary-foreground' },
+    ].filter(Boolean);
+
     
     return (
         <AppLayout>
@@ -313,35 +321,24 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                             </CardHeader>
                             <CardContent className="space-y-2">
                                  <div className="grid grid-cols-2 gap-2">
-                                    {job.phone && (
-                                        <Button asChild style={{ backgroundColor: finalColor }} className="text-primary-foreground hover:opacity-90">
-                                            <a href={`tel:${job.phone}`}><Phone className="ml-2 h-4 w-4" />اتصال</a>
-                                        </Button>
-                                    )}
-                                    {job.whatsapp && (
-                                        <Button asChild className="bg-green-600 hover:bg-green-700 text-primary-foreground">
-                                            <a href={`https://wa.me/${job.whatsapp.replace(/\+/g, '')}?text=${encodeURIComponent(whatsappMessage)}`} target="_blank" rel="noopener noreferrer">
-                                                <MessageSquare className="ml-2 h-4 w-4" />واتساب
-                                            </a>
-                                        </Button>
-                                    )}
-                                    {job.email && (
-                                        <Button asChild className="bg-gray-600 hover:bg-gray-700 text-primary-foreground">
-                                            <a href={`mailto:${job.email}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`}><Mail className="ml-2 h-4 w-4" />البريد الإلكتروني</a>
-                                        </Button>
-                                    )}
-                                    {job.instagram && (
-                                        <Button asChild className="text-primary-foreground bg-gradient-to-r from-pink-500 to-orange-500 hover:opacity-90">
-                                            <a href={`https://instagram.com/${job.instagram.replace(/@/g, '')}`} target="_blank" rel="noopener noreferrer">
-                                                <Instagram className="ml-2 h-4 w-4" />إنستغرام
-                                            </a>
-                                        </Button>
-                                    )}
-                                    {job.applyUrl && job.postType === 'seeking_worker' && (
-                                        <Button asChild className={cn("bg-blue-600 hover:bg-blue-700 text-primary-foreground", (!!job.phone || !!job.whatsapp || !!job.email || !!job.instagram) && ( ( [job.phone, job.whatsapp, job.email, job.instagram].filter(Boolean).length % 2 ) !== 0 ) ? 'col-span-2' : '' )}>
-                                            <a href={job.applyUrl} target="_blank" rel="noopener noreferrer"><LinkIcon className="ml-2 h-4 w-4" />تسجيل عبر الموقع</a>
-                                        </Button>
-                                    )}
+                                    {contactButtons.map(button => {
+                                        if (!button) return null;
+                                        const isApplyUrl = button.type === 'applyUrl';
+                                        const isLastAndOdd = button === contactButtons[contactButtons.length - 1] && contactButtons.length % 2 !== 0;
+                                        return (
+                                            <Button
+                                                key={button.type}
+                                                asChild
+                                                className={cn(button.className, (isApplyUrl && isLastAndOdd) && 'col-span-2')}
+                                                style={button.type === 'phone' ? { backgroundColor: button.color } : {}}
+                                            >
+                                                <a href={button.href} target={button.type !== 'phone' && button.type !== 'email' ? '_blank' : undefined} rel="noopener noreferrer">
+                                                    <button.icon className="ml-2 h-4 w-4" />
+                                                    {button.label}
+                                                </a>
+                                            </Button>
+                                        )
+                                    })}
                                 </div>
                                 <ShareButton title={job.title || ''} text={job.description || ''} />
                             </CardContent>
