@@ -61,7 +61,6 @@ export interface User {
   description?: string;
   createdAt?: Timestamp;
   gender?: 'male' | 'female';
-  isAdmin?: boolean;
 }
 
 export interface Testimonial {
