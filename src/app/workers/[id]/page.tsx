@@ -100,9 +100,6 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
         url: canonicalUrl,
         siteName: 'توظيفك',
         type: 'profile', // 'profile' is more appropriate here
-        profile: {
-            username: job.ownerName,
-        },
         images: [
             {
                 url: siteThumbnail,
@@ -350,5 +347,3 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
         </AppLayout>
     );
 }
-
-    
