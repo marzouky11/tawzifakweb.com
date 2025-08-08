@@ -52,13 +52,6 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
       twitter: { images: [siteThumbnail] }
     };
   }
-  
-  const employmentTypeMapping: {[key: string]: string} = {
-    'full_time': 'FULL_TIME',
-    'part_time': 'PART_TIME',
-    'freelance': 'CONTRACTOR',
-    'remote': 'OTHER',
-  };
 
   const jobTitle = job.title || `باحث عن عمل: ${job.ownerName}`;
   const jobCity = job.city || 'مدينة غير محددة';
@@ -67,11 +60,6 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
   const metaDescription = (job.description || `إعلان عن ${jobTitle} في ${jobCity}, ${jobCountry}.`).substring(0, 160);
   const jsonLdDescription = job.description || `إعلان عن ${jobTitle} في ${jobCity}, ${jobCountry}.`;
 
-  const createdAtDate = (job.createdAt && typeof job.createdAt.toDate === 'function') 
-    ? job.createdAt.toDate() 
-    : new Date();
-
-  // Using a more generic schema for a person seeking employment rather than JobPosting
   const personSchema = {
     '@context': 'https://schema.org',
     '@type': 'Person',
@@ -83,7 +71,6 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
         addressLocality: jobCity,
         addressCountry: jobCountry,
     },
-    // You can add more properties like 'knowsAbout', 'alumniOf', etc. if you have the data
   };
 
   const canonicalUrl = `${baseUrl}/workers/${job.id}`;
@@ -99,7 +86,7 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
         description: metaDescription,
         url: canonicalUrl,
         siteName: 'توظيفك',
-        type: 'profile', // 'profile' is more appropriate here
+        type: 'profile',
         images: [
             {
                 url: siteThumbnail,
@@ -145,7 +132,7 @@ const DetailSection = ({ icon: Icon, title, children }: { icon: React.ElementTyp
             <Icon className="h-5 w-5" />
             {title}
         </h3>
-        <div className="prose dark:prose-invert max-w-none text-foreground">
+        <div className="prose prose-lg dark:prose-invert max-w-none text-foreground">
             {children}
         </div>
     </div>
@@ -233,7 +220,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                            </div>
                         </CardHeader>
                         <CardContent className="p-4 sm:p-6 space-y-6">
-                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-3">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                                 <SeekerInfoItem icon={LayoutGrid} label="الفئة" value={categoryName} />
                                 {job.workType && <SeekerInfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} />}
                             </div>

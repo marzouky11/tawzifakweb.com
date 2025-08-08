@@ -162,7 +162,7 @@ const DetailSection = ({ icon: Icon, title, children }: { icon: React.ElementTyp
             <Icon className="h-5 w-5" />
             {title}
         </h3>
-        <div className="prose dark:prose-invert max-w-none text-foreground">
+        <div className="prose prose-lg dark:prose-invert max-w-none text-foreground">
             {children}
         </div>
     </div>
@@ -242,7 +242,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                             </div>
                         </CardHeader>
                         <CardContent className="p-4 sm:p-6 space-y-6">
-                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-3">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                                 <InfoItem icon={LayoutGrid} label="الفئة" value={categoryName} />
                                 {translatedWorkType && <InfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} />}
                                 <InfoItem icon={Wallet} label="الأجر" value={job.salary ? job.salary : 'عند الطلب'} />
