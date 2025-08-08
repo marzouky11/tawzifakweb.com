@@ -60,7 +60,7 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
     'remote': 'OTHER',
   };
 
-  const jobTitle = job.title || (job.postType === 'seeking_job' ? `باحث عن عمل: ${job.ownerName}` : 'إعلان وظيفة');
+  const jobTitle = job.title || `باحث عن عمل: ${job.ownerName}`;
   const jobCity = job.city || 'مدينة غير محددة';
   const jobCountry = job.country || 'دولة غير محددة';
 
@@ -71,29 +71,19 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
     ? job.createdAt.toDate() 
     : new Date();
 
-  const jobPostingJsonLd = {
-      '@context': 'https://schema.org',
-      '@type': 'JobPosting',
-      title: jobTitle,
-      description: jsonLdDescription,
-      datePosted: createdAtDate.toISOString(),
-      employmentType: job.workType ? employmentTypeMapping[job.workType] : 'OTHER',
-      hiringOrganization: {
-        '@type': 'Organization',
-        name: job.companyName || 'توظيفك',
-        sameAs: baseUrl,
-        logo: siteThumbnail,
-      },
-      jobLocation: {
-        '@type': 'Place',
-        address: {
-          '@type': 'PostalAddress',
-          addressLocality: jobCity,
-          addressCountry: jobCountry,
-        },
-      },
-      ...(job.workType === 'remote' && { jobLocationType: 'TELECOMMUTE' }),
-      ...(job.qualifications && { qualifications: job.qualifications }),
+  // Using a more generic schema for a person seeking employment rather than JobPosting
+  const personSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: job.ownerName,
+    description: jsonLdDescription,
+    jobTitle: job.title,
+    address: {
+        '@type': 'PostalAddress',
+        addressLocality: jobCity,
+        addressCountry: jobCountry,
+    },
+    // You can add more properties like 'knowsAbout', 'alumniOf', etc. if you have the data
   };
 
   const canonicalUrl = `${baseUrl}/workers/${job.id}`;
@@ -109,7 +99,10 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
         description: metaDescription,
         url: canonicalUrl,
         siteName: 'توظيفك',
-        type: 'article',
+        type: 'profile', // 'profile' is more appropriate here
+        profile: {
+            username: job.ownerName,
+        },
         images: [
             {
                 url: siteThumbnail,
@@ -126,7 +119,7 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
         images: [siteThumbnail],
     },
     other: {
-        'application/ld+json': JSON.stringify(jobPostingJsonLd, null, 2)
+        'application/ld+json': JSON.stringify(personSchema, null, 2)
     }
   };
 }
@@ -243,7 +236,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                            </div>
                         </CardHeader>
                         <CardContent className="p-4 sm:p-6 space-y-6">
-                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-3">
                                 <SeekerInfoItem icon={LayoutGrid} label="الفئة" value={categoryName} />
                                 {job.workType && <SeekerInfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} />}
                             </div>
@@ -357,3 +350,5 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
         </AppLayout>
     );
 }
+
+    
