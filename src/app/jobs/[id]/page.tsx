@@ -41,6 +41,7 @@ import { JobCard } from '@/components/job-card';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import Link from 'next/link';
 import { ViewCounter } from './view-counter';
+import { cn } from '@/lib/utils';
 
 interface JobDetailPageProps {
   params: { id: string };
@@ -51,12 +52,21 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
   const baseUrl = 'https://www.tawzifak.com';
   const siteThumbnail = 'https://i.postimg.cc/YCz0LvMj/Screenshot-20250704-173231.jpg';
   
-  if (!job || job.postType !== 'seeking_worker') {
+  if (!job) {
     return {
       title: 'الإعلان غير موجود',
       description: 'لم نتمكن من العثور على الإعلان الذي تبحث عنه.',
       openGraph: { images: [{ url: siteThumbnail }] },
       twitter: { images: [siteThumbnail] }
+    };
+  }
+  
+  if (job.postType !== 'seeking_worker') {
+    return {
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
   
@@ -328,7 +338,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                         </Button>
                                     )}
                                     {job.applyUrl && job.postType === 'seeking_worker' && (
-                                        <Button asChild className="bg-blue-600 hover:bg-blue-700 text-primary-foreground">
+                                        <Button asChild className={cn("bg-blue-600 hover:bg-blue-700 text-primary-foreground", (!!job.phone || !!job.whatsapp || !!job.email || !!job.instagram) && ( ( [job.phone, job.whatsapp, job.email, job.instagram].filter(Boolean).length % 2 ) !== 0 ) ? 'col-span-2' : '' )}>
                                             <a href={job.applyUrl} target="_blank" rel="noopener noreferrer"><LinkIcon className="ml-2 h-4 w-4" />تسجيل عبر الموقع</a>
                                         </Button>
                                     )}

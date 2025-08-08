@@ -21,6 +21,7 @@ const categories: Category[] = [
   { id: 'crafts', name: 'الحرف والصناعات التقليدية', iconName: 'PenTool', color: '#a16207' },
   { id: 'manufacturing', name: 'الصناعة والإنتاج', iconName: 'Factory', color: '#4b5563' },
   { id: 'law', name: 'القانون والشؤون القانونية', iconName: 'Gavel', color: '#78716c' },
+  { id: 'gov', name: 'وظائف حكومية', iconName: 'Gavel', color: '#334155' },
   { id: 'media', name: 'الإعلام والاتصال', iconName: 'Newspaper', color: '#475569' },
   { id: 'retail', name: 'التجارة والتوزيع', iconName: 'ShoppingCart', color: '#22c55e' },
   { id: '1', name: 'نجار', iconName: 'Hammer', color: '#a16207' },
@@ -477,3 +478,4 @@ export function getCategories() {
 export function getCategoryById(id: string) {
     return categories.find((cat) => cat.id === id);
 }
+
