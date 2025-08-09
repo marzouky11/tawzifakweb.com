@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
   const baseUrl = 'https://www.tawzifak.com';
   const siteThumbnail = 'https://i.postimg.cc/YCz0LvMj/Screenshot-20250704-173231.jpg';
   
-  if (!job) {
+  if (!job || job.postType !== 'seeking_worker') {
     return {
       title: 'الإعلان غير موجود',
       description: 'لم نتمكن من العثور على الإعلان الذي تبحث عنه.',
@@ -315,7 +315,8 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                     {contactButtons.map(button => {
                                         if (!button) return null;
                                         const isApplyUrl = button.type === 'applyUrl';
-                                        const isLastAndOdd = button === contactButtons[contactButtons.length - 1] && contactButtons.length % 2 !== 0;
+                                        const isLastAndOdd = contactButtons.filter(b => !!b).length % 2 !== 0 && button === contactButtons[contactButtons.length - 1];
+
                                         return (
                                             <Button
                                                 key={button.type}

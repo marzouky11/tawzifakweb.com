@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -70,7 +71,7 @@ const MobileFooter = () => {
   }
   
   return (
-    <footer className="md:hidden bg-card border-t py-6 mt-0 pb-28">
+    <footer className="md:hidden bg-card border-t py-6 mt-0">
       <div className="container mx-auto px-4 space-y-6">
           <div>
               <h3 className="font-bold text-lg mb-3 px-2">روابط مهمة</h3>
