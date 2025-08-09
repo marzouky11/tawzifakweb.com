@@ -128,15 +128,15 @@ const DesktopFooter = () => {
             <ul className="space-y-2">
               <li><Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary">سياسة الخصوصية</Link></li>
               <li><Link href="/terms" className="text-sm text-muted-foreground hover:text-primary">شروط الاستخدام</Link></li>
-              <li><Link href="/about" className="text-sm text-muted-foreground hover:text-primary">من نحن</Link></li>
-              <li><Link href="/faq" className="text-sm text-muted-foreground hover:text-primary">الأسئلة الشائعة</Link></li>
-              <li><Link href="/contact" className="text-sm text-muted-foreground hover:text-primary">اتصل بنا</Link></li>
             </ul>
           </div>
           
           <div className="space-y-4">
              <h4 className="font-bold text-lg">معلومات المنصة</h4>
             <ul className="space-y-2">
+                 <li><Link href="/about" className="text-sm text-muted-foreground hover:text-primary">من نحن</Link></li>
+                 <li><Link href="/faq" className="text-sm text-muted-foreground hover:text-primary">الأسئلة الشائعة</Link></li>
+                 <li><Link href="/contact" className="text-sm text-muted-foreground hover:text-primary">اتصل بنا</Link></li>
                 <li>
                     <a href="https://www.facebook.com/profile.php?id=61578748771269" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 justify-center lg:justify-start text-sm text-muted-foreground hover:text-primary">
                         <Facebook className="h-4 w-4" />
