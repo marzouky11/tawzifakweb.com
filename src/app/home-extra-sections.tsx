@@ -135,7 +135,8 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: index * 0.2 }}
                 className={cn(
-                  index === 2 ? 'hidden md:block' : '' // Hide the 3rd item on mobile
+                  index >= 2 ? 'hidden lg:block' : '',
+                  index >= 1 ? 'hidden md:block' : ''
                 )}
               >
                 <Card className="relative p-6 h-full flex flex-col bg-gradient-to-br from-card to-muted/30 shadow-lg hover:shadow-2xl transition-all duration-300 border-border/50 hover:border-primary/50">
