@@ -86,11 +86,10 @@ const MobileFooter = () => {
     <footer
       className="md:hidden bg-card border-t mt-4 py-6"
       style={{
-        // رفع الفوتر قليلاً وعدم تغطية شريط التنقل
         position: 'relative',
         zIndex: 10,
-        paddingBottom: 'env(safe-area-inset-bottom)', // لأجهزة iPhone الحديثة
-        marginBottom: '10px', // تعديل حسب الحاجة
+        paddingBottom: 'calc(env(safe-area-inset-bottom) + 20px)',
+        marginBottom: '10px',
       }}
     >
       <div className="container mx-auto px-4 space-y-6">
@@ -130,7 +129,7 @@ const MobileFooter = () => {
 
         <div
           className="text-center text-muted-foreground text-xs pt-2"
-          style={{ marginTop: '-10px' }} // تقليل الفراغ بين آراء المستخدمين والفوتر (يمكن تعديله حسب تصميمك)
+          style={{ marginTop: '-5px', marginBottom: '20px' }}
         >
           &copy; {new Date().getFullYear()} توظيفك. جميع الحقوق محفوظة.
         </div>
@@ -189,4 +188,4 @@ export function Footer() {
       <DesktopFooter />
     </>
   );
-                }
+            }
