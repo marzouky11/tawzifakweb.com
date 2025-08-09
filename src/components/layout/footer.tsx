@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -65,13 +64,16 @@ const MobileFooter = () => {
   const { user } = useAuth();
   const pathname = usePathname();
   const filteredImportantLinks = importantLinks.filter(link => !link.guestOnly || !user);
-  
+
   if (pathname !== '/') {
     return null;
   }
-  
+
   return (
-    <footer className="md:hidden bg-card border-t py-6 mt-0">
+    <footer 
+      className="md:hidden bg-card border-t fixed bottom-[calc(var(--tab-bar-height,56px)+1rem)] left-0 right-0 z-50 py-6"
+      style={{ minHeight: 'auto' }}
+    >
       <div className="container mx-auto px-4 space-y-6">
           <div>
               <h3 className="font-bold text-lg mb-3 px-2">روابط مهمة</h3>
@@ -84,7 +86,7 @@ const MobileFooter = () => {
 
           <div>
               <h3 className="font-bold text-lg mb-3 px-2">معلومات المنصة</h3>
-               <div className="space-y-1">
+              <div className="space-y-1">
                   {platformLinks.map((link) => <FooterLinkItem key={link.href} {...link} />)}
                   <a href="https://www.facebook.com/profile.php?id=61578748771269" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 rounded-lg hover:bg-muted transition-colors">
                       <div className="flex items-center gap-3">
@@ -97,7 +99,7 @@ const MobileFooter = () => {
           </div>
 
           <Separator />
-          
+
           <div className="text-center text-muted-foreground text-xs pt-4">
               &copy; {new Date().getFullYear()} توظيفك. جميع الحقوق محفوظة.
           </div>
@@ -142,4 +144,4 @@ export function Footer() {
       <DesktopFooter />
     </>
   );
-}
+      }
