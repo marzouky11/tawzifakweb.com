@@ -35,18 +35,23 @@ export default function AddTestimonialPage() {
       <MobilePageHeader title="إضافة رأي">
         <MessageSquare className="h-5 w-5 text-primary" />
       </MobilePageHeader>
+
       <DesktopPageHeader
         icon={MessageSquare}
         title="شاركنا رأيك"
         description="نحن نقدر رأيك كثيرًا. ملاحظاتك تساعدنا على تحسين المنصة وتطويرها."
       />
-      <div className="container mx-auto max-w-2xl px-4 pb-8 sm:pb-8 pb-2 md:pb-8">
-        <Card>
-          <CardContent className="pt-6">
-            <AddTestimonialForm />
-          </CardContent>
-        </Card>
-      </div>
+
+      <main className="flex-grow">
+        <div className="container mx-auto max-w-2xl px-4 pb-6 sm:pb-8">
+          <Card>
+            <CardContent className="pt-6">
+              <AddTestimonialForm />
+            </CardContent>
+          </Card>
+        </div>
+      </main>
+
     </AppLayout>
   );
 }
