@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
   const baseUrl = 'https://www.tawzifak.com';
   const siteThumbnail = 'https://i.postimg.cc/YCz0LvMj/Screenshot-20250704-173231.jpg';
   
-  if (!job || job.postType !== 'seeking_job') {
+  if (!job) {
     return {
       title: 'الإعلان غير موجود',
       description: 'لم نتمكن من العثور على الإعلان الذي تبحث عنه.',

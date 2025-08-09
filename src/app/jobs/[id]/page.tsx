@@ -61,15 +61,6 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
     };
   }
   
-  if (job.postType !== 'seeking_worker') {
-    return {
-      robots: {
-        index: false,
-        follow: false,
-      },
-    };
-  }
-  
   const employmentTypeMapping: {[key: string]: string} = {
     'full_time': 'FULL_TIME',
     'part_time': 'PART_TIME',
