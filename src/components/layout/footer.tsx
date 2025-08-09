@@ -23,6 +23,7 @@ ArrowLeft,
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/context/auth-context';
+import { getArticles } from '@/lib/articles';
 
 const importantLinks = [
 { label: 'تسجيل الدخول', href: '/login', icon: LogIn, guestOnly: true },
@@ -43,14 +44,6 @@ const platformLinks = [
 { label: 'الأسئلة الشائعة', href: '/faq', icon: HelpCircle },
 ];
 
-const desktopFooterLinks = [
-{ label: 'من نحن', href: '/about' },
-{ label: 'الأسئلة الشائعة', href: '/faq' },
-{ label: 'اتصل بنا', href: '/contact' },
-{ label: 'سياسة الخصوصية', href: '/privacy' },
-{ label: 'شروط الاستخدام', href: '/terms' },
-];
-
 const FooterLinkItem = ({ href, icon: Icon, label }: { href: string; icon: React.ElementType; label: string; }) => (
 
 <Link href={href} className="flex items-center justify-between p-3 rounded-lg hover:bg-muted transition-colors">  
@@ -60,7 +53,9 @@ const FooterLinkItem = ({ href, icon: Icon, label }: { href: string; icon: React
 </div>  
 <ArrowLeft className="h-4 w-4 text-muted-foreground" />  
 </Link>  
-);  const MobileFooter = () => {
+);
+  
+const MobileFooter = () => {
 const { user } = useAuth();
 const pathname = usePathname();
 const filteredImportantLinks = importantLinks.filter(link => !link.guestOnly || !user);
@@ -102,39 +97,80 @@ return (
 </footer>  );
 };
 
-const DesktopFooter = () => (
+const DesktopFooter = () => {
+  const recentArticles = getArticles().slice(0, 4);
 
-  <footer className="hidden md:flex bg-card border-t mt-auto py-8">    
-    <div className="container mx-auto px-4">    
-        <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-right gap-6">    
-            <div className="flex items-center gap-2">    
-                <Handshake className="h-6 w-6 text-primary" />    
-                <p className="text-sm text-muted-foreground">    
-                    &copy; {new Date().getFullYear()} توظيفك. جميع الحقوق محفوظة.    
-                </p>    
-            </div>    
-            <div className="flex items-center gap-x-6 gap-y-2 flex-wrap justify-center">    
-              {desktopFooterLinks.map((link) => (    
-                <Link key={link.href} href={link.href} className="text-sm text-muted-foreground hover:text-primary transition-colors">    
-                  {link.label}    
-                </Link>    
-              ))}    
-            </div>    
-            <div>    
-                 <Button asChild variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">    
-                    <a href="https://www.facebook.com/profile.php?id=61578748771269" target="_blank" rel="noopener noreferrer" aria-label="Facebook">    
-                        <Facebook className="h-5 w-5" />    
-                    </a>    
-                </Button>    
-            </div>    
-        </div>    
-    </div>    
-  </footer>    
-);  export function Footer() {  
+  return (
+    <footer className="hidden md:block bg-card border-t mt-auto py-12">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 text-center lg:text-right">
+          <div className="lg:col-span-1 space-y-4">
+            <div className="flex justify-center lg:justify-start items-center gap-2">
+              <Handshake className="h-8 w-8 text-primary" />
+              <span className="text-2xl font-bold">توظيفك</span>
+            </div>
+            <p className="text-muted-foreground text-sm">
+              منصتك الأولى للعثور على فرص عمل موثوقة في العالم العربي. نصل بين الباحثين عن عمل وأصحاب العمل.
+            </p>
+          </div>
+          
+          <div className="space-y-4">
+            <h4 className="font-bold text-lg">روابط مهمة</h4>
+            <ul className="space-y-2">
+              <li><Link href="/jobs" className="text-sm text-muted-foreground hover:text-primary">الوظائف</Link></li>
+              <li><Link href="/workers" className="text-sm text-muted-foreground hover:text-primary">العمال</Link></li>
+              <li><Link href="/post-job/select-type" className="text-sm text-muted-foreground hover:text-primary">نشر إعلان</Link></li>
+              <li><Link href="/cv-builder" className="text-sm text-muted-foreground hover:text-primary">إنشاء سيرة ذاتية</Link></li>
+            </ul>
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="font-bold text-lg">مقالات</h4>
+            <ul className="space-y-2">
+              {recentArticles.map(article => (
+                <li key={article.slug}>
+                  <Link href={`/articles/${article.slug}`} className="text-sm text-muted-foreground hover:text-primary line-clamp-1">{article.title}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          
+          <div className="space-y-4">
+            <h4 className="font-bold text-lg">معلومات المنصة</h4>
+            <ul className="space-y-2">
+              <li><Link href="/about" className="text-sm text-muted-foreground hover:text-primary">من نحن</Link></li>
+              <li><Link href="/faq" className="text-sm text-muted-foreground hover:text-primary">الأسئلة الشائعة</Link></li>
+              <li><Link href="/contact" className="text-sm text-muted-foreground hover:text-primary">اتصل بنا</Link></li>
+              <li><Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary">سياسة الخصوصية</Link></li>
+              <li><Link href="/terms" className="text-sm text-muted-foreground hover:text-primary">شروط الاستخدام</Link></li>
+            </ul>
+          </div>
+        </div>
+        
+        <Separator className="my-8" />
+
+        <div className="flex flex-col sm:flex-row justify-between items-center text-center gap-4">
+          <p className="text-sm text-muted-foreground">
+            &copy; {new Date().getFullYear()} توظيفك. جميع الحقوق محفوظة.
+          </p>
+          <div className="flex items-center gap-2">
+            <Button asChild variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
+              <a href="https://www.facebook.com/profile.php?id=61578748771269" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                <Facebook className="h-5 w-5" />
+              </a>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </footer>
+  )
+};
+
+export function Footer() {  
 return (  
 <>  
 <MobileFooter />  
 <DesktopFooter />  
 </>  
 );  
-}  
+}

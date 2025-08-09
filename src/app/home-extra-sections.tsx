@@ -102,7 +102,7 @@ function StatsSection({ stats }: { stats: { jobs: number, seekers: number } }) {
 
 
 // Testimonials Section Component
-const INITIAL_DISPLAY_COUNT = 2;
+const INITIAL_DISPLAY_COUNT = 3;
 
 function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Testimonial[] }) {
   const ref = useRef(null);
@@ -127,7 +127,7 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
         </motion.div>
         
         {initialTestimonials.length > 0 ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {displayedTestimonials.map((testimonial, index) => (
               <motion.div
                 key={testimonial.id}
