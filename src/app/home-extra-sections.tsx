@@ -176,7 +176,7 @@ export function HomeExtraSections({ testimonials, jobOffersCount, jobSeekersCoun
     const stats = { jobs: jobOffersCount, seekers: jobSeekersCount };
 
     return (
-        <div className="space-y-16">
+        <div className="space-y-8">
             <StatsSection stats={stats} />
             <TestimonialsSection initialTestimonials={testimonials} />
         </div>
