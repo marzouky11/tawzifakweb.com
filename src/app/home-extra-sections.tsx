@@ -152,7 +152,7 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
             </Card>
         )}
 
-        <div className="mt-6 text-center flex flex-col sm:flex-row justify-center items-center gap-4">
+        <div className="mt-15 text-center flex flex-col sm:flex-row justify-center items-center gap-4">
           <Button asChild variant="outline" size="lg">
             <Link href="/testimonials">عرض كل الآراء</Link>
           </Button>
