@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -113,8 +112,8 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
   const displayedTestimonials = initialTestimonials.slice(0, INITIAL_DISPLAY_COUNT_DESKTOP);
 
   return (
-    <section ref={ref} className="py-0">
-      <div className="container mx-auto px-0">
+    <section ref={ref} className="pt-8 pb-4"> {/* قللنا padding هنا */}
+      <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -146,7 +145,7 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
             ))}
           </div>
         ) : (
-           <Card className="text-center text-muted-foreground p-4 flex flex-col items-center gap-4">
+           <Card className="text-center text-muted-foreground p-8 flex flex-col items-center gap-4">
                 <MessageSquare className="w-16 h-16 text-muted-foreground/30" />
                 <p className="text-lg">كن أول من يشاركنا رأيه في المنصة!</p>
             </Card>
@@ -176,7 +175,7 @@ export function HomeExtraSections({ testimonials, jobOffersCount, jobSeekersCoun
     const stats = { jobs: jobOffersCount, seekers: jobSeekersCount };
 
     return (
-        <div className="space-y-16">
+        <div className="space-y-8"> {/* قللنا المسافة من 16 إلى 8 */}
             <StatsSection stats={stats} />
             <TestimonialsSection initialTestimonials={testimonials} />
         </div>
