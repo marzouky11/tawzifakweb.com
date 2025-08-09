@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -29,6 +28,7 @@ const importantLinks = [
     { label: 'الوظائف', href: '/jobs', icon: Briefcase },
     { label: 'العمال', href: '/workers', icon: Users },
     { label: 'نشر إعلان', href: '/post-job/select-type', icon: PlusCircle },
+    { label: 'إنشاء سيرة ذاتية', href: '/cv-builder', icon: FileText },
     { label: 'الإعدادات', href: '/profile', icon: Settings },
 ];
 
@@ -59,15 +59,24 @@ const FooterLinkItem = ({ href, icon: Icon, label }: { href: string; icon: React
     </Link>
 );
 
-
 export function Footer() {
   const { user } = useAuth();
   const filteredImportantLinks = importantLinks.filter(link => !link.guestOnly || !user);
-  
+  // ارتفاع الفوتر تقريبا 160px (تعديل حسب الحاجة)
+  const footerHeightPx = 160;
+
   return (
     <>
+      {/* محتوى الصفحة الرئيسي يحتاج هذا padding-bottom لتجنب فراغ فوق الفوتر */}
+      <style>{`
+        /* هذا الأسلوب يمكنك وضعه في CSS خارجي أو global */
+        main, .page-content {
+          padding-bottom: ${footerHeightPx}px;
+        }
+      `}</style>
+
       {/* Mobile Footer */}
-      <footer className="md:hidden bg-card border-t py-6">
+      <footer className="md:hidden fixed bottom-0 left-0 right-0 bg-card border-t z-50 py-6">
         <div className="container mx-auto px-4 space-y-6">
             <div>
                 <h3 className="font-bold text-lg mb-3 px-2">روابط مهمة</h3>
@@ -94,7 +103,7 @@ export function Footer() {
 
             <Separator />
             
-            <div className="text-center text-muted-foreground text-xs pt-4">
+            <div className="text-center text-muted-foreground text-xs">
                 &copy; {new Date().getFullYear()} توظيفك. جميع الحقوق محفوظة.
             </div>
         </div>
@@ -129,4 +138,4 @@ export function Footer() {
       </footer>
     </>
   );
-}
+                         }
