@@ -57,7 +57,7 @@ function StatsSection({ stats }: { stats: { jobs: number, seekers: number } }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-10"
+          className="text-center mb-6"
         >
           <h2 className="text-3xl font-bold tracking-tight text-foreground">منصتنا بالأرقام</h2>
           <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">نحن ننمو كل يوم بفضل ثقتكم، ونسعى لربط الكفاءات بأفضل الفرص.</p>
@@ -120,7 +120,7 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-10"
+          className="text-center mb-6"
         >
           <h2 className="text-3xl font-bold tracking-tight text-foreground">ماذا يقول مستخدمونا؟</h2>
           <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">آراؤكم هي مصدر إلهامنا ووقودنا للتطور المستمر.</p>
@@ -152,7 +152,7 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
             </Card>
         )}
 
-        <div className="mt-15 text-center flex flex-col sm:flex-row justify-center items-center gap-4">
+        <div className="mt-10 text-center flex flex-col sm:flex-row justify-center items-center gap-4">
           <Button asChild variant="outline" size="lg">
             <Link href="/testimonials">عرض كل الآراء</Link>
           </Button>
