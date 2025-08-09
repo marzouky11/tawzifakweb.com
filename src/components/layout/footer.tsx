@@ -119,28 +119,24 @@ const DesktopFooter = () => {
             <ul className="space-y-2">
               <li><Link href="/jobs" className="text-sm text-muted-foreground hover:text-primary">الوظائف</Link></li>
               <li><Link href="/workers" className="text-sm text-muted-foreground hover:text-primary">العمال</Link></li>
+              <li><Link href="/articles" className="text-sm text-muted-foreground hover:text-primary">مقالات</Link></li>
               <li><Link href="/post-job/select-type" className="text-sm text-muted-foreground hover:text-primary">نشر إعلان</Link></li>
               <li><Link href="/cv-builder" className="text-sm text-muted-foreground hover:text-primary">إنشاء سيرة ذاتية</Link></li>
             </ul>
           </div>
 
           <div className="space-y-4">
-            <h4 className="font-bold text-lg">مقالات</h4>
-            <ul className="space-y-2">
-              {recentArticles.map(article => (
-                <li key={article.slug}>
-                  <Link href={`/articles/${article.slug}`} className="text-sm text-muted-foreground hover:text-primary line-clamp-1">{article.title}</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          
-          <div className="space-y-4">
             <h4 className="font-bold text-lg">معلومات المنصة</h4>
             <ul className="space-y-2">
               <li><Link href="/about" className="text-sm text-muted-foreground hover:text-primary">من نحن</Link></li>
               <li><Link href="/faq" className="text-sm text-muted-foreground hover:text-primary">الأسئلة الشائعة</Link></li>
               <li><Link href="/contact" className="text-sm text-muted-foreground hover:text-primary">اتصل بنا</Link></li>
+            </ul>
+          </div>
+          
+          <div className="space-y-4">
+             <h4 className="font-bold text-lg">الشروط والسياسات</h4>
+            <ul className="space-y-2">
               <li><Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary">سياسة الخصوصية</Link></li>
               <li><Link href="/terms" className="text-sm text-muted-foreground hover:text-primary">شروط الاستخدام</Link></li>
             </ul>
