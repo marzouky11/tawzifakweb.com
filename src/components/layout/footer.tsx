@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -93,7 +94,7 @@ return (
 
   <Separator />    
       
-  <div className="text-center text-muted-foreground text-xs pt-4">    
+  <div className="text-center text-muted-foreground text-xs pt-4 pb-20">    
       &copy; {new Date().getFullYear()} توظيفك. جميع الحقوق محفوظة.    
   </div>
 
