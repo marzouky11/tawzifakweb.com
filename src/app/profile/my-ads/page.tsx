@@ -23,7 +23,7 @@ import type { Job } from '@/lib/types';
 import { JobCard } from '@/components/job-card';
 import { useToast } from '@/hooks/use-toast';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 
 export default function MyAdsPage() {
@@ -83,13 +83,13 @@ export default function MyAdsPage() {
         ) : (
           <div className="container mx-auto max-w-5xl px-4 pb-8">
             <Card>
-                <CardContent>
+                <CardContent className="pt-6">
                     {adsLoading ? (
                         <div className="flex justify-center p-8">
                             <Loader2 className="h-8 w-8 animate-spin text-primary" />
                         </div>
                     ) : myAds.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {myAds.map(ad => (
                                 <div key={ad.id} className="flex flex-col gap-2">
                                     <JobCard job={ad} />

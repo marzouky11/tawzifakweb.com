@@ -12,6 +12,7 @@ import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import type { Job } from '@/lib/types';
 import { AnimatePresence } from 'framer-motion';
+import { notFound } from 'next/navigation';
 
 export default function EditJobPage() {
   const { user, loading: authLoading } = useAuth();
@@ -33,20 +34,19 @@ export default function EditJobPage() {
         
         // Ownership check
         if (!jobData || jobData.userId !== user?.uid) {
-          // Instead of notFound(), redirect or show an error
-          router.push('/');
+          notFound();
           return;
         }
 
         setJob(jobData);
-        setLoading(false);
       }
+      setLoading(false);
     };
 
     if (user) {
         fetchJob();
     }
-  }, [params.id, user, router]);
+  }, [params.id, user]);
 
   const categories = getCategories();
 
@@ -75,11 +75,15 @@ export default function EditJobPage() {
           <Card>
             <CardContent className="pt-6">
               <AnimatePresence>
-                {job && (
+                {job ? (
                   <PostJobForm
                     categories={categories}
                     job={job}
                   />
+                ) : (
+                  <div className="flex justify-center p-8">
+                    <p>الإعلان غير موجود أو لا تملك صلاحية تعديله.</p>
+                  </div>
                 )}
               </AnimatePresence>
             </CardContent>
