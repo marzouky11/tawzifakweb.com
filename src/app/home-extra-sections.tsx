@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -37,18 +38,7 @@ const CountUp = ({ end, duration = 2 }: { end: number, duration?: number }) => {
     return () => clearInterval(timer);
   }, [end, duration, isInView]);
 
-  return (
-    <span 
-      ref={ref} 
-      className="inline-block min-w-[5ch] text-center" 
-      style={{ 
-        fontFeatureSettings: "'tnum', 'lnum'", 
-        fontVariantNumeric: "tabular-nums" 
-      }}
-    >
-      {count.toLocaleString('ar-EG')}
-    </span>
-  );
+  return <span ref={ref}>{count.toLocaleString('ar-EG')}</span>;
 };
 
 
@@ -83,7 +73,7 @@ function StatsSection({ stats }: { stats: { jobs: number, seekers: number } }) {
                 <Briefcase className="h-10 w-10" />
               </div>
               <p className="text-lg font-semibold text-foreground">عرض عمل منشور</p>
-              <div className="text-5xl font-bold text-accent text-[3.5rem] md:text-5xl leading-none">
+              <div className="text-5xl font-bold text-accent">
                 <CountUp end={stats.jobs} />
               </div>
             </Card>
@@ -99,7 +89,7 @@ function StatsSection({ stats }: { stats: { jobs: number, seekers: number } }) {
                 <Users className="h-10 w-10" />
               </div>
               <p className="text-lg font-semibold text-foreground">باحث عن عمل</p>
-              <div className="text-5xl font-bold text-destructive text-[3.5rem] md:text-5xl leading-none">
+              <div className="text-5xl font-bold text-destructive">
                 <CountUp end={stats.seekers} />
               </div>
             </Card>
