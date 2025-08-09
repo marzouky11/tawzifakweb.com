@@ -107,9 +107,8 @@ const INITIAL_DISPLAY_COUNT = 3;
 function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Testimonial[] }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-150px" });
-  const [showAll, setShowAll] = useState(false);
 
-  const displayedTestimonials = showAll ? initialTestimonials : initialTestimonials.slice(0, INITIAL_DISPLAY_COUNT);
+  const displayedTestimonials = initialTestimonials.slice(0, INITIAL_DISPLAY_COUNT);
   const hasMoreTestimonials = initialTestimonials.length > INITIAL_DISPLAY_COUNT;
 
   return (
@@ -162,14 +161,9 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
         )}
 
         <div className="mt-10 text-center flex flex-col sm:flex-row justify-center items-center gap-4">
-          {hasMoreTestimonials && !showAll && (
-             <Button onClick={() => setShowAll(true)} variant="outline" size="lg">
-              عرض كل الآراء
-            </Button>
-          )}
-           {showAll && (
-             <Button onClick={() => setShowAll(false)} variant="outline" size="lg">
-              عرض أقل
+          {hasMoreTestimonials && (
+             <Button asChild variant="outline" size="lg">
+              <Link href="/testimonials">عرض كل الآراء</Link>
             </Button>
           )}
           <Button asChild size="lg">
