@@ -9,6 +9,7 @@ import { motion, useInView } from "framer-motion";
 import type { Testimonial } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 // CountUp component for animating numbers
 const CountUp = ({ end, duration = 2 }: { end: number, duration?: number }) => {  
@@ -109,7 +110,6 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
   const isInView = useInView(ref, { once: true, margin: "-150px" });
 
   const displayedTestimonials = initialTestimonials.slice(0, INITIAL_DISPLAY_COUNT);
-  const hasMoreTestimonials = initialTestimonials.length > INITIAL_DISPLAY_COUNT;
 
   return (
     <section ref={ref} className="py-12">
@@ -134,6 +134,9 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
                 initial={{ opacity: 0, y: 50 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: index * 0.2 }}
+                className={cn(
+                  index === 2 ? 'hidden md:block' : '' // Hide the 3rd item on mobile
+                )}
               >
                 <Card className="relative p-6 h-full flex flex-col bg-gradient-to-br from-card to-muted/30 shadow-lg hover:shadow-2xl transition-all duration-300 border-border/50 hover:border-primary/50">
                   <div className="flex items-center gap-4 mb-4">
@@ -161,11 +164,9 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
         )}
 
         <div className="mt-10 text-center flex flex-col sm:flex-row justify-center items-center gap-4">
-          {hasMoreTestimonials && (
-             <Button asChild variant="outline" size="lg">
-              <Link href="/testimonials">عرض كل الآراء</Link>
-            </Button>
-          )}
+          <Button asChild variant="outline" size="lg">
+            <Link href="/testimonials">عرض كل الآراء</Link>
+          </Button>
           <Button asChild size="lg">
             <Link href="/add-testimonial">أضف رأيك</Link>
           </Button>
