@@ -1,56 +1,100 @@
 'use client';
 
-import { useEffect } from 'react';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import { useRouter } from 'next/navigation';
+
+import { Button } from '@/components/ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from "@/hooks/use-toast";
+import { addTestimonial } from '@/lib/data';
 import { useAuth } from '@/context/auth-context';
-import { AppLayout } from '@/components/layout/app-layout';
-import { Card, CardContent } from '@/components/ui/card';
-import { AddTestimonialForm } from './add-testimonial-form';
-import { Loader2, MessageSquare } from 'lucide-react';
-import { MobilePageHeader } from '@/components/layout/mobile-page-header';
-import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
+import { Loader2 } from 'lucide-react';
 
-export default function AddTestimonialPage() {
-  const { user, loading } = useAuth();
+const formSchema = z.object({
+  content: z.string().min(10, { message: 'يجب أن يكون الرأي 10 أحرف على الأقل.' }).max(500, { message: 'يجب ألا يتجاوز الرأي 500 حرف.' }),
+});
+
+function AddTestimonialForm() {
+  const { toast } = useToast();
+  const { user, userData } = useAuth();
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login?redirect=/add-testimonial');
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      content: '',
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!user || !userData) {
+      toast({
+        variant: "destructive",
+        title: "خطأ",
+        description: "يجب عليك تسجيل الدخول أولاً.",
+      });
+      router.push('/login');
+      return;
     }
-  }, [loading, user, router]);
 
-  if (loading || !user) {
-    return (
-      <AppLayout>
-        <div className="flex h-[50vh] items-center justify-center p-8">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
-      </AppLayout>
-    );
+    setIsSubmitting(true);
+    try {
+      await addTestimonial({
+        userId: user.uid,
+        userName: userData.name,
+        userAvatarColor: userData.avatarColor || '#3b82f6',
+        content: values.content,
+      });
+
+      toast({
+        title: "شكرًا لك!",
+        description: "تم إرسال رأيك بنجاح. نحن نقدر مساهمتك.",
+      });
+      router.push('/');
+    } catch (error) {
+      console.error("Failed to add testimonial:", error);
+      toast({
+        variant: "destructive",
+        title: "خطأ في الإرسال",
+        description: "حدث خطأ غير متوقع أثناء إرسال رأيك. يرجى المحاولة مرة أخرى لاحقًا.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
-    <AppLayout>
-      <div className="flex flex-col min-h-screen">
-        <MobilePageHeader title="إضافة رأي">
-          <MessageSquare className="h-5 w-5 text-primary" />
-        </MobilePageHeader>
-
-        <DesktopPageHeader
-          icon={MessageSquare}
-          title="شاركنا رأيك"
-          description="نحن نقدر رأيك كثيرًا. ملاحظاتك تساعدنا على تحسين المنصة وتطويرها."
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <FormField
+          control={form.control}
+          name="content"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>رأيك يهمنا</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="اكتب هنا رأيك حول تجربتك مع منصة توظيفك..."
+                  rows={6}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-
-        <main className="container mx-auto max-w-2xl px-4 pb-8 flex-grow">
-          <Card>
-            <CardContent className="pt-6">
-              <AddTestimonialForm />
-            </CardContent>
-          </Card>
-        </main>
-      </div>
-    </AppLayout>
+        <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+          {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          إرسال الرأي
+        </Button>
+      </form>
+    </Form>
   );
 }
+
+export default AddTestimonialForm;
