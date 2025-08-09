@@ -53,11 +53,11 @@ function StatsSection({ stats }: { stats: { jobs: number, seekers: number } }) {
       ></div>
       <div className="container relative mx-auto px-4">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-0"
+          className="text-center mb-10"
         >
           <h2 className="text-3xl font-bold tracking-tight text-foreground">منصتنا بالأرقام</h2>
           <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">نحن ننمو كل يوم بفضل ثقتكم، ونسعى لربط الكفاءات بأفضل الفرص.</p>
@@ -116,11 +116,11 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
     <section ref={ref} className="py-12">
       <div className="container mx-auto px-4">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-0"
+          className="text-center mb-10"
         >
           <h2 className="text-3xl font-bold tracking-tight text-foreground">ماذا يقول مستخدمونا؟</h2>
           <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">آراؤكم هي مصدر إلهامنا ووقودنا للتطور المستمر.</p>
