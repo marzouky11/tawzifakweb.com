@@ -72,7 +72,7 @@ return null;
 return (
 
 <footer className="md:hidden bg-card border-t py-6 mt-0">  
-<div className="container mx-auto px-4 space-y-6">  
+<div className="container mx-auto px-4 space-y-6 pb-24">  
 <div>  
 <h3 className="font-bold text-lg mb-3 px-2">روابط مهمة</h3>  
 <div className="space-y-1">  
@@ -94,7 +94,7 @@ return (
 
   <Separator />    
       
-  <div className="text-center text-muted-foreground text-xs pt-4 pb-20">    
+  <div className="text-center text-muted-foreground text-xs pt-4">    
       &copy; {new Date().getFullYear()} توظيفك. جميع الحقوق محفوظة.    
   </div>
 
