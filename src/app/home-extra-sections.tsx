@@ -53,7 +53,7 @@ function StatsSection({ stats }: { stats: { jobs: number, seekers: number } }) {
       ></div>
       <div className="container relative mx-auto px-4">
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.5 }}
@@ -113,10 +113,10 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
   const displayedTestimonials = initialTestimonials.slice(0, INITIAL_DISPLAY_COUNT_DESKTOP);
 
   return (
-    <section ref={ref} className="py-12">
+    <section ref={ref} className="py-6">
       <div className="container mx-auto px-4">
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.5 }}
@@ -176,7 +176,7 @@ export function HomeExtraSections({ testimonials, jobOffersCount, jobSeekersCoun
     const stats = { jobs: jobOffersCount, seekers: jobSeekersCount };
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-16">
             <StatsSection stats={stats} />
             <TestimonialsSection initialTestimonials={testimonials} />
         </div>
