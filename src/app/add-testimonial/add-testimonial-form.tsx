@@ -18,12 +18,12 @@ export default function AddTestimonialPage() {
     if (!loading && !user) {
       router.push('/login?redirect=/add-testimonial');
     }
-  }, [user, loading, router]);
+  }, [loading, user, router]);
 
   if (loading || !user) {
     return (
       <AppLayout>
-        <div className="flex h-full items-center justify-center p-8 min-h-[50vh]">
+        <div className="flex h-[50vh] items-center justify-center p-8">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
       </AppLayout>
