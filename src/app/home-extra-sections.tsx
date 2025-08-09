@@ -113,8 +113,8 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
   const displayedTestimonials = initialTestimonials.slice(0, INITIAL_DISPLAY_COUNT_DESKTOP);
 
   return (
-    <section ref={ref} className="py-6">
-      <div className="container mx-auto px-4">
+    <section ref={ref} className="py-0">
+      <div className="container mx-auto px-0">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -146,7 +146,7 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
             ))}
           </div>
         ) : (
-           <Card className="text-center text-muted-foreground p-8 flex flex-col items-center gap-4">
+           <Card className="text-center text-muted-foreground p-4 flex flex-col items-center gap-4">
                 <MessageSquare className="w-16 h-16 text-muted-foreground/30" />
                 <p className="text-lg">كن أول من يشاركنا رأيه في المنصة!</p>
             </Card>
