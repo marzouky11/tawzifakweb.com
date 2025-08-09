@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect } from 'react';
@@ -41,7 +40,7 @@ export default function AddTestimonialPage() {
         title="شاركنا رأيك"
         description="نحن نقدر رأيك كثيرًا. ملاحظاتك تساعدنا على تحسين المنصة وتطويرها."
       />
-      <div className="container mx-auto max-w-2xl px-4 pb-8">
+      <div className="container mx-auto max-w-2xl px-4 pb-8 sm:pb-8 pb-2 md:pb-8">
         <Card>
           <CardContent className="pt-6">
             <AddTestimonialForm />
