@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -28,7 +29,6 @@ const importantLinks = [
     { label: 'الوظائف', href: '/jobs', icon: Briefcase },
     { label: 'العمال', href: '/workers', icon: Users },
     { label: 'نشر إعلان', href: '/post-job/select-type', icon: PlusCircle },
-    { label: 'إنشاء سيرة ذاتية', href: '/cv-builder', icon: FileText },  // تمت الإضافة هنا
     { label: 'الإعدادات', href: '/profile', icon: Settings },
 ];
 
@@ -129,4 +129,4 @@ export function Footer() {
       </footer>
     </>
   );
-    }
+}
