@@ -98,8 +98,6 @@ return (
 };
 
 const DesktopFooter = () => {
-  const recentArticles = getArticles().slice(0, 4);
-
   return (
     <footer className="hidden md:block bg-card border-t mt-auto py-12">
       <div className="container mx-auto px-4">
@@ -126,8 +124,10 @@ const DesktopFooter = () => {
           </div>
 
           <div className="space-y-4">
-            <h4 className="font-bold text-lg">معلومات المنصة</h4>
+            <h4 className="font-bold text-lg">الشروط والسياسات</h4>
             <ul className="space-y-2">
+              <li><Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary">سياسة الخصوصية</Link></li>
+              <li><Link href="/terms" className="text-sm text-muted-foreground hover:text-primary">شروط الاستخدام</Link></li>
               <li><Link href="/about" className="text-sm text-muted-foreground hover:text-primary">من نحن</Link></li>
               <li><Link href="/faq" className="text-sm text-muted-foreground hover:text-primary">الأسئلة الشائعة</Link></li>
               <li><Link href="/contact" className="text-sm text-muted-foreground hover:text-primary">اتصل بنا</Link></li>
@@ -135,26 +135,18 @@ const DesktopFooter = () => {
           </div>
           
           <div className="space-y-4">
-             <h4 className="font-bold text-lg">الشروط والسياسات</h4>
+             <h4 className="font-bold text-lg">معلومات المنصة</h4>
             <ul className="space-y-2">
-              <li><Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary">سياسة الخصوصية</Link></li>
-              <li><Link href="/terms" className="text-sm text-muted-foreground hover:text-primary">شروط الاستخدام</Link></li>
+                <li>
+                    <a href="https://www.facebook.com/profile.php?id=61578748771269" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 justify-center lg:justify-start text-sm text-muted-foreground hover:text-primary">
+                        <Facebook className="h-4 w-4" />
+                        <span>تابعنا على فيسبوك</span>
+                    </a>
+                </li>
             </ul>
-          </div>
-        </div>
-        
-        <Separator className="my-8" />
-
-        <div className="flex flex-col sm:flex-row justify-between items-center text-center gap-4">
-          <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} توظيفك. جميع الحقوق محفوظة.
-          </p>
-          <div className="flex items-center gap-2">
-            <Button asChild variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
-              <a href="https://www.facebook.com/profile.php?id=61578748771269" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                <Facebook className="h-5 w-5" />
-              </a>
-            </Button>
+            <p className="text-xs text-muted-foreground pt-4">
+                &copy; {new Date().getFullYear()} توظيفك. جميع الحقوق محفوظة.
+            </p>
           </div>
         </div>
       </div>
