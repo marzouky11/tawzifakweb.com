@@ -35,7 +35,6 @@ const navLinks = [
     { href: '/', label: 'الرئيسية' },
     { href: '/jobs', label: 'الوظائف' },
     { href: '/workers', label: 'العمال' },
-    { href: '/cv-builder', label: 'إنشاء سيرة ذاتية' },
 ];
 
 export function Header() {
@@ -148,19 +147,28 @@ export function Header() {
                 </Link>
               );
             })}
+             {user && (
+                 <Link
+                  href="/profile/my-ads"
+                  className={cn(
+                    'text-sm font-medium transition-colors hover:text-primary',
+                    pathname.startsWith('/profile/my-ads') ? 'text-primary' : 'text-muted-foreground'
+                  )}
+                >
+                  إعلاناتي
+                </Link>
+            )}
           </div>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-4">
           <ThemeToggleButton />
-          {user && (
-            <Button asChild variant="outline" className="border-primary/50 text-primary hover:bg-primary/10 hover:text-primary">
-                <Link href="/profile/my-ads">
-                <FileText className="ml-2 h-4 w-4" />
-                <span className="hidden sm:inline">إعلاناتي</span>
-                </Link>
-            </Button>
-          )}
+          <Button asChild variant="outline" className="border-accent/50 text-accent hover:bg-accent/10 hover:text-accent">
+            <Link href="/cv-builder">
+              <FileText className="ml-2 h-4 w-4" />
+              <span className="hidden sm:inline">إنشاء سيرة ذاتية</span>
+            </Link>
+          </Button>
           <Button asChild>
             <Link href="/post-job/select-type">
               <Plus className="ml-2 h-4 w-4" />
