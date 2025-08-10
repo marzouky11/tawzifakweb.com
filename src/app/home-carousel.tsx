@@ -54,7 +54,7 @@ const slidesData = [
     alt: "إنشاء سيرة ذاتية احترافية",
     hint: "cv builder",
     title: "أنشئ سيرتك الذاتية بسهولة",
-    description: "استخدم أداتنا المجانية لإنشاء سيرة ذاتية احترافية تجذب انتباه أصحاب العمل.",
+    description: "استخدم أداتنا المجانية لإنشاء سيرة ذاتية",
     buttonText: "أنشئ سيرتك الذاتية الآن",
     buttonLink: "/cv-builder",
     buttonClass: "bg-yellow-500 hover:bg-yellow-600"
