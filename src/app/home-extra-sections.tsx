@@ -111,7 +111,7 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
   const displayedTestimonials = initialTestimonials.slice(0, INITIAL_DISPLAY_COUNT_DESKTOP);
 
   return (
-    <section ref={ref} className="py-4">
+    <section ref={ref} className="py-0">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
