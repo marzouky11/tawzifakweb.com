@@ -163,7 +163,7 @@ export function Header() {
 
         <div className="flex items-center gap-2 sm:gap-4">
           <ThemeToggleButton />
-          <Button asChild variant="outline" className="border-accent/50 text-accent hover:bg-accent/10 hover:text-accent">
+          <Button asChild variant="outline" className="border-yellow-500/50 text-yellow-600 dark:text-yellow-400 hover:bg-yellow-500/10 hover:text-yellow-600 dark:hover:text-yellow-400">
             <Link href="/cv-builder">
               <FileText className="ml-2 h-4 w-4" />
               <span className="hidden sm:inline">إنشاء سيرة ذاتية</span>
