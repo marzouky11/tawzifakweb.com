@@ -110,6 +110,9 @@ const DesktopFooter = () => {
             <p className="text-muted-foreground text-sm">
               منصتك الأولى للعثور على فرص عمل موثوقة في العالم العربي. نصل بين الباحثين عن عمل وأصحاب العمل.
             </p>
+            <p className="text-muted-foreground text-xs mt-4">
+                &copy; {new Date().getFullYear()} توظيفك. جميع الحقوق محفوظة.
+            </p>
           </div>
           
           <div className="space-y-4">
@@ -145,10 +148,6 @@ const DesktopFooter = () => {
               <li><Link href="/terms" className="text-sm text-muted-foreground hover:text-primary">شروط الاستخدام</Link></li>
             </ul>
           </div>
-        </div>
-        <Separator className="my-8" />
-        <div className="text-center text-muted-foreground text-xs">
-          &copy; {new Date().getFullYear()} توظيفك. جميع الحقوق محفوظة.
         </div>
       </div>
     </footer>
