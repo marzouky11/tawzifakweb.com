@@ -260,6 +260,14 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                             </div>
                             
                             <Separator />
+
+                            {job.qualifications && (
+                               <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة">
+                                    <p>{job.qualifications}</p>
+                               </DetailSection>
+                            )}
+
+                            {job.qualifications && (job.experience || job.conditions || job.description || job.tasks) && <Separator />}
                             
                             {job.experience && (
                                <DetailSection icon={Award} title="الخبرة المطلوبة">
@@ -267,15 +275,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                </DetailSection>
                             )}
 
-                            {job.experience && (job.qualifications || job.conditions || job.description || job.tasks) && <Separator />}
-
-                            {job.qualifications && (
-                               <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة">
-                                    <p>{job.qualifications}</p>
-                               </DetailSection>
-                            )}
-                            
-                            {job.qualifications && (job.conditions || job.description || job.tasks) && <Separator />}
+                            {job.experience && (job.conditions || job.description || job.tasks) && <Separator />}
 
                             {job.conditions && (
                                <DetailSection icon={ClipboardList} title="الشروط المطلوبة">
@@ -379,5 +379,3 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
         </AppLayout>
     );
 }
-
-    
