@@ -111,7 +111,7 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
   const displayedTestimonials = initialTestimonials.slice(0, INITIAL_DISPLAY_COUNT_DESKTOP);
 
   return (
-    <section ref={ref} className="py-0">
+    <section ref={ref} className="py-4">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -150,7 +150,7 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
           </Card>  
         )}  
 
-        <div className="mt-10 text-center flex flex-col sm:flex-row justify-center items-center gap-4">  
+        <div className="mt-10 text-center flex flex-col sm:flex-row justify-center items-center gap-1">  
           <Button asChild variant="outline" size="lg">  
             <Link href="/testimonials">عرض كل الآراء</Link>  
           </Button>  
@@ -174,7 +174,7 @@ export function HomeExtraSections({ testimonials, jobOffersCount, jobSeekersCoun
   const stats = { jobs: jobOffersCount, seekers: jobSeekersCount };
 
   return (  
-    <div className="space-y-0">  
+    <div className="space-y-6">  
       <StatsSection stats={stats} />  
       <TestimonialsSection initialTestimonials={testimonials} />  
     </div>  
