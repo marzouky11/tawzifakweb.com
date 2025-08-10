@@ -99,7 +99,7 @@ return (
 
 const DesktopFooter = () => {
   return (
-    <footer className="hidden md:block bg-card border-t mt-auto py-12">
+    <footer className="hidden md:block bg-card border-t mt-auto pt-12 pb-8">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 text-center lg:text-right">
           <div className="lg:col-span-1 space-y-4">
@@ -124,14 +124,6 @@ const DesktopFooter = () => {
           </div>
 
           <div className="space-y-4">
-            <h4 className="font-bold text-lg">الشروط والسياسات</h4>
-            <ul className="space-y-2">
-              <li><Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary">سياسة الخصوصية</Link></li>
-              <li><Link href="/terms" className="text-sm text-muted-foreground hover:text-primary">شروط الاستخدام</Link></li>
-            </ul>
-          </div>
-          
-          <div className="space-y-4">
              <h4 className="font-bold text-lg">معلومات المنصة</h4>
             <ul className="space-y-2">
                  <li><Link href="/about" className="text-sm text-muted-foreground hover:text-primary">من نحن</Link></li>
@@ -144,10 +136,19 @@ const DesktopFooter = () => {
                     </a>
                 </li>
             </ul>
-            <p className="text-xs text-muted-foreground pt-4">
-                &copy; {new Date().getFullYear()} توظيفك. جميع الحقوق محفوظة.
-            </p>
           </div>
+          
+           <div className="space-y-4">
+            <h4 className="font-bold text-lg">الشروط والسياسات</h4>
+            <ul className="space-y-2">
+              <li><Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary">سياسة الخصوصية</Link></li>
+              <li><Link href="/terms" className="text-sm text-muted-foreground hover:text-primary">شروط الاستخدام</Link></li>
+            </ul>
+          </div>
+        </div>
+        <Separator className="my-8" />
+        <div className="text-center text-muted-foreground text-xs">
+          &copy; {new Date().getFullYear()} توظيفك. جميع الحقوق محفوظة.
         </div>
       </div>
     </footer>
