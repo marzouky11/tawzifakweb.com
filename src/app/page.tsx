@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { getJobs, getTestimonials } from '@/lib/data';
 import React, { Suspense } from 'react';
-import { Handshake, Newspaper, Briefcase, Users, ArrowLeft, FileText } from 'lucide-react';
+import { Newspaper, Briefcase, Users, ArrowLeft, FileText } from 'lucide-react';
 import { JobFilters } from '@/components/job-filters';
 import { ThemeToggleButton } from '@/components/theme-toggle';
 import { HomeCarousel } from './home-carousel';
@@ -104,13 +104,9 @@ function HomeHeaderMobile() {
       <div className="md:hidden bg-primary text-primary-foreground p-4 rounded-b-3xl shadow-md">
         <div className="container mx-auto">
           <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
-                <Handshake className="h-10 w-10 flex-shrink-0" />
-                <div>
-                  <h1 className="text-2xl font-bold">توظيفك</h1>
-                  <p className="text-xs font-light text-primary-foreground/90 -mt-0.5">بوابتك نحو فرص أفضل</p>
-                </div>
-            </div>
+            <Link href="/">
+              <Image src="/LOGO1.png" alt="شعار توظيفك" width={140} height={35} priority />
+            </Link>
             <div className="flex items-center gap-1">
               <ThemeToggleButton className="text-white hover:bg-white/20" />
             </div>

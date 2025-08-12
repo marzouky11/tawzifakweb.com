@@ -2,10 +2,10 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
 Facebook,
-Handshake,
 LogIn,
 UserPlus,
 Briefcase,
@@ -103,14 +103,13 @@ const DesktopFooter = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 text-center lg:text-right">
           <div className="lg:col-span-1 space-y-4">
-            <div className="flex justify-center lg:justify-start items-center gap-2">
-              <Handshake className="h-8 w-8 text-primary" />
-              <span className="text-2xl font-bold">توظيفك</span>
+            <div className="flex justify-center lg:justify-start items-center">
+              <Image src="/LOGO2.png" alt="شعار توظيفك" width={150} height={40} />
             </div>
             <p className="text-muted-foreground text-sm">
               منصتك الأولى للعثور على فرص عمل موثوقة في العالم العربي. نصل بين الباحثين عن عمل وأصحاب العمل.
             </p>
-            <p className="text-muted-foreground text-xs mt-4">
+             <p className="text-muted-foreground text-xs mt-4">
                 &copy; {new Date().getFullYear()} توظيفك. جميع الحقوق محفوظة.
             </p>
           </div>

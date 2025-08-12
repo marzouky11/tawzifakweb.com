@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
 import { signOut } from 'firebase/auth';
@@ -21,7 +22,6 @@ import {
   Plus,
   LogOut,
   User as UserIcon,
-  Handshake,
   Newspaper,
   Settings,
   FileText,
@@ -128,8 +128,7 @@ export function Header() {
       <nav className="container relative flex items-center justify-between h-20">
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-2">
-            <Handshake className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-bold text-foreground">توظيفك</span>
+            <Image src="/LOGO2.png" alt="شعار توظيفك" width={150} height={40} priority />
           </Link>
           <div className="flex items-center gap-6">
             {navLinks.map((link) => {
