@@ -105,7 +105,7 @@ function HomeHeaderMobile() {
         <div className="container mx-auto">
           <div className="flex justify-between items-center">
             <Link href="/">
-              <Image src="/LOGO1.png" alt="شعار توظيفك" width={140} height={35} priority />
+              <Image src="/LOGO2.png" alt="شعار توظيفك" width={140} height={35} priority />
             </Link>
             <div className="flex items-center gap-1">
               <ThemeToggleButton className="text-primary hover:bg-primary/10" />
