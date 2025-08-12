@@ -101,14 +101,14 @@ async function ExtraSections() {
 
 function HomeHeaderMobile() {
   return (
-      <div className="md:hidden bg-primary text-primary-foreground p-4 rounded-b-3xl shadow-md">
+      <div className="md:hidden bg-card text-card-foreground p-4 rounded-b-3xl shadow-md border-b-4 border-primary">
         <div className="container mx-auto">
           <div className="flex justify-between items-center">
             <Link href="/">
               <Image src="/LOGO1.png" alt="شعار توظيفك" width={140} height={35} priority />
             </Link>
             <div className="flex items-center gap-1">
-              <ThemeToggleButton className="text-white hover:bg-white/20" />
+              <ThemeToggleButton className="text-primary hover:bg-primary/10" />
             </div>
           </div>
         </div>
