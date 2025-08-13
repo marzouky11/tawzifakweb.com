@@ -63,6 +63,7 @@ export function HomeHeaderMobile() {
             </Link>
             <div className="flex items-center gap-2">
                 {renderThemeToggle()}
+                <Separator orientation="vertical" className="h-6" />
                 {renderAuthButton()}
             </div>
           </div>
