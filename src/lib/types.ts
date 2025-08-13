@@ -45,6 +45,7 @@ export interface Job {
   education?: string;
   status?: 'open' | 'closed';
   views?: number;
+  howToApply?: string;
 }
 
 export interface User {

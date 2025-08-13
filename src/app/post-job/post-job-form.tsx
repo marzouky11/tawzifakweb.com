@@ -19,7 +19,7 @@ import {
   Loader2, Briefcase, Users, FileText, FileSignature, 
   LayoutGrid, Globe, MapPin, Wallet, Phone, MessageSquare, Mail,
   Building2, Award, Users2, Info, Instagram, GraduationCap, Link as LinkIcon,
-  ClipboardList, ArrowLeft, ArrowRight, CheckSquare, Check,
+  ClipboardList, ArrowLeft, ArrowRight, CheckSquare, Check, HelpCircle,
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -38,18 +38,19 @@ const formSchema = z.object({
   
   companyName: z.string().optional(),
   experience: z.string().optional(),
+  description: z.string().optional(),
   qualifications: z.string().optional(),
   salary: z.string().optional(),
   openPositions: z.coerce.number().int().positive().optional(),
   conditions: z.string().optional(),
   tasks: z.string().optional(),
-  description: z.string().optional(),
   
   phone: z.string().optional(),
   whatsapp: z.string().optional(),
   email: z.string().email({ message: "الرجاء إدخال بريد إلكتروني صحيح." }).optional().or(z.literal('')),
   instagram: z.string().optional(),
   applyUrl: z.string().url({ message: 'الرجاء إدخال رابط صحيح' }).optional().or(z.literal('')),
+  howToApply: z.string().optional(),
 }).refine(data => 
     (!!data.phone || !!data.whatsapp || !!data.email || !!data.instagram) || 
     (!!data.applyUrl && data.postType === 'seeking_worker'), {
@@ -59,8 +60,8 @@ const formSchema = z.object({
 
 const stepFields = [
   ['postType', 'title', 'categoryId', 'customCategory', 'workType', 'country', 'city'],
-  ['companyName', 'experience', 'qualifications', 'salary', 'openPositions', 'conditions', 'tasks', 'description'],
-  ['phone', 'whatsapp', 'email', 'instagram', 'applyUrl'],
+  ['companyName', 'experience', 'description', 'qualifications', 'salary', 'openPositions', 'conditions', 'tasks'],
+  ['phone', 'whatsapp', 'email', 'instagram', 'applyUrl', 'howToApply'],
 ];
 
 interface PostJobFormProps {
@@ -142,10 +143,10 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
       workType: job?.workType || undefined,
       salary: job?.salary || '',
       experience: job?.experience || '',
+      description: job?.description || '',
       qualifications: job?.qualifications || '',
       companyName: job?.companyName || '',
       openPositions: job?.openPositions || undefined,
-      description: job?.description || '',
       conditions: job?.conditions || '',
       tasks: job?.tasks || '',
       phone: job?.phone || '',
@@ -153,6 +154,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
       email: job?.email || '',
       instagram: job?.instagram || '',
       applyUrl: job?.applyUrl || '',
+      howToApply: job?.howToApply || '',
     },
   });
 
@@ -259,16 +261,17 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
           companyName: values.companyName,
           salary: values.salary,
           experience: values.experience,
+          description: values.description,
           qualifications: values.qualifications,
           conditions: values.conditions,
           tasks: values.tasks,
           openPositions: values.openPositions,
-          description: values.description,
           phone: values.phone,
           whatsapp: values.whatsapp,
           email: values.email,
           instagram: values.instagram,
           applyUrl: values.applyUrl,
+          howToApply: values.howToApply,
         };
 
         const { id } = await postJob(newJobData);
@@ -421,6 +424,9 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                 )} />
             )}
         </div>
+        <FormField control={form.control} name="description" render={({ field }) => (
+            <FormItem><FormLabelIcon icon={FileSignature} label={postType === 'seeking_job' ? "وصف المهارات والخبرة" : "وصف الوظيفة (اختياري)"}/><FormControl><Textarea placeholder={postType === 'seeking_job' ? "اكتب تفاصيل عن مهاراتك وخبراتك..." : "اكتب تفاصيل إضافية عن الوظيفة، المتطلبات، إلخ."} {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
+        )} />
         <FormField control={form.control} name="qualifications" render={({ field }) => (
             <FormItem><FormLabelIcon icon={GraduationCap} label={postType === 'seeking_job' ? 'الشهادات والمؤهلات' : 'المؤهلات المطلوبة (اختياري)'} /><FormControl><Textarea placeholder="مثال: بكالوريوس هندسة، دبلوم تقني..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
         )} />
@@ -437,9 +443,6 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                 )} />
             </>
         )}
-        <FormField control={form.control} name="description" render={({ field }) => (
-        <FormItem><FormLabelIcon icon={FileSignature} label={postType === 'seeking_job' ? "وصف المهارات والخبرة" : "وصف الوظيفة (اختياري)"}/><FormControl><Textarea placeholder={postType === 'seeking_job' ? "اكتب تفاصيل عن مهاراتك وخبراتك..." : "اكتب تفاصيل إضافية عن الوظيفة، المتطلبات، إلخ."} {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
-        )} />
     </div>,
 
     // Step 3: Contact Info
@@ -462,9 +465,14 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                 <FormItem><FormLabelIcon icon={Instagram} label="حساب إنستغرام (اختياري)" /><FormControl><Input placeholder="username" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
             )} />
              {postType === 'seeking_worker' && (
+                <>
                 <FormField control={form.control} name="applyUrl" render={({ field }) => (
                     <FormItem><FormLabelIcon icon={LinkIcon} label="رابط التقديم (اختياري)" /><FormControl><Input type="url" placeholder="https://example.com/apply" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
                 )} />
+                <FormField control={form.control} name="howToApply" render={({ field }) => (
+                    <FormItem><FormLabelIcon icon={HelpCircle} label="كيفية التقديم (اختياري)" /><FormControl><Textarea placeholder="اشرح هنا خطوات التقديم. مثلاً: أرسل سيرتك الذاتية إلى البريد الإلكتروني المذكور أعلاه." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
+                )} />
+                </>
              )}
               <FormMessage>{form.formState.errors.phone?.message}</FormMessage>
         </div>
@@ -525,4 +533,3 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
         </Form>
   );
 }
-

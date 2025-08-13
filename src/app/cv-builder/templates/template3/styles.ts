@@ -11,6 +11,7 @@ const styles = `
     background: #fff;
     border-top: 10px solid #C0392B;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-sizing: border-box;
   }
   .container {
     padding: 30px 40px;
@@ -110,5 +111,3 @@ const styles = `
   }
 `;
 export default styles;
-
-    
