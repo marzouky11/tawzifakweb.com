@@ -106,8 +106,7 @@ const DesktopFooter = () => {
             <div className="flex justify-center lg:justify-start items-center">
               <Image src="/LOGO2.png" alt="شعار توظيفك" width={150} height={40} />
             </div>
-            <p className="text-muted-foreground text-sm">
-              منصتك الأولى للعثور على فرص عمل موثوقة في العالم العربي. نصل بين الباحثين عن عمل وأصحاب العمل.
+            <p className="text-muted-foreground text-sm"> منصة توظيفك هي وجهتك الأولى للبحث عن فرص العمل في المغرب والدول العربية. توفر المنصة وظائف متنوعة، إمكانية إنشاء سيرة ذاتية احترافية، ونشر الإعلانات الوظيفية بسهولة. تهدف إلى ربط الشركات بالمواهب بكفاءة، وتقديم تجربة توظيف مهنية وآمنة لجميع المستخدمين.
             </p>
              <p className="text-muted-foreground text-xs mt-4">
                 &copy; {new Date().getFullYear()} توظيفك. جميع الحقوق محفوظة.
