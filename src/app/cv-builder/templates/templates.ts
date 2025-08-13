@@ -6,21 +6,17 @@ import Template2 from './template2/component';
 import styles2 from './template2/styles';
 import Template3 from './template3/component';
 import styles3 from './template3/styles';
-import Template4 from './template4/component';
-import styles4 from './template4/styles';
-import Template5 from './template5/component';
-import styles5 from './template5/styles';
 import Template6 from './template6/component';
 import styles6 from './template6/styles';
-import Template7 from './template7/component';
-import styles7 from './template7/styles';
-import Template8 from './template8/component';
-import styles8 from './template8/styles';
-import Template9 from './template9/component';
-import styles9 from './template9/styles';
-import Template10 from './template10/component';
-import styles10 from './template10/styles';
-import { FileText, Palette, Feather, Award, Gem, Briefcase, Star, Newspaper, Sparkles, FolderArchive, LucideIcon } from 'lucide-react';
+import Template11 from './template11/component';
+import styles11 from './template11/styles';
+import Template12 from './template12/component';
+import styles12 from './template12/styles';
+import Template13 from './template13/component';
+import styles13 from './template13/styles';
+import Template14 from './template14/component';
+import styles14 from './template14/styles';
+import { FileText, Palette, Feather, Award, Gem, Briefcase, Star, Newspaper, Sparkles, FolderArchive, LucideIcon, Type, CheckCircle } from 'lucide-react';
 
 export interface CVTemplate {
   id: string;
@@ -30,6 +26,7 @@ export interface CVTemplate {
   styles: string;
   icon: LucideIcon;
   color: string;
+  type: 'creative' | 'ats';
 }
 
 export const templates: CVTemplate[] = [
@@ -40,7 +37,8 @@ export const templates: CVTemplate[] = [
     thumbnail: 'https://i.ibb.co/3sHwM3r/template1.png',
     styles: styles1,
     icon: Palette,
-    color: '#0056b3'
+    color: '#0056b3',
+    type: 'creative',
   },
   {
     id: 'template2',
@@ -49,7 +47,8 @@ export const templates: CVTemplate[] = [
     thumbnail: 'https://i.ibb.co/6P0p2my/template2.png',
     styles: styles2,
     icon: Feather,
-    color: '#1abc9c'
+    color: '#1abc9c',
+    type: 'creative',
   },
    {
     id: 'template3',
@@ -58,25 +57,8 @@ export const templates: CVTemplate[] = [
     thumbnail: 'https://i.ibb.co/Q8Q49p4/template3.png',
     styles: styles3,
     icon: Award,
-    color: '#C0392B'
-  },
-  {
-    id: 'template4',
-    name: 'أزرق بسيط',
-    component: Template4,
-    thumbnail: 'https://i.ibb.co/CBrz3fT/template4.png',
-    styles: styles4,
-    icon: FileText,
-    color: '#007bff'
-  },
-    {
-    id: 'template5',
-    name: 'احترافي مقسّم',
-    component: Template5,
-    thumbnail: 'https://i.ibb.co/68gPZYC/template5.png',
-    styles: styles5,
-    icon: Briefcase,
-    color: '#333333'
+    color: '#C0392B',
+    type: 'creative',
   },
    {
     id: 'template6',
@@ -85,42 +67,47 @@ export const templates: CVTemplate[] = [
     thumbnail: 'https://i.ibb.co/pLgX9n9/template6.png',
     styles: styles6,
     icon: Sparkles,
-    color: '#3498DB'
+    color: '#3498DB',
+    type: 'creative',
   },
   {
-    id: 'template7',
-    name: 'أخضر هادئ',
-    component: Template7,
-    thumbnail: 'https://i.ibb.co/tZ5G7qd/template7.png',
-    styles: styles7,
-    icon: Gem,
-    color: '#10b981'
-  },
-  {
-    id: 'template8',
-    name: 'داكن حديث',
-    component: Template8,
-    thumbnail: 'https://i.ibb.co/Kz2gVq5/template8.png',
-    styles: styles8,
-    icon: Star,
-    color: '#a0aec0'
-  },
-  {
-    id: 'template9',
-    name: 'أصفر جريء',
-    component: Template9,
+    id: 'template11',
+    name: 'ATS بسيط',
+    component: Template11,
     thumbnail: 'https://i.ibb.co/L5Qyv2k/template9.png',
-    styles: styles9,
-    icon: Newspaper,
-    color: '#f1c40f'
+    styles: styles11,
+    icon: Type,
+    color: '#334155',
+    type: 'ats',
   },
   {
-    id: 'template10',
-    name: 'بسيط جداً',
-    component: Template10,
-    thumbnail: 'https://i.ibb.co/rfn3Y2r/template10.png',
-    styles: styles10,
-    icon: FolderArchive,
-    color: '#333333'
+    id: 'template12',
+    name: 'ATS احترافي',
+    component: Template12,
+    thumbnail: 'https://i.ibb.co/L5Qyv2k/template9.png',
+    styles: styles12,
+    icon: Type,
+    color: '#1e293b',
+    type: 'ats',
+  },
+    {
+    id: 'template13',
+    name: 'ATS حديث',
+    component: Template13,
+    thumbnail: 'https://i.ibb.co/L5Qyv2k/template9.png',
+    styles: styles13,
+    icon: Type,
+    color: '#4338ca',
+    type: 'ats',
+  },
+  {
+    id: 'template14',
+    name: 'ATS كلاسيكي',
+    component: Template14,
+    thumbnail: 'https://i.ibb.co/L5Qyv2k/template9.png',
+    styles: styles14,
+    icon: Type,
+    color: '#7f1d1d',
+    type: 'ats',
   },
 ];

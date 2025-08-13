@@ -10,7 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlusCircle, Trash2, Loader2, Download, Image as ImageIcon, RotateCw, Crop, User, Briefcase, Mail, Phone, MapPin, GraduationCap, Award, Star, Info, MessageSquare, Instagram, Link as LinkIcon, Building2, Users2, ClipboardList, FileText, Globe } from 'lucide-react';
+import { PlusCircle, Trash2, Loader2, Download, Image as ImageIcon, RotateCw, Crop, User, Briefcase, Mail, Phone, MapPin, GraduationCap, Award, Star, Info, MessageSquare, Instagram, Link as LinkIcon, Building2, Users2, ClipboardList, FileText, Globe, Type, CheckCircle } from 'lucide-react';
 import { templates } from './templates/templates';
 import Image from 'next/image';
 import { useAuth } from '@/context/auth-context';
@@ -29,6 +29,7 @@ import Cropper from 'react-easy-crop';
 import type { Area } from 'react-easy-crop';
 import { getCroppedImg } from './crop-image';
 import { Slider } from '@/components/ui/slider';
+import { Separator } from '@/components/ui/separator';
 
 
 const formSchema = z.object({
@@ -209,6 +210,9 @@ export function CVForm() {
   }
   
   const TemplateComponent = selectedTemplate.component;
+  const creativeTemplates = templates.filter(t => t.type === 'creative');
+  const atsTemplates = templates.filter(t => t.type === 'ats');
+
 
   const FormLabelIcon = ({icon: Icon, label}: {icon: React.ElementType, label: string}) => (
     <FormLabel className="flex items-center gap-2">
@@ -389,33 +393,58 @@ export function CVForm() {
         </div>
 
         <div className="md:col-span-1 space-y-6 md:sticky md:top-24">
-          <h3 className="text-xl font-bold">اختر القالب</h3>
-          <div className="grid grid-cols-2 gap-4">
-            {templates.map((template) => (
-              <div
-                key={template.id}
-                className={`border-4 rounded-lg cursor-pointer transition-all ${selectedTemplate.id === template.id ? 'border-primary' : 'border-transparent hover:border-primary/50'}`}
-                onClick={() => setSelectedTemplate(template)}
-              >
-                <Card
-                  className="flex flex-col items-center justify-center p-2 h-full aspect-[1/1.41]"
-                  style={{ backgroundColor: `${template.color}1A` }} // ~10% opacity
-                >
-                  <FileText className="w-7 h-7 mb-2" style={{ color: template.color }} />
-                  <p className="font-semibold text-center text-xs" style={{ color: template.color }}>
-                    {template.name}
-                  </p>
-                </Card>
-              </div>
-            ))}
-          </div>
+            <div>
+                <h3 className="text-xl font-bold mb-2 flex items-center gap-2"><Palette className="h-5 w-5 text-primary"/> قوالب إبداعية</h3>
+                <p className="text-sm text-muted-foreground mb-4">قوالب بتصاميم جذابة ومناسبة لمعظم الوظائف العامة.</p>
+                <div className="grid grid-cols-2 gap-4">
+                    {creativeTemplates.map((template) => (
+                    <div
+                        key={template.id}
+                        className={`border-4 rounded-lg cursor-pointer transition-all ${selectedTemplate.id === template.id ? 'border-primary' : 'border-transparent hover:border-primary/50'}`}
+                        onClick={() => setSelectedTemplate(template)}
+                    >
+                        <Card
+                        className="flex flex-col items-center justify-center p-2 h-full aspect-[1/1.41]"
+                        style={{ backgroundColor: `${template.color}1A` }}
+                        >
+                        <template.icon className="w-7 h-7 mb-2" style={{ color: template.color }} />
+                        <p className="font-semibold text-center text-xs" style={{ color: template.color }}>
+                            {template.name}
+                        </p>
+                        </Card>
+                    </div>
+                    ))}
+                </div>
+            </div>
+
+            <Separator />
+
+            <div>
+                <h3 className="text-xl font-bold mb-2 flex items-center gap-2"><CheckCircle className="h-5 w-5 text-green-600"/> قوالب متوافقة مع (ATS)</h3>
+                <p className="text-sm text-muted-foreground mb-4">قوالب بسيطة ومُحسَّنة لأنظمة تتبع المتقدمين التي تستخدمها الشركات الكبرى.</p>
+                <div className="grid grid-cols-2 gap-4">
+                    {atsTemplates.map((template) => (
+                    <div
+                        key={template.id}
+                        className={`border-4 rounded-lg cursor-pointer transition-all ${selectedTemplate.id === template.id ? 'border-green-600' : 'border-transparent hover:border-green-600/50'}`}
+                        onClick={() => setSelectedTemplate(template)}
+                    >
+                        <Card
+                        className="flex flex-col items-center justify-center p-2 h-full aspect-[1/1.41]"
+                        style={{ backgroundColor: `${template.color}1A` }}
+                        >
+                        <template.icon className="w-7 h-7 mb-2" style={{ color: template.color }} />
+                        <p className="font-semibold text-center text-xs" style={{ color: template.color }}>
+                            {template.name}
+                        </p>
+                        </Card>
+                    </div>
+                    ))}
+                </div>
+            </div>
+
         </div>
       </div>
     </>
   );
 }
-
-    
-
-    
-
