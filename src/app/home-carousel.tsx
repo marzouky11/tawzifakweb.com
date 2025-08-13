@@ -88,16 +88,6 @@ export function HomeCarousel() {
     >
       <CarouselContent>
         {slidesData.map((slide, index) => {
-          // Hide slides on mobile if they don't have a mobileSrc, except the first one
-           if (!slide.mobileSrc && index > 0) {
-            return (
-              <CarouselItem key={slide.key} className="hidden md:block">
-                {/* Render for desktop, but it will be inside a hidden container */}
-                <DesktopSlide slide={slide} index={index} user={user} />
-              </CarouselItem>
-            );
-          }
-
           const isFirstSlideAuth = index === 0;
           const title = isFirstSlideAuth ? (user ? slide.authTitle : slide.guestTitle) : slide.title;
           const description = isFirstSlideAuth ? (user ? slide.authDescription : slide.guestDescription) : slide.description;
@@ -105,49 +95,49 @@ export function HomeCarousel() {
           const buttonLink = isFirstSlideAuth ? (user ? slide.authButtonLink : slide.guestButtonLink) : slide.buttonLink;
 
           return (
-            <CarouselItem key={slide.key} className={cn(!slide.mobileSrc ? "md:block" : "")}>
+            <CarouselItem key={slide.key}>
               <div className="relative h-64 md:h-80">
-                {/* Desktop Image */}
-                <img
-                  src={slide.desktopSrc}
-                  alt={slide.alt}
-                  className="absolute inset-0 w-full h-full object-cover hidden md:block"
-                  loading={index === 0 ? "eager" : "lazy"}
-                  data-ai-hint={slide.hint}
-                />
-                 {/* Mobile Image */}
-                {slide.mobileSrc && (
+                {/* Desktop view */}
+                <div className="hidden md:block w-full h-full">
                   <img
-                    src={slide.mobileSrc}
+                    src={slide.desktopSrc}
                     alt={slide.alt}
-                    className="absolute inset-0 w-full h-full object-cover block md:hidden"
+                    className="absolute inset-0 w-full h-full object-cover"
                     loading={index === 0 ? "eager" : "lazy"}
                     data-ai-hint={slide.hint}
                   />
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent flex items-center p-12">
+                    <div className="max-w-lg text-white space-y-4">
+                      <h2 className="text-5xl font-bold leading-tight drop-shadow-md">{title}</h2>
+                      <p className="text-lg text-white/90 drop-shadow-sm">{description}</p>
+                      <Button asChild size="lg" className={cn("text-white font-semibold transition-transform hover:scale-105", slide.buttonClass)}>
+                        <Link href={buttonLink!}>{buttonText}</Link>
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mobile view */}
+                {slide.mobileSrc && (
+                    <div className="md:hidden w-full h-full">
+                        <img
+                            src={slide.mobileSrc}
+                            alt={slide.alt}
+                            className="absolute inset-0 w-full h-full object-cover"
+                            loading={index === 0 ? "eager" : "lazy"}
+                            data-ai-hint={slide.hint}
+                        />
+                        <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center p-4">
+                            <div className="text-white space-y-2">
+                                <h2 className="text-2xl font-bold leading-tight drop-shadow-md">{title}</h2>
+                                <p className="text-sm text-white/90 drop-shadow-sm">{description}</p>
+                                <Button asChild size="sm" className={cn("text-white font-semibold mt-2", slide.buttonClass)}>
+                                    <Link href={buttonLink!}>{buttonText}</Link>
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
                 )}
-                
-                {/* Desktop Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent hidden md:flex items-center p-6 md:p-12">
-                  <div className="max-w-md md:max-w-lg text-white space-y-4">
-                    <h2 className="text-3xl md:text-5xl font-bold leading-tight drop-shadow-md">{title}</h2>
-                    <p className="text-base md:text-lg text-white/90 drop-shadow-sm">{description}</p>
-                    <Button asChild size="lg" className={cn("text-white font-semibold transition-transform hover:scale-105", slide.buttonClass)}>
-                      <Link href={buttonLink!}>{buttonText}</Link>
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Mobile Overlay */}
-                <div className="absolute inset-0 bg-black/50 flex md:hidden flex-col items-center justify-center text-center p-4">
-                   <div className="text-white space-y-2">
-                    <h2 className="text-2xl font-bold leading-tight drop-shadow-md">{title}</h2>
-                    <p className="text-sm text-white/90 drop-shadow-sm">{description}</p>
-                    <Button asChild size="sm" className={cn("text-white font-semibold mt-2", slide.buttonClass)}>
-                      <Link href={buttonLink!}>{buttonText}</Link>
-                    </Button>
-                  </div>
-                </div>
-
               </div>
             </CarouselItem>
           );
@@ -156,33 +146,3 @@ export function HomeCarousel() {
     </Carousel>
   );
 }
-
-// Helper component to avoid repetition, used for hidden desktop slides on mobile
-const DesktopSlide = ({ slide, index, user }: { slide: any, index: number, user: any }) => {
-  const isFirstSlideAuth = index === 0;
-  const title = isFirstSlideAuth ? (user ? slide.authTitle : slide.guestTitle) : slide.title;
-  const description = isFirstSlideAuth ? (user ? slide.authDescription : slide.guestDescription) : slide.description;
-  const buttonText = isFirstSlideAuth ? (user ? slide.authButtonText : slide.guestButtonText) : slide.buttonText;
-  const buttonLink = isFirstSlideAuth ? (user ? slide.authButtonLink : slide.guestButtonLink) : slide.buttonLink;
-
-  return (
-    <div className="relative h-64 md:h-80">
-      <img
-        src={slide.desktopSrc}
-        alt={slide.alt}
-        className="absolute inset-0 w-full h-full object-cover"
-        loading="lazy"
-        data-ai-hint={slide.hint}
-      />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent flex items-center p-6 md:p-12">
-        <div className="max-w-md md:max-w-lg text-white space-y-4">
-          <h2 className="text-3xl md:text-5xl font-bold leading-tight drop-shadow-md">{title}</h2>
-          <p className="text-base md:text-lg text-white/90 drop-shadow-sm">{description}</p>
-          <Button asChild size="lg" className={cn("text-white font-semibold transition-transform hover:scale-105", slide.buttonClass)}>
-            <Link href={buttonLink!}>{buttonText}</Link>
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-};
