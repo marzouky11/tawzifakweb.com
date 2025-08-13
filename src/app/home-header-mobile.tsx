@@ -10,12 +10,18 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { User as UserIcon, LogIn } from 'lucide-react';
 import { ThemeToggleButton } from '@/components/theme-toggle';
 import { Separator } from '@/components/ui/separator';
+import { useState, useEffect } from 'react';
 
 export function HomeHeaderMobile() {
   const { user, userData, loading } = useAuth();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const renderAuthButton = () => {
-    if (loading) {
+    if (!isClient || loading) {
       return <Skeleton className="h-10 w-10 rounded-full" />;
     }
     if (user && userData) {
@@ -37,9 +43,16 @@ export function HomeHeaderMobile() {
     );
   };
 
+  const renderThemeToggle = () => {
+    if (!isClient) {
+      return <Skeleton className="h-10 w-10 rounded-full" />;
+    }
+    return <ThemeToggleButton className="text-primary bg-background/50 hover:bg-background/70 h-10 w-10 rounded-full border border-primary/20" />;
+  };
+
   return (
       <div 
-        className="md:hidden bg-card text-card-foreground p-4 rounded-b-3xl shadow-md border-b-4 border-primary"
+        className="md:hidden bg-card text-card-foreground p-3 rounded-b-3xl shadow-md border-b-4 border-primary"
       >
         <div className="container mx-auto px-0">
           <div className="flex justify-between items-center">
@@ -47,7 +60,7 @@ export function HomeHeaderMobile() {
               <Image src="/LOGO2.png" alt="شعار توظيفك" width={130} height={32} priority />
             </Link>
             <div className="flex items-center gap-1">
-                <ThemeToggleButton className="text-primary bg-background/50 hover:bg-background/70 h-10 w-10 rounded-full border border-primary/20" />
+                {renderThemeToggle()}
                 <Separator orientation="vertical" className="h-6 mx-1 bg-border" />
                 {renderAuthButton()}
             </div>
