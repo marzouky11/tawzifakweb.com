@@ -138,7 +138,7 @@ export function Header() {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    'text-sm font-medium transition-colors hover:text-primary',
+                    'text-lg font-medium transition-colors hover:text-primary',
                     isActive ? 'text-primary' : 'text-muted-foreground'
                   )}
                 >
@@ -150,7 +150,7 @@ export function Header() {
                  <Link
                   href="/profile/my-ads"
                   className={cn(
-                    'text-sm font-medium transition-colors hover:text-primary',
+                    'text-lg font-medium transition-colors hover:text-primary',
                     pathname.startsWith('/profile/my-ads') ? 'text-primary' : 'text-muted-foreground'
                   )}
                 >
