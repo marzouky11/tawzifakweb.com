@@ -20,18 +20,18 @@ export function HomeHeaderMobile() {
     }
     if (user && userData) {
       return (
-        <Button asChild variant="ghost" size="icon" className="h-12 w-12 rounded-full">
+        <Button asChild variant="ghost" size="icon" className="h-10 w-10 rounded-full">
             <Link href="/profile">
-                <UserAvatar name={userData.name} color={userData.avatarColor} className="h-10 w-10" />
+                <UserAvatar name={userData.name} color={userData.avatarColor} className="h-9 w-9" />
             </Link>
         </Button>
       );
     }
     return (
-      <Button asChild variant="outline" className="h-12 w-auto px-4 rounded-full border-primary/50 text-primary bg-primary/10">
+      <Button asChild variant="outline" className="h-10 w-auto px-3 rounded-full border-primary/50 text-primary bg-primary/10">
         <Link href="/login">
-          <LogIn className="h-5 w-5" />
-          <span className="mr-2 font-semibold">دخول</span>
+          <LogIn className="h-4 w-4" />
+          <span className="mr-1.5 font-semibold text-sm">دخول</span>
         </Link>
       </Button>
     );
@@ -39,16 +39,16 @@ export function HomeHeaderMobile() {
 
   return (
       <div 
-        className="md:hidden bg-card text-card-foreground p-4 rounded-b-3xl shadow-md border-b-4 border-primary"
+        className="md:hidden bg-card text-card-foreground p-3 rounded-b-3xl shadow-md border-b-4 border-primary"
       >
         <div className="container mx-auto">
           <div className="flex justify-between items-center">
             <Link href="/">
-              <Image src="/LOGO2.png" alt="شعار توظيفك" width={140} height={35} priority />
+              <Image src="/LOGO2.png" alt="شعار توظيفك" width={130} height={32} priority />
             </Link>
             <div className="flex items-center gap-1">
-                <ThemeToggleButton className="text-primary bg-background/50 hover:bg-background/70 h-12 w-12 rounded-full border border-primary/20" />
-                <Separator orientation="vertical" className="h-8 mx-1 bg-border" />
+                <ThemeToggleButton className="text-primary bg-background/50 hover:bg-background/70 h-10 w-10 rounded-full border border-primary/20" />
+                <Separator orientation="vertical" className="h-6 mx-1 bg-border" />
                 {renderAuthButton()}
             </div>
           </div>
