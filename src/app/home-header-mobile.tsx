@@ -52,7 +52,7 @@ export function HomeHeaderMobile() {
 
   return (
       <div 
-        className="md:hidden bg-card text-card-foreground p-3 rounded-b-3xl shadow-md border-b-4 border-primary"
+        className="md:hidden bg-card text-card-foreground p-4 rounded-b-3xl shadow-md border-b-4 border-primary"
       >
         <div className="container mx-auto px-0">
           <div className="flex justify-between items-center">
