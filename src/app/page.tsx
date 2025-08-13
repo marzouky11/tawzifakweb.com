@@ -104,7 +104,7 @@ function HomeHeaderMobile() {
 
   return (
       <div 
-        className="md:hidden bg-card text-card-foreground p-4 rounded-b-3xl shadow-md border-b-4 border-primary"
+        className="md:hidden sticky top-0 z-50 bg-card text-card-foreground p-4 rounded-b-3xl shadow-md border-b-4 border-primary"
         style={{ backgroundImage: blueDotPattern }}
       >
         <div className="container mx-auto">
