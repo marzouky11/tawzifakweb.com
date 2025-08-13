@@ -8,6 +8,7 @@ import CVBuilderClient from './cv-builder-client';
 export default function CVBuilderPage() {
   return (
     <AppLayout>
+        <h1 className="sr-only">أداة إنشاء السيرة الذاتية باللغة العربية</h1>
         <MobilePageHeader title="إنشاء السيرة الذاتية">
             <FileText className="h-5 w-5 text-primary" />
         </MobilePageHeader>
