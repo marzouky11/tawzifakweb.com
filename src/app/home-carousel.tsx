@@ -13,7 +13,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 const slidesData = [
   {
     key: 'main',
-    desktopSrc: "/slide1.webp",
+    desktopSrc: "/web1.png",
     mobileSrc: "/Sliderphone1.jpg",
     alt: "شخص يبدأ رحلته المهنية",
     hint: "professional journey start",
@@ -29,7 +29,7 @@ const slidesData = [
   },
   {
     key: 'explore-workers',
-    desktopSrc: "/slide2.webp",
+    desktopSrc: "/web2.png",
     mobileSrc: "/Sliderphone2.png",
     alt: "وظائف مميزة",
     hint: "professional worker",
@@ -41,7 +41,7 @@ const slidesData = [
   },
   {
     key: 'explore-jobs',
-    desktopSrc: "/slide3.webp",
+    desktopSrc: "/web3.png",
     mobileSrc: "/Sliderphone3.png",
     alt: "عمال محترفون",
     hint: "job opportunities",
@@ -53,7 +53,7 @@ const slidesData = [
   },
   {
     key: 'cv-builder',
-    desktopSrc: "/slide4.webp",
+    desktopSrc: "/web4.png",
     mobileSrc: "/Sliderphone4.jpg",
     alt: "إنشاء سيرة ذاتية احترافية",
     hint: "cv builder",
