@@ -107,7 +107,7 @@ export function HomeCarousel() {
                     data-ai-hint={slide.hint}
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent flex items-center p-12">
-                    <div className="max-w-lg text-white space-y-4">
+                    <div className="w-1/2 text-white space-y-4">
                       <h2 className="text-5xl font-bold leading-tight drop-shadow-md">{title}</h2>
                       <p className="text-lg text-white/90 drop-shadow-sm">{description}</p>
                       <Button asChild size="lg" className={cn("text-white font-semibold transition-transform hover:scale-105", slide.buttonClass)}>
