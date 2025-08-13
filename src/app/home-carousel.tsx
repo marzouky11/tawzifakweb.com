@@ -30,7 +30,7 @@ const slidesData = [
   {
     key: 'explore-workers',
     desktopSrc: "/slide2.webp",
-    mobileSrc: "/Sliderphone2.jpg",
+    mobileSrc: "/Sliderphone2.png",
     alt: "وظائف مميزة",
     hint: "professional worker",
     title: "وظائف مميزة بانتظارك",
@@ -42,7 +42,7 @@ const slidesData = [
   {
     key: 'explore-jobs',
     desktopSrc: "/slide3.webp",
-    mobileSrc: "/Sliderphone3.jpg",
+    mobileSrc: "/Sliderphone3.png",
     alt: "عمال محترفون",
     hint: "job opportunities",
     title: "عمّال محترفون في جميع المجالات",
@@ -54,7 +54,7 @@ const slidesData = [
   {
     key: 'cv-builder',
     desktopSrc: "/slide4.webp",
-    mobileSrc: "/slide4.webp",
+    mobileSrc: "/Sliderphone4.jpg",
     alt: "إنشاء سيرة ذاتية احترافية",
     hint: "cv builder",
     title: "أنشئ سيرتك الذاتية بسهولة",
