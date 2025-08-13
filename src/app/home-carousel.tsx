@@ -54,7 +54,7 @@ const slidesData = [
   {
     key: 'cv-builder',
     desktopSrc: "/slide4.webp",
-    mobileSrc: null, // No mobile image for this one, so it will be hidden on mobile
+    mobileSrc: "/slide4.webp",
     alt: "إنشاء سيرة ذاتية احترافية",
     hint: "cv builder",
     title: "أنشئ سيرتك الذاتية بسهولة",
