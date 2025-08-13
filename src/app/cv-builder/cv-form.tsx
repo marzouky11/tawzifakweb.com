@@ -10,7 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlusCircle, Trash2, Loader2, Download, Image as ImageIcon, RotateCw, Crop, User, Briefcase, Mail, Phone, MapPin, GraduationCap, Award, Star, Info, MessageSquare, Instagram, Link as LinkIcon, Building2, Users2, ClipboardList, FileText, Globe, Type, CheckCircle } from 'lucide-react';
+import { PlusCircle, Trash2, Loader2, Download, Image as ImageIcon, RotateCw, Crop, User, Briefcase, Mail, Phone, MapPin, GraduationCap, Award, Star, Info, MessageSquare, Instagram, Link as LinkIcon, Building2, Users2, ClipboardList, FileText, Globe, Type, CheckCircle, Palette } from 'lucide-react';
 import { templates } from './templates/templates';
 import Image from 'next/image';
 import { useAuth } from '@/context/auth-context';
