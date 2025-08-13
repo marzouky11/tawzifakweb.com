@@ -148,7 +148,18 @@ export function CVForm() {
   }, [imageSrc, croppedAreaPixels, rotation, form, toast]);
 
 
-  const onSubmit = async (data: CVData) => {
+  const handleDownload = async () => {
+    // Validate the form before generating PDF
+    const isValid = await form.trigger();
+    if (!isValid) {
+        toast({
+            variant: "destructive",
+            title: "حقول ناقصة",
+            description: "الرجاء مراجعة النموذج وتعبئة جميع الحقول المطلوبة قبل التحميل.",
+        });
+        return;
+    }
+
     setIsGenerating(true);
     toast({ title: 'جاري إنشاء سيرتك الذاتية...', description: 'قد يستغرق هذا بضع لحظات.' });
 
@@ -157,7 +168,7 @@ export function CVForm() {
             throw new Error('Could not find the template element to print.');
         }
 
-        const dataForPdf = { ...data };
+        const dataForPdf = { ...form.getValues() };
         if (dataForPdf.profilePicture && !dataForPdf.profilePicture.startsWith('data:')) {
             try {
                 dataForPdf.profilePicture = await toDataURL(dataForPdf.profilePicture);
@@ -172,14 +183,14 @@ export function CVForm() {
             }
         }
         
+        // This is a trick to render the data in the hidden div before printing
         const originalData = form.getValues();
         form.reset(dataForPdf);
-        
-        await new Promise(resolve => setTimeout(resolve, 50));
-
+        await new Promise(resolve => setTimeout(resolve, 50)); // Wait for state to update
 
         const dataUrl = await toPng(printRef.current, { cacheBust: true, pixelRatio: 2 });
         
+        // Restore form data
         form.reset(originalData);
 
         const pdf = new jsPDF('p', 'mm', 'a4');
@@ -187,7 +198,7 @@ export function CVForm() {
         const pdfHeight = pdf.internal.pageSize.getHeight();
         
         pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save(`${data.fullName}-cv.pdf`);
+        pdf.save(`${dataForPdf.fullName}-cv.pdf`);
         
         toast({ title: 'تم التحميل بنجاح!', description: 'تم تحميل سيرتك الذاتية بصيغة PDF.' });
 
@@ -272,7 +283,7 @@ export function CVForm() {
       <div className="grid md:grid-cols-3 gap-8 items-start">
         <div className="md:col-span-2">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={(e) => e.preventDefault()} className="space-y-8">
               <Card>
                 <CardHeader><CardTitle className="flex items-center gap-2"><User className="h-5 w-5"/> المعلومات الشخصية</CardTitle></CardHeader>
                 <CardContent className="space-y-4">
@@ -383,11 +394,6 @@ export function CVForm() {
                   <Button type="button" variant="outline" onClick={() => appendLang({ name: '' })}><PlusCircle className="ml-2 h-4 w-4" /> إضافة لغة</Button>
                 </CardContent>
               </Card>
-
-              <Button type="submit" size="lg" className="w-full" disabled={isGenerating}>
-                {isGenerating ? <Loader2 className="ml-2 h-4 w-4 animate-spin" /> : <Download className="ml-2 h-4 w-4" />}
-                {isGenerating ? 'جاري التحميل...' : 'تحميل السيرة الذاتية (PDF)'}
-              </Button>
             </form>
           </Form>
         </div>
@@ -398,20 +404,33 @@ export function CVForm() {
                 <p className="text-sm text-muted-foreground mb-4">قوالب بتصاميم جذابة ومناسبة لمعظم الوظائف العامة.</p>
                 <div className="grid grid-cols-2 gap-4">
                     {creativeTemplates.map((template) => (
-                    <div
-                        key={template.id}
-                        className={`border-4 rounded-lg cursor-pointer transition-all ${selectedTemplate.id === template.id ? 'border-primary' : 'border-transparent hover:border-primary/50'}`}
-                        onClick={() => setSelectedTemplate(template)}
-                    >
-                        <Card
-                        className="flex flex-col items-center justify-center p-2 h-full aspect-[1/1.41]"
-                        style={{ backgroundColor: `${template.color}1A` }}
+                    <div key={template.id} className="relative group">
+                         <div
+                            className={`border-4 rounded-lg cursor-pointer transition-all ${selectedTemplate.id === template.id ? 'border-primary' : 'border-transparent group-hover:border-primary/50'}`}
+                            onClick={() => setSelectedTemplate(template)}
                         >
-                        <template.icon className="w-7 h-7 mb-2" style={{ color: template.color }} />
-                        <p className="font-semibold text-center text-xs" style={{ color: template.color }}>
-                            {template.name}
-                        </p>
-                        </Card>
+                            <Card
+                                className="flex flex-col items-center justify-center p-2 h-full aspect-[1/1.41]"
+                                style={{ backgroundColor: `${template.color}1A` }}
+                            >
+                                <template.icon className="w-7 h-7 mb-2" style={{ color: template.color }} />
+                                <p className="font-semibold text-center text-xs" style={{ color: template.color }}>
+                                    {template.name}
+                                </p>
+                            </Card>
+                        </div>
+                        {selectedTemplate.id === template.id && (
+                            <div className="absolute -top-5 left-1/2 -translate-x-1/2 w-[calc(100%-1rem)]">
+                                <Button
+                                    onClick={handleDownload}
+                                    disabled={isGenerating}
+                                    className="w-full"
+                                >
+                                    {isGenerating ? <Loader2 className="ml-2 h-4 w-4 animate-spin" /> : <Download className="ml-2 h-4 w-4" />}
+                                    تحميل
+                                </Button>
+                            </div>
+                        )}
                     </div>
                     ))}
                 </div>
@@ -424,25 +443,37 @@ export function CVForm() {
                 <p className="text-sm text-muted-foreground mb-4">قوالب بسيطة ومُحسَّنة لأنظمة تتبع المتقدمين التي تستخدمها الشركات الكبرى.</p>
                 <div className="grid grid-cols-2 gap-4">
                     {atsTemplates.map((template) => (
-                    <div
-                        key={template.id}
-                        className={`border-4 rounded-lg cursor-pointer transition-all ${selectedTemplate.id === template.id ? 'border-green-600' : 'border-transparent hover:border-green-600/50'}`}
-                        onClick={() => setSelectedTemplate(template)}
-                    >
-                        <Card
-                        className="flex flex-col items-center justify-center p-2 h-full aspect-[1/1.41]"
-                        style={{ backgroundColor: `${template.color}1A` }}
+                    <div key={template.id} className="relative group">
+                         <div
+                            className={`border-4 rounded-lg cursor-pointer transition-all ${selectedTemplate.id === template.id ? 'border-green-600' : 'border-transparent group-hover:border-green-600/50'}`}
+                            onClick={() => setSelectedTemplate(template)}
                         >
-                        <template.icon className="w-7 h-7 mb-2" style={{ color: template.color }} />
-                        <p className="font-semibold text-center text-xs" style={{ color: template.color }}>
-                            {template.name}
-                        </p>
-                        </Card>
+                            <Card
+                            className="flex flex-col items-center justify-center p-2 h-full aspect-[1/1.41]"
+                            style={{ backgroundColor: `${template.color}1A` }}
+                            >
+                            <template.icon className="w-7 h-7 mb-2" style={{ color: template.color }} />
+                            <p className="font-semibold text-center text-xs" style={{ color: template.color }}>
+                                {template.name}
+                            </p>
+                            </Card>
+                        </div>
+                        {selectedTemplate.id === template.id && (
+                            <div className="absolute -top-5 left-1/2 -translate-x-1/2 w-[calc(100%-1rem)]">
+                                <Button
+                                    onClick={handleDownload}
+                                    disabled={isGenerating}
+                                    className="w-full bg-green-600 hover:bg-green-700"
+                                >
+                                    {isGenerating ? <Loader2 className="ml-2 h-4 w-4 animate-spin" /> : <Download className="ml-2 h-4 w-4" />}
+                                    تحميل
+                                </Button>
+                            </div>
+                        )}
                     </div>
                     ))}
                 </div>
             </div>
-
         </div>
       </div>
     </>
