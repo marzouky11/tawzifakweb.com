@@ -1,8 +1,5 @@
 
 const styles = `
-  body {
-    direction: rtl;
-  }
   .a4-page.template3 {
     font-family: 'Cairo', sans-serif;
     width: 21cm;
@@ -12,15 +9,16 @@ const styles = `
     border-top: 10px solid #C0392B;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     box-sizing: border-box;
+    direction: rtl;
   }
-  .container {
+  .a4-page.template3 .container {
     padding: 30px 40px;
   }
-  .header {
+  .a4-page.template3 .header {
     text-align: center;
     margin-bottom: 20px;
   }
-  .avatar {
+  .a4-page.template3 .avatar {
       width: 110px;
       height: 110px;
       border-radius: 50%;
@@ -28,19 +26,19 @@ const styles = `
       margin: 0 auto 15px;
       border: 4px solid #C0392B;
   }
-  .header h1 {
+  .a4-page.template3 .header h1 {
     font-size: 2.6em;
     margin: 0;
     font-weight: 700;
     color: #2c3e50;
   }
-  .header .job-title {
+  .a4-page.template3 .header .job-title {
     font-size: 1.2em;
     color: #C0392B;
     margin: 5px 0;
     font-weight: 400;
   }
-  .contact-bar {
+  .a4-page.template3 .contact-bar {
     text-align: center;
     font-size: 0.9em;
     padding: 10px 0;
@@ -53,15 +51,15 @@ const styles = `
     gap: 15px;
     flex-wrap: wrap;
   }
-   .contact-bar span {
+   .a4-page.template3 .contact-bar span {
       display: flex;
       align-items: center;
       gap: 5px;
   }
-  .section {
+  .a4-page.template3 .section {
     margin-bottom: 25px;
   }
-  .section-title {
+  .a4-page.template3 .section-title {
     font-size: 1.3em;
     color: #C0392B;
     text-transform: uppercase;
@@ -74,37 +72,37 @@ const styles = `
     align-items: center;
     gap: 8px;
   }
-  .item {
+  .a4-page.template3 .item {
     margin-bottom: 15px;
   }
-  .item h3 {
+  .a4-page.template3 .item h3 {
     font-size: 1.1em;
     font-weight: bold;
     margin: 0 0 2px 0;
   }
-  .item .sub-heading {
+  .a4-page.template3 .item .sub-heading {
     font-style: italic;
     color: #555;
     margin-bottom: 5px;
     font-size: 0.9em;
   }
-  .item .description {
+  .a4-page.template3 .item .description {
     font-size: 1em;
     color: #555;
   }
-  .skills {
+  .a4-page.template3 .skills {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
   }
-  .skill-tag {
+  .a4-page.template3 .skill-tag {
     background: #ecf0f1;
     color: #34495e;
     padding: 4px 12px;
     border-radius: 4px;
     font-size: 0.9em;
   }
-  .grid-section {
+  .a4-page.template3 .grid-section {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
