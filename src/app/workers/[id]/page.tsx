@@ -126,15 +126,35 @@ const SeekerInfoItem = ({ icon: Icon, label, value }: { icon: React.ElementType;
     );
 };
 
+const FormattedText = ({ text }: { text?: string }) => {
+    if (!text) return null;
+
+    const contentBlocks = text.split('\n').map(paragraph => paragraph.trim()).filter(p => p.length > 0);
+
+    return (
+        <div className="prose prose-lg dark:prose-invert max-w-none text-foreground">
+            {contentBlocks.map((block, index) => {
+                if (block.startsWith('- ') || block.startsWith('* ')) {
+                    const listItems = block.split('\n').filter(i => i.trim()).map(item => item.trim().replace(/^[-*]\s*/, ''));
+                    return (
+                        <ul key={index} className="list-disc pr-5 space-y-2 mb-4">
+                            {listItems.map((item, i) => <li key={i}>{item}</li>)}
+                        </ul>
+                    );
+                }
+                return <p key={index} className="mb-4">{block}</p>;
+            })}
+        </div>
+    );
+}
+
 const DetailSection = ({ icon: Icon, title, children }: { icon: React.ElementType, title: string, children: React.ReactNode }) => (
     <div>
         <h3 className="text-xl font-bold flex items-center gap-2 mb-3 text-primary">
             <Icon className="h-5 w-5" />
             {title}
         </h3>
-        <div className="prose prose-lg dark:prose-invert max-w-none text-foreground">
-            {children}
-        </div>
+        {children}
     </div>
 );
 
@@ -229,7 +249,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                             
                             {job.experience && (
                                <DetailSection icon={Award} title="الخبرة">
-                                    <p>{job.experience}</p>
+                                    <FormattedText text={job.experience} />
                                </DetailSection>
                             )}
 
@@ -237,7 +257,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                             
                             {job.qualifications && (
                                <DetailSection icon={GraduationCap} title="المؤهلات">
-                                    <p>{job.qualifications}</p>
+                                    <FormattedText text={job.qualifications} />
                                </DetailSection>
                             )}
                             
@@ -245,7 +265,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
 
                             {job.description && (
                                <DetailSection icon={FileText} title="وصف المهارات والخبرة">
-                                    <p>{job.description}</p>
+                                    <FormattedText text={job.description} />
                                </DetailSection>
                             )}
                         </CardContent>
