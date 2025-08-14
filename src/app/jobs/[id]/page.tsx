@@ -51,7 +51,7 @@ interface JobDetailPageProps {
 export async function generateMetadata({ params }: JobDetailPageProps): Promise<Metadata> {
   const job = await getJobById(params.id);
   const baseUrl = 'https://www.tawzifak.com';
-  const siteThumbnail = 'https://i.postimg.cc/YCz0LvMj/Screenshot-20250704-173231.jpg';
+  const siteThumbnail = 'https://www.tawzifak.com/og-image.jpg';
   
   if (!job || job.postType !== 'seeking_worker') {
     return {

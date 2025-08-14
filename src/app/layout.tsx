@@ -16,7 +16,7 @@ const tajawal = Tajawal({
 const baseUrl = 'https://www.tawzifak.com';
 const appName = 'توظيفك';
 const appDescription = "توظيفك - منصتك الأولى للعثور على فرص عمل موثوقة في العالم العربي. وظائف يومية في السعودية، المغرب، مصر، الإمارات، الجزائر، تونس وغيرها. سجل مجانًا وابدأ العمل الآن.";
-const appOgImage = 'https://i.postimg.cc/YCz0LvMj/Screenshot-20250704-173231.jpg';
+const appOgImage = 'https://www.tawzifak.com/og-image.jpg';
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
