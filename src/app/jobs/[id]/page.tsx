@@ -147,11 +147,11 @@ const workTypeTranslations: { [key in WorkType]: string } = {
   remote: 'عن بعد',
 };
 
-const InfoItem = ({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string | number | undefined; }) => {
+const InfoItem = ({ icon: Icon, label, value, color }: { icon: React.ElementType; label: string; value: string | number | undefined; color?: string }) => {
     if (!value) return null;
     return (
       <div className="flex flex-col gap-1 p-3 bg-muted/50 rounded-lg text-center">
-        <Icon className="h-6 w-6 text-primary mx-auto mb-1" />
+        <Icon className="h-6 w-6 mx-auto mb-1" style={{ color }} />
         <dt className="text-xs text-muted-foreground">{label}</dt>
         <dd className="font-semibold text-sm">{value}</dd>
       </div>
@@ -180,9 +180,9 @@ const FormattedText = ({ text }: { text?: string }) => {
     );
 }
 
-const DetailSection = ({ icon: Icon, title, children }: { icon: React.ElementType, title: string, children: React.ReactNode }) => (
+const DetailSection = ({ icon: Icon, title, color, children }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode }) => (
     <div>
-        <h3 className="text-xl font-bold flex items-center gap-2 mb-3 text-primary">
+        <h3 className="text-xl font-bold flex items-center gap-2 mb-3" style={{color}}>
             <Icon className="h-5 w-5" />
             {title}
         </h3>
@@ -273,17 +273,17 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                         </CardHeader>
                         <CardContent className="p-4 sm:p-6 space-y-6">
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                                <InfoItem icon={LayoutGrid} label="الفئة" value={categoryName} />
-                                {translatedWorkType && <InfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} />}
-                                <InfoItem icon={Wallet} label="الأجر" value={job.salary ? job.salary : 'عند الطلب'} />
-                                {job.companyName && <InfoItem icon={Building2} label="الشركة" value={job.companyName} />}
-                                {job.openPositions && <InfoItem icon={Users2} label="شواغر" value={job.openPositions} />}
+                                <InfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={finalColor} />
+                                {translatedWorkType && <InfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={finalColor} />}
+                                <InfoItem icon={Wallet} label="الأجر" value={job.salary ? job.salary : 'عند الطلب'} color={finalColor} />
+                                {job.companyName && <InfoItem icon={Building2} label="الشركة" value={job.companyName} color={finalColor} />}
+                                {job.openPositions && <InfoItem icon={Users2} label="شواغر" value={job.openPositions} color={finalColor} />}
                             </div>
                             
                             <Separator />
 
                             {job.description && (
-                               <DetailSection icon={FileText} title="وصف الوظيفة">
+                               <DetailSection icon={FileText} title="وصف الوظيفة" color={finalColor}>
                                     <FormattedText text={job.description} />
                                </DetailSection>
                             )}
@@ -291,7 +291,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                              {job.description && (job.qualifications || job.experience || job.conditions || job.tasks || job.howToApply) && <Separator />}
 
                             {job.qualifications && (
-                               <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة">
+                               <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={finalColor}>
                                     <FormattedText text={job.qualifications} />
                                </DetailSection>
                             )}
@@ -299,7 +299,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                             {job.qualifications && (job.experience || job.conditions || job.tasks || job.howToApply) && <Separator />}
                             
                             {job.experience && (
-                               <DetailSection icon={Award} title="الخبرة المطلوبة">
+                               <DetailSection icon={Award} title="الخبرة المطلوبة" color={finalColor}>
                                     <FormattedText text={job.experience} />
                                </DetailSection>
                             )}
@@ -307,7 +307,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                             {job.experience && (job.conditions || job.tasks || job.howToApply) && <Separator />}
 
                             {job.conditions && (
-                               <DetailSection icon={ClipboardList} title="الشروط المطلوبة">
+                               <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={finalColor}>
                                     <FormattedText text={job.conditions} />
                                </DetailSection>
                             )}
@@ -315,7 +315,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                              {job.conditions && (job.tasks || job.howToApply) && <Separator />}
 
                             {job.tasks && (
-                               <DetailSection icon={CheckSquare} title="المهام المطلوبة">
+                               <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={finalColor}>
                                     <FormattedText text={job.tasks} />
                                </DetailSection>
                             )}
@@ -323,7 +323,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                             {job.tasks && job.howToApply && <Separator />}
 
                             {job.howToApply && (
-                               <DetailSection icon={HelpCircle} title="كيفية التقديم">
+                               <DetailSection icon={HelpCircle} title="كيفية التقديم" color={finalColor}>
                                     <FormattedText text={job.howToApply} />
                                </DetailSection>
                             )}
@@ -335,7 +335,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                         <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2 text-lg">
-                                    <Phone className="h-5 w-5 text-primary" />
+                                    <Phone className="h-5 w-5" style={{color: finalColor}} />
                                     معلومات التواصل
                                 </CardTitle>
                             </CardHeader>
@@ -368,7 +368,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                         <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2 text-lg">
-                                    <UserIcon className="h-5 w-5 text-primary" />
+                                    <UserIcon className="h-5 w-5" style={{color: finalColor}}/>
                                     صاحب الإعلان
                                 </CardTitle>
                             </CardHeader>

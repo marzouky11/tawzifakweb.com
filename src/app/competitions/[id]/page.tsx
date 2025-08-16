@@ -75,7 +75,7 @@ const InfoItem = ({ icon: Icon, label, value, href, isDate }: { icon: React.Elem
 
     const content = (
         <div className="flex flex-col gap-1 p-3 bg-muted/50 rounded-lg text-center">
-            <Icon className="h-6 w-6 text-primary mx-auto mb-1" />
+            <Icon className="h-6 w-6 text-red-700 mx-auto mb-1" />
             <dt className="text-xs text-muted-foreground">{label}</dt>
             <dd className={`font-semibold text-sm ${isDate ? 'text-destructive' : ''}`}>{value}</dd>
         </div>
@@ -90,7 +90,7 @@ const InfoItem = ({ icon: Icon, label, value, href, isDate }: { icon: React.Elem
 
 const DetailSection = ({ icon: Icon, title, children }: { icon: React.ElementType, title: string, children: React.ReactNode }) => (
     <div className="space-y-3">
-        <h3 className="text-xl font-bold flex items-center gap-2 mb-3 text-primary border-r-4 border-primary pr-2">
+        <h3 className="text-xl font-bold flex items-center gap-2 mb-3 text-red-700 border-r-4 border-red-700 pr-2">
             <Icon className="h-5 w-5" />
             {title}
         </h3>
@@ -130,6 +130,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
     }
     
     const organizerIcon = getOrganizerIcon(competition.organizer);
+    const sectionColor = '#B71C1C';
 
     return (
         <AppLayout>
@@ -143,25 +144,25 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
             />
             <div className="container mx-auto max-w-4xl px-4 pb-8">
                 <div className="space-y-6">
-                    <Card className="overflow-hidden shadow-lg border-t-4 border-blue-500">
+                    <Card className="overflow-hidden shadow-lg border-t-4" style={{borderColor: sectionColor}}>
                         <CardHeader className="bg-muted/30 p-4 sm:p-6">
                             <div className="flex items-start gap-4">
-                                <CategoryIcon name={organizerIcon} className="w-10 h-10 text-blue-500 flex-shrink-0 mt-1" />
+                                <CategoryIcon name={organizerIcon} className="w-10 h-10 text-red-700 flex-shrink-0 mt-1" />
                                 <div className='flex-grow'>
                                     <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                                         {competition.title || 'عنوان غير متوفر'}
                                     </h1>
                                     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground mt-2 text-sm">
                                         <div className="flex items-center gap-1.5">
-                                            <Building className="h-4 w-4 text-blue-500" />
+                                            <Building className="h-4 w-4" style={{color: sectionColor}} />
                                             <span>الجهة المنظمة: {competition.organizer}</span>
                                         </div>
                                         <div className="flex items-center gap-1.5">
-                                            <MapPin className="h-4 w-4 text-blue-500" />
+                                            <MapPin className="h-4 w-4" style={{color: sectionColor}} />
                                             <span>الموقع: {competition.location}</span>
                                         </div>
                                         <div className="flex items-center gap-1.5">
-                                            <CalendarDays className="h-4 w-4 text-blue-500" />
+                                            <CalendarDays className="h-4 w-4" style={{color: sectionColor}} />
                                             <span>نُشرت: {competition.postedAt}</span>
                                         </div>
                                     </div>
@@ -205,7 +206,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                                         </Button>
                                     )}
                                     {competition.officialLink && (
-                                        <Button asChild size="lg">
+                                        <Button asChild size="lg" style={{backgroundColor: sectionColor, color: 'white'}}>
                                             <a href={competition.officialLink} target="_blank" rel="noopener noreferrer">
                                                 <LinkIcon className="ml-2 h-4 w-4" />
                                                 الذهاب إلى رابط التقديم

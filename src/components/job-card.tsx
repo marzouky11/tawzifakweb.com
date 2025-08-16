@@ -71,7 +71,10 @@ export function JobCard({ job }: JobCardProps) {
   
   return (
     <Card 
-        className="flex flex-col rounded-lg bg-card shadow-md h-full transition-all hover:shadow-xl w-full overflow-hidden border-t-4"
+        className={cn(
+            "flex flex-col rounded-lg bg-card shadow-md h-full transition-all hover:shadow-xl w-full overflow-hidden border-t-4",
+            isSeekingJob && "border-dashed"
+        )}
         style={{ borderColor: sectionColor }}
     >
        <CardHeader className="p-4">

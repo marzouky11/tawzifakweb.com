@@ -2,12 +2,13 @@
 import Link from 'next/link';
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Calendar, Users, Building, ShieldCheck, Landmark } from 'lucide-react';
+import { Calendar, Users, Building } from 'lucide-react';
 import type { Competition } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getOrganizerIcon } from '@/lib/data';
 import { CategoryIcon } from './icons';
+import { Separator } from './ui/separator';
 
 interface CompetitionCardProps {
   competition: Competition | null;
@@ -62,6 +63,10 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
             </h3>
         </div>
       </CardHeader>
+      
+       <div className="px-4">
+        <Separator />
+      </div>
       
       <CardContent className="p-4 flex-grow space-y-3">
         <InfoBadge
