@@ -17,7 +17,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Loader2, Edit, Trash2, FileText, Frown } from 'lucide-react';
+import { Loader2, Trash2, FileText, Frown } from 'lucide-react';
 import { getJobsByUserId, deleteAd, getJobs, getCompetitions, deleteCompetition } from '@/lib/data';
 import type { Job, Competition } from '@/lib/types';
 import { JobCard } from '@/components/job-card';
@@ -28,7 +28,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
-function AdGrid({ ads, onAdDelete, isAdminView }: { ads: Job[], onAdDelete: (adId: string) => void, isAdminView: boolean }) {
+function AdGrid({ ads, onAdDelete }: { ads: Job[], onAdDelete: (adId: string) => void }) {
     if (ads.length === 0) {
         return (
              <div className="text-center text-muted-foreground p-8 flex flex-col items-center gap-4">
@@ -43,15 +43,41 @@ function AdGrid({ ads, onAdDelete, isAdminView }: { ads: Job[], onAdDelete: (adI
             {ads.map(ad => (
                 <div key={ad.id} className="flex flex-col gap-2">
                     <JobCard job={ad} />
+                    <Button variant="destructive" className="flex-1" onClick={() => onAdDelete(ad.id)}>
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        حذف
+                    </Button>
+                </div>
+            ))}
+        </div>
+    )
+}
+
+function UserAdGrid({ ads, onAdDelete }: { ads: Job[], onAdDelete: (adId: string) => void }) {
+    if (ads.length === 0) {
+        return (
+             <div className="text-center text-muted-foreground p-8 flex flex-col items-center gap-4">
+                <Frown className="w-16 h-16 text-muted-foreground/50" />
+                <p>لم تقم بنشر أي إعلانات بعد.</p>
+                <Button asChild>
+                    <Link href="/post-job/select-type">نشر إعلان جديد</Link>
+                </Button>
+            </div>
+        )
+    }
+
+    return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {ads.map(ad => (
+                <div key={ad.id} className="flex flex-col gap-2">
+                    <JobCard job={ad} />
                     <div className="flex gap-2">
-                        {!isAdminView && (
-                            <Button asChild variant="outline" className="flex-1">
-                                <Link href={`/edit-job/${ad.id}`}>
-                                    <Edit className="mr-2 h-4 w-4" />
-                                    تعديل
-                                </Link>
-                            </Button>
-                        )}
+                        <Button asChild variant="outline" className="flex-1">
+                            <Link href={`/edit-job/${ad.id}`}>
+                                <FileSignature className="mr-2 h-4 w-4" />
+                                تعديل
+                            </Link>
+                        </Button>
                         <Button variant="destructive" className="flex-1" onClick={() => onAdDelete(ad.id)}>
                             <Trash2 className="mr-2 h-4 w-4" />
                             حذف
@@ -62,6 +88,7 @@ function AdGrid({ ads, onAdDelete, isAdminView }: { ads: Job[], onAdDelete: (adI
         </div>
     )
 }
+
 
 function CompetitionGrid({ competitions, onAdDelete }: { competitions: Competition[], onAdDelete: (adId: string) => void }) {
     if (competitions.length === 0) {
@@ -78,12 +105,10 @@ function CompetitionGrid({ competitions, onAdDelete }: { competitions: Competiti
             {competitions.map(comp => (
                 <div key={comp.id} className="flex flex-col gap-2">
                     <CompetitionCard competition={comp} />
-                    <div className="flex gap-2">
-                        <Button variant="destructive" className="flex-1" onClick={() => onAdDelete(comp.id)}>
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            حذف
-                        </Button>
-                    </div>
+                    <Button variant="destructive" className="flex-1" onClick={() => onAdDelete(comp.id)}>
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        حذف
+                    </Button>
                 </div>
             ))}
         </div>
@@ -179,35 +204,23 @@ export default function MyAdsPage() {
             <Tabs defaultValue="offers" className="w-full">
                 <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 mb-6">
                     <TabsTrigger value="offers">عروض العمل ({jobOffers.length})</TabsTrigger>
-                    <TabsTrigger value="requests">طلبات العمل ({jobRequests.length})</TabsTrigger>
                     <TabsTrigger value="competitions">المباريات ({competitions.length})</TabsTrigger>
+                    <TabsTrigger value="requests">طلبات العمل ({jobRequests.length})</TabsTrigger>
                 </TabsList>
                 <TabsContent value="offers">
-                    <AdGrid ads={jobOffers} onAdDelete={(id) => handleDeleteTrigger(id, 'ad')} isAdminView={true} />
-                </TabsContent>
-                <TabsContent value="requests">
-                    <AdGrid ads={jobRequests} onAdDelete={(id) => handleDeleteTrigger(id, 'ad')} isAdminView={true} />
+                    <AdGrid ads={jobOffers} onAdDelete={(id) => handleDeleteTrigger(id, 'ad')} />
                 </TabsContent>
                 <TabsContent value="competitions">
                     <CompetitionGrid competitions={competitions} onAdDelete={(id) => handleDeleteTrigger(id, 'competition')} />
+                </TabsContent>
+                <TabsContent value="requests">
+                    <AdGrid ads={jobRequests} onAdDelete={(id) => handleDeleteTrigger(id, 'ad')} />
                 </TabsContent>
             </Tabs>
         )
     }
 
-    if (myPersonalAds.length > 0) {
-        return <AdGrid ads={myPersonalAds} onAdDelete={(id) => handleDeleteTrigger(id, 'ad')} isAdminView={false} />;
-    }
-
-    return (
-        <div className="text-center text-muted-foreground p-8 flex flex-col items-center gap-4">
-            <Frown className="w-16 h-16 text-muted-foreground/50" />
-            <p>لم تقم بنشر أي إعلانات بعد.</p>
-            <Button asChild>
-                <Link href="/post-job/select-type">نشر إعلان جديد</Link>
-            </Button>
-        </div>
-    )
+    return <UserAdGrid ads={myPersonalAds} onAdDelete={(id) => handleDeleteTrigger(id, 'ad')} />;
   }
 
   return (

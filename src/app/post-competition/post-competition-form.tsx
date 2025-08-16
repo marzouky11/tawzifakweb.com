@@ -101,10 +101,10 @@ const StepsIndicator = ({ currentStep, onStepClick }: { currentStep: number; onS
                 {isCompleted ? <Check className="w-6 h-6" /> : <step.icon className="w-5 h-5" />}
               </button>
               <div className="hidden md:block text-center mt-2">
-                <p className={cn("font-bold text-sm", isCurrent ? "text-primary" : "text-foreground")}>
+                <p className={cn("font-bold", isCurrent ? "text-primary" : "text-foreground")}>
                   {step.name}
                 </p>
-                 <p className="text-xs text-muted-foreground">{step.description}</p>
+                <p className="text-xs text-muted-foreground">{step.description}</p>
               </div>
             </div>
           );
@@ -211,11 +211,17 @@ export function PostCompetitionForm() {
         return;
     }
 
-    const fieldsToValidate = stepFields[currentStep] as (keyof z.infer<typeof formSchema>)[];
-    const isValid = await form.trigger(fieldsToValidate);
+    const fieldsToValidate = stepFields.slice(0, stepIndex).flat();
+    const isValid = await form.trigger(fieldsToValidate as any);
 
     if(isValid) {
         setCurrentStep(stepIndex);
+    } else {
+         toast({
+            variant: "destructive",
+            title: "حقول ناقصة",
+            description: "الرجاء تعبئة جميع الحقول في المراحل السابقة أولاً.",
+        });
     }
   }
 
