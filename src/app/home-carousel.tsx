@@ -37,7 +37,7 @@ const slidesData = [
     description: "استكشف الفرص المناسبة لمهاراتك واهتماماتك",
     buttonText: "استكشف الآن",
     buttonLink: "/jobs",
-    buttonClass: "bg-green-600 hover:bg-green-700"
+    buttonClass: "bg-[#0D47A1] hover:bg-[#0D47A1]/90"
   },
   {
     key: 'explore-jobs',
@@ -49,7 +49,7 @@ const slidesData = [
     description: "من البناء إلى التقنية – الجميع هنا",
     buttonText: "استكشف الآن",
     buttonLink: "/workers",
-    buttonClass: "bg-red-600 hover:bg-red-700"
+    buttonClass: "bg-[#424242] hover:bg-[#424242]/90"
   },
   {
     key: 'cv-builder',

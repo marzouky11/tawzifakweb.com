@@ -180,7 +180,8 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
     const category = getCategoryById(job.categoryId || '');
     const categoryName = category?.name || job.categoryName;
     const translatedWorkType = job.workType ? workTypeTranslations[job.workType] : undefined;
-    const finalColor = category?.color || '#424242';
+    const sectionColor = '#424242';
+    const categoryColor = category?.color || sectionColor;
     const finalIconName = category?.iconName || 'Users';
 
     const jobTitle = job.title || 'هذا الإعلان';
@@ -209,13 +210,13 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                 <div className="space-y-6">
                     <Card 
                         className="overflow-hidden shadow-lg border-2 border-dashed"
-                        style={{ borderColor: finalColor }}
+                        style={{ borderColor: sectionColor }}
                     >
                         <CardHeader className="bg-muted/30 p-4 sm:p-6">
                            <div className="flex flex-col items-start gap-4">
                                 <div className="flex items-center gap-3 w-full">
-                                    <div className="p-2 sm:p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${finalColor}1A` }}>
-                                        <CategoryIcon name={finalIconName} className="w-6 h-6 sm:w-8 sm:h-8" style={{ color: finalColor }} />
+                                    <div className="p-2 sm:p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${categoryColor}1A` }}>
+                                        <CategoryIcon name={finalIconName} className="w-6 h-6 sm:w-8 sm:h-8" style={{ color: categoryColor }} />
                                     </div>
                                     <div className="flex-grow">
                                         <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
@@ -241,14 +242,14 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                         </CardHeader>
                         <CardContent className="p-4 sm:p-6 space-y-6">
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                                <SeekerInfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={finalColor} />
-                                {job.workType && <SeekerInfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={finalColor} />}
+                                <SeekerInfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={categoryColor} />
+                                {job.workType && <SeekerInfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={categoryColor} />}
                             </div>
 
                             <Separator/>
                             
                             {job.experience && (
-                               <DetailSection icon={Award} title="الخبرة" color={finalColor}>
+                               <DetailSection icon={Award} title="الخبرة" color={sectionColor}>
                                     <FormattedText text={job.experience} />
                                </DetailSection>
                             )}
@@ -256,7 +257,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                             {job.experience && (job.qualifications || job.description) && <Separator />}
                             
                             {job.qualifications && (
-                               <DetailSection icon={GraduationCap} title="المؤهلات" color={finalColor}>
+                               <DetailSection icon={GraduationCap} title="المؤهلات" color={sectionColor}>
                                     <FormattedText text={job.qualifications} />
                                </DetailSection>
                             )}
@@ -264,7 +265,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                             {job.qualifications && job.description && <Separator />}
 
                             {job.description && (
-                               <DetailSection icon={FileText} title="وصف المهارات والخبرة" color={finalColor}>
+                               <DetailSection icon={FileText} title="وصف المهارات والخبرة" color={sectionColor}>
                                     <FormattedText text={job.description} />
                                </DetailSection>
                             )}
@@ -275,14 +276,14 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                         <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2 text-lg">
-                                    <Phone className="h-5 w-5" style={{color: finalColor}}/>
+                                    <Phone className="h-5 w-5" style={{color: sectionColor}}/>
                                     معلومات التواصل
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-2">
                                 <div className="grid grid-cols-2 gap-2">
                                     {job.phone && (
-                                        <Button asChild style={{ backgroundColor: finalColor }} className="text-primary-foreground hover:opacity-90">
+                                        <Button asChild style={{ backgroundColor: sectionColor }} className="text-primary-foreground hover:opacity-90">
                                             <a href={`tel:${job.phone}`}><Phone className="ml-2 h-4 w-4" />اتصال</a>
                                         </Button>
                                     )}
@@ -313,7 +314,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                         <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2 text-lg">
-                                    <UserIcon className="h-5 w-5" style={{color: finalColor}}/>
+                                    <UserIcon className="h-5 w-5" style={{color: sectionColor}}/>
                                     صاحب الإعلان
                                 </CardTitle>
                             </CardHeader>

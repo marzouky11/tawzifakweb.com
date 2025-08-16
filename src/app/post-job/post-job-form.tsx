@@ -169,12 +169,12 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
   const postType = form.watch('postType');
   const categoryId = form.watch('categoryId');
   const customCategory = form.watch('customCategory');
-
-  const selectedCategoryData = React.useMemo(() => {
-    return categories.find(c => c.id === categoryId);
-  }, [categoryId, categories]);
   
-  const categoryThemeColor = selectedCategoryData?.color;
+  const getThemeColor = () => {
+    if (postType === 'seeking_job') return '#424242'; // Dark Gray
+    if (postType === 'seeking_worker') return '#0D47A1'; // Dark Blue
+    return 'hsl(var(--primary))';
+  }
 
   const nextStep = async () => {
     const fieldsToValidate = stepFields[currentStep] as (keyof z.infer<typeof formSchema>)[];
@@ -293,13 +293,6 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
     }
   }
   
-  const getThemeColor = () => {
-    if (categoryThemeColor) return categoryThemeColor;
-    if (postType === 'seeking_job') return 'hsl(var(--destructive))';
-    if (postType === 'seeking_worker') return 'hsl(var(--accent))';
-    return 'hsl(var(--primary))';
-  }
-
   const FormLabelIcon = ({icon: Icon, label}: {icon: React.ElementType, label: string}) => (
     <FormLabel className="flex items-center gap-2 text-base md:text-lg">
       <Icon 
