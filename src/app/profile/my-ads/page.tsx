@@ -28,7 +28,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
-function AdGrid({ ads, onAdDelete }: { ads: Job[], onAdDelete: (adId: string) => void }) {
+function AdGrid({ ads, onAdDelete, isAdmin }: { ads: Job[], onAdDelete: (adId: string) => void, isAdmin: boolean }) {
     if (ads.length === 0) {
         return (
              <div className="text-center text-muted-foreground p-8 flex flex-col items-center gap-4">
@@ -44,12 +44,14 @@ function AdGrid({ ads, onAdDelete }: { ads: Job[], onAdDelete: (adId: string) =>
                 <div key={ad.id} className="flex flex-col gap-2">
                     <JobCard job={ad} />
                     <div className="flex gap-2">
-                        <Button asChild variant="outline" className="flex-1">
-                            <Link href={`/edit-job/${ad.id}`}>
-                                <Edit className="mr-2 h-4 w-4" />
-                                تعديل
-                            </Link>
-                        </Button>
+                        {!isAdmin && (
+                            <Button asChild variant="outline" className="flex-1">
+                                <Link href={`/edit-job/${ad.id}`}>
+                                    <Edit className="mr-2 h-4 w-4" />
+                                    تعديل
+                                </Link>
+                            </Button>
+                        )}
                         <Button variant="destructive" className="flex-1" onClick={() => onAdDelete(ad.id)}>
                             <Trash2 className="mr-2 h-4 w-4" />
                             حذف
@@ -77,7 +79,6 @@ function CompetitionGrid({ competitions, onAdDelete }: { competitions: Competiti
                 <div key={comp.id} className="flex flex-col gap-2">
                     <CompetitionCard competition={comp} />
                     <div className="flex gap-2">
-                        {/* No edit for competitions for now */}
                         <Button variant="destructive" className="flex-1" onClick={() => onAdDelete(comp.id)}>
                             <Trash2 className="mr-2 h-4 w-4" />
                             حذف
@@ -169,16 +170,16 @@ export default function MyAdsPage() {
     if(userData?.isAdmin) {
         return (
             <Tabs defaultValue="offers" className="w-full">
-                <TabsList className="grid w-full grid-cols-3 mb-6">
+                <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 mb-6">
                     <TabsTrigger value="offers">عروض العمل ({jobOffers.length})</TabsTrigger>
                     <TabsTrigger value="requests">طلبات العمل ({jobRequests.length})</TabsTrigger>
                     <TabsTrigger value="competitions">المباريات ({competitions.length})</TabsTrigger>
                 </TabsList>
                 <TabsContent value="offers">
-                    <AdGrid ads={jobOffers} onAdDelete={(id) => handleDeleteTrigger(id, 'ad')} />
+                    <AdGrid ads={jobOffers} onAdDelete={(id) => handleDeleteTrigger(id, 'ad')} isAdmin={true} />
                 </TabsContent>
                 <TabsContent value="requests">
-                    <AdGrid ads={jobRequests} onAdDelete={(id) => handleDeleteTrigger(id, 'ad')} />
+                    <AdGrid ads={jobRequests} onAdDelete={(id) => handleDeleteTrigger(id, 'ad')} isAdmin={true} />
                 </TabsContent>
                 <TabsContent value="competitions">
                     <CompetitionGrid competitions={competitions} onAdDelete={(id) => handleDeleteTrigger(id, 'competition')} />
@@ -188,7 +189,7 @@ export default function MyAdsPage() {
     }
 
     if (myPersonalAds.length > 0) {
-        return <AdGrid ads={myPersonalAds} onAdDelete={(id) => handleDeleteTrigger(id, 'ad')} />;
+        return <AdGrid ads={myPersonalAds} onAdDelete={(id) => handleDeleteTrigger(id, 'ad')} isAdmin={false} />;
     }
 
     return (
