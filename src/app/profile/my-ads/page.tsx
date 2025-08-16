@@ -17,7 +17,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Loader2, Trash2, FileText, Frown } from 'lucide-react';
+import { Loader2, Trash2, FileText, Frown, FileSignature } from 'lucide-react';
 import { getJobsByUserId, deleteAd, getJobs, getCompetitions, deleteCompetition } from '@/lib/data';
 import type { Job, Competition } from '@/lib/types';
 import { JobCard } from '@/components/job-card';
@@ -202,10 +202,10 @@ export default function MyAdsPage() {
     if(userData?.isAdmin) {
         return (
             <Tabs defaultValue="offers" className="w-full">
-                <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 mb-6">
-                    <TabsTrigger value="offers">عروض العمل ({jobOffers.length})</TabsTrigger>
+                <TabsList className="grid w-full grid-cols-3 mb-6">
+                    <TabsTrigger value="offers">الوظائف ({jobOffers.length})</TabsTrigger>
                     <TabsTrigger value="competitions">المباريات ({competitions.length})</TabsTrigger>
-                    <TabsTrigger value="requests">طلبات العمل ({jobRequests.length})</TabsTrigger>
+                    <TabsTrigger value="requests">الباحثون ({jobRequests.length})</TabsTrigger>
                 </TabsList>
                 <TabsContent value="offers">
                     <AdGrid ads={jobOffers} onAdDelete={(id) => handleDeleteTrigger(id, 'ad')} />
