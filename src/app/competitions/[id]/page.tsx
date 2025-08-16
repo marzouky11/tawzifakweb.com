@@ -1,4 +1,5 @@
 
+
 import { notFound } from 'next/navigation';
 import { getCompetitionById, getOrganizerIcon } from '@/lib/data';
 import { AppLayout } from '@/components/layout/app-layout';
@@ -32,6 +33,7 @@ import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import Link from 'next/link';
 import { CategoryIcon } from '@/components/icons';
 import { Separator } from '@/components/ui/separator';
+import { ReportAdDialog } from '@/app/jobs/[id]/report-ad-dialog';
 
 interface CompetitionDetailPageProps {
   params: { id: string };
@@ -152,7 +154,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                 title="تفاصيل المباراة العمومية"
                 description="هنا تجد جميع المعلومات المتعلقة بهذه المباراة."
             />
-            <div className="container mx-auto max-w-4xl px-4 pb-8">
+            <div className="container mx-auto max-w-4xl px-4 pb-8 space-y-6">
                 <Card className="overflow-hidden shadow-lg border-t-4" style={{borderColor: sectionColor}}>
                     <CardHeader className="bg-muted/30 p-4 sm:p-6">
                         <div className="flex items-start gap-4">
@@ -200,37 +202,40 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                                 </div>
                             </DetailSection>
                         </div>
-                         
-                        {(competition.fileUrl || competition.officialLink) && (
-                            <Card className="mt-8">
-                                <CardHeader>
-                                    <CardTitle className="flex items-center gap-2" style={{color: sectionColor}}>
-                                        <LogIn className="h-5 w-5" />
-                                        التقديم على المباراة
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="flex flex-col sm:flex-row justify-center gap-4">
-                                     {competition.fileUrl && (
-                                        <Button asChild size="lg" variant="outline" className="flex-1">
-                                            <a href={competition.fileUrl} target="_blank" rel="noopener noreferrer">
-                                                <FileUp className="ml-2 h-4 w-4" />
-                                                تحميل إعلان المباراة (PDF)
-                                            </a>
-                                        </Button>
-                                    )}
-                                    {competition.officialLink && (
-                                        <Button asChild size="lg" className="flex-1 text-primary-foreground" style={{backgroundColor: sectionColor}}>
-                                            <a href={competition.officialLink} target="_blank" rel="noopener noreferrer">
-                                                <LinkIcon className="ml-2 h-4 w-4" />
-                                                الذهاب إلى رابط التسجيل
-                                            </a>
-                                        </Button>
-                                    )}
-                                </CardContent>
-                            </Card>
-                        )}
                     </CardContent>
                 </Card>
+                         
+                {(competition.fileUrl || competition.officialLink) && (
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2" style={{color: sectionColor}}>
+                                <LogIn className="h-5 w-5" />
+                                التقديم على المباراة
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="flex flex-col sm:flex-row justify-center gap-4">
+                                {competition.fileUrl && (
+                                <Button asChild size="lg" variant="outline" className="flex-1">
+                                    <a href={competition.fileUrl} target="_blank" rel="noopener noreferrer">
+                                        <FileUp className="ml-2 h-4 w-4" />
+                                        تحميل إعلان المباراة (PDF)
+                                    </a>
+                                </Button>
+                            )}
+                            {competition.officialLink && (
+                                <Button asChild size="lg" className="flex-1 text-primary-foreground" style={{backgroundColor: sectionColor}}>
+                                    <a href={competition.officialLink} target="_blank" rel="noopener noreferrer">
+                                        <LinkIcon className="ml-2 h-4 w-4" />
+                                        الذهاب إلى رابط التسجيل
+                                    </a>
+                                </Button>
+                            )}
+                        </CardContent>
+                    </Card>
+                )}
+                <div className="text-center">
+                    <ReportAdDialog adId={competition.id} />
+                </div>
             </div>
         </AppLayout>
     );
