@@ -69,9 +69,9 @@ const steps = [
     { id: 3, name: "الوثائق والتواريخ", description: "الملفات المطلوبة ومواعيد التسجيل.", icon: CalendarIcon },
 ];
 
-const StepsIndicator = ({ currentStep, onStepClick, steps }: { currentStep: number; onStepClick: (step: number) => void; steps: typeof steps }) => {
+const StepsIndicator = ({ currentStep, onStepClick }: { currentStep: number; onStepClick: (step: number) => void; }) => {
   return (
-    <div className="relative mb-8">
+    <div className="relative">
       <div className="absolute right-0 top-1/2 w-full -translate-y-1/2" aria-hidden="true">
         <div className="h-0.5 w-full bg-border" />
       </div>
@@ -101,9 +101,10 @@ const StepsIndicator = ({ currentStep, onStepClick, steps }: { currentStep: numb
                 {isCompleted ? <Check className="w-6 h-6" /> : <step.icon className="w-5 h-5" />}
               </button>
               <div className="hidden md:block text-center mt-2">
-                <p className={cn("font-bold text-xs", isCurrent ? "text-primary" : "text-foreground")}>
+                <p className={cn("font-bold text-sm", isCurrent ? "text-primary" : "text-foreground")}>
                   {step.name}
                 </p>
+                 <p className="text-xs text-muted-foreground">{step.description}</p>
               </div>
             </div>
           );
@@ -149,7 +150,7 @@ const DatePickerField = ({ name, label, control, icon: Icon }: { name: any, labe
 );
 
 const FormLabelIcon = ({icon: Icon, label}: {icon: React.ElementType, label: string}) => (
-    <FormLabel className="flex items-center gap-2">
+    <FormLabel className="flex items-center gap-2 text-base md:text-lg">
       <Icon className='h-4 w-4 text-primary' />
       {label}
     </FormLabel>
@@ -195,8 +196,28 @@ export function PostCompetitionForm() {
       if (currentStep < steps.length - 1) {
         setCurrentStep(prev => prev + 1);
       }
+    } else {
+        toast({
+            variant: "destructive",
+            title: "حقول ناقصة",
+            description: "الرجاء تعبئة جميع الحقول المطلوبة للمتابعة.",
+        });
     }
   };
+  
+  const handleStepClick = async (stepIndex: number) => {
+    if (stepIndex < currentStep) {
+        setCurrentStep(stepIndex);
+        return;
+    }
+
+    const fieldsToValidate = stepFields[currentStep] as (keyof z.infer<typeof formSchema>)[];
+    const isValid = await form.trigger(fieldsToValidate);
+
+    if(isValid) {
+        setCurrentStep(stepIndex);
+    }
+  }
 
   const prevStep = () => {
     setCurrentStep(prev => prev - 1);
@@ -281,7 +302,7 @@ export function PostCompetitionForm() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full">
         <div className="p-6 md:p-8">
-          <StepsIndicator currentStep={currentStep} onStepClick={setCurrentStep} steps={steps} />
+          <StepsIndicator currentStep={currentStep} onStepClick={handleStepClick} />
         </div>
         <Separator className="mx-auto w-[calc(100%-3rem)]" />
         <div className="p-6 flex-grow">
