@@ -28,7 +28,7 @@ export function HomeHeaderMobile() {
     if (user && userData) {
       return (
         <Button asChild variant="outline" className="h-10 w-auto px-3 rounded-full border-primary/50 text-primary bg-primary/10">
-            <Link href="/profile/edit">
+            <Link href="/profile">
                 <Settings className="h-4 w-4" />
                 <span className="mr-1.5 font-semibold text-sm">حسابي</span>
             </Link>
