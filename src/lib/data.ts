@@ -94,18 +94,18 @@ const categories: Category[] = [
 ];
 
 const organizers: Organizer[] = [
-  { name: "وزارة التربية الوطنية", icon: "BookOpen" },
-  { name: "وزارة الصحة والحماية الاجتماعية", icon: "Stethoscope" },
-  { name: "وزارة العدل", icon: "Gavel" },
-  { name: "القوات المسلحة الملكية", icon: "Shield" },
-  { name: "الأمن الوطني", icon: "ShieldCheck" },
-  { name: "الدرك الملكي", icon: "Shield" },
-  { name: "الوقاية المدنية", icon: "LifeBuoy" },
-  { name: "إدارة الجمارك والضرائب غير المباشرة", icon: "Landmark" },
-  { name: "المكتب الوطني للسكك الحديدية", icon: "TrainTrack" },
-  { name: "المكتب الوطني للكهرباء والماء الصالح للشرب", icon: "Zap" },
-  { name: "الوكالة الوطنية للمحافظة العقارية", icon: "FileText" },
-  { name: "المكتب الشريف للفوسفاط", icon: "Factory" },
+  { name: "وزارة التربية الوطنية", icon: "BookOpen", color: "#8E24AA" },
+  { name: "وزارة الصحة والحماية الاجتماعية", icon: "Stethoscope", color: "#43A047" },
+  { name: "وزارة العدل", icon: "Gavel", color: '#6D4C41' },
+  { name: "القوات المسلحة الملكية", icon: "Shield", color: '#2E7D32' },
+  { name: "الأمن الوطني", icon: "ShieldCheck", color: '#1E88E5' },
+  { name: "الدرك الملكي", icon: "Shield", color: '#004D40' },
+  { name: "الوقاية المدنية", icon: "LifeBuoy", color: '#E53935' },
+  { name: "إدارة الجمارك والضرائب غير المباشرة", icon: "Landmark", color: '#37474F' },
+  { name: "المكتب الوطني للسكك الحديدية", icon: "TrainTrack", color: '#F4511E' },
+  { name: "المكتب الوطني للكهرباء والماء الصالح للشرب", icon: "Zap", color: '#FBC02D' },
+  { name: "الوكالة الوطنية للمحافظة العقارية", icon: "FileText", color: '#00897B' },
+  { name: "المكتب الشريف للفوسفاط", icon: "Factory", color: '#455A64' },
 ];
 
 function formatTimeAgo(timestamp: any) {
