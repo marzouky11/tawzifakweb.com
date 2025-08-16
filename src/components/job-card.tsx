@@ -1,4 +1,5 @@
 
+
 import Link from 'next/link';
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -58,59 +59,62 @@ export function JobCard({ job }: JobCardProps) {
   
   // Section-specific colors
   const sectionColors = {
-    seeking_worker: '#0D47A1', // Dark Blue
-    seeking_job: '#424242',    // Dark Gray
+    seeking_worker: '#0D47A1', // Dark Blue for Job Offers
+    seeking_job: '#424242',    // Dark Gray for Job Seekers
   };
-  const categoryColor = sectionColors[job.postType];
+  const sectionColor = sectionColors[job.postType];
+  const categoryColor = category?.color || sectionColor;
 
   const categoryIcon = category?.iconName || (isSeekingJob ? 'Users' : 'Briefcase');
 
-  const salaryText = !isSeekingJob ? (job.salary || 'عند الطلب') : '';
+  const salaryText = !isSeekingJob ? (job.salary || 'عند الطلب') : undefined;
   
   return (
     <Card 
         className="flex flex-col rounded-lg bg-card shadow-md h-full transition-all hover:shadow-xl w-full overflow-hidden border-t-4"
-        style={{ borderColor: categoryColor }}
+        style={{ borderColor: sectionColor }}
     >
        <CardHeader className="p-4">
         <div className="flex items-center gap-3">
              <div className="w-8 h-8 rounded-md flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: `${categoryColor}1A` }}>
                 <CategoryIcon name={categoryIcon} className="w-5 h-5" style={{ color: categoryColor }} />
             </div>
-             <h3 className="font-bold text-base leading-tight line-clamp-2" style={{color: categoryColor}}>
-                <Link href={detailUrl} className="hover:underline">
-                    {job.title}
-                </Link>
-            </h3>
+             <div className="w-full overflow-hidden">
+                <h3 className="font-bold text-base leading-tight truncate" style={{color: sectionColor}}>
+                    <Link href={detailUrl} className="hover:underline">
+                        {job.title}
+                    </Link>
+                </h3>
+                <p className="text-xs text-muted-foreground truncate">
+                    {isSeekingJob ? job.ownerName : categoryName}
+                </p>
+             </div>
         </div>
       </CardHeader>
       
+      <div className="px-4">
+        <Separator />
+      </div>
+
       <CardContent className="p-4 flex-grow space-y-3">
-        <InfoBadge
-            icon={isSeekingJob ? UserIcon : Briefcase}
-            text={isSeekingJob ? job.ownerName : categoryName}
+         <InfoBadge
+            icon={MapPin}
+            text={`${job.country}, ${job.city}`}
         />
-        <div className="flex items-center justify-between gap-2">
-             <InfoBadge
-                icon={MapPin}
-                text={`${job.country}, ${job.city}`}
+        {salaryText && (
+            <InfoBadge 
+                icon={Wallet} 
+                text={salaryText} 
             />
-            {salaryText && (
-                <InfoBadge 
-                    icon={Wallet} 
-                    text={salaryText} 
-                />
-            )}
-        </div>
+        )}
       </CardContent>
 
       <CardFooter className="p-4 pt-0 mt-auto flex items-center justify-between">
          <span className="text-xs text-muted-foreground">{job.postedAt}</span>
-        <Button asChild size="sm" className="text-sm rounded-lg" style={{ backgroundColor: categoryColor, color: 'hsl(var(--primary-foreground))' }} >
+        <Button asChild size="sm" className="text-sm rounded-lg" style={{ backgroundColor: sectionColor, color: 'hsl(var(--primary-foreground))' }} >
           <Link href={detailUrl}>{isSeekingJob ? 'عرض الملف' : 'عرض التفاصيل'}</Link>
         </Button>
       </CardFooter>
     </Card>
   );
 }
-

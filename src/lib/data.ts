@@ -6,91 +6,91 @@ import type { Job, Category, PostType, User, WorkType, Testimonial, Competition,
 import Fuse from 'fuse.js';
 
 const categories: Category[] = [
-  { id: 'it', name: 'تكنولوجيا المعلومات', iconName: 'Code', color: '#0D47A1' },
-  { id: 'engineering', name: 'الهندسة', iconName: 'CircuitBoard', color: '#0D47A1' },
-  { id: 'construction', name: 'البناء والأشغال العامة', iconName: 'HardHat', color: '#0D47A1' },
-  { id: 'healthcare', name: 'الصحة والتمريض', iconName: 'Stethoscope', color: '#0D47A1' },
-  { id: 'education', name: 'التعليم والتدريب', iconName: 'BookOpen', color: '#0D47A1' },
-  { id: 'finance', name: 'المالية والمحاسبة', iconName: 'Calculator', color: '#0D47A1' },
-  { id: 'admin', name: 'الإدارة والسكرتارية', iconName: 'KanbanSquare', color: '#0D47A1' },
-  { id: 'marketing', name: 'التسويق والمبيعات', iconName: 'Megaphone', color: '#0D47A1' },
-  { id: 'hr', name: 'الموارد البشرية', iconName: 'Users', color: '#0D47A1' },
-  { id: 'hospitality', name: 'الفندقة والسياحة', iconName: 'ConciergeBell', color: '#0D47A1' },
-  { id: 'logistics', name: 'النقل واللوجستيك', iconName: 'Truck', color: '#0D47A1' },
-  { id: 'security', name: 'الخدمات الأمنية', iconName: 'Shield', color: '#0D47A1' },
-  { id: 'crafts', name: 'الحرف والصناعات التقليدية', iconName: 'PenTool', color: '#0D47A1' },
-  { id: 'manufacturing', name: 'الصناعة والإنتاج', iconName: 'Factory', color: '#0D47A1' },
-  { id: 'law', name: 'القانون والشؤون القانونية', iconName: 'Gavel', color: '#0D47A1' },
-  { id: 'gov', name: 'وظائف حكومية', iconName: 'Gavel', color: '#0D47A1' },
-  { id: 'media', name: 'الإعلام والاتصال', iconName: 'Newspaper', color: '#0D47A1' },
-  { id: 'retail', name: 'التجارة والتوزيع', iconName: 'ShoppingCart', color: '#0D47A1' },
-  { id: '1', name: 'نجار', iconName: 'Hammer', color: '#424242' },
-  { id: '2', name: 'حداد', iconName: 'Wrench', color: '#424242' },
-  { id: '3', name: 'سباك', iconName: 'ShowerHead', color: '#424242' },
-  { id: '4', name: 'كهربائي منازل', iconName: 'Zap', color: '#424242' },
-  { id: '5', name: 'كهربائي سيارات', iconName: 'Car', color: '#424242' },
-  { id: '6', name: 'فني تبريد وتكييف', iconName: 'AirVent', color: '#424242' },
-  { id: '7', name: 'فني صيانة هواتف', iconName: 'Smartphone', color: '#424242' },
-  { id: '8', name: 'خياط', iconName: 'Scissors', color: '#424242' },
-  { id: '9', name: 'مصمم أزياء', iconName: 'Shirt', color: '#424242' },
-  { id: '10', name: 'صباغ', iconName: 'Paintbrush', color: '#424242' },
-  { id: '12', name: 'عامل بلاط', iconName: 'Layers', color: '#424242' },
-  { id: '13', name: 'عامل زليج', iconName: 'Layers', color: '#424242' },
-  { id: '14', name: 'ميكانيكي سيارات', iconName: 'Wrench', color: '#424242' },
-  { id: '15', name: 'سائق شاحنة', iconName: 'Truck', color: '#424242' },
-  { id: '16', name: 'سائق تاكسي', iconName: 'Car', color: '#424242' },
-  { id: '17', name: 'سائق توصيل', iconName: 'Bike', color: '#424242' },
-  { id: '18', name: 'فلاح', iconName: 'Sprout', color: '#424242' },
-  { id: '19', name: 'راعي غنم', iconName: 'PersonStanding', color: '#424242' },
-  { id: '20', name: 'جزّار', iconName: 'ChefHat', color: '#424242' },
-  { id: '21', name: 'خبّاز', iconName: 'CookingPot', color: '#424242' },
-  { id: '22', name: 'طباخ', iconName: 'ChefHat', color: '#424242' },
-  { id: '23', name: 'حلواني', iconName: 'Cake', color: '#424242' },
-  { id: '24', name: 'منظف منازل', iconName: 'SprayCan', color: '#424242' },
-  { id: '25', name: 'منظف مكاتب', iconName: 'SprayCan', color: '#424242' },
-  { id: '26', name: 'مربية أطفال', iconName: 'Baby', color: '#424242' },
-  { id: '27', name: 'عاملة منزلية', iconName: 'Home', color: '#424242' },
-  { id: '28', name: 'حارس أمن', iconName: 'Shield', color: '#424242' },
-  { id: '29', name: 'عامل مستودع', iconName: 'Package', color: '#424242' },
-  { id: '30', name: 'نجار ألمنيوم', iconName: 'Hammer', color: '#424242' },
-  { id: '31', name: 'عامل حدادة فنية', iconName: 'Wrench', color: '#424242' },
-  { id: '32', name: 'نجار ديكور', iconName: 'Hammer', color: '#424242' },
-  { id: '33', name: 'رسام جداريات', iconName: 'Paintbrush', color: '#424242' },
-  { id: '34', name: 'عامل في مصنع', iconName: 'Factory', color: '#424242' },
-  { id: '35', name: 'عامل في المخابز', iconName: 'CookingPot', color: '#424242' },
-  { id: '36', name: 'معلم شاورما', iconName: 'ChefHat', color: '#424242' },
-  { id: '37', name: 'معلم مشاوي', iconName: 'ChefHat', color: '#424242' },
-  { id: '38', name: 'عامل مقهى', iconName: 'Coffee', color: '#424242' },
-  { id: '39', name: 'عامل مطعم', iconName: 'Utensils', color: '#424242' },
-  { id: '40', name: 'عامل غسيل سيارات', iconName: 'Car', color: '#424242' },
-  { id: '41', name: 'فني ألواح شمسية', iconName: 'Sun', color: '#424242' },
-  { id: '42', name: 'معلم سيراميك', iconName: 'Layers', color: '#424242' },
-  { id: '43', name: 'صانع أحذية', iconName: 'Briefcase', color: '#424242' },
-  { id: '44', name: 'فني إصلاح أثاث', iconName: 'Wrench', color: '#424242' },
-  { id: '45', name: 'عامل توصيل طلبات', iconName: 'Bike', color: '#424242' },
-  { id: '46', name: 'حلاق رجالي', iconName: 'Scissors', color: '#424242' },
-  { id: '47', name: 'حلاقة نسائية', iconName: 'Scissors', color: '#424242' },
-  { id: '48', name: 'فني كاميرات مراقبة', iconName: 'Camera', color: '#424242' },
-  { id: '49', name: 'فني حواسيب', iconName: 'Laptop', color: '#424242' },
-  { id: '50', name: 'فني طباعة وتصوير', iconName: 'Printer', color: '#424242' },
-  { id: '51', name: 'بائع متجول', iconName: 'ShoppingCart', color: '#424242' },
-  { id: '52', name: 'بائع في متجر', iconName: 'Store', color: '#424242' },
-  { id: '53', name: 'مساعد بائع', iconName: 'Store', color: '#424242' },
-  { id: '54', 'name': 'موظف كاشير', 'iconName': 'Calculator', 'color': '#424242' },
-  { id: '55', name: 'عامل تعبئة وتغليف', iconName: 'Package', color: '#424242' },
-  { id: '56', name: 'معلم حدائق وتشجير', iconName: 'Sprout', color: '#424242' },
-  { id: '57', name: 'مبلط', iconName: 'Layers', color: '#424242' },
-  { id: '58', name: 'دهّان', iconName: 'Paintbrush', color: '#424242' },
-  { id: '59', name: 'نجّار أثاث', iconName: 'Hammer', color: '#424242' },
-  { id: '60', name: 'مرمم أثاث قديم', iconName: 'Wrench', color: '#424242' },
-  { id: '61', name: 'تقني إصلاح أجهزة كهربائية', iconName: 'CircuitBoard', color: '#424242' },
-  { id: '62', name: 'خبير أعشاب طبيعية', iconName: 'Leaf', color: '#424242' },
-  { id: '63', name: 'صانع مواد تنظيف', iconName: 'SprayCan', color: '#424242' },
-  { id: '64', name: 'مشغل آلات صناعية', iconName: 'Factory', color: '#424242' },
-  { id: '65', name: 'عامل نقل أثاث', iconName: 'Truck', color: '#424242' },
-  { id: '66', name: 'عامل نظافة شوارع', iconName: 'Trash2', color: '#424242' },
-  { id: '67', name: 'عامل مغسلة ملابس', iconName: 'Shirt', color: '#424242' },
-  { id: '68', name: 'موزع إعلانات', iconName: 'Megaphone', color: '#424242' },
+  { id: 'it', name: 'تكنولوجيا المعلومات', iconName: 'Code', color: '#1E88E5' }, // Blue
+  { id: 'engineering', name: 'الهندسة', iconName: 'CircuitBoard', color: '#FB8C00' }, // Orange
+  { id: 'construction', name: 'البناء والأشغال العامة', iconName: 'HardHat', color: '#78909C' }, // Blue Grey
+  { id: 'healthcare', name: 'الصحة والتمريض', iconName: 'Stethoscope', color: '#43A047' }, // Green
+  { id: 'education', name: 'التعليم والتدريب', iconName: 'BookOpen', color: '#8E24AA' }, // Purple
+  { id: 'finance', name: 'المالية والمحاسبة', iconName: 'Calculator', color: '#00ACC1' }, // Cyan
+  { id: 'admin', name: 'الإدارة والسكرتارية', iconName: 'KanbanSquare', color: '#5E35B1' }, // Deep Purple
+  { id: 'marketing', name: 'التسويق والمبيعات', iconName: 'Megaphone', color: '#E53935' }, // Red
+  { id: 'hr', name: 'الموارد البشرية', iconName: 'Users', color: '#3949AB' }, // Indigo
+  { id: 'hospitality', name: 'الفندقة والسياحة', iconName: 'ConciergeBell', color: '#D81B60' }, // Pink
+  { id: 'logistics', name: 'النقل واللوجستيك', iconName: 'Truck', color: '#F4511E' }, // Deep Orange
+  { id: 'security', name: 'الخدمات الأمنية', iconName: 'Shield', color: '#546E7A' }, // Blue Grey
+  { id: 'crafts', name: 'الحرف والصناعات التقليدية', iconName: 'PenTool', color: '#A1887F' }, // Brown
+  { id: 'manufacturing', name: 'الصناعة والإنتاج', iconName: 'Factory', color: '#455A64' }, // Blue Grey
+  { id: 'law', name: 'القانون والشؤون القانونية', iconName: 'Gavel', color: '#6D4C41' }, // Brown
+  { id: 'gov', name: 'وظائف حكومية', iconName: 'Landmark', color: '#0277BD' }, // Light Blue
+  { id: 'media', name: 'الإعلام والاتصال', iconName: 'Newspaper', color: '#00897B' }, // Teal
+  { id: 'retail', name: 'التجارة والتوزيع', iconName: 'ShoppingCart', color: '#37474F' }, // Blue Grey
+  { id: '1', name: 'نجار', iconName: 'Hammer', color: '#6D4C41' }, // Brown
+  { id: '2', name: 'حداد', iconName: 'Wrench', color: '#616161' }, // Grey
+  { id: '3', name: 'سباك', iconName: 'ShowerHead', color: '#0288D1' }, // Light Blue
+  { id: '4', name: 'كهربائي منازل', iconName: 'Zap', color: '#FBC02D' }, // Yellow
+  { id: '5', name: 'كهربائي سيارات', iconName: 'Car', color: '#F57C00' }, // Orange
+  { id: '6', name: 'فني تبريد وتكييف', iconName: 'AirVent', color: '#0097A7' }, // Cyan
+  { id: '7', name: 'فني صيانة هواتف', iconName: 'Smartphone', color: '#303F9F' }, // Indigo
+  { id: '8', name: 'خياط', iconName: 'Scissors', color: '#C2185B' }, // Pink
+  { id: '9', name: 'مصمم أزياء', iconName: 'Shirt', color: '#D32F2F' }, // Red
+  { id: '10', name: 'صباغ', iconName: 'Paintbrush', color: '#7B1FA2' }, // Purple
+  { id: '12', name: 'عامل بلاط', iconName: 'Layers', color: '#5D4037' }, // Brown
+  { id: '13', name: 'عامل زليج', iconName: 'Layers', color: '#5D4037' }, // Brown
+  { id: '14', name: 'ميكانيكي سيارات', iconName: 'Wrench', color: '#512DA8' }, // Deep Purple
+  { id: '15', name: 'سائق شاحنة', iconName: 'Truck', color: '#E64A19' }, // Deep Orange
+  { id: '16', name: 'سائق تاكسي', iconName: 'Car', color: '#F57C00' }, // Orange
+  { id: '17', name: 'سائق توصيل', iconName: 'Bike', color: '#FFA000' }, // Amber
+  { id: '18', name: 'فلاح', iconName: 'Sprout', color: '#388E3C' }, // Green
+  { id: '19', name: 'راعي غنم', iconName: 'PersonStanding', color: '#689F38' }, // Light Green
+  { id: '20', name: 'جزّار', iconName: 'ChefHat', color: '#D32F2F' }, // Red
+  { id: '21', name: 'خبّاز', iconName: 'CookingPot', color: '#AFB42B' }, // Lime
+  { id: '22', name: 'طباخ', iconName: 'ChefHat', color: '#F57C00' }, // Orange
+  { id: '23', name: 'حلواني', iconName: 'Cake', color: '#E91E63' }, // Pink
+  { id: '24', name: 'منظف منازل', iconName: 'SprayCan', color: '#03A9F4' }, // Light Blue
+  { id: '25', name: 'منظف مكاتب', iconName: 'SprayCan', color: '#03A9F4' }, // Light Blue
+  { id: '26', name: 'مربية أطفال', iconName: 'Baby', color: '#FFC107' }, // Amber
+  { id: '27', name: 'عاملة منزلية', iconName: 'Home', color: '#455A64' }, // Blue Grey
+  { id: '28', name: 'حارس أمن', iconName: 'Shield', color: '#263238' }, // Blue Grey
+  { id: '29', name: 'عامل مستودع', iconName: 'Package', color: '#4E342E' }, // Brown
+  { id: '30', name: 'نجار ألمنيوم', iconName: 'Hammer', color: '#757575' }, // Grey
+  { id: '31', name: 'عامل حدادة فنية', iconName: 'Wrench', color: '#424242' }, // Grey
+  { id: '32', name: 'نجار ديكور', iconName: 'Hammer', color: '#8D6E63' }, // Brown
+  { id: '33', name: 'رسام جداريات', iconName: 'Paintbrush', color: '#673AB7' }, // Deep Purple
+  { id: '34', name: 'عامل في مصنع', iconName: 'Factory', color: '#546E7A' }, // Blue Grey
+  { id: '35', name: 'عامل في المخابز', iconName: 'CookingPot', color: '#795548' }, // Brown
+  { id: '36', name: 'معلم شاورما', iconName: 'ChefHat', color: '#FF9800' }, // Orange
+  { id: '37', name: 'معلم مشاوي', iconName: 'ChefHat', color: '#F44336' }, // Red
+  { id: '38', name: 'عامل مقهى', iconName: 'Coffee', color: '#5D4037' }, // Brown
+  { id: '39', name: 'عامل مطعم', iconName: 'Utensils', color: '#4CAF50' }, // Green
+  { id: '40', name: 'عامل غسيل سيارات', iconName: 'Car', color: '#03A9F4' }, // Light Blue
+  { id: '41', name: 'فني ألواح شمسية', iconName: 'Sun', color: '#FFB300' }, // Amber
+  { id: '42', name: 'معلم سيراميك', iconName: 'Layers', color: '#795548' }, // Brown
+  { id: '43', name: 'صانع أحذية', iconName: 'Briefcase', color: '#6D4C41' }, // Brown
+  { id: '44', name: 'فني إصلاح أثاث', iconName: 'Wrench', color: '#A1887F' }, // Brown
+  { id: '45', name: 'عامل توصيل طلبات', iconName: 'Bike', color: '#FF7043' }, // Deep Orange
+  { id: '46', name: 'حلاق رجالي', iconName: 'Scissors', color: '#3F51B5' }, // Indigo
+  { id: '47', name: 'حلاقة نسائية', iconName: 'Scissors', color: '#AD1457' }, // Pink
+  { id: '48', name: 'فني كاميرات مراقبة', iconName: 'Camera', color: '#263238' }, // Blue Grey
+  { id: '49', name: 'فني حواسيب', iconName: 'Laptop', color: '#1976D2' }, // Blue
+  { id: '50', name: 'فني طباعة وتصوير', iconName: 'Printer', color: '#546E7A' }, // Blue Grey
+  { id: '51', name: 'بائع متجول', iconName: 'ShoppingCart', color: '#00796B' }, // Teal
+  { id: '52', name: 'بائع في متجر', iconName: 'Store', color: '#00796B' }, // Teal
+  { id: '53', name: 'مساعد بائع', iconName: 'Store', color: '#00796B' }, // Teal
+  { id: '54', 'name': 'موظف كاشير', 'iconName': 'Calculator', 'color': '#37474F' }, // Blue Grey
+  { id: '55', name: 'عامل تعبئة وتغليف', iconName: 'Package', color: '#4E342E' }, // Brown
+  { id: '56', name: 'معلم حدائق وتشجير', iconName: 'Sprout', color: '#4CAF50' }, // Green
+  { id: '57', name: 'مبلط', iconName: 'Layers', color: '#795548' }, // Brown
+  { id: '58', name: 'دهّان', iconName: 'Paintbrush', color: '#6A1B9A' }, // Purple
+  { id: '59', name: 'نجّار أثاث', iconName: 'Hammer', color: '#6D4C41' }, // Brown
+  { id: '60', name: 'مرمم أثاث قديم', iconName: 'Wrench', color: '#8D6E63' }, // Brown
+  { id: '61', name: 'تقني إصلاح أجهزة كهربائية', iconName: 'CircuitBoard', color: '#0277BD' }, // Light Blue
+  { id: '62', name: 'خبير أعشاب طبيعية', iconName: 'Leaf', color: '#2E7D32' }, // Green
+  { id: '63', name: 'صانع مواد تنظيف', iconName: 'SprayCan', color: '#006064' }, // Cyan
+  { id: '64', name: 'مشغل آلات صناعية', iconName: 'Factory', color: '#455A64' }, // Blue Grey
+  { id: '65', name: 'عامل نقل أثاث', iconName: 'Truck', color: '#BF360C' }, // Deep Orange
+  { id: '66', name: 'عامل نظافة شوارع', iconName: 'Trash2', color: '#424242' }, // Grey
+  { id: '67', name: 'عامل مغسلة ملابس', iconName: 'Shirt', color: '#1565C0' }, // Blue
+  { id: '68', name: 'موزع إعلانات', iconName: 'Megaphone', color: '#D84315' }, // Deep Orange
 ];
 
 const organizers: Organizer[] = [

@@ -212,7 +212,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
     const categoryName = category?.name || job.categoryName;
     
     const translatedWorkType = job.workType ? workTypeTranslations[job.workType] : undefined;
-    const finalColor = category?.color || 'hsl(var(--primary))';
+    const finalColor = category?.color || '#0D47A1';
     const finalIconName = category?.iconName || 'Briefcase';
     
     const jobTitle = job.title || 'هذا الإعلان';
@@ -351,7 +351,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                                 key={button.type}
                                                 asChild
                                                 className={cn(button.className, (isApplyUrl && isLastAndOdd) && 'col-span-2')}
-                                                style={button.type === 'phone' ? { backgroundColor: button.color } : {}}
+                                                style={button.type === 'phone' ? { backgroundColor: finalColor } : {}}
                                             >
                                                 <a href={button.href} target={button.type !== 'phone' && button.type !== 'email' ? '_blank' : undefined} rel="noopener noreferrer">
                                                     <button.icon className="ml-2 h-4 w-4" />
