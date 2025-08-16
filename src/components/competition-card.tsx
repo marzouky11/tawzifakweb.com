@@ -2,10 +2,12 @@
 import Link from 'next/link';
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ShieldCheck, Calendar, Users, Building } from 'lucide-react';
+import { Calendar, Users, Building, ShieldCheck, Landmark } from 'lucide-react';
 import type { Competition } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
+import { getOrganizerIcon } from '@/lib/data';
+import { CategoryIcon } from './icons';
 
 interface CompetitionCardProps {
   competition: Competition | null;
@@ -40,6 +42,7 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
   }
 
   const detailUrl = `/competitions/${competition.id}`;
+  const organizerIcon = getOrganizerIcon(competition.organizer);
   
   return (
     <Card 
@@ -47,7 +50,7 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
     >
        <CardHeader className="p-4">
         <div className="flex items-center gap-3">
-             <ShieldCheck className="w-8 h-8 text-blue-500 flex-shrink-0" />
+             <CategoryIcon name={organizerIcon} className="w-8 h-8 text-blue-500 flex-shrink-0" />
              <h3 className="font-bold text-base leading-tight text-blue-800 dark:text-blue-300 line-clamp-2">
                 <Link href={detailUrl} className="hover:underline">
                     {competition.title}
@@ -74,7 +77,8 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
         </div>
       </CardContent>
 
-      <CardFooter className="p-4 pt-0 mt-auto flex items-center justify-end">
+      <CardFooter className="p-4 pt-0 mt-auto flex items-center justify-between">
+         <span className="text-xs text-muted-foreground">{competition.postedAt}</span>
         <Button asChild size="sm" className="text-sm rounded-lg bg-blue-500 text-primary-foreground hover:bg-blue-600">
           <Link href={detailUrl}>عرض التفاصيل</Link>
         </Button>

@@ -2,7 +2,7 @@
 
 import { db } from '@/lib/firebase';
 import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, Query, and, QueryConstraint, QueryFilterConstraint } from 'firebase/firestore';
-import type { Job, Category, PostType, User, WorkType, Testimonial, Competition } from './types';
+import type { Job, Category, PostType, User, WorkType, Testimonial, Competition, Organizer } from './types';
 import Fuse from 'fuse.js';
 
 const categories: Category[] = [
@@ -91,6 +91,21 @@ const categories: Category[] = [
   { id: '66', name: 'عامل نظافة شوارع', iconName: 'Trash2', color: '#e11d48' },
   { id: '67', name: 'عامل مغسلة ملابس', iconName: 'Shirt', color: '#7c3aed' },
   { id: '68', name: 'موزع إعلانات', iconName: 'Megaphone', color: '#be123c' },
+];
+
+const organizers: Organizer[] = [
+  { name: "وزارة التربية الوطنية", icon: "BookOpen" },
+  { name: "وزارة الصحة والحماية الاجتماعية", icon: "Stethoscope" },
+  { name: "وزارة العدل", icon: "Gavel" },
+  { name: "القوات المسلحة الملكية", icon: "Shield" },
+  { name: "الأمن الوطني", icon: "ShieldCheck" },
+  { name: "الدرك الملكي", icon: "Shield" },
+  { name: "الوقاية المدنية", icon: "LifeBuoy" },
+  { name: "إدارة الجمارك والضرائب غير المباشرة", icon: "Landmark" },
+  { name: "المكتب الوطني للسكك الحديدية", icon: "TrainTrack" },
+  { name: "المكتب الوطني للكهرباء والماء الصالح للشرب", icon: "Zap" },
+  { name: "الوكالة الوطنية للمحافظة العقارية", icon: "FileText" },
+  { name: "المكتب الشريف للفوسفاط", icon: "Factory" },
 ];
 
 function formatTimeAgo(timestamp: any) {
@@ -580,4 +595,14 @@ export function getCategories() {
 
 export function getCategoryById(id: string) {
     return categories.find((cat) => cat.id === id);
+}
+
+export function getOrganizers() {
+  return organizers;
+}
+
+export function getOrganizerIcon(organizerName?: string): string {
+    if (!organizerName) return 'Landmark';
+    const organizer = organizers.find(o => o.name === organizerName);
+    return organizer ? organizer.icon : 'Landmark';
 }

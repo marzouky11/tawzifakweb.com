@@ -65,6 +65,11 @@ export interface Competition {
   createdAt: Timestamp;
 }
 
+export interface Organizer {
+  name: string;
+  icon: string;
+}
+
 export interface User {
   id:string;
   name: string;

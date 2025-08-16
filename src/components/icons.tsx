@@ -55,6 +55,11 @@ import {
   Handshake,
   Users,
   Newspaper,
+  ShieldCheck,
+  LifeBuoy,
+  Landmark,
+  TrainTrack,
+  FileText
 } from 'lucide-react';
 import type { CSSProperties } from 'react';
 
@@ -113,6 +118,11 @@ const iconMap: { [key: string]: LucideIcon } = {
   Handshake,
   Users,
   Newspaper,
+  ShieldCheck,
+  LifeBuoy,
+  Landmark,
+  TrainTrack,
+  FileText,
   Default: Briefcase,
 };
 

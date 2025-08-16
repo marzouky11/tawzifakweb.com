@@ -1,6 +1,6 @@
 
 import { notFound } from 'next/navigation';
-import { getCompetitionById } from '@/lib/data';
+import { getCompetitionById, getOrganizerIcon } from '@/lib/data';
 import { AppLayout } from '@/components/layout/app-layout';
 import type { Metadata } from 'next';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
@@ -18,9 +18,11 @@ import {
   ClipboardList,
   Info,
   MapPin,
+  Landmark
 } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import Link from 'next/link';
+import { CategoryIcon } from '@/components/icons';
 
 interface CompetitionDetailPageProps {
   params: { id: string };
@@ -127,6 +129,8 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
         notFound();
     }
     
+    const organizerIcon = getOrganizerIcon(competition.organizer);
+
     return (
         <AppLayout>
             <MobilePageHeader title="تفاصيل المباراة">
@@ -141,21 +145,26 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                 <div className="space-y-6">
                     <Card className="overflow-hidden shadow-lg border-t-4 border-blue-500">
                         <CardHeader className="bg-muted/30 p-4 sm:p-6">
-                            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
-                                {competition.title || 'عنوان غير متوفر'}
-                            </h1>
-                             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground mt-2 text-sm">
-                                <div className="flex items-center gap-1.5">
-                                    <Building className="h-4 w-4 text-blue-500" />
-                                    <span>الجهة المنظمة: {competition.organizer}</span>
-                                </div>
-                                <div className="flex items-center gap-1.5">
-                                    <MapPin className="h-4 w-4 text-blue-500" />
-                                    <span>الموقع: {competition.location}</span>
-                                </div>
-                                <div className="flex items-center gap-1.5">
-                                    <CalendarDays className="h-4 w-4 text-blue-500" />
-                                    <span>نُشرت: {competition.postedAt}</span>
+                            <div className="flex items-start gap-4">
+                                <CategoryIcon name={organizerIcon} className="w-10 h-10 text-blue-500 flex-shrink-0 mt-1" />
+                                <div className='flex-grow'>
+                                    <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+                                        {competition.title || 'عنوان غير متوفر'}
+                                    </h1>
+                                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground mt-2 text-sm">
+                                        <div className="flex items-center gap-1.5">
+                                            <Building className="h-4 w-4 text-blue-500" />
+                                            <span>الجهة المنظمة: {competition.organizer}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5">
+                                            <MapPin className="h-4 w-4 text-blue-500" />
+                                            <span>الموقع: {competition.location}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5">
+                                            <CalendarDays className="h-4 w-4 text-blue-500" />
+                                            <span>نُشرت: {competition.postedAt}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </CardHeader>
