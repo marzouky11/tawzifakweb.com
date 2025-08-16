@@ -1,4 +1,5 @@
 
+
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { AppLayout } from '@/components/layout/app-layout';
@@ -60,7 +61,7 @@ function JobFiltersSkeleton() {
 function JobSectionSkeleton() {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {Array.from({ length: 6 }).map((_, i) => (
+            {Array.from({ length: 8 }).map((_, i) => (
                 <JobCard key={i} job={null} />
             ))}
         </div>
@@ -220,11 +221,9 @@ export default function HomePage() {
 
           <Separator />
           
-          <section>
-            <Suspense>
+          <Suspense>
               <CompetitionsSection />
-            </Suspense>
-          </section>
+          </Suspense>
           
           <Separator />
 

@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -18,19 +19,18 @@ export function CompetitionFilters({ className }: CompetitionFiltersProps) {
   const pathname = usePathname();
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [location, setLocation] = useState('');
 
   useEffect(() => {
     setSearchQuery(searchParams.get('q') || '');
-    setLocation(searchParams.get('location') || '');
   }, [searchParams]);
 
   const handleFilter = () => {
     const params = new URLSearchParams();
-    
-    if (searchQuery) params.set('q', searchQuery);
-    if (location) params.set('location', location);
-    
+    if (searchQuery) {
+      params.set('q', searchQuery);
+    } else {
+      params.delete('q');
+    }
     router.push(`${pathname}?${params.toString()}`);
   };
   
@@ -41,11 +41,10 @@ export function CompetitionFilters({ className }: CompetitionFiltersProps) {
 
   const resetFilters = () => {
     setSearchQuery('');
-    setLocation('');
     router.push(pathname);
   }
 
-  const hasFilters = searchQuery || location;
+  const hasFilters = !!searchQuery;
 
   return (
     <div className={cn(`w-full p-4 bg-muted/50 rounded-lg border`, className)}>
@@ -54,13 +53,7 @@ export function CompetitionFilters({ className }: CompetitionFiltersProps) {
           placeholder="ابحث عن مباراة، جهة، أو كلمة مفتاحية..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="md:col-span-1 bg-background"
-        />
-        <Input
-          placeholder="ابحث بالموقع أو المدينة..."
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          className="md:col-span-1 bg-background"
+          className="md:col-span-2 bg-background"
         />
         <div className="flex gap-2">
             <Button type="submit" className="flex-grow">

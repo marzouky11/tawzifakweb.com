@@ -30,7 +30,6 @@ function CompetitionsListSkeleton() {
 async function CompetitionsList({ searchParams }: { searchParams?: { [key: string]: string | string[] | undefined } }) {
   const competitions = await getCompetitions({
       searchQuery: typeof searchParams?.q === 'string' ? searchParams.q : undefined,
-      location: typeof searchParams?.location === 'string' ? searchParams.location : undefined,
   });
 
   if (competitions.length > 0) {
