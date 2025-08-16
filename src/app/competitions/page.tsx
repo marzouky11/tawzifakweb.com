@@ -1,4 +1,5 @@
 
+
 import type { Metadata } from 'next';
 import { AppLayout } from '@/components/layout/app-layout';
 import { getCompetitions } from '@/lib/data';
@@ -8,6 +9,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { CompetitionCard } from '@/components/competition-card';
+import { CompetitionFilters } from '@/components/competition-filters';
+
 
 export const metadata: Metadata = {
   title: 'المباريات العمومية - آخر إعلانات التوظيف الحكومي',
@@ -24,8 +27,11 @@ function CompetitionsListSkeleton() {
   );
 }
 
-async function CompetitionsList() {
-  const competitions = await getCompetitions();
+async function CompetitionsList({ searchParams }: { searchParams?: { [key: string]: string | string[] | undefined } }) {
+  const competitions = await getCompetitions({
+      searchQuery: typeof searchParams?.q === 'string' ? searchParams.q : undefined,
+      location: typeof searchParams?.location === 'string' ? searchParams.location : undefined,
+  });
 
   if (competitions.length > 0) {
     return (
@@ -34,10 +40,14 @@ async function CompetitionsList() {
       </div>
     );
   }
-  return <p className="col-span-full text-center text-muted-foreground py-10">لا توجد مباريات عمومية متاحة حاليًا.</p>;
+  return <p className="col-span-full text-center text-muted-foreground py-10">لا توجد مباريات تطابق بحثك.</p>;
 }
 
-export default async function CompetitionsPage() {
+export default async function CompetitionsPage({
+  searchParams,
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
 
   return (
     <AppLayout>
@@ -49,9 +59,10 @@ export default async function CompetitionsPage() {
         title="المباريات العمومية"
         description="تصفح أحدث إعلانات التوظيف والمباريات في القطاع العام."
       />
-      <div className="container py-6">
+      <div className="container py-6 space-y-6">
+        <CompetitionFilters />
         <Suspense fallback={<CompetitionsListSkeleton />}>
-          <CompetitionsList />
+          <CompetitionsList searchParams={searchParams} />
         </Suspense>
       </div>
     </AppLayout>

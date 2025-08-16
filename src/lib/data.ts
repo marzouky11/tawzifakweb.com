@@ -494,13 +494,18 @@ export async function postCompetition(competitionData: Omit<Competition, 'id' | 
   }
 }
 
-export async function getCompetitions(options: { count?: number } = {}): Promise<Competition[]> {
+export async function getCompetitions(options: { 
+  count?: number;
+  searchQuery?: string;
+  location?: string;
+} = {}): Promise<Competition[]> {
   try {
+    const { count, searchQuery, location } = options;
     const competitionsRef = collection(db, 'competitions');
-    const q = query(competitionsRef, orderBy('createdAt', 'desc'), limit(options.count || 100));
+    const q = query(competitionsRef, orderBy('createdAt', 'desc'));
     const querySnapshot = await getDocs(q);
 
-    return querySnapshot.docs.map(doc => {
+    let competitions = querySnapshot.docs.map(doc => {
       const data = doc.data();
       return {
         id: doc.id,
@@ -508,6 +513,37 @@ export async function getCompetitions(options: { count?: number } = {}): Promise
         postedAt: formatTimeAgo(data.createdAt),
       } as Competition;
     });
+
+    if (searchQuery || location) {
+        const searchList = competitions;
+        let results = searchList;
+
+        if (searchQuery) {
+            const fuse = new Fuse(results, {
+                keys: ['title', 'organizer', 'description'],
+                includeScore: true,
+                threshold: 0.4,
+            });
+            results = fuse.search(searchQuery).map(result => result.item);
+        }
+
+        if (location) {
+            const fuse = new Fuse(results, {
+                keys: ['location'],
+                includeScore: true,
+                threshold: 0.3,
+            });
+            results = fuse.search(location).map(result => result.item);
+        }
+
+        competitions = results;
+    }
+
+    if (count) {
+      return competitions.slice(0, count);
+    }
+    
+    return competitions;
   } catch (error) {
     console.error("Error fetching competitions: ", error);
     return [];
