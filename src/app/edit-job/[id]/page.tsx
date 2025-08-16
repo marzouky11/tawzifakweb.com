@@ -12,7 +12,6 @@ import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import type { Job } from '@/lib/types';
 import { AnimatePresence } from 'framer-motion';
-import { notFound } from 'next/navigation';
 
 export default function EditJobPage() {
   const { user, loading: authLoading } = useAuth();
@@ -34,7 +33,8 @@ export default function EditJobPage() {
         
         // Ownership check
         if (!jobData || jobData.userId !== user?.uid) {
-          notFound();
+          // Instead of notFound(), we redirect on the client side.
+          router.push('/profile/my-ads');
           return;
         }
 
@@ -46,7 +46,7 @@ export default function EditJobPage() {
     if (user) {
         fetchJob();
     }
-  }, [params.id, user]);
+  }, [params.id, user, router]);
 
   const categories = getCategories();
 
