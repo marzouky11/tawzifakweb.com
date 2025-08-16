@@ -83,11 +83,20 @@ async function CompetitionsSection() {
     if (competitions.length === 0) return null;
 
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {competitions.map((comp) => (
-          <CompetitionCard key={comp.id} competition={comp} />
-        ))}
-      </div>
+      <>
+        <SectionHeader 
+          icon={ShieldCheck}
+          title="المباريات العمومية"
+          description="تصفح آخر مباريات التوظيف في القطاع العام."
+          href="/competitions"
+          iconColor="#3b82f6"
+        />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {competitions.map((comp) => (
+            <CompetitionCard key={comp.id} competition={comp} />
+          ))}
+        </div>
+      </>
     );
 }
 
@@ -210,9 +219,11 @@ export default function HomePage() {
 
           <Separator />
           
-          <Suspense>
-            <CompetitionsSection />
-          </Suspense>
+          <section>
+            <Suspense>
+              <CompetitionsSection />
+            </Suspense>
+          </section>
           
           <Separator />
 

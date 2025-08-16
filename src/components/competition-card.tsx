@@ -43,9 +43,9 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
   
   return (
     <Card 
-        className="flex flex-col rounded-lg bg-card shadow-md h-full transition-all hover:shadow-xl hover:border-blue-500/50 w-full overflow-hidden border-2 border-dashed border-blue-500/30"
+        className="flex flex-col rounded-lg bg-card shadow-md h-full transition-all hover:shadow-xl hover:border-blue-500/50 w-full overflow-hidden border-t-4 border-blue-500"
     >
-       <CardHeader className="p-4 bg-blue-50 dark:bg-blue-900/20">
+       <CardHeader className="p-4">
         <div className="flex items-center gap-3">
              <ShieldCheck className="w-8 h-8 text-blue-500 flex-shrink-0" />
              <h3 className="font-bold text-base leading-tight text-blue-800 dark:text-blue-300 line-clamp-2">
@@ -75,7 +75,7 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
       </CardContent>
 
       <CardFooter className="p-4 pt-0 mt-auto flex items-center justify-end">
-        <Button asChild size="sm" className="text-sm rounded-lg" variant="link">
+        <Button asChild size="sm" className="text-sm rounded-lg bg-blue-500 text-primary-foreground hover:bg-blue-600">
           <Link href={detailUrl}>عرض التفاصيل</Link>
         </Button>
       </CardFooter>

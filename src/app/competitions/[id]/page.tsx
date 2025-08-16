@@ -16,7 +16,8 @@ import {
   Link as LinkIcon,
   ShieldCheck,
   ClipboardList,
-  Info
+  Info,
+  MapPin,
 } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import Link from 'next/link';
@@ -86,17 +87,38 @@ const InfoItem = ({ icon: Icon, label, value, href, isDate }: { icon: React.Elem
 
 
 const DetailSection = ({ icon: Icon, title, children }: { icon: React.ElementType, title: string, children: React.ReactNode }) => (
-    <div>
-        <h3 className="text-xl font-bold flex items-center gap-2 mb-3 text-primary">
+    <div className="space-y-3">
+        <h3 className="text-xl font-bold flex items-center gap-2 mb-3 text-primary border-r-4 border-primary pr-2">
             <Icon className="h-5 w-5" />
             {title}
         </h3>
-        <div className="prose prose-lg dark:prose-invert max-w-none text-foreground">
+        <div className="prose prose-lg dark:prose-invert max-w-none text-foreground bg-muted/30 p-4 rounded-lg">
             {children}
         </div>
     </div>
 );
 
+const FormattedText = ({ text }: { text?: string }) => {
+    if (!text) return null;
+
+    const contentBlocks = text.split('\n').map(paragraph => paragraph.trim()).filter(p => p.length > 0);
+
+    return (
+        <div className="prose prose-lg dark:prose-invert max-w-none text-foreground">
+            {contentBlocks.map((block, index) => {
+                if (block.startsWith('- ') || block.startsWith('* ')) {
+                    const listItems = block.split('\n').filter(i => i.trim()).map(item => item.trim().replace(/^[-*]\s*/, ''));
+                    return (
+                        <ul key={index} className="list-disc pr-5 space-y-2 mb-4">
+                            {listItems.map((item, i) => <li key={i}>{item}</li>)}
+                        </ul>
+                    );
+                }
+                return <p key={index} className="mb-4 last:mb-0">{block}</p>;
+            })}
+        </div>
+    );
+}
 
 export default async function CompetitionDetailPage({ params }: CompetitionDetailPageProps) {
     const competition = await getCompetitionById(params.id);
@@ -122,18 +144,22 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                             <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                                 {competition.title || 'عنوان غير متوفر'}
                             </h1>
-                             <div className="flex flex-wrap items-center gap-4 text-muted-foreground mt-2 text-sm">
+                             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground mt-2 text-sm">
                                 <div className="flex items-center gap-1.5">
-                                    <Building className="h-4 w-4" />
+                                    <Building className="h-4 w-4 text-blue-500" />
                                     <span>الجهة المنظمة: {competition.organizer}</span>
                                 </div>
                                 <div className="flex items-center gap-1.5">
-                                    <CalendarDays className="h-4 w-4" />
+                                    <MapPin className="h-4 w-4 text-blue-500" />
+                                    <span>الموقع: {competition.location}</span>
+                                </div>
+                                <div className="flex items-center gap-1.5">
+                                    <CalendarDays className="h-4 w-4 text-blue-500" />
                                     <span>نُشرت: {competition.postedAt}</span>
                                 </div>
                             </div>
                         </CardHeader>
-                        <CardContent className="p-4 sm:p-6 space-y-6">
+                        <CardContent className="p-4 sm:p-6 space-y-8">
                              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                                 <InfoItem icon={Briefcase} label="نوع المباراة" value={competition.competitionType} />
                                 <InfoItem icon={Users2} label="عدد المناصب" value={competition.positionsAvailable} />
@@ -143,30 +169,40 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
 
                             {competition.description && (
                                <DetailSection icon={Info} title="وصف تفصيلي">
-                                   <p>{competition.description}</p>
+                                   <FormattedText text={competition.description} />
                                </DetailSection>
                             )}
 
                             {competition.requirements && (
                                <DetailSection icon={ClipboardList} title="الشروط المطلوبة">
-                                   <p>{competition.requirements}</p>
+                                   <FormattedText text={competition.requirements} />
                                </DetailSection>
                             )}
 
                              {competition.documentsNeeded && (
                                <DetailSection icon={FileText} title="الوثائق المطلوبة">
-                                    <p>{competition.documentsNeeded}</p>
+                                    <FormattedText text={competition.documentsNeeded} />
                                </DetailSection>
                             )}
                             
-                            {competition.fileUrl && (
-                                <div className="pt-4 text-center">
-                                    <Button asChild>
-                                        <a href={competition.fileUrl} target="_blank" rel="noopener noreferrer">
-                                            <FileText className="ml-2 h-4 w-4" />
-                                            تحميل الملف المرفق
-                                        </a>
-                                    </Button>
+                            {(competition.fileUrl || competition.officialLink) && (
+                                <div className="pt-4 text-center flex flex-col sm:flex-row justify-center gap-4">
+                                    {competition.fileUrl && (
+                                        <Button asChild size="lg" variant="outline">
+                                            <a href={competition.fileUrl} target="_blank" rel="noopener noreferrer">
+                                                <FileText className="ml-2 h-4 w-4" />
+                                                تحميل إعلان المباراة (PDF)
+                                            </a>
+                                        </Button>
+                                    )}
+                                    {competition.officialLink && (
+                                        <Button asChild size="lg">
+                                            <a href={competition.officialLink} target="_blank" rel="noopener noreferrer">
+                                                <LinkIcon className="ml-2 h-4 w-4" />
+                                                الذهاب إلى رابط التقديم
+                                            </a>
+                                        </Button>
+                                    )}
                                 </div>
                             )}
 
