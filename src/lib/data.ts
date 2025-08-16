@@ -588,6 +588,14 @@ export async function getCompetitionById(id: string): Promise<Competition | null
   }
 }
 
+export async function deleteCompetition(competitionId: string) {
+    try {
+        await deleteDoc(doc(db, 'competitions', competitionId));
+    } catch (e) {
+        console.error("Error deleting competition: ", e);
+        throw new Error("Failed to delete competition");
+    }
+}
 
 export function getCategories() {
   return categories;

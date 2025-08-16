@@ -74,9 +74,9 @@ export default function SelectPostTypePage() {
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <Link href="/post-job?type=seeking_worker" onClick={(e) => handleLinkClick(e, 'seeking_worker')} className="lg:col-span-1">
-            <Card className="p-6 text-center hover:shadow-xl hover:border-accent transition-all duration-300 cursor-pointer h-full flex flex-col justify-center items-center">
-              <Briefcase className="h-16 w-16 text-accent mb-4" />
-              <h3 className="text-xl font-semibold">أبحث عن موظف/عامل</h3>
+            <Card className="p-6 text-center hover:shadow-xl hover:border-[#0D47A1] transition-all duration-300 cursor-pointer h-full flex flex-col justify-center items-center bg-[#0D47A1]/5 dark:bg-[#0D47A1]/20">
+              <Briefcase className="h-16 w-16 text-[#0D47A1] mb-4" />
+              <h3 className="text-xl font-semibold text-[#0D47A1]">أبحث عن موظف/عامل</h3>
               <p className="text-muted-foreground mt-2">
                 انشر فرصة عمل لديك واعثر على أفضل المرشحين لمشروعك أو شركتك.
               </p>
@@ -84,26 +84,30 @@ export default function SelectPostTypePage() {
           </Link>
 
           <Link href="/post-job?type=seeking_job" onClick={(e) => handleLinkClick(e, 'seeking_job')} className="lg:col-span-1">
-            <Card className="p-6 text-center hover:shadow-xl hover:border-destructive transition-all duration-300 cursor-pointer h-full flex flex-col justify-center items-center">
-              <Users className="h-16 w-16 text-destructive mb-4" />
-              <h3 className="text-xl font-semibold">أبحث عن عمل</h3>
+            <Card className="p-6 text-center hover:shadow-xl hover:border-[#424242] transition-all duration-300 cursor-pointer h-full flex flex-col justify-center items-center bg-[#424242]/5 dark:bg-[#424242]/20">
+              <Users className="h-16 w-16 text-[#424242] mb-4" />
+              <h3 className="text-xl font-semibold text-[#424242]">أبحث عن عمل</h3>
               <p className="text-muted-foreground mt-2">
                 أنشئ ملفك الشخصي كباحث عن عمل واعرض مهاراتك وخبراتك لأصحاب العمل.
               </p>
             </Card>
           </Link>
           
-          {userData?.isAdmin && (
-            <Link href="/post-competition" onClick={handleCompetitionClick} className="lg:col-span-1">
-                <Card className="p-6 text-center hover:shadow-xl hover:border-blue-500 transition-all duration-300 cursor-pointer h-full flex flex-col justify-center items-center bg-blue-50 dark:bg-blue-900/20">
-                  <ShieldCheck className="h-16 w-16 text-blue-500 mb-4" />
-                  <h3 className="text-xl font-semibold text-blue-800 dark:text-blue-300">نشر مباراة عمومية</h3>
+          <Link href="/post-competition" onClick={handleCompetitionClick} className="lg:col-span-1">
+            <Card className="p-6 text-center hover:shadow-xl hover:border-[#B71C1C] transition-all duration-300 cursor-pointer h-full flex flex-col justify-center items-center bg-[#B71C1C]/5 dark:bg-[#B71C1C]/20">
+              <ShieldCheck className="h-16 w-16 text-[#B71C1C] mb-4" />
+              <h3 className="text-xl font-semibold text-[#B71C1C]">نشر مباراة عمومية</h3>
+              {userData?.isAdmin ? (
                   <p className="text-muted-foreground mt-2">
                     (خاص بالمشرفين) انشر إعلانات المباريات والوظائف الحكومية.
                   </p>
-                </Card>
-            </Link>
-          )}
+              ) : (
+                 <p className="text-muted-foreground mt-2">
+                    هذه الميزة متاحة للمشرفين فقط.
+                  </p>
+              )}
+            </Card>
+          </Link>
 
         </div>
       </div>

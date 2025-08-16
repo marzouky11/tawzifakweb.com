@@ -18,14 +18,15 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Loader2, Edit, Trash2, FileText, Frown } from 'lucide-react';
-import { getJobsByUserId, deleteAd, getJobs } from '@/lib/data';
-import type { Job } from '@/lib/types';
+import { getJobsByUserId, deleteAd, getJobs, getCompetitions, deleteCompetition } from '@/lib/data';
+import type { Job, Competition } from '@/lib/types';
 import { JobCard } from '@/components/job-card';
+import { CompetitionCard } from '@/components/competition-card';
 import { useToast } from '@/hooks/use-toast';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Card, CardContent } from '@/components/ui/card';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 function AdGrid({ ads, onAdDelete }: { ads: Job[], onAdDelete: (adId: string) => void }) {
     if (ads.length === 0) {
@@ -60,13 +61,44 @@ function AdGrid({ ads, onAdDelete }: { ads: Job[], onAdDelete: (adId: string) =>
     )
 }
 
+function CompetitionGrid({ competitions, onAdDelete }: { competitions: Competition[], onAdDelete: (adId: string) => void }) {
+    if (competitions.length === 0) {
+        return (
+             <div className="text-center text-muted-foreground p-8 flex flex-col items-center gap-4">
+                <Frown className="w-16 h-16 text-muted-foreground/50" />
+                <p>لا توجد إعلانات في هذا القسم.</p>
+            </div>
+        )
+    }
+
+    return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {competitions.map(comp => (
+                <div key={comp.id} className="flex flex-col gap-2">
+                    <CompetitionCard competition={comp} />
+                    <div className="flex gap-2">
+                        {/* No edit for competitions for now */}
+                        <Button variant="destructive" className="flex-1" onClick={() => onAdDelete(comp.id)}>
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            حذف
+                        </Button>
+                    </div>
+                </div>
+            ))}
+        </div>
+    )
+}
+
 export default function MyAdsPage() {
   const router = useRouter();
   const { toast } = useToast();
   const { user, userData, loading: authLoading } = useAuth();
+  
   const [allAds, setAllAds] = useState<Job[]>([]);
+  const [competitions, setCompetitions] = useState<Competition[]>([]);
+  
   const [adsLoading, setAdsLoading] = useState(true);
-  const [adToDelete, setAdToDelete] = useState<string | null>(null);
+  const [adToDelete, setAdToDelete] = useState<{ id: string, type: 'ad' | 'competition' } | null>(null);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -78,24 +110,33 @@ export default function MyAdsPage() {
     if (user) {
         const fetchAds = async () => {
             setAdsLoading(true);
-            let ads: Job[] = [];
             if (userData?.isAdmin) {
-                ads = await getJobs(); // Admin fetches all ads
+                const [jobs, comps] = await Promise.all([
+                    getJobs(),
+                    getCompetitions()
+                ]);
+                setAllAds(jobs);
+                setCompetitions(comps);
             } else {
-                ads = await getJobsByUserId(user.uid);
+                const userJobs = await getJobsByUserId(user.uid);
+                setAllAds(userJobs);
             }
-            setAllAds(ads);
             setAdsLoading(false);
         };
         fetchAds();
     }
   }, [user, userData?.isAdmin]);
 
-  const handleDeleteAd = async () => {
+  const handleDelete = async () => {
     if (!adToDelete) return;
     try {
-        await deleteAd(adToDelete);
-        setAllAds(prevAds => prevAds.filter(ad => ad.id !== adToDelete));
+        if(adToDelete.type === 'ad') {
+            await deleteAd(adToDelete.id);
+            setAllAds(prevAds => prevAds.filter(ad => ad.id !== adToDelete.id));
+        } else {
+            await deleteCompetition(adToDelete.id);
+            setCompetitions(prevComps => prevComps.filter(comp => comp.id !== adToDelete.id));
+        }
         toast({ title: "تم حذف الإعلان بنجاح" });
     } catch (error) {
         toast({ variant: 'destructive', title: 'فشل حذف الإعلان' });
@@ -110,6 +151,11 @@ export default function MyAdsPage() {
     const myPersonalAds = userData?.isAdmin ? [] : allAds;
     return { jobOffers, jobRequests, myPersonalAds };
   }, [allAds, userData?.isAdmin]);
+  
+  const handleDeleteTrigger = (id: string, type: 'ad' | 'competition') => {
+      setAdToDelete({ id, type });
+  };
+
 
   const renderContent = () => {
     if (adsLoading) {
@@ -123,22 +169,26 @@ export default function MyAdsPage() {
     if(userData?.isAdmin) {
         return (
             <Tabs defaultValue="offers" className="w-full">
-                <TabsList className="grid w-full grid-cols-2 mb-6">
+                <TabsList className="grid w-full grid-cols-3 mb-6">
                     <TabsTrigger value="offers">عروض العمل ({jobOffers.length})</TabsTrigger>
                     <TabsTrigger value="requests">طلبات العمل ({jobRequests.length})</TabsTrigger>
+                    <TabsTrigger value="competitions">المباريات ({competitions.length})</TabsTrigger>
                 </TabsList>
                 <TabsContent value="offers">
-                    <AdGrid ads={jobOffers} onAdDelete={setAdToDelete} />
+                    <AdGrid ads={jobOffers} onAdDelete={(id) => handleDeleteTrigger(id, 'ad')} />
                 </TabsContent>
                 <TabsContent value="requests">
-                    <AdGrid ads={jobRequests} onAdDelete={setAdToDelete} />
+                    <AdGrid ads={jobRequests} onAdDelete={(id) => handleDeleteTrigger(id, 'ad')} />
+                </TabsContent>
+                <TabsContent value="competitions">
+                    <CompetitionGrid competitions={competitions} onAdDelete={(id) => handleDeleteTrigger(id, 'competition')} />
                 </TabsContent>
             </Tabs>
         )
     }
 
     if (myPersonalAds.length > 0) {
-        return <AdGrid ads={myPersonalAds} onAdDelete={setAdToDelete} />;
+        return <AdGrid ads={myPersonalAds} onAdDelete={(id) => handleDeleteTrigger(id, 'ad')} />;
     }
 
     return (
@@ -187,7 +237,7 @@ export default function MyAdsPage() {
             </AlertDialogHeader>
             <AlertDialogFooter>
             <AlertDialogCancel onClick={() => setAdToDelete(null)}>إلغاء</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteAd}>تأكيد الحذف</AlertDialogAction>
+            <AlertDialogAction onClick={handleDelete}>تأكيد الحذف</AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
