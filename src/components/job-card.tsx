@@ -25,10 +25,10 @@ const workTypeTranslations: { [key in WorkType]: string } = {
 const InfoBadge = ({ icon: Icon, text, className }: { icon: React.ElementType, text: string | undefined, className?: string }) => {
   if (!text) return null;
   return (
-    <Badge variant="secondary" className={cn("flex-shrink-0 font-normal text-xs py-1", className)}>
-      <Icon className="h-4 w-4 ml-1" />
-      <span className="truncate">{text}</span>
-    </Badge>
+    <div className={cn("flex items-center gap-1.5 text-xs text-muted-foreground", className)}>
+      <Icon className="h-3.5 w-3.5" />
+      <span className="truncate font-medium">{text}</span>
+    </div>
   );
 };
 
@@ -55,83 +55,62 @@ export function JobCard({ job }: JobCardProps) {
   const detailUrl = isSeekingJob ? `/workers/${job.id}` : `/jobs/${job.id}`;
   
   const categoryName = category?.name || job.categoryName;
-  const categoryColor = category?.color || (isSeekingJob ? 'hsl(var(--destructive))' : 'hsl(var(--primary))');
+  
+  // Section-specific colors
+  const sectionColors = {
+    seeking_worker: '#0D47A1', // Dark Blue
+    seeking_job: '#424242',    // Dark Gray
+  };
+  const categoryColor = sectionColors[job.postType];
+
   const categoryIcon = category?.iconName || (isSeekingJob ? 'Users' : 'Briefcase');
 
-  const workTypeText = job.workType ? workTypeTranslations[job.workType] : '';
   const salaryText = !isSeekingJob ? (job.salary || 'عند الطلب') : '';
   
   return (
     <Card 
-        className={cn(
-            "flex flex-col rounded-lg bg-card shadow-sm h-full transition-shadow hover:shadow-lg w-full overflow-hidden",
-            isSeekingJob ? "border border-dashed" : "border-t-4"
-        )}
+        className="flex flex-col rounded-lg bg-card shadow-md h-full transition-all hover:shadow-xl w-full overflow-hidden border-t-4"
         style={{ borderColor: categoryColor }}
     >
        <CardHeader className="p-4">
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex-grow min-w-0">
-             <div className="flex items-center gap-2 mb-2">
-                 <CategoryIcon name={categoryIcon} className="w-5 h-5 flex-shrink-0" style={{ color: categoryColor }} />
-                 <h3 className="font-bold text-base leading-tight text-foreground line-clamp-2">
-                    <Link href={detailUrl} className="hover:underline">
-                        {job.title}
-                    </Link>
-                </h3>
+        <div className="flex items-center gap-3">
+             <div className="w-8 h-8 rounded-md flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: `${categoryColor}1A` }}>
+                <CategoryIcon name={categoryIcon} className="w-5 h-5" style={{ color: categoryColor }} />
             </div>
-             <p className="text-sm font-medium mr-7 truncate" style={{ color: categoryColor }}>
-                {categoryName}
-              </p>
-          </div>
+             <h3 className="font-bold text-base leading-tight line-clamp-2" style={{color: categoryColor}}>
+                <Link href={detailUrl} className="hover:underline">
+                    {job.title}
+                </Link>
+            </h3>
         </div>
       </CardHeader>
       
-      <Separator />
-
       <CardContent className="p-4 flex-grow space-y-3">
-        <div className="flex flex-wrap items-center gap-2">
-            {isSeekingJob && (
-                <InfoBadge
-                    icon={UserIcon}
-                    text={job.ownerName}
-                    className="bg-purple-100/60 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300"
-                />
-            )}
-            <InfoBadge
+        <InfoBadge
+            icon={isSeekingJob ? UserIcon : Briefcase}
+            text={isSeekingJob ? job.ownerName : categoryName}
+        />
+        <div className="flex items-center justify-between gap-2">
+             <InfoBadge
                 icon={MapPin}
                 text={`${job.country}, ${job.city}`}
-                className="bg-red-100/60 text-red-700 dark:bg-red-900/40 dark:text-red-300"
             />
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
-            {!isSeekingJob && workTypeText && (
-                 <InfoBadge 
-                    icon={Clock} 
-                    text={workTypeText} 
-                    className="bg-blue-100/60 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300"
-                />
-            )}
             {salaryText && (
                 <InfoBadge 
                     icon={Wallet} 
                     text={salaryText} 
-                    className="bg-green-100/60 text-green-700 dark:bg-green-900/40 dark:text-green-300"
                 />
             )}
         </div>
       </CardContent>
 
       <CardFooter className="p-4 pt-0 mt-auto flex items-center justify-between">
-         <div className="flex items-center gap-1 text-xs text-muted-foreground">
-            <CalendarDays className="h-3.5 w-3.5" />
-            <span>{job.postedAt}</span>
-        </div>
-        <Button asChild size="sm" className="text-sm rounded-lg" variant="secondary">
+         <span className="text-xs text-muted-foreground">{job.postedAt}</span>
+        <Button asChild size="sm" className="text-sm rounded-lg" style={{ backgroundColor: categoryColor, color: 'hsl(var(--primary-foreground))' }} >
           <Link href={detailUrl}>{isSeekingJob ? 'عرض الملف' : 'عرض التفاصيل'}</Link>
         </Button>
       </CardFooter>
     </Card>
   );
 }
+

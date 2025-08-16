@@ -43,15 +43,19 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
 
   const detailUrl = `/competitions/${competition.id}`;
   const organizerIcon = getOrganizerIcon(competition.organizer);
+  const sectionColor = '#B71C1C'; // Dark Red
   
   return (
     <Card 
-        className="flex flex-col rounded-lg bg-card shadow-md h-full transition-all hover:shadow-xl hover:border-blue-500/50 w-full overflow-hidden border-t-4 border-blue-500"
+        className="flex flex-col rounded-lg bg-card shadow-md h-full transition-all hover:shadow-xl w-full overflow-hidden border-t-4"
+        style={{ borderColor: sectionColor }}
     >
        <CardHeader className="p-4">
         <div className="flex items-center gap-3">
-             <CategoryIcon name={organizerIcon} className="w-8 h-8 text-blue-500 flex-shrink-0" />
-             <h3 className="font-bold text-base leading-tight text-blue-800 dark:text-blue-300 line-clamp-2">
+             <div className="w-8 h-8 rounded-md flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: `${sectionColor}1A`}}>
+                <CategoryIcon name={organizerIcon} className="w-5 h-5" style={{ color: sectionColor }} />
+             </div>
+             <h3 className="font-bold text-base leading-tight line-clamp-2" style={{color: sectionColor}}>
                 <Link href={detailUrl} className="hover:underline">
                     {competition.title}
                 </Link>
@@ -79,7 +83,7 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
 
       <CardFooter className="p-4 pt-0 mt-auto flex items-center justify-between">
          <span className="text-xs text-muted-foreground">{competition.postedAt}</span>
-        <Button asChild size="sm" className="text-sm rounded-lg bg-blue-500 text-primary-foreground hover:bg-blue-600">
+        <Button asChild size="sm" className="text-sm rounded-lg" style={{ backgroundColor: sectionColor, color: 'hsl(var(--primary-foreground))' }}>
           <Link href={detailUrl}>عرض التفاصيل</Link>
         </Button>
       </CardFooter>
