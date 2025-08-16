@@ -59,7 +59,7 @@ function JobFiltersSkeleton() {
 
 function JobSectionSkeleton() {
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {Array.from({ length: 6 }).map((_, i) => (
                 <JobCard key={i} job={null} />
             ))}
@@ -68,9 +68,9 @@ function JobSectionSkeleton() {
 }
 
 async function JobOffersSection() {
-    const jobOffers = await getJobs({ postType: 'seeking_worker', count: 6 });
+    const jobOffers = await getJobs({ postType: 'seeking_worker', count: 8 });
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {jobOffers.map(job => (
                 <JobCard key={job.id} job={job} />
             ))}
@@ -79,7 +79,7 @@ async function JobOffersSection() {
 }
 
 async function CompetitionsSection() {
-    const competitions = await getCompetitions({ count: 3 });
+    const competitions = await getCompetitions({ count: 4 });
     if (competitions.length === 0) return null;
 
     return (
@@ -89,9 +89,9 @@ async function CompetitionsSection() {
           title="المباريات العمومية"
           description="تصفح آخر مباريات التوظيف في القطاع العام."
           href="/competitions"
-          iconColor="#3b82f6"
+          iconColor="#B71C1C"
         />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {competitions.map((comp) => (
             <CompetitionCard key={comp.id} competition={comp} />
           ))}
@@ -101,9 +101,9 @@ async function CompetitionsSection() {
 }
 
 async function JobSeekersSection() {
-    const jobSeekers = await getJobs({ postType: 'seeking_job', count: 6 });
+    const jobSeekers = await getJobs({ postType: 'seeking_job', count: 8 });
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {jobSeekers.map(job => (
                 <JobCard key={job.id} job={job} />
             ))}
@@ -211,6 +211,7 @@ export default function HomePage() {
               title="أحدث عروض العمل"
               description="اكتشف آخر فرص الشغل التي أضافها أصحاب العمل في مختلف المجالات."
               href="/jobs"
+              iconColor="#0D47A1"
             />
             <Suspense fallback={<JobSectionSkeleton />}>
               <JobOffersSection />
@@ -234,6 +235,7 @@ export default function HomePage() {
               title="باحثون عن عمل"
               description="تصفح ملفات المرشحين والمهنيين المستعدين للانضمام إلى فريقك."
               href="/workers"
+              iconColor="#424242"
             />
             <Suspense fallback={<JobSectionSkeleton />}>
               <JobSeekersSection />

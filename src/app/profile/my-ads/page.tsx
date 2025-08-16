@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/context/auth-context';
@@ -18,19 +18,53 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Loader2, Edit, Trash2, FileText, Frown } from 'lucide-react';
-import { getJobsByUserId, deleteAd } from '@/lib/data';
+import { getJobsByUserId, deleteAd, getJobs } from '@/lib/data';
 import type { Job } from '@/lib/types';
 import { JobCard } from '@/components/job-card';
 import { useToast } from '@/hooks/use-toast';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Card, CardContent } from '@/components/ui/card';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
+
+function AdGrid({ ads, onAdDelete }: { ads: Job[], onAdDelete: (adId: string) => void }) {
+    if (ads.length === 0) {
+        return (
+             <div className="text-center text-muted-foreground p-8 flex flex-col items-center gap-4">
+                <Frown className="w-16 h-16 text-muted-foreground/50" />
+                <p>لا توجد إعلانات في هذا القسم.</p>
+            </div>
+        )
+    }
+
+    return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {ads.map(ad => (
+                <div key={ad.id} className="flex flex-col gap-2">
+                    <JobCard job={ad} />
+                    <div className="flex gap-2">
+                        <Button asChild variant="outline" className="flex-1">
+                            <Link href={`/edit-job/${ad.id}`}>
+                                <Edit className="mr-2 h-4 w-4" />
+                                تعديل
+                            </Link>
+                        </Button>
+                        <Button variant="destructive" className="flex-1" onClick={() => onAdDelete(ad.id)}>
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            حذف
+                        </Button>
+                    </div>
+                </div>
+            ))}
+        </div>
+    )
+}
 
 export default function MyAdsPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const { user, loading: authLoading } = useAuth();
-  const [myAds, setMyAds] = useState<Job[]>([]);
+  const { user, userData, loading: authLoading } = useAuth();
+  const [allAds, setAllAds] = useState<Job[]>([]);
   const [adsLoading, setAdsLoading] = useState(true);
   const [adToDelete, setAdToDelete] = useState<string | null>(null);
 
@@ -44,19 +78,24 @@ export default function MyAdsPage() {
     if (user) {
         const fetchAds = async () => {
             setAdsLoading(true);
-            const ads = await getJobsByUserId(user.uid);
-            setMyAds(ads);
+            let ads: Job[] = [];
+            if (userData?.isAdmin) {
+                ads = await getJobs(); // Admin fetches all ads
+            } else {
+                ads = await getJobsByUserId(user.uid);
+            }
+            setAllAds(ads);
             setAdsLoading(false);
         };
         fetchAds();
     }
-  }, [user]);
+  }, [user, userData?.isAdmin]);
 
   const handleDeleteAd = async () => {
     if (!adToDelete) return;
     try {
         await deleteAd(adToDelete);
-        setMyAds(prevAds => prevAds.filter(ad => ad.id !== adToDelete));
+        setAllAds(prevAds => prevAds.filter(ad => ad.id !== adToDelete));
         toast({ title: "تم حذف الإعلان بنجاح" });
     } catch (error) {
         toast({ variant: 'destructive', title: 'فشل حذف الإعلان' });
@@ -65,6 +104,54 @@ export default function MyAdsPage() {
     }
   };
 
+  const { jobOffers, jobRequests, myPersonalAds } = useMemo(() => {
+    const jobOffers = allAds.filter(ad => ad.postType === 'seeking_worker');
+    const jobRequests = allAds.filter(ad => ad.postType === 'seeking_job');
+    const myPersonalAds = userData?.isAdmin ? [] : allAds;
+    return { jobOffers, jobRequests, myPersonalAds };
+  }, [allAds, userData?.isAdmin]);
+
+  const renderContent = () => {
+    if (adsLoading) {
+        return (
+            <div className="flex justify-center p-8">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+        );
+    }
+    
+    if(userData?.isAdmin) {
+        return (
+            <Tabs defaultValue="offers" className="w-full">
+                <TabsList className="grid w-full grid-cols-2 mb-6">
+                    <TabsTrigger value="offers">عروض العمل ({jobOffers.length})</TabsTrigger>
+                    <TabsTrigger value="requests">طلبات العمل ({jobRequests.length})</TabsTrigger>
+                </TabsList>
+                <TabsContent value="offers">
+                    <AdGrid ads={jobOffers} onAdDelete={setAdToDelete} />
+                </TabsContent>
+                <TabsContent value="requests">
+                    <AdGrid ads={jobRequests} onAdDelete={setAdToDelete} />
+                </TabsContent>
+            </Tabs>
+        )
+    }
+
+    if (myPersonalAds.length > 0) {
+        return <AdGrid ads={myPersonalAds} onAdDelete={setAdToDelete} />;
+    }
+
+    return (
+        <div className="text-center text-muted-foreground p-8 flex flex-col items-center gap-4">
+            <Frown className="w-16 h-16 text-muted-foreground/50" />
+            <p>لم تقم بنشر أي إعلانات بعد.</p>
+            <Button asChild>
+                <Link href="/post-job/select-type">نشر إعلان جديد</Link>
+            </Button>
+        </div>
+    )
+  }
+
   return (
     <AppLayout>
       <MobilePageHeader title="إعلاناتي">
@@ -72,8 +159,8 @@ export default function MyAdsPage() {
       </MobilePageHeader>
        <DesktopPageHeader
         icon={FileText}
-        title="إعلاناتي"
-        description="هنا يمكنك إدارة جميع إعلاناتك، تعديلها، أو حذفها."
+        title={userData?.isAdmin ? "لوحة تحكم الإعلانات" : "إعلاناتي"}
+        description={userData?.isAdmin ? "إدارة جميع الإعلانات المنشورة في المنصة." : "هنا يمكنك إدارة جميع إعلاناتك، تعديلها، أو حذفها."}
       />
       <div className="flex-grow">
         {authLoading ? (
@@ -81,42 +168,10 @@ export default function MyAdsPage() {
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
           </div>
         ) : (
-          <div className="container mx-auto max-w-5xl px-4 pb-8">
+          <div className="container mx-auto max-w-7xl px-4 pb-8">
             <Card>
                 <CardContent className="pt-6">
-                    {adsLoading ? (
-                        <div className="flex justify-center p-8">
-                            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                        </div>
-                    ) : myAds.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {myAds.map(ad => (
-                                <div key={ad.id} className="flex flex-col gap-2">
-                                    <JobCard job={ad} />
-                                    <div className="flex gap-2">
-                                        <Button asChild variant="outline" className="flex-1">
-                                            <Link href={`/edit-job/${ad.id}`}>
-                                                <Edit className="mr-2 h-4 w-4" />
-                                                تعديل
-                                            </Link>
-                                        </Button>
-                                        <Button variant="destructive" className="flex-1" onClick={() => setAdToDelete(ad.id)}>
-                                            <Trash2 className="mr-2 h-4 w-4" />
-                                            حذف
-                                        </Button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="text-center text-muted-foreground p-8 flex flex-col items-center gap-4">
-                            <Frown className="w-16 h-16 text-muted-foreground/50" />
-                            <p>لم تقم بنشر أي إعلانات بعد.</p>
-                            <Button asChild>
-                                <Link href="/post-job/select-type">نشر إعلان جديد</Link>
-                            </Button>
-                        </div>
-                    )}
+                    {renderContent()}
                 </CardContent>
               </Card>
           </div>
