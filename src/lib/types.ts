@@ -52,18 +52,35 @@ export interface Competition {
   id: string;
   title: string;
   organizer: string;
-  location: string;
   competitionType: string;
   positionsAvailable: number;
-  requirements: string;
-  documentsNeeded: string;
-  deadline: string; // Storing as string for simplicity, can be converted to Date
+  deadline: string; // last day for registration
   officialLink: string;
+  
+  // Optional fields for more detail
   description?: string;
   fileUrl?: string;
+  
+  // New detailed fields
+  location?: string; // Replaces instituteLocation
+  trainingSystem?: string;
+  trainingDuration?: string;
+  accommodation?: string; // e.g., Internat, Externat
+  allowance?: string; // المنحة / الأجر
+  jobProspects?: string; // أفق العمل
+  requirements?: string; // الشروط (can include qualifications, age, etc.)
+  competitionStages?: string; // مراحل المباراة
+  documentsNeeded?: string;
+  
+  // New date fields
+  registrationStartDate?: string;
+  competitionDate?: string;
+  
+  // Timestamps
   postedAt: string;
   createdAt: Timestamp;
 }
+
 
 export interface Organizer {
   name: string;
