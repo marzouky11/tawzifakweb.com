@@ -115,12 +115,14 @@ async function JobSeekersSection() {
 async function ExtraSections() {
     const testimonials = await getTestimonials();
     const jobOffersCount = (await getJobs({ postType: 'seeking_worker', count: 9999 })).length;
+    const competitionsCount = (await getCompetitions({ count: 9999 })).length;
     const jobSeekersCount = (await getJobs({ postType: 'seeking_job', count: 9999 })).length;
 
     return (
         <HomeExtraSections
             testimonials={testimonials}
             jobOffersCount={jobOffersCount}
+            competitionsCount={competitionsCount}
             jobSeekersCount={jobSeekersCount}
         />
     );

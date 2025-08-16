@@ -11,8 +11,8 @@ const navItems = [
   { href: '/', label: 'الرئيسية', icon: Home },
   { href: '/jobs', label: 'الوظائف', icon: Briefcase },
   { href: '/post-job/select-type', label: 'إضافة', icon: Plus, isFab: true },
-  { href: '/workers', label: 'العمال', icon: Users },
   { href: '/competitions', label: 'المباريات', icon: ShieldCheck },
+  { href: '/workers', label: 'العمال', icon: Users },
 ];
 
 function BottomNavContent() {

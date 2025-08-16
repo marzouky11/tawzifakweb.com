@@ -123,6 +123,7 @@ const iconMap: { [key: string]: LucideIcon } = {
   Landmark,
   TrainTrack,
   FileText,
+  Briefcase,
   Default: Briefcase,
 };
 

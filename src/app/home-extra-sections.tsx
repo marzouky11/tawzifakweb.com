@@ -1,8 +1,9 @@
+
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Briefcase, Star, Users, MessageSquare } from 'lucide-react';
+import { Briefcase, Star, Users, MessageSquare, ShieldCheck } from 'lucide-react';
 import { motion, useInView } from "framer-motion";
 import type { Testimonial } from '@/lib/types';
 import { Button } from '@/components/ui/button';
@@ -43,7 +44,34 @@ const CountUp = ({ end, duration = 2 }: { end: number, duration?: number }) => {
 };
 
 // Stats Section Component
-function StatsSection({ stats }: { stats: { jobs: number, seekers: number } }) {
+function StatsSection({ stats }: { stats: { jobs: number, competitions: number, seekers: number } }) {
+  const statItems = [
+    {
+      label: "عرض عمل منشور",
+      count: stats.jobs,
+      icon: Briefcase,
+      colorClass: "text-accent",
+      bgColorClass: "bg-accent/10",
+      borderColorClass: "hover:border-accent"
+    },
+    {
+      label: "مباراة عمومية",
+      count: stats.competitions,
+      icon: ShieldCheck,
+      colorClass: "text-red-600",
+      bgColorClass: "bg-red-600/10",
+      borderColorClass: "hover:border-red-600"
+    },
+    {
+      label: "باحث عن عمل",
+      count: stats.seekers,
+      icon: Users,
+      colorClass: "text-destructive",
+      bgColorClass: "bg-destructive/10",
+      borderColorClass: "hover:border-destructive"
+    }
+  ];
+
   return (
     <section className="relative overflow-hidden py-8 bg-muted/50 rounded-2xl">
       <div  
@@ -61,39 +89,26 @@ function StatsSection({ stats }: { stats: { jobs: number, seekers: number } }) {
           <h2 className="text-3xl font-bold tracking-tight text-foreground">منصتنا بالأرقام</h2>
           <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">نحن ننمو كل يوم بفضل ثقتكم، ونسعى لربط الكفاءات بأفضل الفرص.</p>
         </motion.div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <Card className="p-6 text-center flex flex-col items-center gap-4 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-accent border-transparent border bg-background">
-              <div className="p-4 bg-accent/10 rounded-full text-accent">
-                <Briefcase className="h-10 w-10" />
-              </div>
-              <p className="text-lg font-semibold text-foreground">عرض عمل منشور</p>
-              <div className="text-5xl font-bold text-accent">
-                <CountUp end={stats.jobs} />
-              </div>
-            </Card>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            <Card className="p-6 text-center flex flex-col items-center gap-4 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-destructive border-transparent border bg-background">
-              <div className="p-4 bg-destructive/10 rounded-full text-destructive">
-                <Users className="h-10 w-10" />
-              </div>
-              <p className="text-lg font-semibold text-foreground">باحث عن عمل</p>
-              <div className="text-5xl font-bold text-destructive">
-                <CountUp end={stats.seekers} />
-              </div>
-            </Card>
-          </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          {statItems.map((item, index) => (
+            <motion.div
+              key={item.label}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.5, delay: index * 0.2 }}
+            >
+              <Card className={cn("p-6 text-center flex flex-col items-center gap-4 transition-all duration-300 hover:scale-105 hover:shadow-2xl border-transparent border bg-background", item.borderColorClass)}>
+                <div className={cn("p-4 rounded-full", item.bgColorClass, item.colorClass)}>
+                  <item.icon className="h-10 w-10" />
+                </div>
+                <p className="text-lg font-semibold text-foreground">{item.label}</p>
+                <div className={cn("text-5xl font-bold", item.colorClass)}>
+                  <CountUp end={item.count} />
+                </div>
+              </Card>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
@@ -166,12 +181,13 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
 interface HomeExtraSectionsProps {
   testimonials: Testimonial[];
   jobOffersCount: number;
+  competitionsCount: number;
   jobSeekersCount: number;
 }
 
 // Main component to export
-export function HomeExtraSections({ testimonials, jobOffersCount, jobSeekersCount }: HomeExtraSectionsProps) {
-  const stats = { jobs: jobOffersCount, seekers: jobSeekersCount };
+export function HomeExtraSections({ testimonials, jobOffersCount, competitionsCount, jobSeekersCount }: HomeExtraSectionsProps) {
+  const stats = { jobs: jobOffersCount, competitions: competitionsCount, seekers: jobSeekersCount };
 
   return (  
     <div className="space-y-6">  

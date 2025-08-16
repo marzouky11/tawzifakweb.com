@@ -35,8 +35,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 const navLinks = [
     { href: '/', label: 'الرئيسية' },
     { href: '/jobs', label: 'الوظائف' },
-    { href: '/workers', label: 'العمال' },
     { href: '/competitions', label: 'المباريات' },
+    { href: '/workers', label: 'العمال' },
 ];
 
 export function Header() {
