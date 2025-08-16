@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Briefcase, Plus, Users, Settings } from 'lucide-react';
+import { Home, Briefcase, Plus, Users, Settings, ShieldCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState, useEffect } from 'react';
 
@@ -12,7 +12,7 @@ const navItems = [
   { href: '/jobs', label: 'الوظائف', icon: Briefcase },
   { href: '/post-job/select-type', label: 'إضافة', icon: Plus, isFab: true },
   { href: '/workers', label: 'العمال', icon: Users },
-  { href: '/profile', label: 'الإعدادات', icon: Settings },
+  { href: '/competitions', label: 'المباريات', icon: ShieldCheck },
 ];
 
 function BottomNavContent() {
@@ -21,8 +21,6 @@ function BottomNavContent() {
   return (
     <div className="relative flex items-center justify-around h-16 mx-4 bg-card border rounded-2xl shadow-lg">
       {navItems.map((item, index) => {
-        // More specific paths should be checked first.
-        // /workers/[id] should match /workers, not /
         const isActive = item.href === '/' 
           ? pathname === '/' 
           : pathname.startsWith(item.href);
@@ -72,14 +70,20 @@ function BottomNavContent() {
 
 export function BottomNav() {
   const [isClient, setIsClient] = useState(false);
-
+  const pathname = usePathname();
+  
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   if (!isClient) {
-    return null; // Don't render on the server
+    return null;
   }
+  
+  if (pathname === '/profile') {
+      return null;
+  }
+
 
   return (
     <footer className="fixed bottom-0 left-0 z-40 w-full h-20 bg-transparent md:hidden">

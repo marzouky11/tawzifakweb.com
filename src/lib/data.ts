@@ -2,7 +2,7 @@
 
 import { db } from '@/lib/firebase';
 import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, Query, and, QueryConstraint, QueryFilterConstraint } from 'firebase/firestore';
-import type { Job, Category, PostType, User, WorkType, Testimonial } from './types';
+import type { Job, Category, PostType, User, WorkType, Testimonial, Competition } from './types';
 import Fuse from 'fuse.js';
 
 const categories: Category[] = [
@@ -471,6 +471,73 @@ export async function recordView(adId: string, viewerId: string): Promise<void> 
 }
 
 
+// Functions for Competitions
+export async function postCompetition(competitionData: Omit<Competition, 'id' | 'createdAt' | 'postedAt'>): Promise<{ id: string }> {
+  try {
+    const competitionsCollection = collection(db, 'competitions');
+    const newCompetition: { [key: string]: any } = {
+        ...competitionData,
+        createdAt: serverTimestamp(),
+    };
+    
+    Object.keys(newCompetition).forEach(key => {
+        if (newCompetition[key] === undefined || newCompetition[key] === '') {
+            delete newCompetition[key];
+        }
+    });
+
+    const newDocRef = await addDoc(competitionsCollection, newCompetition);
+    return { id: newDocRef.id };
+  } catch (e) {
+    console.error("Error adding competition: ", e);
+    throw new Error("Failed to post competition");
+  }
+}
+
+export async function getCompetitions(options: { count?: number } = {}): Promise<Competition[]> {
+  try {
+    const competitionsRef = collection(db, 'competitions');
+    const q = query(competitionsRef, orderBy('createdAt', 'desc'), limit(options.count || 100));
+    const querySnapshot = await getDocs(q);
+
+    return querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        postedAt: formatTimeAgo(data.createdAt),
+      } as Competition;
+    });
+  } catch (error) {
+    console.error("Error fetching competitions: ", error);
+    return [];
+  }
+}
+
+
+export async function getCompetitionById(id: string): Promise<Competition | null> {
+  try {
+    const docRef = doc(db, 'competitions', id);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      return { 
+          id: docSnap.id, 
+          ...data,
+          postedAt: formatTimeAgo(data.createdAt),
+     } as Competition;
+    } else {
+      console.log("No such competition document!");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching competition by ID: ", error);
+    return null;
+  }
+}
+
+
 export function getCategories() {
   return categories;
 }
@@ -478,5 +545,3 @@ export function getCategories() {
 export function getCategoryById(id: string) {
     return categories.find((cat) => cat.id === id);
 }
-
-

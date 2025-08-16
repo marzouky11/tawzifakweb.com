@@ -48,8 +48,25 @@ export interface Job {
   howToApply?: string;
 }
 
-export interface User {
+export interface Competition {
   id: string;
+  title: string;
+  organizer: string;
+  location: string;
+  competitionType: string;
+  positionsAvailable: number;
+  requirements: string;
+  documentsNeeded: string;
+  deadline: string; // Storing as string for simplicity, can be converted to Date
+  officialLink: string;
+  description?: string;
+  fileUrl?: string;
+  postedAt: string;
+  createdAt: Timestamp;
+}
+
+export interface User {
+  id:string;
   name: string;
   email: string;
   country?: string;
@@ -62,6 +79,7 @@ export interface User {
   description?: string;
   createdAt?: Timestamp;
   gender?: 'male' | 'female';
+  isAdmin?: boolean;
 }
 
 export interface Testimonial {

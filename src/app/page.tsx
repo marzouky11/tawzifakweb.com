@@ -5,9 +5,9 @@ import { AppLayout } from '@/components/layout/app-layout';
 import { JobCard } from '@/components/job-card';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { getJobs, getTestimonials } from '@/lib/data';
+import { getJobs, getTestimonials, getCompetitions } from '@/lib/data';
 import React, { Suspense } from 'react';
-import { Newspaper, Briefcase, Users, ArrowLeft, FileText, User as UserIcon } from 'lucide-react';
+import { Newspaper, Briefcase, Users, ArrowLeft, FileText, User as UserIcon, ShieldCheck } from 'lucide-react';
 import { JobFilters } from '@/components/job-filters';
 import { HomeCarousel } from './home-carousel';
 import { HomeExtraSections } from './home-extra-sections';
@@ -18,6 +18,7 @@ import { UserAvatar } from '@/components/user-avatar';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { HomeHeaderMobile } from './home-header-mobile';
+import { CompetitionCard } from '@/components/competition-card';
 
 
 export const revalidate = 60; // Revalidate every 60 seconds
@@ -77,6 +78,19 @@ async function JobOffersSection() {
     );
 }
 
+async function CompetitionsSection() {
+    const competitions = await getCompetitions({ count: 3 });
+    if (competitions.length === 0) return null;
+
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {competitions.map((comp) => (
+          <CompetitionCard key={comp.id} competition={comp} />
+        ))}
+      </div>
+    );
+}
+
 async function JobSeekersSection() {
     const jobSeekers = await getJobs({ postType: 'seeking_job', count: 6 });
     return (
@@ -107,14 +121,15 @@ interface SectionHeaderProps {
   title: string;
   description: string;
   href: string;
+  iconColor?: string;
 }
 
-function SectionHeader({ icon: Icon, title, description, href }: SectionHeaderProps) {
+function SectionHeader({ icon: Icon, title, description, href, iconColor }: SectionHeaderProps) {
   return (
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
       <div className="flex items-center gap-4">
         <div className="p-3 bg-primary/10 rounded-full">
-            <Icon className="h-8 w-8 text-primary" />
+            <Icon className="h-8 w-8" style={{ color: iconColor || 'hsl(var(--primary))' }} />
         </div>
         <div>
           <h2 className="text-2xl font-bold text-foreground">{title}</h2>
@@ -194,6 +209,13 @@ export default function HomePage() {
           </section>
 
           <Separator />
+          
+          <Suspense>
+            <CompetitionsSection />
+          </Suspense>
+          
+          <Separator />
+
 
           <section>
             <SectionHeader

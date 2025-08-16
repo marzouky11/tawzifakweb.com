@@ -25,6 +25,7 @@ import {
   Newspaper,
   Settings,
   FileText,
+  ShieldCheck
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -35,6 +36,7 @@ const navLinks = [
     { href: '/', label: 'الرئيسية' },
     { href: '/jobs', label: 'الوظائف' },
     { href: '/workers', label: 'العمال' },
+    { href: '/competitions', label: 'المباريات' },
 ];
 
 export function Header() {
