@@ -94,7 +94,6 @@ export function JobCard({ job }: JobCardProps) {
                 </p>
              </div>
           </div>
-           {job.isNew && <Badge variant="default" className="text-xs shrink-0">جديد</Badge>}
         </div>
       </CardHeader>
       
