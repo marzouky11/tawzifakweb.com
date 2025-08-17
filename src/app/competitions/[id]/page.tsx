@@ -9,7 +9,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
   CalendarDays,
-  User as UserIcon,
   Briefcase,
   Building,
   Users2,
@@ -19,18 +18,12 @@ import {
   ClipboardList,
   Info,
   MapPin,
-  Landmark,
-  Clock,
-  School,
-  Bed,
-  Wallet,
   Target,
   ListOrdered,
   FileUp,
   LogIn,
 } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
-import Link from 'next/link';
 import { CategoryIcon } from '@/components/icons';
 import { Separator } from '@/components/ui/separator';
 import { ReportAdDialog } from '@/app/jobs/[id]/report-ad-dialog';
@@ -99,21 +92,24 @@ const InfoItem = ({ icon: Icon, label, value, color, href, isDate }: { icon: Rea
 };
 
 
-const DetailSection = ({ icon: Icon, title, color, children, hasSeparator }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode, hasSeparator?: boolean }) => (
-    <div className="space-y-4">
-        <h3 className="text-xl font-bold flex items-center gap-2" style={{color: color || '#B71C1C'}}>
-            <Icon className="h-5 w-5" />
-            {title}
-        </h3>
-        <div className="prose prose-lg dark:prose-invert max-w-none text-foreground bg-muted/30 p-4 rounded-lg">
-            {children}
+const DetailSection = ({ icon: Icon, title, color, children, hasSeparator }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode, hasSeparator?: boolean }) => {
+    if (!children) return null;
+    return (
+        <div className="space-y-4">
+            <h3 className="text-xl font-bold flex items-center gap-2" style={{color: color || '#B71C1C'}}>
+                <Icon className="h-5 w-5" />
+                {title}
+            </h3>
+            <div className="prose prose-lg dark:prose-invert max-w-none text-foreground bg-muted/30 p-4 rounded-lg">
+                {children}
+            </div>
+            {hasSeparator && <Separator className="my-6" />}
         </div>
-        {hasSeparator && <Separator className="my-6" />}
-    </div>
-);
+    );
+};
 
 const FormattedText = ({ text }: { text?: string }) => {
-    if (!text) return <p className="italic text-muted-foreground">غير محدد</p>;
+    if (!text || text.trim() === '') return <p className="italic text-muted-foreground">غير محدد</p>;
 
     const contentBlocks = text.split('\n').map(paragraph => paragraph.trim()).filter(p => p.length > 0);
 
@@ -180,19 +176,25 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                             <InfoItem icon={Briefcase} label="نوع المباراة" value={competition.competitionType} color={sectionColor} />
                             <InfoItem icon={Users2} label="عدد المناصب" value={competition.positionsAvailable} color={sectionColor} />
-                            <InfoItem icon={School} label="نظام التكوين" value={competition.trainingSystem} color={sectionColor} />
                             <InfoItem icon={MapPin} label="الموقع" value={competition.location} color={sectionColor} />
-                            <InfoItem icon={Clock} label="مدة التكوين" value={competition.trainingDuration} color={sectionColor} />
-                            <InfoItem icon={Bed} label="الإقامة والأكل" value={competition.accommodation} color={sectionColor} />
-                            <InfoItem icon={Wallet} label="المنحة / الأجر" value={competition.allowance} color={sectionColor} />
                         </div>
                         <Separator />
                         <div className="space-y-6">
-                           {competition.description && <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor} hasSeparator><FormattedText text={competition.description} /></DetailSection>}
-                           {competition.jobProspects && <DetailSection icon={Target} title="أفق العمل بعد المباراة" color={sectionColor} hasSeparator><FormattedText text={competition.jobProspects} /></DetailSection>}
-                           {competition.requirements && <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor} hasSeparator><FormattedText text={competition.requirements} /></DetailSection>}
-                           {competition.competitionStages && <DetailSection icon={ListOrdered} title="مراحل المباراة" color={sectionColor} hasSeparator><FormattedText text={competition.competitionStages} /></DetailSection>}
-                           {competition.documentsNeeded && <DetailSection icon={FileText} title="الوثائق المطلوبة" color={sectionColor} hasSeparator><FormattedText text={competition.documentsNeeded} /></DetailSection>}
+                           <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor} hasSeparator={!!competition.jobProspects}>
+                                <FormattedText text={competition.description} />
+                           </DetailSection>
+                           <DetailSection icon={Target} title="أفق العمل بعد المباراة" color={sectionColor} hasSeparator={!!competition.requirements}>
+                                <FormattedText text={competition.jobProspects} />
+                           </DetailSection>
+                           <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor} hasSeparator={!!competition.competitionStages}>
+                                <FormattedText text={competition.requirements} />
+                           </DetailSection>
+                           <DetailSection icon={ListOrdered} title="مراحل المباراة" color={sectionColor} hasSeparator={!!competition.documentsNeeded}>
+                                <FormattedText text={competition.competitionStages} />
+                           </DetailSection>
+                           <DetailSection icon={FileText} title="الوثائق المطلوبة" color={sectionColor} hasSeparator>
+                                <FormattedText text={competition.documentsNeeded} />
+                           </DetailSection>
 
                             <DetailSection icon={CalendarDays} title="التواريخ المهمة" color={sectionColor}>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 not-prose">

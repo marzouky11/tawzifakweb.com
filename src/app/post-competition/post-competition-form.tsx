@@ -10,9 +10,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from "@/hooks/use-toast";
-import { postCompetition, getOrganizers, getOrganizerIcon } from '@/lib/data';
+import { postCompetition, getOrganizers } from '@/lib/data';
 import { useRouter } from 'next/navigation';
-import { Loader2, Calendar as CalendarIcon, FileText, FileSignature, Info, Check, ArrowLeft, ArrowRight, Building, School, Wallet, Target, ListOrdered, FileUp, LogIn, Users2, Clock, Bed, MapPin, Briefcase } from 'lucide-react';
+import { 
+    Loader2, Calendar as CalendarIcon, FileText, FileSignature, Info, Check, 
+    ArrowLeft, ArrowRight, Building, Target, ListOrdered, FileUp, LogIn, Users2, MapPin, Briefcase 
+} from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
@@ -26,13 +29,15 @@ import { CategoryIcon } from '@/components/icons';
 const formSchema = z.object({
   title: z.string().min(5, 'العنوان يجب أن يكون 5 أحرف على الأقل.'),
   organizer: z.string().min(2, 'الجهة المنظمة مطلوبة.'),
+  positionsAvailable: z.coerce.number().int().positive('عدد المناصب يجب أن يكون رقمًا صحيحًا موجبًا.'),
+  competitionType: z.string().optional(),
+  location: z.string().optional(),
   
   description: z.string().optional(),
   jobProspects: z.string().optional(),
   
   requirements: z.string().min(10, 'الشروط مطلوبة.'),
   competitionStages: z.string().optional(),
-
   documentsNeeded: z.string().min(10, 'الوثائق المطلوبة.'),
   
   registrationStartDate: z.date().optional(),
@@ -40,23 +45,18 @@ const formSchema = z.object({
   competitionDate: z.date().optional(),
   
   officialLink: z.string().url('الرابط الرسمي يجب أن يكون رابطًا صحيحًا.'),
-  
-  positionsAvailable: z.coerce.number().int().positive('عدد المناصب يجب أن يكون رقمًا صحيحًا موجبًا.'),
-  competitionType: z.string().optional(),
-  location: z.string().optional(),
   fileUrl: z.string().url('رابط الملف يجب أن يكون رابطًا صحيحًا.').optional().or(z.literal('')),
 });
 
-
 const stepFields = [
-  ['title', 'organizer', 'description', 'jobProspects', 'positionsAvailable', 'competitionType', 'location'],
-  ['requirements', 'competitionStages', 'documentsNeeded'],
+  ['title', 'organizer', 'positionsAvailable', 'competitionType', 'location'],
+  ['description', 'jobProspects', 'requirements', 'competitionStages', 'documentsNeeded'],
   ['registrationStartDate', 'deadline', 'competitionDate', 'officialLink', 'fileUrl'],
 ];
 
 const steps = [
     { id: 1, name: "المعلومات الأساسية", description: "تفاصيل المباراة الرئيسية.", icon: FileText },
-    { id: 2, name: "الشروط والمراحل", description: "المتطلبات، المراحل، والوثائق.", icon: FileSignature },
+    { id: 2, name: "المتطلبات والوصف", description: "شروط المباراة وتفاصيلها.", icon: FileSignature },
     { id: 3, name: "التواريخ والروابط", description: "مواعيد التسجيل وروابط التقديم.", icon: CalendarIcon },
 ];
 
@@ -112,7 +112,7 @@ const DatePickerField = ({ name, label, control, icon: Icon }: { name: any, labe
         name={name}
         render={({ field }) => (
             <FormItem className="flex flex-col">
-                <FormLabel className="flex items-center gap-2"><Icon className="h-4 w-4 text-primary" />{label}</FormLabel>
+                 <FormLabel className="flex items-center gap-2"><Icon className="h-4 w-4 text-primary" />{label}</FormLabel>
                 <Popover>
                     <PopoverTrigger asChild>
                         <FormControl>
@@ -174,8 +174,8 @@ export function PostCompetitionForm() {
   });
 
   const nextStep = async () => {
-    const fields = stepFields[currentStep];
-    const isValid = await form.trigger(fields as any);
+    const fieldsToValidate = stepFields[currentStep] as (keyof z.infer<typeof formSchema>)[];
+    const isValid = await form.trigger(fieldsToValidate);
     if (isValid) {
       if (currentStep < steps.length - 1) {
         setCurrentStep(prev => prev + 1);
@@ -194,9 +194,8 @@ export function PostCompetitionForm() {
         setCurrentStep(stepIndex);
         return;
     }
-
-    const fieldsToValidate = stepFields.slice(0, stepIndex).flat();
-    const isValid = await form.trigger(fieldsToValidate as any);
+    const fieldsToValidate = stepFields.slice(0, stepIndex + 1).flat() as (keyof z.infer<typeof formSchema>)[];
+    const isValid = await form.trigger(fieldsToValidate);
 
     if(isValid) {
         setCurrentStep(stepIndex);
@@ -248,18 +247,18 @@ export function PostCompetitionForm() {
     <div className="space-y-6" key="step1">
       <FormField control={form.control} name="title" render={({ field }) => (<FormItem><FormLabelIcon icon={FileText} label="عنوان المباراة" /><FormControl><Input placeholder="اسم المباراة أو الإعلان الرسمي" {...field} /></FormControl><FormMessage /></FormItem>)} />
       <FormField control={form.control} name="organizer" render={({ field }) => (<FormItem><FormLabelIcon icon={Building} label="الجهة المنظمة" /><Select onValueChange={field.onChange} value={field.value}><FormControl><SelectTrigger><SelectValue placeholder="اختر الجهة المنظمة من القائمة" /></SelectTrigger></FormControl><SelectContent><ScrollArea className="h-[250px]">{organizers.map(org => (<SelectItem key={org.name} value={org.name}><div className="flex items-center gap-2"><CategoryIcon name={org.icon} className="h-5 w-5" style={{color: org.color}} /> {org.name}</div></SelectItem>))}</ScrollArea></SelectContent></Select><FormMessage /></FormItem>)} />
-      <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabelIcon icon={FileSignature} label="وصف تفصيلي (اختياري)" /><FormControl><Textarea placeholder="معلومات إضافية حول المباراة..." rows={4} {...field} /></FormControl><FormMessage /></FormItem>)} />
-      <FormField control={form.control} name="jobProspects" render={({ field }) => (<FormItem><FormLabelIcon icon={Target} label="أفق العمل بعد المباراة (اختياري)" /><FormControl><Textarea placeholder="المهام والوظائف المتاحة بعد التخرج أو النجاح" rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <FormField control={form.control} name="positionsAvailable" render={({ field }) => (<FormItem><FormLabelIcon icon={Users2} label="عدد المناصب" /><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>)} />
-        <FormField control={form.control} name="competitionType" render={({ field }) => (<FormItem><FormLabelIcon icon={Info} label="نوع المباراة (اختياري)" /><FormControl><Input placeholder="مفتوحة للجميع، لفئة معينة..." {...field} /></FormControl><FormMessage /></FormItem>)} />
+        <FormField control={form.control} name="competitionType" render={({ field }) => (<FormItem><FormLabelIcon icon={Briefcase} label="نوع المباراة (اختياري)" /><FormControl><Input placeholder="مفتوحة للجميع، لفئة معينة..." {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="location" render={({ field }) => (<FormItem><FormLabelIcon icon={MapPin} label="الموقع (اختياري)" /><FormControl><Input placeholder="مكان إجراء التكوين أو المباراة" {...field} /></FormControl><FormMessage /></FormItem>)} />
       </div>
     </div>,
     // Step 2
     <div className="space-y-6" key="step2">
-       <FormField control={form.control} name="requirements" render={({ field }) => (<FormItem><FormLabelIcon icon={Info} label="الشروط المطلوبة" /><FormControl><Textarea placeholder="المؤهلات، السن، الطول، حدة البصر..." rows={4} {...field} /></FormControl><FormMessage /></FormItem>)} />
-      <FormField control={form.control} name="competitionStages" render={({ field }) => (<FormItem><FormLabelIcon icon={ListOrdered} label="مراحل المباراة (اختياري)" /><FormControl><Textarea placeholder="الاختبارات الأولية، البدنية، الكتابية، المقابلة..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
+       <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabelIcon icon={Info} label="وصف تفصيلي (اختياري)" /><FormControl><Textarea placeholder="معلومات إضافية حول المباراة..." rows={4} {...field} /></FormControl><FormMessage /></FormItem>)} />
+       <FormField control={form.control} name="jobProspects" render={({ field }) => (<FormItem><FormLabelIcon icon={Target} label="أفق العمل بعد المباراة (اختياري)" /><FormControl><Textarea placeholder="المهام والوظائف المتاحة بعد التخرج أو النجاح" rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
+       <FormField control={form.control} name="requirements" render={({ field }) => (<FormItem><FormLabelIcon icon={FileSignature} label="الشروط المطلوبة" /><FormControl><Textarea placeholder="المؤهلات، السن، الطول، حدة البصر..." rows={4} {...field} /></FormControl><FormMessage /></FormItem>)} />
+       <FormField control={form.control} name="competitionStages" render={({ field }) => (<FormItem><FormLabelIcon icon={ListOrdered} label="مراحل المباراة (اختياري)" /><FormControl><Textarea placeholder="الاختبارات الأولية، البدنية، الكتابية، المقابلة..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
        <FormField control={form.control} name="documentsNeeded" render={({ field }) => (<FormItem><FormLabelIcon icon={FileText} label="الوثائق المطلوبة" /><FormControl><Textarea placeholder="قائمة بالوثائق المطلوبة من المترشحين" rows={4} {...field} /></FormControl><FormMessage /></FormItem>)} />
     </div>,
     // Step 3
