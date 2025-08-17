@@ -110,13 +110,6 @@ const StepsIndicator = ({ currentStep, steps, onStepClick, themeColor }: { curre
                 </p>
                 <p className="text-xs text-muted-foreground">{step.description}</p>
               </div>
-               <div className="md:hidden text-center mt-2 h-5">
-                {isCurrent && (
-                    <p className="text-xs font-semibold text-primary" style={{color: themeColor}}>
-                        {step.name}
-                    </p>
-                )}
-               </div>
             </div>
           );
         })}
