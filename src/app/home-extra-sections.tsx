@@ -50,25 +50,19 @@ function StatsSection({ stats }: { stats: { jobs: number, competitions: number, 
       label: "عرض عمل منشور",
       count: stats.jobs,
       icon: Briefcase,
-      colorClass: "text-accent",
-      bgColorClass: "bg-accent/10",
-      borderColorClass: "hover:border-accent"
+      color: "#0D47A1", // Dark Blue for Job Offers
     },
     {
       label: "مباراة عمومية",
       count: stats.competitions,
       icon: ShieldCheck,
-      colorClass: "text-red-600",
-      bgColorClass: "bg-red-600/10",
-      borderColorClass: "hover:border-red-600"
+      color: "#B71C1C", // Dark Red for Competitions
     },
     {
       label: "باحث عن عمل",
       count: stats.seekers,
       icon: Users,
-      colorClass: "text-destructive",
-      bgColorClass: "bg-destructive/10",
-      borderColorClass: "hover:border-destructive"
+      color: "#424242", // Dark Gray for Job Seekers
     }
   ];
 
@@ -98,12 +92,21 @@ function StatsSection({ stats }: { stats: { jobs: number, competitions: number, 
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.5, delay: index * 0.2 }}
             >
-              <Card className={cn("p-6 text-center flex flex-col items-center gap-4 transition-all duration-300 hover:scale-105 hover:shadow-2xl border-transparent border bg-background", item.borderColorClass)}>
-                <div className={cn("p-4 rounded-full", item.bgColorClass, item.colorClass)}>
+              <Card 
+                className="p-6 text-center flex flex-col items-center gap-4 transition-all duration-300 hover:scale-105 hover:shadow-2xl border-transparent border bg-background"
+                style={{'--stat-color': item.color} as React.CSSProperties}
+              >
+                <div 
+                    className="p-4 rounded-full"
+                    style={{ backgroundColor: `${item.color}1A`, color: item.color }}
+                >
                   <item.icon className="h-10 w-10" />
                 </div>
                 <p className="text-lg font-semibold text-foreground">{item.label}</p>
-                <div className={cn("text-5xl font-bold", item.colorClass)}>
+                <div 
+                    className="text-5xl font-bold"
+                    style={{ color: item.color }}
+                >
                   <CountUp end={item.count} />
                 </div>
               </Card>
