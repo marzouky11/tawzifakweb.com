@@ -57,7 +57,7 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
              <div className="w-8 h-8 rounded-md flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: `${sectionColor}1A`}}>
                 <CategoryIcon name={organizerIcon} className="w-5 h-5" style={{ color: sectionColor }} />
              </div>
-             <h3 className="font-bold text-base leading-tight line-clamp-2" style={{color: sectionColor}}>
+             <h3 className="font-bold text-base leading-tight line-clamp-2 text-foreground">
                 <Link href={detailUrl} className="hover:underline">
                     {competition.title}
                 </Link>
