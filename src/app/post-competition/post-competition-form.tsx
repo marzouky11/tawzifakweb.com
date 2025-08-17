@@ -16,9 +16,6 @@ import {
     Loader2, Calendar as CalendarIcon, FileText, FileSignature, Info, Check, 
     ArrowLeft, ArrowRight, Building, Target, ListOrdered, FileUp, LogIn, Users2, MapPin, Briefcase 
 } from 'lucide-react';
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Calendar } from "@/components/ui/calendar"
-import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -41,9 +38,9 @@ const formSchema = z.object({
   competitionStages: z.string().optional(),
   documentsNeeded: z.string().min(10, 'الوثائق المطلوبة.'),
   
-  registrationStartDate: z.date().optional(),
-  deadline: z.date({ required_error: "آخر أجل للتسجيل مطلوب." }),
-  competitionDate: z.date().optional(),
+  registrationStartDate: z.string().optional(),
+  deadline: z.string({ required_error: "آخر أجل للتسجيل مطلوب." }).min(1, "آخر أجل للتسجيل مطلوب."),
+  competitionDate: z.string().optional(),
   
   officialLink: z.string().url('الرابط الرسمي يجب أن يكون رابطًا صحيحًا.'),
   fileUrl: z.string().url('رابط الملف يجب أن يكون رابطًا صحيحًا.').optional().or(z.literal('')),
@@ -111,41 +108,6 @@ const StepsIndicator = ({ currentStep, onStepClick }: { currentStep: number; onS
   );
 };
 
-
-const DatePickerField = ({ name, label, control, icon: Icon }: { name: any, label: string, control: any, icon: React.ElementType }) => (
-    <FormField
-        control={control}
-        name={name}
-        render={({ field }) => (
-            <FormItem className="flex flex-col">
-                 <FormLabelIcon icon={Icon} label={label}/>
-                <Popover>
-                    <PopoverTrigger asChild>
-                        <FormControl>
-                            <Button
-                                variant={"outline"}
-                                className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
-                            >
-                                {field.value ? format(field.value, "PPP") : <span>اختر تاريخًا</span>}
-                                <CalendarIcon className="mr-auto h-4 w-4 opacity-50" />
-                            </Button>
-                        </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            initialFocus
-                        />
-                    </PopoverContent>
-                </Popover>
-                <FormMessage />
-            </FormItem>
-        )}
-    />
-);
-
 const FormLabelIcon = ({icon: Icon, label}: {icon: React.ElementType, label: string}) => (
     <FormLabel className="flex items-center gap-2 text-base md:text-lg">
       <Icon className='h-4 w-4' style={{color: sectionColor}} />
@@ -180,9 +142,9 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
       location: competition?.location || '',
       jobProspects: competition?.jobProspects || '',
       competitionStages: competition?.competitionStages || '',
-      deadline: competition?.deadline ? new Date(competition.deadline) : undefined,
-      registrationStartDate: competition?.registrationStartDate ? new Date(competition.registrationStartDate) : undefined,
-      competitionDate: competition?.competitionDate ? new Date(competition.competitionDate) : undefined,
+      deadline: competition?.deadline || '',
+      registrationStartDate: competition?.registrationStartDate || '',
+      competitionDate: competition?.competitionDate || '',
     },
   });
 
@@ -228,12 +190,7 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     try {
-      const dataToSave = {
-          ...values,
-          deadline: values.deadline.toISOString().split('T')[0],
-          registrationStartDate: values.registrationStartDate?.toISOString().split('T')[0],
-          competitionDate: values.competitionDate?.toISOString().split('T')[0],
-      };
+      const dataToSave = { ...values };
 
       if (isEditing && competition) {
         await updateCompetition(competition.id, dataToSave);
@@ -285,9 +242,9 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
     // Step 3
     <div className="space-y-6" key="step3">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <DatePickerField name="registrationStartDate" label="تاريخ فتح التسجيل (اختياري)" control={form.control} icon={CalendarIcon} />
-          <DatePickerField name="deadline" label="آخر أجل للتسجيل" control={form.control} icon={CalendarIcon} />
-          <DatePickerField name="competitionDate" label="تاريخ إجراء المباراة (اختياري)" control={form.control} icon={CalendarIcon} />
+          <FormField control={form.control} name="registrationStartDate" render={({ field }) => (<FormItem><FormLabelIcon icon={CalendarIcon} label="تاريخ فتح التسجيل (اختياري)" /><FormControl><Input placeholder="مثال: 2024-08-01" {...field} /></FormControl><FormMessage /></FormItem>)} />
+          <FormField control={form.control} name="deadline" render={({ field }) => (<FormItem><FormLabelIcon icon={CalendarIcon} label="آخر أجل للتسجيل" /><FormControl><Input placeholder="مثال: 2024-09-15" {...field} /></FormControl><FormMessage /></FormItem>)} />
+          <FormField control={form.control} name="competitionDate" render={({ field }) => (<FormItem><FormLabelIcon icon={CalendarIcon} label="تاريخ إجراء المباراة (اختياري)" /><FormControl><Input placeholder="مثال: 2024-10-10" {...field} /></FormControl><FormMessage /></FormItem>)} />
       </div>
       <FormField control={form.control} name="fileUrl" render={({ field }) => (<FormItem><FormLabelIcon icon={FileUp} label="رابط ملف إضافي (PDF اختياري)" /><FormControl><Input type="url" placeholder="رابط مباشر لملف PDF رسمي" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
       <FormField control={form.control} name="officialLink" render={({ field }) => (<FormItem><FormLabelIcon icon={LogIn} label="رابط التسجيل الإلكتروني" /><FormControl><Input type="url" placeholder="https://example.com/register" {...field} /></FormControl><FormMessage /></FormItem>)} />
