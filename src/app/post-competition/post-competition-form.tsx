@@ -56,8 +56,8 @@ const stepFields = [
 
 const steps = [
     { id: 1, name: "المعلومات الأساسية", description: "تفاصيل المباراة الرئيسية.", icon: FileText },
-    { id: 2, name: "الوصف والمتطلبات", description: "شروط المباراة وتفاصيلها.", icon: FileSignature },
-    { id: 3, name: "التواريخ والروابط", description: "مواعيد التسجيل وروابط التقديم.", icon: CalendarIcon },
+    { id: 2, name: "الوصف والمتطلبات", description: "شروط وتفاصيل المباراة.", icon: FileSignature },
+    { id: 3, name: "التواريخ والروابط", description: "مواعيد التسجيل والتقديم.", icon: CalendarIcon },
 ];
 
 const sectionColor = '#14532d';
