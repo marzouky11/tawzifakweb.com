@@ -16,14 +16,7 @@ interface JobCardProps {
   job: Job | null;
 }
 
-const workTypeTranslations: { [key in WorkType]: string } = {
-  full_time: 'دوام كامل',
-  part_time: 'دوام جزئي',
-  freelance: 'عمل حر',
-  remote: 'عن بعد',
-};
-
-const InfoBadge = ({ icon: Icon, text, variant, className }: { icon?: React.ElementType, text: string | undefined, variant: "secondary" | "destructive" | "accent" | "default", className?: string }) => {
+const InfoBadge = ({ icon: Icon, text, variant, className }: { icon?: React.ElementType, text: string | number | undefined, variant: "secondary" | "destructive" | "accent" | "default", className?: string }) => {
   if (!text) return null;
   return (
     <Badge variant={variant} className={cn("flex items-center gap-1.5 font-normal text-xs py-1", className)}>
@@ -100,19 +93,38 @@ export function JobCard({ job }: JobCardProps) {
       <Separator />
 
       <CardContent className="p-4 flex-grow flex flex-wrap items-start gap-2">
-         <InfoBadge
-            icon={MapPin}
-            text={`${job.ownerName} - ${job.country}, ${job.city}`}
-            variant="destructive"
-            className="bg-red-100 text-red-800 border-red-200 dark:bg-red-900/50 dark:text-red-200 dark:border-red-800"
-        />
-        {salaryText && (
-            <InfoBadge 
-                icon={Wallet} 
-                text={salaryText} 
-                variant="accent"
-                className="bg-green-100 text-green-800 border-green-200 dark:bg-green-900/50 dark:text-green-200 dark:border-green-800"
+        {isSeekingJob ? (
+          <>
+            <InfoBadge
+                icon={MapPin}
+                text={`${job.country}, ${job.city}`}
+                variant="destructive"
+                className="bg-red-100 text-red-800 border-red-200 dark:bg-red-900/50 dark:text-red-200 dark:border-red-800"
             />
+            <InfoBadge
+                icon={UserIcon}
+                text={job.ownerName}
+                variant="secondary"
+                className="bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-900/50 dark:text-gray-200 dark:border-gray-800"
+            />
+          </>
+        ) : (
+          <>
+            <InfoBadge
+                icon={MapPin}
+                text={`${job.country}, ${job.city}`}
+                variant="destructive"
+                className="bg-red-100 text-red-800 border-red-200 dark:bg-red-900/50 dark:text-red-200 dark:border-red-800"
+            />
+            {salaryText && (
+                <InfoBadge 
+                    icon={Wallet} 
+                    text={salaryText} 
+                    variant="accent"
+                    className="bg-green-100 text-green-800 border-green-200 dark:bg-green-900/50 dark:text-green-200 dark:border-green-800"
+                />
+            )}
+          </>
         )}
       </CardContent>
 
