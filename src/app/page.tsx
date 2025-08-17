@@ -69,7 +69,7 @@ function JobSectionSkeleton() {
 }
 
 async function JobOffersSection() {
-    const jobOffers = await getJobs({ postType: 'seeking_worker', count: 8 });
+    const jobOffers = await getJobs({ postType: 'seeking_worker', count: 5 });
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {jobOffers.map(job => (
@@ -80,7 +80,7 @@ async function JobOffersSection() {
 }
 
 async function CompetitionsSection() {
-    const competitions = await getCompetitions({ count: 4 });
+    const competitions = await getCompetitions({ count: 5 });
     if (competitions.length === 0) return null;
 
     return (
@@ -102,7 +102,7 @@ async function CompetitionsSection() {
 }
 
 async function JobSeekersSection() {
-    const jobSeekers = await getJobs({ postType: 'seeking_job', count: 8 });
+    const jobSeekers = await getJobs({ postType: 'seeking_job', count: 5 });
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {jobSeekers.map(job => (
