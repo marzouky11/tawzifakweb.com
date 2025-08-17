@@ -40,3 +40,4 @@ export async function GET() {
     return new Response('Error generating jobs sitemap', { status: 500 });
   }
 }
+

@@ -1,4 +1,5 @@
 
+
 import type { Metadata } from 'next';
 import { AppLayout } from '@/components/layout/app-layout';
 import { JobCard } from '@/components/job-card';
@@ -49,7 +50,7 @@ async function WorkerList({ searchParams }: { searchParams?: { [key: string]: st
       </div>
     );
   }
-  return <p className="col-span-full text-center text-muted-foreground">لا يوجد باحثون عن عمل يطابقون بحثك.</p>;
+  return <p className="col-span-full text-center text-muted-foreground py-10">لا يوجد باحثون عن عمل يطابقون بحثك.</p>;
 }
 
 export default async function WorkersPage({
@@ -84,3 +85,4 @@ export default async function WorkersPage({
     </AppLayout>
   );
 }
+

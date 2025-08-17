@@ -1,4 +1,5 @@
 
+
 import type { Metadata } from 'next';
 import { AppLayout } from '@/components/layout/app-layout';
 import { JobCard } from '@/components/job-card';
@@ -48,7 +49,7 @@ async function JobList({ searchParams }: { searchParams?: { [key: string]: strin
       </div>
     );
   }
-  return <p className="col-span-full text-center text-muted-foreground">لا توجد عروض عمل تطابق بحثك.</p>;
+  return <p className="col-span-full text-center text-muted-foreground py-10">لا توجد عروض عمل تطابق بحثك.</p>;
 }
 
 export default async function JobsPage({
@@ -83,3 +84,4 @@ export default async function JobsPage({
     </AppLayout>
   );
 }
+

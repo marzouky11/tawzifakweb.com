@@ -39,3 +39,4 @@ export async function GET() {
     return new Response('Error generating workers sitemap', { status: 500 });
   }
 }
+

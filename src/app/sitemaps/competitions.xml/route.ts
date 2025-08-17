@@ -40,3 +40,4 @@ export async function GET() {
     return new Response('Error generating competitions sitemap', { status: 500 });
   }
 }
+

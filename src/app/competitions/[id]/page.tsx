@@ -252,3 +252,4 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
         </AppLayout>
     );
 }
+

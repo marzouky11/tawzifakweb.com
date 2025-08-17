@@ -54,58 +54,21 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
     };
   }
 
-  const jobTitle = job.title || `باحث عن عمل: ${job.ownerName}`;
-  const jobCity = job.city || 'مدينة غير محددة';
-  const jobCountry = job.country || 'دولة غير محددة';
-
-  const metaDescription = (job.description || `إعلان عن ${jobTitle} في ${jobCity}, ${jobCountry}.`).substring(0, 160);
-  const jsonLdDescription = job.description || `إعلان عن ${jobTitle} في ${jobCity}, ${jobCountry}.`;
-
-  const personSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
-    name: job.ownerName,
-    description: jsonLdDescription,
-    jobTitle: job.title,
-    address: {
-        '@type': 'PostalAddress',
-        addressLocality: jobCity,
-        addressCountry: jobCountry,
-    },
-  };
-
-  const canonicalUrl = `${baseUrl}/workers/${job.id}`;
-
+  // Prevent indexing of job seeker profiles
   return {
-    title: jobTitle,
-    description: metaDescription,
-    alternates: {
-        canonical: canonicalUrl,
+    robots: {
+      index: false,
+      follow: false,
+      nocache: true,
+      googleBot: {
+        index: false,
+        follow: false,
+        noimageindex: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'none',
+        'max-snippet': -1,
+      },
     },
-    openGraph: {
-        title: jobTitle,
-        description: metaDescription,
-        url: canonicalUrl,
-        siteName: 'توظيفك',
-        type: 'profile',
-        images: [
-            {
-                url: siteThumbnail,
-                width: 1200,
-                height: 630,
-                alt: jobTitle,
-            },
-        ],
-    },
-    twitter: {
-        card: 'summary_large_image',
-        title: jobTitle,
-        description: metaDescription,
-        images: [siteThumbnail],
-    },
-    other: {
-        'application/ld+json': JSON.stringify(personSchema, null, 2)
-    }
   };
 }
 
@@ -359,3 +322,4 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
         </AppLayout>
     );
 }
+
