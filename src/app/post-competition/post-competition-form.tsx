@@ -56,9 +56,11 @@ const stepFields = [
 
 const steps = [
     { id: 1, name: "المعلومات الأساسية", description: "تفاصيل المباراة الرئيسية.", icon: FileText },
-    { id: 2, name: "المتطلبات والوصف", description: "شروط المباراة وتفاصيلها.", icon: FileSignature },
+    { id: 2, name: "الوصف والمتطلبات", description: "شروط المباراة وتفاصيلها.", icon: FileSignature },
     { id: 3, name: "التواريخ والروابط", description: "مواعيد التسجيل وروابط التقديم.", icon: CalendarIcon },
 ];
+
+const sectionColor = '#B71C1C';
 
 const StepsIndicator = ({ currentStep, onStepClick }: { currentStep: number; onStepClick: (step: number) => void; }) => {
   return (
@@ -67,8 +69,8 @@ const StepsIndicator = ({ currentStep, onStepClick }: { currentStep: number; onS
         <div className="h-0.5 w-full bg-border" />
       </div>
       <div
-        className="absolute right-0 top-1/2 h-0.5 -translate-y-1/2 bg-primary transition-all duration-300"
-        style={{ width: `calc(${currentStep} / ${steps.length - 1} * 100%)` }}
+        className="absolute right-0 top-1/2 h-0.5 -translate-y-1/2 transition-all duration-300"
+        style={{ width: `calc(${currentStep} / ${steps.length - 1} * 100%)`, backgroundColor: sectionColor }}
       />
       <div className="relative flex justify-between">
         {steps.map((step, stepIdx) => {
@@ -82,17 +84,20 @@ const StepsIndicator = ({ currentStep, onStepClick }: { currentStep: number; onS
                 onClick={() => stepIdx <= currentStep && onStepClick(stepIdx)}
                 className={cn(
                   "relative z-10 w-10 h-10 flex items-center justify-center rounded-full font-bold text-lg transition-all duration-300 border-2",
-                  isCurrent ? "bg-primary text-primary-foreground border-primary scale-110" :
-                  isCompleted ? "bg-primary text-primary-foreground border-primary" :
-                  "bg-muted border-border text-muted-foreground",
+                  isCurrent ? "scale-110" : "bg-muted text-muted-foreground border-border",
                   "hover:scale-105"
                 )}
+                style={{
+                    backgroundColor: isCurrent || isCompleted ? sectionColor : undefined,
+                    borderColor: isCurrent || isCompleted ? sectionColor : undefined,
+                    color: isCurrent || isCompleted ? 'white' : undefined,
+                }}
                 aria-current={isCurrent ? "step" : undefined}
               >
                 {isCompleted ? <Check className="w-6 h-6" /> : <step.icon className="w-5 h-5" />}
               </button>
               <div className="hidden md:block text-center mt-2">
-                <p className={cn("font-bold", isCurrent ? "text-primary" : "text-foreground")}>
+                <p className={cn("font-bold", isCurrent ? "text-primary" : "text-foreground")} style={{color: isCurrent ? sectionColor : undefined}}>
                   {step.name}
                 </p>
                 <p className="text-xs text-muted-foreground">{step.description}</p>
@@ -112,7 +117,7 @@ const DatePickerField = ({ name, label, control, icon: Icon }: { name: any, labe
         name={name}
         render={({ field }) => (
             <FormItem className="flex flex-col">
-                 <FormLabel className="flex items-center gap-2"><Icon className="h-4 w-4 text-primary" />{label}</FormLabel>
+                 <FormLabelIcon icon={Icon} label={label}/>
                 <Popover>
                     <PopoverTrigger asChild>
                         <FormControl>
@@ -142,7 +147,7 @@ const DatePickerField = ({ name, label, control, icon: Icon }: { name: any, labe
 
 const FormLabelIcon = ({icon: Icon, label}: {icon: React.ElementType, label: string}) => (
     <FormLabel className="flex items-center gap-2 text-base md:text-lg">
-      <Icon className='h-4 w-4 text-primary' />
+      <Icon className='h-4 w-4' style={{color: sectionColor}} />
       {label}
     </FormLabel>
   );
@@ -295,8 +300,8 @@ export function PostCompetitionForm() {
         </div>
         <div className="flex gap-4 items-center justify-between p-6 border-t bg-muted/50 rounded-b-lg mt-auto">
           {currentStep > 0 ? (<Button type="button" variant="outline" onClick={prevStep}><ArrowRight className="ml-2 h-4 w-4" />السابق</Button>) : <div />}
-          {currentStep < steps.length - 1 ? (<Button type="button" onClick={nextStep}>التالي<ArrowLeft className="mr-2 h-4 w-4" /></Button>) : (
-            <Button type="submit" disabled={isSubmitting}>
+          {currentStep < steps.length - 1 ? (<Button type="button" onClick={nextStep} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>التالي<ArrowLeft className="mr-2 h-4 w-4" /></Button>) : (
+            <Button type="submit" disabled={isSubmitting} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>
               {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               نشر المباراة
             </Button>

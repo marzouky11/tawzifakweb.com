@@ -70,7 +70,6 @@ function BottomNavContent() {
 
 export function BottomNav() {
   const [isClient, setIsClient] = useState(false);
-  const pathname = usePathname();
   
   useEffect(() => {
     setIsClient(true);
@@ -80,11 +79,6 @@ export function BottomNav() {
     return null;
   }
   
-  if (pathname === '/profile') {
-      return null;
-  }
-
-
   return (
     <footer className="fixed bottom-0 left-0 z-40 w-full h-20 bg-transparent md:hidden">
       <BottomNavContent />

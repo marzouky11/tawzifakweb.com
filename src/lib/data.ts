@@ -609,8 +609,7 @@ export function getOrganizers() {
   return organizers;
 }
 
-export function getOrganizerIcon(organizerName?: string): string {
-    if (!organizerName) return 'Landmark';
-    const organizer = organizers.find(o => o.name === organizerName);
-    return organizer ? organizer.icon : 'Landmark';
+export function getOrganizerByName(organizerName?: string): Organizer | undefined {
+    if (!organizerName) return undefined;
+    return organizers.find(o => o.name === organizerName);
 }

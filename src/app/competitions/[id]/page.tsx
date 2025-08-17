@@ -1,7 +1,7 @@
 
 
 import { notFound } from 'next/navigation';
-import { getCompetitionById, getOrganizerIcon } from '@/lib/data';
+import { getCompetitionById, getOrganizerByName } from '@/lib/data';
 import { AppLayout } from '@/components/layout/app-layout';
 import type { Metadata } from 'next';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
@@ -96,7 +96,7 @@ const DetailSection = ({ icon: Icon, title, color, children, hasSeparator }: { i
     if (!children) return null;
     return (
         <div className="space-y-4">
-            <h3 className="text-xl font-bold flex items-center gap-2" style={{color: color || '#B71C1C'}}>
+            <h3 className="text-xl font-bold flex items-center gap-2" style={{color}}>
                 <Icon className="h-5 w-5" />
                 {title}
             </h3>
@@ -137,8 +137,9 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
         notFound();
     }
     
-    const organizerIcon = getOrganizerIcon(competition.organizer);
-    const sectionColor = '#B71C1C';
+    const organizer = getOrganizerByName(competition.organizer);
+    const sectionColor = organizer?.color || '#B71C1C';
+    const organizerIcon = organizer?.icon || 'Landmark';
 
     return (
         <AppLayout>
@@ -154,7 +155,9 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                 <Card className="overflow-hidden shadow-lg border-t-4" style={{borderColor: sectionColor}}>
                     <CardHeader className="bg-muted/30 p-4 sm:p-6">
                         <div className="flex items-start gap-4">
-                            <CategoryIcon name={organizerIcon} className="w-10 h-10 flex-shrink-0 mt-1" style={{color: sectionColor}} />
+                            <div className="w-12 h-12 flex-shrink-0 mt-1 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${sectionColor}1A` }}>
+                                <CategoryIcon name={organizerIcon} className="w-8 h-8" style={{color: sectionColor}} />
+                            </div>
                             <div className='flex-grow'>
                                 <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                                     {competition.title || 'عنوان غير متوفر'}

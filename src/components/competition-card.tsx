@@ -6,7 +6,7 @@ import { Calendar, Users, Building } from 'lucide-react';
 import type { Competition } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
-import { getOrganizerIcon } from '@/lib/data';
+import { getOrganizerByName } from '@/lib/data';
 import { CategoryIcon } from './icons';
 import { Separator } from './ui/separator';
 
@@ -43,8 +43,9 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
   }
 
   const detailUrl = `/competitions/${competition.id}`;
-  const organizerIcon = getOrganizerIcon(competition.organizer);
-  const sectionColor = '#B71C1C'; // Dark Red
+  const organizer = getOrganizerByName(competition.organizer);
+  const sectionColor = organizer?.color || '#B71C1C';
+  const organizerIcon = organizer?.icon || 'Landmark';
   
   return (
     <Card 
