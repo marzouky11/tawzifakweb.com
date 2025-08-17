@@ -1,7 +1,5 @@
-
-
 import { db } from '@/lib/firebase';
-import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, Query, and, QueryConstraint, QueryFilterConstraint, documentId } from 'firebase/firestore';
+import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, Query, and, QueryConstraint, QueryFilterConstraint, documentId, increment } from 'firebase/firestore';
 import type { Job, Category, PostType, User, WorkType, Testimonial, Competition, Organizer } from './types';
 import Fuse from 'fuse.js';
 
@@ -421,11 +419,27 @@ export async function deleteTestimonial(testimonialId: string) {
 export async function getViewsCount(adId: string): Promise<number> {
     if (!adId) return 0;
     try {
-        const viewsCollectionRef = collection(db, 'ads', adId, 'views');
+        const adDocRef = doc(db, 'ads', adId);
+        const adSnap = await getDoc(adDocRef);
+
+        let viewsCollectionRef;
+
+        if (adSnap.exists()) {
+            viewsCollectionRef = collection(db, 'ads', adId, 'views');
+        } else {
+            const competitionDocRef = doc(db, 'competitions', adId);
+            const competitionSnap = await getDoc(competitionDocRef);
+            if (competitionSnap.exists()) {
+                viewsCollectionRef = collection(db, 'competitions', adId, 'views');
+            } else {
+                return 0;
+            }
+        }
+        
         const snapshot = await getDocs(viewsCollectionRef);
         return snapshot.size;
     } catch (error) {
-        console.error(`Error getting views for ad ${adId}:`, error);
+        console.error(`Error getting views for item ${adId}:`, error);
         return 0;
     }
 }
@@ -436,7 +450,23 @@ export async function recordView(adId: string, viewerId: string): Promise<void> 
     return;
   }
   try {
-    const viewDocRef = doc(db, 'ads', adId, 'views', viewerId);
+    // Check if it's a job/ad or a competition
+    const adDocRef = doc(db, 'ads', adId);
+    const adSnap = await getDoc(adDocRef);
+
+    let viewDocRef;
+    if (adSnap.exists()) {
+        viewDocRef = doc(db, 'ads', adId, 'views', viewerId);
+    } else {
+        const competitionDocRef = doc(db, 'competitions', adId);
+        const competitionSnap = await getDoc(competitionDocRef);
+        if (competitionSnap.exists()) {
+            viewDocRef = doc(db, 'competitions', adId, 'views', viewerId);
+        } else {
+             console.error(`Error recording view: Ad or competition with ID ${adId} not found.`);
+             return;
+        }
+    }
     await setDoc(viewDocRef, { viewedAt: serverTimestamp() });
   } catch (error) {
     console.error(`Error recording view for ad ${adId} by user ${viewerId}:`, error);
