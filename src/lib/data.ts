@@ -94,18 +94,12 @@ const categories: Category[] = [
 ];
 
 const organizers: Organizer[] = [
+  { name: "الوزارات والجماعات المحلية", icon: "Landmark", color: "#37474F" },
   { name: "وزارة التربية الوطنية", icon: "BookOpen", color: "#8E24AA" },
-  { name: "وزارة الصحة والحماية الاجتماعية", icon: "Stethoscope", color: "#43A047" },
-  { name: "وزارة العدل", icon: "Gavel", color: '#6D4C41' },
-  { name: "القوات المسلحة الملكية", icon: "Shield", color: '#2E7D32' },
-  { name: "الأمن الوطني", icon: "ShieldCheck", color: '#1E88E5' },
-  { name: "الدرك الملكي", icon: "Shield", color: '#004D40' },
-  { name: "الوقاية المدنية", icon: "LifeBuoy", color: '#E53935' },
-  { name: "إدارة الجمارك والضرائب غير المباشرة", icon: "Landmark", color: '#37474F' },
-  { name: "المكتب الوطني للسكك الحديدية", icon: "TrainTrack", color: '#F4511E' },
-  { name: "المكتب الوطني للكهرباء والماء الصالح للشرب", icon: "Zap", color: '#FBC02D' },
-  { name: "الوكالة الوطنية للمحافظة العقارية", icon: "FileText", color: '#00897B' },
-  { name: "المكتب الشريف للفوسفاط", icon: "Factory", color: '#455A64' },
+  { name: "الأمن والقوات المسلحة", icon: "ShieldCheck", color: "#1E88E5" },
+  { name: "الصحة العامة", icon: "Stethoscope", color: "#43A047" },
+  { name: "المعاهد العليا والمؤسسات العامة", icon: "FileText", color: '#00897B' },
+  { name: "خرّيجون جدد (باك/دبلوم)", icon: "Users", color: '#FB8C00' }
 ];
 
 function formatTimeAgo(timestamp: any) {
@@ -624,3 +618,5 @@ export async function deleteUser(userId: string) {
         throw new Error("Failed to delete user document");
     }
 }
+
+    
