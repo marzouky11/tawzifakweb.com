@@ -10,7 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from "@/hooks/use-toast";
-import { postCompetition, getOrganizers } from '@/lib/data';
+import { postCompetition, getOrganizers, updateCompetition } from '@/lib/data';
 import { useRouter } from 'next/navigation';
 import { 
     Loader2, Calendar as CalendarIcon, FileText, FileSignature, Info, Check, 
@@ -25,6 +25,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CategoryIcon } from '@/components/icons';
+import type { Competition } from '@/lib/types';
 
 const formSchema = z.object({
   title: z.string().min(5, 'العنوان يجب أن يكون 5 أحرف على الأقل.'),
@@ -152,29 +153,36 @@ const FormLabelIcon = ({icon: Icon, label}: {icon: React.ElementType, label: str
     </FormLabel>
   );
 
+interface PostCompetitionFormProps {
+  competition?: Competition | null;
+}
 
-export function PostCompetitionForm() {
+export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
   const { toast } = useToast();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const organizers = getOrganizers();
+  const isEditing = !!competition;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: '',
-      organizer: '',
-      competitionType: '',
-      positionsAvailable: 1,
-      requirements: '',
-      documentsNeeded: '',
-      officialLink: '',
-      description: '',
-      fileUrl: '',
-      location: '',
-      jobProspects: '',
-      competitionStages: '',
+      title: competition?.title || '',
+      organizer: competition?.organizer || '',
+      competitionType: competition?.competitionType || '',
+      positionsAvailable: competition?.positionsAvailable || 1,
+      requirements: competition?.requirements || '',
+      documentsNeeded: competition?.documentsNeeded || '',
+      officialLink: competition?.officialLink || '',
+      description: competition?.description || '',
+      fileUrl: competition?.fileUrl || '',
+      location: competition?.location || '',
+      jobProspects: competition?.jobProspects || '',
+      competitionStages: competition?.competitionStages || '',
+      deadline: competition?.deadline ? new Date(competition.deadline) : undefined,
+      registrationStartDate: competition?.registrationStartDate ? new Date(competition.registrationStartDate) : undefined,
+      competitionDate: competition?.competitionDate ? new Date(competition.competitionDate) : undefined,
     },
   });
 
@@ -227,20 +235,28 @@ export function PostCompetitionForm() {
           competitionDate: values.competitionDate?.toISOString().split('T')[0],
       };
 
-      const { id } = await postCompetition(dataToSave);
-      
-      toast({
-        title: "تم النشر بنجاح!",
-        description: "تم نشر المباراة العمومية وسيتم عرضها في القسم المخصص.",
-      });
-      form.reset();
-      router.push(`/competitions/${id}`);
+      if (isEditing && competition) {
+        await updateCompetition(competition.id, dataToSave);
+        toast({
+          title: "تم تحديث المباراة بنجاح!",
+          description: "تم حفظ التغييرات على المباراة.",
+        });
+        router.push(`/competitions/${competition.id}`);
+      } else {
+        const { id } = await postCompetition(dataToSave);
+        toast({
+          title: "تم النشر بنجاح!",
+          description: "تم نشر المباراة العمومية وسيتم عرضها في القسم المخصص.",
+        });
+        form.reset();
+        router.push(`/competitions/${id}`);
+      }
     } catch (error) {
-      console.error("Failed to post competition:", error);
+      console.error("Failed to process competition:", error);
       toast({
         variant: "destructive",
-        title: "خطأ في النشر",
-        description: "حدث خطأ غير متوقع أثناء نشر المباراة. يرجى المحاولة مرة أخرى.",
+        title: "خطأ في العملية",
+        description: `حدث خطأ غير متوقع أثناء ${isEditing ? 'تحديث' : 'نشر'} المباراة. يرجى المحاولة مرة أخرى.`,
       });
     } finally {
       setIsSubmitting(false);
@@ -303,7 +319,7 @@ export function PostCompetitionForm() {
           {currentStep < steps.length - 1 ? (<Button type="button" onClick={nextStep} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>التالي<ArrowLeft className="mr-2 h-4 w-4" /></Button>) : (
             <Button type="submit" disabled={isSubmitting} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>
               {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              نشر المباراة
+              {isEditing ? 'تحديث المباراة' : 'نشر المباراة'}
             </Button>
           )}
         </div>

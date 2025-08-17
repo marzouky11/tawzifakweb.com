@@ -1,4 +1,5 @@
 
+
 import { db } from '@/lib/firebase';
 import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, Query, and, QueryConstraint, QueryFilterConstraint } from 'firebase/firestore';
 import type { Job, Category, PostType, User, WorkType, Testimonial, Competition, Organizer } from './types';
@@ -548,6 +549,27 @@ export async function getCompetitionById(id: string): Promise<Competition | null
     console.error("Error fetching competition by ID: ", error);
     return null;
   }
+}
+
+export async function updateCompetition(id: string, competitionData: Partial<Competition>): Promise<void> {
+    try {
+        const competitionRef = doc(db, 'competitions', id);
+        const dataToUpdate: { [key: string]: any } = {
+            ...competitionData,
+            updatedAt: serverTimestamp()
+        };
+        
+        Object.keys(dataToUpdate).forEach(key => {
+            if (dataToUpdate[key] === undefined) {
+                delete dataToUpdate[key];
+            }
+        });
+
+        await updateDoc(competitionRef, dataToUpdate);
+    } catch (e) {
+        console.error("Error updating competition: ", e);
+        throw new Error("Failed to update competition");
+    }
 }
 
 export async function deleteCompetition(competitionId: string) {
