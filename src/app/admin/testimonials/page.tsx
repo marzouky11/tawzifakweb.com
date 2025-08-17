@@ -95,12 +95,10 @@ export default function AdminTestimonialsPage() {
           {testimonials.map((testimonial) => (
             <div key={testimonial.id} className="flex flex-col gap-2">
                 <TestimonialCard testimonial={testimonial} />
-                <div className="flex gap-2">
-                    <Button variant="destructive" className="flex-1" onClick={() => setTestimonialToDelete(testimonial)}>
-                        <Trash2 className="ml-2 h-4 w-4" />
-                        حذف
-                    </Button>
-                </div>
+                <Button variant="destructive" className="flex-1" onClick={() => setTestimonialToDelete(testimonial)}>
+                    <Trash2 className="ml-2 h-4 w-4" />
+                    حذف
+                </Button>
             </div>
           ))}
         </div>

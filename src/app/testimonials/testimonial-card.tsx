@@ -3,6 +3,7 @@ import type { Testimonial } from '@/lib/types';
 import { Card } from '@/components/ui/card';
 import { UserAvatar } from '@/components/user-avatar';
 import { Star } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface TestimonialCardProps {
   testimonial: Testimonial;
@@ -19,7 +20,15 @@ export function TestimonialCard({ testimonial }: TestimonialCardProps) {
         </div>
       </div>
       <div className="flex items-center gap-1 text-yellow-500 mb-4">
-        {[...Array(5)].map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}
+        {[...Array(5)].map((_, i) => (
+          <Star 
+            key={i} 
+            className={cn(
+              "h-4 w-4", 
+              testimonial.rating > i ? "fill-yellow-400" : "fill-muted stroke-muted-foreground"
+            )}
+          />
+        ))}
       </div>
       <blockquote className="text-muted-foreground text-base leading-relaxed mt-2 flex-grow border-r-2 border-primary pr-4">
         {testimonial.content}

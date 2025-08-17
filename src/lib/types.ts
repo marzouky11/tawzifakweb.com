@@ -1,5 +1,4 @@
 
-
 import type { Timestamp } from 'firebase/firestore';
 
 export interface Category {
@@ -108,6 +107,7 @@ export interface Testimonial {
     userName: string;
     userAvatarColor: string;
     content: string;
+    rating: number;
     createdAt: Timestamp;
     postedAt: string;
 }
