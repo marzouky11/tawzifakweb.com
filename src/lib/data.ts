@@ -1,4 +1,5 @@
 
+
 import { db } from '@/lib/firebase';
 import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, Query, and, QueryConstraint, QueryFilterConstraint, documentId } from 'firebase/firestore';
 import type { Job, Category, PostType, User, WorkType, Testimonial, Competition, Organizer } from './types';
@@ -418,6 +419,7 @@ export async function deleteTestimonial(testimonialId: string) {
 }
 
 export async function getViewsCount(adId: string): Promise<number> {
+    if (!adId) return 0;
     try {
         const viewsCollectionRef = collection(db, 'ads', adId, 'views');
         const snapshot = await getDocs(viewsCollectionRef);

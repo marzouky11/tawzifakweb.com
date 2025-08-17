@@ -119,7 +119,7 @@ export function JobCard({ job }: JobCardProps) {
 
       <CardFooter className="p-4 pt-0 mt-auto flex items-center justify-between">
          <span className="text-xs text-muted-foreground">{job.postedAt}</span>
-        <Button asChild size="sm" className="text-sm rounded-lg" style={{ backgroundColor: `${sectionColor}1A`, color: sectionColor }}>
+        <Button asChild size="sm" className="text-sm rounded-lg active:scale-95 transition-transform" style={{ backgroundColor: `${sectionColor}1A`, color: sectionColor }}>
           <Link href={detailUrl}>{isSeekingJob ? 'عرض الملف' : 'عرض التفاصيل'}</Link>
         </Button>
       </CardFooter>

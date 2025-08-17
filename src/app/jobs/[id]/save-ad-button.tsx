@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -8,6 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Bookmark, Loader2 } from 'lucide-react';
 import { toggleSaveAd, getSavedAdIds } from '@/lib/data';
 import { useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
 interface SaveAdButtonProps {
   adId: string;
@@ -67,21 +69,25 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
   return (
     <Button
       variant="outline"
-      size="icon"
-      className="h-10 w-10 rounded-full"
+      size="default"
+      className={cn(
+        "h-10 px-4",
+        isSaved && "bg-primary/10 border-primary/20 text-primary"
+      )}
       onClick={handleSaveToggle}
       disabled={authLoading || isLoading}
-      aria-label={isSaved ? 'إلغاء حفظ الإعلان' : 'حفظ الإعلان'}
     >
       {isLoading || authLoading ? (
-        <Loader2 className="h-5 w-5 animate-spin" />
+        <Loader2 className="ml-2 h-4 w-4 animate-spin" />
       ) : (
         <Bookmark
-          className={`h-5 w-5 transition-colors ${
-            isSaved ? 'fill-primary text-primary' : 'text-muted-foreground'
-          }`}
+          className={cn(
+            "ml-2 h-4 w-4 transition-colors",
+            isSaved && "fill-current"
+          )}
         />
       )}
+      <span>{isSaved ? 'تم الحفظ' : 'حفظ الإعلان'}</span>
     </Button>
   );
 }
