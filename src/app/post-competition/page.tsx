@@ -47,8 +47,8 @@ export default function PostCompetitionPage() {
         title="نشر مباراة عمومية جديدة"
         description="هذه الصفحة مخصصة للمشرفين فقط لنشر إعلانات المباريات."
       />
-      <div className="md:container md:mx-auto md:max-w-3xl md:pb-8">
-        <Card className="md:rounded-lg">
+      <div className="container mx-auto max-w-3xl px-4 pb-8">
+        <Card>
           <CardContent className="p-0">
             <PostCompetitionForm />
           </CardContent>
