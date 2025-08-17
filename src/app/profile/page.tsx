@@ -144,13 +144,13 @@ function LoggedOutView() {
                     <CardDescription>سجّل دخولك أو أنشئ حسابًا جديدًا لإدارة إعلاناتك وملفك الشخصي.</CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-col sm:flex-row gap-4 p-4">
-                    <Button asChild size="lg" className="flex-1">
+                    <Button asChild size="lg" className="flex-1 py-6">
                         <Link href="/login">
                             <LogInIcon className="mr-2 h-4 w-4" />
                             تسجيل الدخول
                         </Link>
                     </Button>
-                    <Button asChild size="lg" variant="outline" className="flex-1">
+                    <Button asChild size="lg" variant="outline" className="flex-1 py-6">
                         <Link href="/signup">
                             <UserPlus className="mr-2 h-4 w-4" />
                             إنشاء حساب

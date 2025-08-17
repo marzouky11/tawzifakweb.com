@@ -221,7 +221,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                         </CardHeader>
                         <CardContent className="flex flex-col sm:flex-row justify-center gap-4 p-6">
                                 {competition.fileUrl && (
-                                <Button asChild size="lg" variant="outline" className="flex-1 p-6 text-base">
+                                <Button asChild size="lg" variant="outline" className="flex-1 text-base">
                                     <a href={competition.fileUrl} target="_blank" rel="noopener noreferrer">
                                         <FileUp className="ml-2 h-4 w-4" />
                                         تحميل إعلان المباراة (PDF)
@@ -229,7 +229,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                                 </Button>
                             )}
                             {competition.officialLink && (
-                                <Button asChild size="lg" className="flex-1 text-primary-foreground p-6 text-base" style={{backgroundColor: sectionColor}}>
+                                <Button asChild size="lg" className="flex-1 text-primary-foreground text-base" style={{backgroundColor: sectionColor}}>
                                     <a href={competition.officialLink} target="_blank" rel="noopener noreferrer">
                                         <LinkIcon className="ml-2 h-4 w-4" />
                                         الذهاب إلى رابط التسجيل
