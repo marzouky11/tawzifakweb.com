@@ -28,7 +28,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
-function AdGrid({ ads, onAdDelete }: { ads: Job[], onAdDelete: (adId: string) => void }) {
+function AdGrid({ ads, onAdDelete, showEditButton = false }: { ads: Job[], onAdDelete: (adId: string) => void, showEditButton?: boolean }) {
     if (ads.length === 0) {
         return (
              <div className="text-center text-muted-foreground p-8 flex flex-col items-center gap-4">
@@ -43,10 +43,20 @@ function AdGrid({ ads, onAdDelete }: { ads: Job[], onAdDelete: (adId: string) =>
             {ads.map(ad => (
                 <div key={ad.id} className="flex flex-col gap-2">
                     <JobCard job={ad} />
-                    <Button variant="destructive" className="flex-1" onClick={() => onAdDelete(ad.id)}>
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        حذف
-                    </Button>
+                     <div className="flex gap-2">
+                        {showEditButton && (
+                             <Button asChild variant="outline" className="flex-1">
+                                <Link href={`/edit-job/${ad.id}`}>
+                                    <FileSignature className="mr-2 h-4 w-4" />
+                                    تعديل
+                                </Link>
+                            </Button>
+                        )}
+                        <Button variant="destructive" className="flex-1" onClick={() => onAdDelete(ad.id)}>
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            حذف
+                        </Button>
+                    </div>
                 </div>
             ))}
         </div>
@@ -216,13 +226,13 @@ export default function MyAdsPage() {
                     <TabsTrigger value="requests">الباحثون ({jobRequests.length})</TabsTrigger>
                 </TabsList>
                 <TabsContent value="offers">
-                    <AdGrid ads={jobOffers} onAdDelete={(id) => handleDeleteTrigger(id, 'ad')} />
+                    <AdGrid ads={jobOffers} onAdDelete={(id) => handleDeleteTrigger(id, 'ad')} showEditButton={true} />
                 </TabsContent>
                 <TabsContent value="competitions">
                     <CompetitionGrid competitions={competitions} onAdDelete={(id) => handleDeleteTrigger(id, 'competition')} />
                 </TabsContent>
                 <TabsContent value="requests">
-                    <AdGrid ads={jobRequests} onAdDelete={(id) => handleDeleteTrigger(id, 'ad')} />
+                    <AdGrid ads={jobRequests} onAdDelete={(id) => handleDeleteTrigger(id, 'ad')} showEditButton={false} />
                 </TabsContent>
             </Tabs>
         )
