@@ -16,8 +16,9 @@ interface JobCardProps {
   job: Job | null;
 }
 
-const InfoBadge = ({ icon: Icon, text, variant, className }: { icon?: React.ElementType, text: string | number | undefined, variant: "secondary" | "destructive" | "accent" | "default", className?: string }) => {
+const InfoBadge = ({ icon, text, variant, className }: { icon?: React.ElementType, text: string | number | undefined, variant: "secondary" | "destructive" | "accent" | "default", className?: string }) => {
   if (!text) return null;
+  const Icon = icon;
   return (
     <Badge variant={variant} className={cn("flex items-center gap-1.5 font-normal text-xs py-1 max-w-full", className)}>
       {Icon && <Icon className="h-3.5 w-3.5 flex-shrink-0" />}
@@ -82,15 +83,9 @@ export function JobCard({ job }: JobCardProps) {
                         {job.title}
                     </Link>
                 </h3>
-                {isSeekingJob ? (
-                     <p className="text-xs text-muted-foreground truncate">
-                        {categoryName}
-                    </p>
-                ) : (
-                    <p className="text-xs text-muted-foreground truncate">
-                        {job.companyName || categoryName}
-                    </p>
-                )}
+                <p className="text-xs text-muted-foreground truncate">
+                    {categoryName}
+                </p>
              </div>
           </div>
         </div>

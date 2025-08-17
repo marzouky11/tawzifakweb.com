@@ -68,6 +68,9 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
                         {competition.title}
                     </Link>
                 </h3>
+                 <p className="text-xs text-muted-foreground truncate">
+                    {competition.organizer}
+                </p>
              </div>
           </div>
         </div>
@@ -76,12 +79,6 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
       <Separator />
 
       <CardContent className="p-4 flex-grow flex flex-wrap items-start gap-2">
-         <InfoBadge
-            icon={Building}
-            text={competition.organizer}
-            variant="secondary"
-            className="bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-900/50 dark:text-gray-200 dark:border-gray-800"
-        />
         <InfoBadge
             icon={Users}
             text={`${competition.positionsAvailable} منصب`}
