@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -73,7 +74,7 @@ export default function EditJobPage() {
       <div className="flex-grow">
         <div className="container mx-auto max-w-3xl px-4 pb-8">
           <Card>
-            <CardContent className="pt-6">
+            <CardContent className="p-0">
               <AnimatePresence>
                 {job ? (
                   <PostJobForm
