@@ -72,8 +72,8 @@ export function JobCard({ job }: JobCardProps) {
   return (
     <Card 
         className={cn(
-            "flex flex-col rounded-lg bg-card shadow-md h-full transition-all hover:shadow-xl w-full overflow-hidden border-t-4",
-            isSeekingJob && "border-dashed"
+            "flex flex-col rounded-lg bg-card shadow-md h-full transition-all hover:shadow-xl w-full overflow-hidden",
+            isSeekingJob ? "border-2 border-dashed" : "border-t-4"
         )}
         style={{ borderColor: sectionColor }}
     >
@@ -90,7 +90,7 @@ export function JobCard({ job }: JobCardProps) {
                     </Link>
                 </h3>
                 <p className="text-xs text-muted-foreground truncate">
-                    {isSeekingJob ? job.ownerName : categoryName}
+                    {categoryName}
                 </p>
              </div>
           </div>
@@ -102,7 +102,7 @@ export function JobCard({ job }: JobCardProps) {
       <CardContent className="p-4 flex-grow flex flex-wrap items-start gap-2">
          <InfoBadge
             icon={MapPin}
-            text={`${job.country}, ${job.city}`}
+            text={`${job.ownerName} - ${job.country}, ${job.city}`}
             variant="destructive"
             className="bg-red-100 text-red-800 border-red-200 dark:bg-red-900/50 dark:text-red-200 dark:border-red-800"
         />
