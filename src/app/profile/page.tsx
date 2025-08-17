@@ -9,7 +9,7 @@ import { useAuth } from '@/context/auth-context';
 import { AppLayout } from '@/components/layout/app-layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { User, LogOut, ChevronLeft, Loader2, Settings as SettingsIcon, Newspaper, HelpCircle, Info, Mail, Shield, FileText, Facebook, UserPlus, LogIn as LogInIcon } from 'lucide-react';
+import { User, LogOut, ChevronLeft, Loader2, Settings as SettingsIcon, Newspaper, HelpCircle, Info, Mail, Shield, FileText, Facebook, UserPlus, LogIn as LogInIcon, MessageSquare } from 'lucide-react';
 import { getCategories } from '@/lib/data';
 import { UserAvatar } from '@/components/user-avatar';
 import { useToast } from '@/hooks/use-toast';
@@ -121,6 +121,23 @@ function LoggedInView({ userData, onLogout }: { userData: any, onLogout: () => v
                 </CardContent>
             </Card>
             
+            {userData?.isAdmin && (
+               <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-destructive">
+                        <Shield className="h-5 w-5" />
+                        لوحة التحكم (مشرف)
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="p-0">
+                    <ul className="divide-y divide-border">
+                        <SettingItem icon={User} label="إدارة المستخدمين" href="/admin/users" />
+                        <SettingItem icon={MessageSquare} label="إدارة الآراء" href="/admin/testimonials" />
+                    </ul>
+                </CardContent>
+            </Card>
+            )}
+
             {commonLinks}
             
             <Card>

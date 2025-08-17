@@ -1,5 +1,4 @@
 
-
 import { db } from '@/lib/firebase';
 import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, Query, and, QueryConstraint, QueryFilterConstraint } from 'firebase/firestore';
 import type { Job, Category, PostType, User, WorkType, Testimonial, Competition, Organizer } from './types';
@@ -56,7 +55,7 @@ const categories: Category[] = [
   { id: '31', name: 'عامل حدادة فنية', iconName: 'Wrench', color: '#424242' }, // Grey
   { id: '32', name: 'نجار ديكور', iconName: 'Hammer', color: '#8D6E63' }, // Brown
   { id: '33', name: 'رسام جداريات', iconName: 'Paintbrush', color: '#673AB7' }, // Deep Purple
-  { id: '34', name: 'عامل في مصنع', iconName: 'Factory', color: '#546E7A' }, // Blue Grey
+  { id: '34', name: 'عامل في مصنع', iconName: 'Factory', color: '#455A64' }, // Blue Grey
   { id: '35', name: 'عامل في المخابز', iconName: 'CookingPot', color: '#795548' }, // Brown
   { id: '36', name: 'معلم شاورما', iconName: 'ChefHat', color: '#FF9800' }, // Orange
   { id: '37', name: 'معلم مشاوي', iconName: 'ChefHat', color: '#F44336' }, // Red
@@ -385,7 +384,7 @@ export async function addTestimonial(testimonialData: Omit<Testimonial, 'id' | '
             userId: testimonialData.userId,
             userName: testimonialData.userName,
             userAvatarColor: testimonialData.userAvatarColor,
-            text: testimonialData.content,
+            content: testimonialData.content,
             createdAt: serverTimestamp(),
         };
         const newDocRef = await addDoc(reviewsCollection, dataToSave);
@@ -406,7 +405,6 @@ export async function getTestimonials(): Promise<Testimonial[]> {
             return {
                 id: doc.id,
                 ...data,
-                content: data.text,
                 postedAt: formatTimeAgo(data.createdAt),
             } as Testimonial;
         });
@@ -443,7 +441,7 @@ export async function updateTestimonial(testimonialId: string, content: string) 
     try {
         const testimonialRef = doc(db, 'reviews', testimonialId);
         await updateDoc(testimonialRef, {
-            text: content,
+            content: content,
             updatedAt: serverTimestamp()
         });
     } catch (e) {
@@ -612,4 +610,31 @@ export function getOrganizers() {
 export function getOrganizerByName(organizerName?: string): Organizer | undefined {
     if (!organizerName) return undefined;
     return organizers.find(o => o.name === organizerName);
+}
+
+// Admin Functions
+export async function getAllUsers(): Promise<User[]> {
+  try {
+    const usersRef = collection(db, 'users');
+    const q = query(usersRef, orderBy('createdAt', 'desc'));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+    } as User));
+  } catch (error) {
+    console.error("Error fetching all users: ", error);
+    return [];
+  }
+}
+
+export async function deleteUser(userId: string) {
+    try {
+        // This only deletes the Firestore document, not the Firebase Auth user.
+        // Deleting the Auth user requires admin privileges, typically via a backend function.
+        await deleteDoc(doc(db, 'users', userId));
+    } catch (e) {
+        console.error("Error deleting user document: ", e);
+        throw new Error("Failed to delete user document");
+    }
 }
