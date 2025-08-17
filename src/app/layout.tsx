@@ -16,13 +16,13 @@ const tajawal = Tajawal({
 
 const baseUrl = 'https://www.tawzifak.com';
 const appName = 'توظيفك';
-const appDescription = "توظيفك - منصتك الأولى للعثور على فرص عمل موثوقة في العالم العربي. وظائف يومية في السعودية، المغرب، مصر، الإمارات، الجزائر، تونس وغيرها. سجل مجانًا وابدأ العمل الآن.";
+const appDescription = "منصة توظيفك تجمع لك أحدث عروض العمل والمباريات العمومية وفرص البحث عن عمل بسهولة. تصفح الوظائف حسب المدينة والفئة وابقَ على اطلاع دائم بأحدث الفرص المهنية.";
 const appOgImage = 'https://www.tawzifak.com/og-image.jpg';
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "توظيفك - منصة التوظيف العربية للباحثين عن عمل وأصحاب العمل",
+    default: appName,
     template: `%s | ${appName}`
   },
   description: appDescription,
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: {
-      default: "توظيفك - منصة التوظيف العربية للباحثين عن عمل وأصحاب العمل",
+      default: appName,
       template: `%s | ${appName}`
     },
     description: appDescription,
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: {
-      default: "توظيفك - منصة التوظيف العربية للباحثين عن عمل وأصحاب العمل",
+      default: appName,
       template: `%s | ${appName}`
     },
     description: appDescription,
