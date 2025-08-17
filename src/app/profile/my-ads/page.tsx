@@ -105,10 +105,18 @@ function CompetitionGrid({ competitions, onAdDelete }: { competitions: Competiti
             {competitions.map(comp => (
                 <div key={comp.id} className="flex flex-col gap-2">
                     <CompetitionCard competition={comp} />
-                    <Button variant="destructive" className="flex-1" onClick={() => onAdDelete(comp.id)}>
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        حذف
-                    </Button>
+                    <div className="flex gap-2">
+                        <Button asChild variant="outline" className="flex-1">
+                            <Link href={`/edit-competition/${comp.id}`}>
+                                <FileSignature className="mr-2 h-4 w-4" />
+                                تعديل
+                            </Link>
+                        </Button>
+                        <Button variant="destructive" className="flex-1" onClick={() => onAdDelete(comp.id)}>
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            حذف
+                        </Button>
+                    </div>
                 </div>
             ))}
         </div>
