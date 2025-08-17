@@ -69,18 +69,20 @@ function JobSectionSkeleton() {
 }
 
 async function JobOffersSection() {
-    const jobOffers = await getJobs({ postType: 'seeking_worker', count: 5 });
+    const jobOffers = await getJobs({ postType: 'seeking_worker', count: 8 });
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {jobOffers.map(job => (
-                <JobCard key={job.id} job={job} />
+            {jobOffers.map((job, index) => (
+                <div key={job.id} className={cn(index >= 5 && "hidden sm:block")}>
+                    <JobCard job={job} />
+                </div>
             ))}
         </div>
     );
 }
 
 async function CompetitionsSection() {
-    const competitions = await getCompetitions({ count: 5 });
+    const competitions = await getCompetitions({ count: 8 });
     if (competitions.length === 0) return null;
 
     return (
@@ -93,8 +95,10 @@ async function CompetitionsSection() {
           iconColor="#14532d"
         />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {competitions.map((comp) => (
-            <CompetitionCard key={comp.id} competition={comp} />
+          {competitions.map((comp, index) => (
+             <div key={comp.id} className={cn(index >= 5 && "hidden sm:block")}>
+                <CompetitionCard competition={comp} />
+            </div>
           ))}
         </div>
       </>
@@ -102,11 +106,13 @@ async function CompetitionsSection() {
 }
 
 async function JobSeekersSection() {
-    const jobSeekers = await getJobs({ postType: 'seeking_job', count: 5 });
+    const jobSeekers = await getJobs({ postType: 'seeking_job', count: 8 });
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {jobSeekers.map(job => (
-                <JobCard key={job.id} job={job} />
+            {jobSeekers.map((job, index) => (
+                <div key={job.id} className={cn(index >= 5 && "hidden sm:block")}>
+                    <JobCard job={job} />
+                </div>
             ))}
         </div>
     );
