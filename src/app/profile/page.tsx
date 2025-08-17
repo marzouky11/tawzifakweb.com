@@ -9,7 +9,7 @@ import { useAuth } from '@/context/auth-context';
 import { AppLayout } from '@/components/layout/app-layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { User, LogOut, ChevronLeft, Loader2, Settings as SettingsIcon, Newspaper, HelpCircle, Info, Mail, Shield, FileText, Facebook, UserPlus, LogIn as LogInIcon, MessageSquare } from 'lucide-react';
+import { User, LogOut, ChevronLeft, Loader2, Settings as SettingsIcon, Newspaper, HelpCircle, Info, Mail, Shield, FileText, Facebook, UserPlus, LogIn as LogInIcon, MessageSquare, Bookmark } from 'lucide-react';
 import { getCategories } from '@/lib/data';
 import { UserAvatar } from '@/components/user-avatar';
 import { useToast } from '@/hooks/use-toast';
@@ -108,6 +108,7 @@ function LoggedInView({ userData, onLogout }: { userData: any, onLogout: () => v
                 <CardContent className="p-0">
                     <ul className="divide-y divide-border">
                         <SettingItem icon={User} label="تعديل الملف الشخصي" href="/profile/edit" />
+                        <SettingItem icon={Bookmark} label="الإعلانات المحفوظة" href="/profile/saved-ads" />
                         {!userData?.isAdmin && <SettingItem icon={FileText} label="إعلاناتي" href="/profile/my-ads" />}
                         <SettingItem icon={FileText} label="إنشاء سيرة ذاتية" href="/cv-builder" />
                         <li className="flex items-center justify-between p-4">

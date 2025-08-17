@@ -43,6 +43,7 @@ import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import Link from 'next/link';
 import { ViewCounter } from './view-counter';
 import { cn } from '@/lib/utils';
+import { SaveAdButton } from './save-ad-button';
 
 interface JobDetailPageProps {
   params: { id: string };
@@ -269,6 +270,9 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                             <span>{viewsCount} مشاهدات</span>
                                         </div>
                                     </div>
+                                </div>
+                                <div className="flex-shrink-0">
+                                    <SaveAdButton adId={job.id} adType="job" />
                                 </div>
                             </div>
                         </CardHeader>

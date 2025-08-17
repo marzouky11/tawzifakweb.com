@@ -1,6 +1,6 @@
 
 import { db } from '@/lib/firebase';
-import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, Query, and, QueryConstraint, QueryFilterConstraint } from 'firebase/firestore';
+import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, Query, and, QueryConstraint, QueryFilterConstraint, documentId } from 'firebase/firestore';
 import type { Job, Category, PostType, User, WorkType, Testimonial, Competition, Organizer } from './types';
 import Fuse from 'fuse.js';
 
@@ -191,10 +191,13 @@ export async function getJobs(
 
     let jobs = querySnapshot.docs.map(doc => {
       const data = doc.data();
+      const createdAt = data.createdAt.toDate();
+      const isNew = (new Date().getTime() - createdAt.getTime()) < 24 * 60 * 60 * 1000; // Less than 24 hours
       return {
         id: doc.id,
         ...data,
         postedAt: formatTimeAgo(data.createdAt),
+        isNew,
       } as Job;
     });
     
@@ -475,10 +478,13 @@ export async function getCompetitions(options: {
 
     let competitions = querySnapshot.docs.map(doc => {
       const data = doc.data();
+      const createdAt = data.createdAt.toDate();
+      const isNew = (new Date().getTime() - createdAt.getTime()) < 24 * 60 * 60 * 1000;
       return {
         id: doc.id,
         ...data,
         postedAt: formatTimeAgo(data.createdAt),
+        isNew,
       } as Competition;
     });
 
@@ -612,5 +618,62 @@ export async function deleteUser(userId: string) {
     } catch (e) {
         console.error("Error deleting user document: ", e);
         throw new Error("Failed to delete user document");
+    }
+}
+
+// --- Saved Ads Functions ---
+
+export async function getSavedAdIds(userId: string): Promise<string[]> {
+  if (!userId) return [];
+  try {
+    const savedAdsRef = collection(db, 'users', userId, 'savedAds');
+    const snapshot = await getDocs(savedAdsRef);
+    return snapshot.docs.map(doc => doc.id);
+  } catch (error) {
+    console.error("Error fetching saved ad IDs: ", error);
+    return [];
+  }
+}
+
+export async function getSavedAds(userId: string): Promise<(Job | Competition)[]> {
+    if (!userId) return [];
+    try {
+        const savedAdIds = await getSavedAdIds(userId);
+        if (savedAdIds.length === 0) return [];
+
+        const adPromises = savedAdIds.map(id => getJobById(id));
+        const competitionPromises = savedAdIds.map(id => getCompetitionById(id));
+
+        const results = await Promise.all([...adPromises, ...competitionPromises]);
+        
+        return results.filter(item => item !== null) as (Job | Competition)[];
+    } catch (error) {
+        console.error("Error fetching saved ads details: ", error);
+        return [];
+    }
+}
+
+export async function toggleSaveAd(userId: string, adId: string, adType: 'job' | 'competition') {
+    if (!userId || !adId) {
+        throw new Error("User ID and Ad ID are required.");
+    }
+
+    const savedAdRef = doc(db, 'users', userId, 'savedAds', adId);
+    
+    try {
+        const docSnap = await getDoc(savedAdRef);
+        if (docSnap.exists()) {
+            await deleteDoc(savedAdRef);
+            return false; // Ad was unsaved
+        } else {
+            await setDoc(savedAdRef, {
+                savedAt: serverTimestamp(),
+                type: adType,
+            });
+            return true; // Ad was saved
+        }
+    } catch (error) {
+        console.error("Error toggling saved ad status: ", error);
+        throw new Error("Failed to update saved status.");
     }
 }

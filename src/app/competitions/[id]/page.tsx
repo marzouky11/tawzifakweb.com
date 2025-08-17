@@ -27,6 +27,7 @@ import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { CategoryIcon } from '@/components/icons';
 import { Separator } from '@/components/ui/separator';
 import { ReportAdDialog } from '@/app/jobs/[id]/report-ad-dialog';
+import { SaveAdButton } from '@/app/jobs/[id]/save-ad-button';
 
 interface CompetitionDetailPageProps {
   params: { id: string };
@@ -155,24 +156,29 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
             <div className="container mx-auto max-w-4xl px-4 pb-8 space-y-6">
                 <Card className="overflow-hidden shadow-lg border-t-4" style={{borderColor: sectionColor}}>
                     <CardHeader className="bg-muted/30 p-4 sm:p-6">
-                        <div className="flex items-start gap-4">
-                            <div className="w-12 h-12 flex-shrink-0 mt-1 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${organizerColor}1A` }}>
-                                <CategoryIcon name={organizerIcon} className="w-8 h-8" style={{color: organizerColor}} />
-                            </div>
-                            <div className='flex-grow'>
-                                <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
-                                    {competition.title || 'عنوان غير متوفر'}
-                                </h1>
-                                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground mt-2 text-sm">
-                                    <div className="flex items-center gap-1.5">
-                                        <Building className="h-4 w-4" style={{color: sectionColor}} />
-                                        <span>الجهة المنظمة: {competition.organizer}</span>
-                                    </div>
-                                    <div className="flex items-center gap-1.5">
-                                        <CalendarDays className="h-4 w-4" style={{color: sectionColor}} />
-                                        <span>نُشرت: {competition.postedAt}</span>
+                        <div className="flex justify-between items-start gap-4">
+                            <div className="flex items-start gap-4 flex-grow">
+                                <div className="w-12 h-12 flex-shrink-0 mt-1 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${organizerColor}1A` }}>
+                                    <CategoryIcon name={organizerIcon} className="w-8 h-8" style={{color: organizerColor}} />
+                                </div>
+                                <div className='flex-grow'>
+                                    <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+                                        {competition.title || 'عنوان غير متوفر'}
+                                    </h1>
+                                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground mt-2 text-sm">
+                                        <div className="flex items-center gap-1.5">
+                                            <Building className="h-4 w-4" style={{color: sectionColor}} />
+                                            <span>الجهة المنظمة: {competition.organizer}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5">
+                                            <CalendarDays className="h-4 w-4" style={{color: sectionColor}} />
+                                            <span>نُشرت: {competition.postedAt}</span>
+                                        </div>
                                     </div>
                                 </div>
+                            </div>
+                             <div className="flex-shrink-0">
+                                <SaveAdButton adId={competition.id} adType="competition" />
                             </div>
                         </div>
                     </CardHeader>

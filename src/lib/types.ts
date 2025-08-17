@@ -45,6 +45,7 @@ export interface Job {
   status?: 'open' | 'closed';
   views?: number;
   howToApply?: string;
+  isNew?: boolean;
 }
 
 export interface Competition {
@@ -75,6 +76,7 @@ export interface Competition {
   // Timestamps
   postedAt: string;
   createdAt: Timestamp;
+  isNew?: boolean;
 }
 
 

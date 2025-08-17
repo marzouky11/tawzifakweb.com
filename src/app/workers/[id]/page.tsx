@@ -33,6 +33,7 @@ import { JobCard } from '@/components/job-card';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import Link from 'next/link';
 import { ViewCounter } from '@/app/jobs/[id]/view-counter';
+import { SaveAdButton } from '@/app/jobs/[id]/save-ad-button';
 
 
 interface JobDetailPageProps {
@@ -213,30 +214,33 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                         style={{ borderColor: sectionColor }}
                     >
                         <CardHeader className="bg-muted/30 p-4 sm:p-6">
-                           <div className="flex flex-col items-start gap-4">
-                                <div className="flex items-center gap-3 w-full">
-                                    <div className="p-2 sm:p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${categoryColor}1A` }}>
-                                        <CategoryIcon name={finalIconName} className="w-6 h-6 sm:w-8 sm:h-8" style={{ color: categoryColor }} />
-                                    </div>
-                                    <div className="flex-grow">
+                           <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+                                <div className="flex-grow">
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <div className="p-2 sm:p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${categoryColor}1A` }}>
+                                            <CategoryIcon name={finalIconName} className="w-6 h-6 sm:w-8 sm:h-8" style={{ color: categoryColor }} />
+                                        </div>
                                         <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                                             {job.title || 'عنوان غير متوفر'}
                                         </h1>
                                     </div>
-                               </div>
-                               <div className="flex flex-wrap items-center gap-4 text-muted-foreground mt-2 text-sm">
-                                    <div className="flex items-center gap-1.5">
-                                        <MapPin className="h-4 w-4" />
-                                        <span>{job.country || 'دولة غير محددة'}, {job.city || 'مدينة غير محددة'}</span>
+                                   <div className="flex flex-wrap items-center gap-4 text-muted-foreground mt-2 text-sm">
+                                        <div className="flex items-center gap-1.5">
+                                            <MapPin className="h-4 w-4" />
+                                            <span>{job.country || 'دولة غير محددة'}, {job.city || 'مدينة غير محددة'}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5">
+                                            <CalendarDays className="h-4 w-4" />
+                                            <span>نُشر: {job.postedAt}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5">
+                                            <Eye className="h-4 w-4" />
+                                            <span>{viewsCount} مشاهدات</span>
+                                        </div>
                                     </div>
-                                    <div className="flex items-center gap-1.5">
-                                        <CalendarDays className="h-4 w-4" />
-                                        <span>نُشر: {job.postedAt}</span>
-                                    </div>
-                                    <div className="flex items-center gap-1.5">
-                                        <Eye className="h-4 w-4" />
-                                        <span>{viewsCount} مشاهدات</span>
-                                    </div>
+                                </div>
+                                <div className="flex-shrink-0">
+                                    <SaveAdButton adId={job.id} adType="job" />
                                 </div>
                            </div>
                         </CardHeader>
