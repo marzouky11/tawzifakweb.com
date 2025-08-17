@@ -94,9 +94,9 @@ export default function SelectPostTypePage() {
           </Link>
           
           <Link href="/post-competition" onClick={handleCompetitionClick} className="lg:col-span-1">
-            <Card className="p-6 text-center hover:shadow-xl hover:border-[#B71C1C] transition-all duration-300 cursor-pointer h-full flex flex-col justify-center items-center bg-[#B71C1C]/5 dark:bg-[#B71C1C]/20">
-              <ShieldCheck className="h-16 w-16 text-[#B71C1C] mb-4" />
-              <h3 className="text-xl font-semibold text-[#B71C1C]">نشر مباراة عمومية</h3>
+            <Card className="p-6 text-center hover:shadow-xl hover:border-[#14532d] transition-all duration-300 cursor-pointer h-full flex flex-col justify-center items-center bg-[#14532d]/5 dark:bg-[#14532d]/20">
+              <ShieldCheck className="h-16 w-16 text-[#14532d] mb-4" />
+              <h3 className="text-xl font-semibold text-[#14532d]">نشر مباراة عمومية</h3>
               {userData?.isAdmin ? (
                   <p className="text-muted-foreground mt-2">
                     (خاص بالمشرفين) انشر إعلانات المباريات والوظائف الحكومية.

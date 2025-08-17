@@ -44,7 +44,7 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
 
   const detailUrl = `/competitions/${competition.id}`;
   const organizer = getOrganizerByName(competition.organizer);
-  const sectionColor = '#B71C1C';
+  const sectionColor = '#14532d';
   const organizerIcon = organizer?.icon || 'Landmark';
   const organizerColor = organizer?.color || sectionColor;
   

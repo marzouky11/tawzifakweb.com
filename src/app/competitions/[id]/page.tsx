@@ -138,8 +138,9 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
     }
     
     const organizer = getOrganizerByName(competition.organizer);
-    const sectionColor = organizer?.color || '#B71C1C';
+    const sectionColor = '#14532d';
     const organizerIcon = organizer?.icon || 'Landmark';
+    const organizerColor = organizer?.color || sectionColor;
 
     return (
         <AppLayout>
@@ -155,8 +156,8 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                 <Card className="overflow-hidden shadow-lg border-t-4" style={{borderColor: sectionColor}}>
                     <CardHeader className="bg-muted/30 p-4 sm:p-6">
                         <div className="flex items-start gap-4">
-                            <div className="w-12 h-12 flex-shrink-0 mt-1 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${sectionColor}1A` }}>
-                                <CategoryIcon name={organizerIcon} className="w-8 h-8" style={{color: sectionColor}} />
+                            <div className="w-12 h-12 flex-shrink-0 mt-1 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${organizerColor}1A` }}>
+                                <CategoryIcon name={organizerIcon} className="w-8 h-8" style={{color: organizerColor}} />
                             </div>
                             <div className='flex-grow'>
                                 <h1 className="text-2xl sm:text-3xl font-bold text-foreground">

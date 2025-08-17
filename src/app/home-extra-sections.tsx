@@ -56,7 +56,7 @@ function StatsSection({ stats }: { stats: { jobs: number, competitions: number, 
       label: "مباراة عمومية",
       count: stats.competitions,
       icon: ShieldCheck,
-      color: "#B71C1C", // Dark Red for Competitions
+      color: "#14532d", // Dark Green for Competitions
     },
     {
       label: "باحث عن عمل",

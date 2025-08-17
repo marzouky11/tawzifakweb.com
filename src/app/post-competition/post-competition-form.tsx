@@ -60,7 +60,7 @@ const steps = [
     { id: 3, name: "التواريخ والروابط", description: "مواعيد التسجيل وروابط التقديم.", icon: CalendarIcon },
 ];
 
-const sectionColor = '#B71C1C';
+const sectionColor = '#14532d';
 
 const StepsIndicator = ({ currentStep, onStepClick }: { currentStep: number; onStepClick: (step: number) => void; }) => {
   return (
