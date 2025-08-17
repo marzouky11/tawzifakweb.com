@@ -44,8 +44,9 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
 
   const detailUrl = `/competitions/${competition.id}`;
   const organizer = getOrganizerByName(competition.organizer);
-  const sectionColor = organizer?.color || '#B71C1C';
+  const sectionColor = '#B71C1C';
   const organizerIcon = organizer?.icon || 'Landmark';
+  const organizerColor = organizer?.color || sectionColor;
   
   return (
     <Card 
@@ -54,11 +55,11 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
     >
        <CardHeader className="p-4">
         <div className="flex items-center gap-3">
-             <div className="w-8 h-8 rounded-md flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: `${sectionColor}1A`}}>
-                <CategoryIcon name={organizerIcon} className="w-5 h-5" style={{ color: sectionColor }} />
+             <div className="w-8 h-8 rounded-md flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: `${organizerColor}1A`}}>
+                <CategoryIcon name={organizerIcon} className="w-5 h-5" style={{ color: organizerColor }} />
              </div>
-             <h3 className="font-bold text-base leading-tight line-clamp-2 text-foreground">
-                <Link href={detailUrl} className="hover:underline">
+             <h3 className="font-bold text-base leading-tight line-clamp-2">
+                <Link href={detailUrl} className="hover:underline" style={{ color: sectionColor }}>
                     {competition.title}
                 </Link>
             </h3>
