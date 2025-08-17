@@ -1,7 +1,7 @@
 
 
 import { notFound } from 'next/navigation';
-import { getCompetitionById, getOrganizerByName } from '@/lib/data';
+import { getCompetitionById, getOrganizerByName, getCompetitions } from '@/lib/data';
 import { AppLayout } from '@/components/layout/app-layout';
 import type { Metadata } from 'next';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
@@ -22,12 +22,15 @@ import {
   ListOrdered,
   FileUp,
   LogIn,
+  Eye,
 } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { CategoryIcon } from '@/components/icons';
 import { Separator } from '@/components/ui/separator';
 import { ReportAdDialog } from '@/app/jobs/[id]/report-ad-dialog';
 import { SaveAdButton } from '@/app/jobs/[id]/save-ad-button';
+import { ViewCounter } from '@/app/jobs/[id]/view-counter';
+import { CompetitionCard } from '@/components/competition-card';
 
 interface CompetitionDetailPageProps {
   params: { id: string };
@@ -138,6 +141,11 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
         notFound();
     }
     
+    const [similarCompetitions, viewsCount] = await Promise.all([
+      getCompetitions({ count: 2, excludeId: competition.id }),
+      getViewsCount(params.id)
+    ]);
+    
     const organizer = getOrganizerByName(competition.organizer);
     const sectionColor = '#14532d';
     const organizerIcon = organizer?.icon || 'Landmark';
@@ -145,6 +153,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
 
     return (
         <AppLayout>
+            <ViewCounter adId={params.id} />
             <MobilePageHeader title="تفاصيل المباراة">
                 <Landmark className="h-5 w-5 text-primary" />
             </MobilePageHeader>
@@ -173,6 +182,10 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                                         <div className="flex items-center gap-1.5">
                                             <CalendarDays className="h-4 w-4" style={{color: sectionColor}} />
                                             <span>نُشرت: {competition.postedAt}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5">
+                                            <Eye className="h-4 w-4" style={{color: sectionColor}} />
+                                            <span>{viewsCount} مشاهدات</span>
                                         </div>
                                     </div>
                                 </div>
@@ -248,6 +261,16 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                 <div className="text-center">
                     <ReportAdDialog adId={competition.id} />
                 </div>
+                 {similarCompetitions.length > 0 && (
+                    <div className="space-y-4 pt-6 mt-6 border-t">
+                        <h2 className="text-2xl font-bold">مباريات مشابهة</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {similarCompetitions.map((similarComp) => (
+                            <CompetitionCard key={similarComp.id} competition={similarComp} />
+                        ))}
+                        </div>
+                    </div>
+                )}
             </div>
         </AppLayout>
     );

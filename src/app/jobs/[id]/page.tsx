@@ -336,63 +336,38 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                         </CardContent>
                     </Card>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2 text-lg">
-                                    <Phone className="h-5 w-5" style={{color: sectionColor}} />
-                                    معلومات التواصل
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-2">
-                                 <div className="grid grid-cols-2 gap-2">
-                                    {contactButtons.map(button => {
-                                        if (!button) return null;
-                                        const isApplyUrl = button.type === 'applyUrl';
-                                        const isLastAndOdd = contactButtons.filter(b => !!b).length % 2 !== 0 && button === contactButtons[contactButtons.length - 1];
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2 text-lg">
+                                <Phone className="h-5 w-5" style={{color: sectionColor}} />
+                                معلومات التواصل
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-2">
+                             <div className="grid grid-cols-2 gap-2">
+                                {contactButtons.map(button => {
+                                    if (!button) return null;
+                                    const isApplyUrl = button.type === 'applyUrl';
+                                    const isLastAndOdd = contactButtons.filter(b => !!b).length % 2 !== 0 && button === contactButtons[contactButtons.length - 1];
 
-                                        return (
-                                            <Button
-                                                key={button.type}
-                                                asChild
-                                                className={cn(button.className, (isApplyUrl && isLastAndOdd) && 'col-span-2')}
-                                                style={button.type === 'phone' ? { backgroundColor: sectionColor } : {}}
-                                            >
-                                                <a href={button.href} target={button.type !== 'phone' && button.type !== 'email' ? '_blank' : undefined} rel="noopener noreferrer">
-                                                    <button.icon className="ml-2 h-4 w-4" />
-                                                    {button.label}
-                                                </a>
-                                            </Button>
-                                        )
-                                    })}
-                                </div>
-                                <ShareButton title={job.title || ''} text={job.description || ''} />
-                            </CardContent>
-                        </Card>
-
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2 text-lg">
-                                    <UserIcon className="h-5 w-5" style={{color: sectionColor}}/>
-                                    صاحب الإعلان
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="flex flex-col gap-4">
-                                <div className="flex flex-row items-center gap-4">
-                                    <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-16 w-16 text-2xl flex-shrink-0" />
-                                    <div className="font-semibold text-lg text-right flex-grow">
-                                        {job.ownerName || 'صاحب الإعلان'}
-                                    </div>
-                                </div>
-                                <Button asChild variant="outline" size="sm" className="w-full">
-                                    <Link href={`/user/${job.userId}`}>
-                                        <Search className="mr-2 h-4 w-4" />
-                                        عرض جميع إعلاناته
-                                    </Link>
-                                </Button>
-                            </CardContent>
-                        </Card>
-                    </div>
+                                    return (
+                                        <Button
+                                            key={button.type}
+                                            asChild
+                                            className={cn(button.className, (isApplyUrl && isLastAndOdd) && 'col-span-2')}
+                                            style={button.type === 'phone' ? { backgroundColor: sectionColor } : {}}
+                                        >
+                                            <a href={button.href} target={button.type !== 'phone' && button.type !== 'email' ? '_blank' : undefined} rel="noopener noreferrer">
+                                                <button.icon className="ml-2 h-4 w-4" />
+                                                {button.label}
+                                            </a>
+                                        </Button>
+                                    )
+                                })}
+                            </div>
+                            <ShareButton title={job.title || ''} text={job.description || ''} />
+                        </CardContent>
+                    </Card>
                     
                     <div className="text-center pt-4">
                         <ReportAdDialog adId={job.id} />

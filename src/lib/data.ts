@@ -501,9 +501,10 @@ export async function getCompetitions(options: {
   count?: number;
   searchQuery?: string;
   location?: string;
+  excludeId?: string;
 } = {}): Promise<Competition[]> {
   try {
-    const { count, searchQuery, location } = options;
+    const { count, searchQuery, location, excludeId } = options;
     const competitionsRef = collection(db, 'competitions');
     const q = query(competitionsRef, orderBy('createdAt', 'desc'));
     const querySnapshot = await getDocs(q);
@@ -518,6 +519,14 @@ export async function getCompetitions(options: {
         postedAt: formatTimeAgo(data.createdAt),
         isNew,
       } as Competition;
+    });
+
+     // Client-side filtering
+    competitions = competitions.filter(comp => {
+       if (excludeId && comp.id === excludeId) {
+        return false;
+      }
+      return true;
     });
 
     if (searchQuery || location) {
