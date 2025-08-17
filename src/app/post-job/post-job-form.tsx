@@ -70,15 +70,15 @@ interface PostJobFormProps {
   preselectedType?: PostType;
 }
 
-const StepsIndicator = ({ currentStep, steps, onStepClick }: { currentStep: number; steps: { id: number; name: string, description: string; icon: React.ElementType }[]; onStepClick: (step: number) => void; }) => {
+const StepsIndicator = ({ currentStep, steps, onStepClick, themeColor }: { currentStep: number; steps: { id: number; name: string, description: string; icon: React.ElementType }[]; onStepClick: (step: number) => void; themeColor: string; }) => {
   return (
     <div className="relative">
       <div className="absolute right-0 top-1/2 w-full -translate-y-1/2" aria-hidden="true">
         <div className="h-0.5 w-full bg-border" />
       </div>
       <div
-        className="absolute right-0 top-1/2 h-0.5 -translate-y-1/2 bg-primary transition-all duration-300"
-        style={{ width: `calc(${currentStep} / ${steps.length - 1} * 100%)` }}
+        className="absolute right-0 top-1/2 h-0.5 -translate-y-1/2 transition-all duration-300"
+        style={{ width: `calc(${currentStep} / ${steps.length - 1} * 100%)`, backgroundColor: themeColor }}
       />
       <div className="relative flex justify-between">
         {steps.map((step, stepIdx) => {
@@ -92,24 +92,27 @@ const StepsIndicator = ({ currentStep, steps, onStepClick }: { currentStep: numb
                 onClick={() => stepIdx <= currentStep && onStepClick(stepIdx)}
                 className={cn(
                   "relative z-10 w-10 h-10 flex items-center justify-center rounded-full font-bold text-lg transition-all duration-300 border-2",
-                  isCurrent ? "bg-primary text-primary-foreground border-primary scale-110" :
-                  isCompleted ? "bg-primary text-primary-foreground border-primary" :
-                  "bg-muted border-border text-muted-foreground",
+                  isCurrent ? "scale-110" : "bg-muted text-muted-foreground border-border",
                   "hover:scale-105"
                 )}
+                 style={{
+                    backgroundColor: isCurrent || isCompleted ? themeColor : undefined,
+                    borderColor: isCurrent || isCompleted ? themeColor : undefined,
+                    color: isCurrent || isCompleted ? 'white' : undefined,
+                }}
                 aria-current={isCurrent ? "step" : undefined}
               >
                 {isCompleted ? <Check className="w-6 h-6" /> : <step.icon className="w-5 h-5" />}
               </button>
               <div className="hidden md:block text-center mt-2">
-                <p className={cn("font-bold", isCurrent ? "text-primary" : "text-foreground")}>
+                <p className={cn("font-bold", isCurrent ? "text-primary" : "text-foreground")} style={{color: isCurrent ? themeColor : undefined}}>
                   {step.name}
                 </p>
                 <p className="text-xs text-muted-foreground">{step.description}</p>
               </div>
                <div className="md:hidden text-center mt-2 h-5">
                 {isCurrent && (
-                    <p className="text-xs font-semibold text-primary">
+                    <p className="text-xs font-semibold text-primary" style={{color: themeColor}}>
                         {step.name}
                     </p>
                 )}
@@ -197,12 +200,17 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
         setCurrentStep(stepIndex);
         return;
     }
-
-    const fieldsToValidate = stepFields[currentStep] as (keyof z.infer<typeof formSchema>)[];
+    const fieldsToValidate = stepFields.slice(0, stepIndex + 1).flat() as (keyof z.infer<typeof formSchema>)[];
     const isValid = await form.trigger(fieldsToValidate);
 
     if(isValid) {
         setCurrentStep(stepIndex);
+    } else {
+         toast({
+            variant: "destructive",
+            title: "حقول ناقصة",
+            description: "الرجاء تعبئة جميع الحقول في المراحل السابقة أولاً.",
+        });
     }
   }
 
@@ -476,7 +484,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
         <Form {...form}>
            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full">
                 <div className="p-6 md:p-8">
-                     <StepsIndicator currentStep={currentStep} steps={steps} onStepClick={handleStepClick} />
+                     <StepsIndicator currentStep={currentStep} steps={steps} onStepClick={handleStepClick} themeColor={getThemeColor()} />
                 </div>
                 
                 <Separator className="mx-auto w-[calc(100%-3rem)]" />
@@ -497,14 +505,14 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
 
                 <div className="flex gap-4 items-center justify-between p-6 border-t bg-muted/50 rounded-b-lg mt-auto">
                     {currentStep > 0 ? (
-                        <Button type="button" variant="outline" onClick={prevStep} className="text-base md:text-lg">
+                        <Button type="button" variant="outline" onClick={prevStep}>
                             <ArrowRight className="ml-2 h-4 w-4" />
                             السابق
                         </Button>
                     ) : <div />}
 
                     {currentStep < stepsContent.length - 1 && (
-                        <Button type="button" onClick={nextStep} style={{ backgroundColor: getThemeColor() }} className="text-primary-foreground text-base md:text-lg">
+                        <Button type="button" onClick={nextStep} style={{ backgroundColor: getThemeColor() }} className="text-primary-foreground">
                             التالي
                             <ArrowLeft className="mr-2 h-4 w-4" />
                         </Button>
@@ -515,7 +523,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                             type="submit"
                             disabled={isSubmitting}
                             style={{ backgroundColor: getThemeColor() }}
-                            className="text-primary-foreground text-base md:text-lg"
+                            className="text-primary-foreground"
                         >
                             {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                             {isEditing ? 'تحديث الإعلان' : 'نشر الإعلان'}
