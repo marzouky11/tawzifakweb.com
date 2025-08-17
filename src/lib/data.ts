@@ -414,42 +414,6 @@ export async function getTestimonials(): Promise<Testimonial[]> {
     }
 }
 
-
-export async function getTestimonialById(id: string): Promise<Testimonial | null> {
-  try {
-    const docRef = doc(db, 'reviews', id);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-      return { 
-          id: docSnap.id, 
-          ...data,
-          content: data.text,
-          postedAt: formatTimeAgo(data.createdAt),
-     } as Testimonial;
-    } else {
-      return null;
-    }
-  } catch (error) {
-    console.error("Error fetching testimonial by ID: ", error);
-    return null;
-  }
-}
-
-export async function updateTestimonial(testimonialId: string, content: string) {
-    try {
-        const testimonialRef = doc(db, 'reviews', testimonialId);
-        await updateDoc(testimonialRef, {
-            content: content,
-            updatedAt: serverTimestamp()
-        });
-    } catch (e) {
-        console.error("Error updating testimonial: ", e);
-        throw new Error("Failed to update testimonial");
-    }
-}
-
 export async function deleteTestimonial(testimonialId: string) {
     try {
         await deleteDoc(doc(db, 'reviews', testimonialId));

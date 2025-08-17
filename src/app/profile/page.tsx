@@ -108,7 +108,7 @@ function LoggedInView({ userData, onLogout }: { userData: any, onLogout: () => v
                 <CardContent className="p-0">
                     <ul className="divide-y divide-border">
                         <SettingItem icon={User} label="تعديل الملف الشخصي" href="/profile/edit" />
-                        <SettingItem icon={FileText} label="إعلاناتي" href="/profile/my-ads" />
+                        {!userData?.isAdmin && <SettingItem icon={FileText} label="إعلاناتي" href="/profile/my-ads" />}
                         <SettingItem icon={FileText} label="إنشاء سيرة ذاتية" href="/cv-builder" />
                         <li className="flex items-center justify-between p-4">
                             <div className="flex items-center gap-4">
@@ -131,6 +131,7 @@ function LoggedInView({ userData, onLogout }: { userData: any, onLogout: () => v
                 </CardHeader>
                 <CardContent className="p-0">
                     <ul className="divide-y divide-border">
+                        <SettingItem icon={FileText} label="إدارة الإعلانات" href="/profile/my-ads" />
                         <SettingItem icon={User} label="إدارة المستخدمين" href="/admin/users" />
                         <SettingItem icon={MessageSquare} label="إدارة الآراء" href="/admin/testimonials" />
                     </ul>

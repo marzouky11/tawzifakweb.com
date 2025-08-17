@@ -8,7 +8,7 @@ import { AppLayout } from '@/components/layout/app-layout';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, MessageSquare, Trash2, Edit } from 'lucide-react';
+import { Loader2, MessageSquare, Trash2 } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,12 +20,10 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useToast } from '@/hooks/use-toast';
-import { getTestimonials, deleteTestimonial, updateTestimonial } from '@/lib/data';
+import { getTestimonials, deleteTestimonial } from '@/lib/data';
 import type { Testimonial } from '@/lib/types';
 import { TestimonialCard } from '@/app/testimonials/testimonial-card';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
 
 export default function AdminTestimonialsPage() {
   const { userData, loading: authLoading } = useAuth();
@@ -35,8 +33,6 @@ export default function AdminTestimonialsPage() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
   const [testimonialToDelete, setTestimonialToDelete] = useState<Testimonial | null>(null);
-  const [testimonialToEdit, setTestimonialToEdit] = useState<Testimonial | null>(null);
-  const [editText, setEditText] = useState('');
 
   useEffect(() => {
     if (!authLoading && !userData?.isAdmin) {
@@ -74,25 +70,6 @@ export default function AdminTestimonialsPage() {
     }
   };
 
-  const handleEdit = (testimonial: Testimonial) => {
-    setTestimonialToEdit(testimonial);
-    setEditText(testimonial.content);
-  };
-  
-  const handleUpdate = async () => {
-    if (!testimonialToEdit) return;
-    try {
-        await updateTestimonial(testimonialToEdit.id, editText);
-        setTestimonials(prev => prev.map(t => t.id === testimonialToEdit.id ? { ...t, content: editText } : t));
-        toast({ title: "تم تحديث الرأي بنجاح" });
-    } catch (error) {
-         toast({ variant: 'destructive', title: 'فشل تحديث الرأي' });
-    } finally {
-        setTestimonialToEdit(null);
-        setEditText('');
-    }
-  }
-
   if (authLoading || loading) {
     return (
       <AppLayout>
@@ -111,7 +88,7 @@ export default function AdminTestimonialsPage() {
       <DesktopPageHeader
         icon={MessageSquare}
         title="إدارة آراء المستخدمين"
-        description="مراجعة، تعديل، أو حذف الآراء المنشورة على المنصة."
+        description="مراجعة وحذف الآراء المنشورة على المنصة."
       />
       <div className="container mx-auto max-w-7xl px-4 pb-8">
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
@@ -119,10 +96,6 @@ export default function AdminTestimonialsPage() {
             <div key={testimonial.id} className="flex flex-col gap-2">
                 <TestimonialCard testimonial={testimonial} />
                 <div className="flex gap-2">
-                    <Button variant="outline" className="flex-1" onClick={() => handleEdit(testimonial)}>
-                        <Edit className="ml-2 h-4 w-4" />
-                        تعديل
-                    </Button>
                     <Button variant="destructive" className="flex-1" onClick={() => setTestimonialToDelete(testimonial)}>
                         <Trash2 className="ml-2 h-4 w-4" />
                         حذف
@@ -147,25 +120,6 @@ export default function AdminTestimonialsPage() {
             </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      
-      <Dialog open={!!testimonialToEdit} onOpenChange={(open) => !open && setTestimonialToEdit(null)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>تعديل الرأي</DialogTitle>
-          </DialogHeader>
-          <div className="py-4">
-            <Textarea 
-                value={editText}
-                onChange={(e) => setEditText(e.target.value)}
-                rows={6}
-            />
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setTestimonialToEdit(null)}>إلغاء</Button>
-            <Button onClick={handleUpdate}>حفظ التغييرات</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </AppLayout>
   );
 }
