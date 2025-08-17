@@ -74,6 +74,8 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
         </div>
       </CardHeader>
       
+      <Separator />
+
       <CardContent className="p-4 flex-grow flex flex-wrap items-start gap-2">
          <InfoBadge
             icon={Building}

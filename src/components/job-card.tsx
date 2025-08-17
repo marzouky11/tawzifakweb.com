@@ -10,7 +10,7 @@ import { getCategoryById } from '@/lib/data';
 import { CategoryIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Separator } from '@/components/ui/separator';
+import { Separator } from './ui/separator';
 
 interface JobCardProps {
   job: Job | null;
@@ -98,6 +98,8 @@ export function JobCard({ job }: JobCardProps) {
         </div>
       </CardHeader>
       
+      <Separator />
+
       <CardContent className="p-4 flex-grow flex flex-wrap items-start gap-2">
          <InfoBadge
             icon={MapPin}
