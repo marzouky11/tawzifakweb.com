@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { getJobs, getTestimonials, getCompetitions } from '@/lib/data';
 import React, { Suspense } from 'react';
-import { Newspaper, Briefcase, Users, ArrowLeft, FileText, User as UserIcon, ShieldCheck } from 'lucide-react';
+import { Newspaper, Briefcase, Users, ArrowLeft, FileText, User as UserIcon, Landmark } from 'lucide-react';
 import { JobFilters } from '@/components/job-filters';
 import { HomeCarousel } from './home-carousel';
 import { HomeExtraSections } from './home-extra-sections';
@@ -86,7 +86,7 @@ async function CompetitionsSection() {
     return (
       <>
         <SectionHeader 
-          icon={ShieldCheck}
+          icon={Landmark}
           title="المباريات العمومية"
           description="تصفح آخر مباريات التوظيف في القطاع العام."
           href="/competitions"

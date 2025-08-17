@@ -3,7 +3,7 @@
 import type { Metadata } from 'next';
 import { AppLayout } from '@/components/layout/app-layout';
 import { getCompetitions } from '@/lib/data';
-import { ShieldCheck } from 'lucide-react';
+import { Landmark } from 'lucide-react';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
@@ -51,10 +51,10 @@ export default async function CompetitionsPage({
   return (
     <AppLayout>
       <MobilePageHeader title="المباريات العمومية">
-        <ShieldCheck className="h-5 w-5 text-primary" />
+        <Landmark className="h-5 w-5 text-primary" />
       </MobilePageHeader>
       <DesktopPageHeader
-        icon={ShieldCheck}
+        icon={Landmark}
         title="المباريات العمومية"
         description="تصفح أحدث إعلانات التوظيف والمباريات في القطاع العام."
       />

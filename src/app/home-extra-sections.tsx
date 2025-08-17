@@ -3,7 +3,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Briefcase, Star, Users, MessageSquare, ShieldCheck } from 'lucide-react';
+import { Briefcase, Star, Users, MessageSquare, Landmark } from 'lucide-react';
 import { motion, useInView } from "framer-motion";
 import type { Testimonial } from '@/lib/types';
 import { Button } from '@/components/ui/button';
@@ -55,7 +55,7 @@ function StatsSection({ stats }: { stats: { jobs: number, competitions: number, 
     {
       label: "مباراة عمومية",
       count: stats.competitions,
-      icon: ShieldCheck,
+      icon: Landmark,
       color: "#14532d", // Dark Green for Competitions
     },
     {

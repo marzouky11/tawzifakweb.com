@@ -7,7 +7,7 @@ import { useAuth } from '@/context/auth-context';
 import { AppLayout } from '@/components/layout/app-layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { PostCompetitionForm } from './post-competition-form';
-import { Loader2, ShieldCheck } from 'lucide-react';
+import { Loader2, Landmark } from 'lucide-react';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 
@@ -40,10 +40,10 @@ export default function PostCompetitionPage() {
   return (
     <AppLayout>
       <MobilePageHeader title="نشر مباراة عمومية">
-        <ShieldCheck className="h-5 w-5 text-primary" />
+        <Landmark className="h-5 w-5 text-primary" />
       </MobilePageHeader>
       <DesktopPageHeader
-        icon={ShieldCheck}
+        icon={Landmark}
         title="نشر مباراة عمومية جديدة"
         description="هذه الصفحة مخصصة للمشرفين فقط لنشر إعلانات المباريات."
       />

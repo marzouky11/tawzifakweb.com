@@ -14,7 +14,7 @@ import {
   Users2,
   FileText,
   Link as LinkIcon,
-  ShieldCheck,
+  Landmark,
   ClipboardList,
   Info,
   MapPin,
@@ -145,10 +145,10 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
     return (
         <AppLayout>
             <MobilePageHeader title="تفاصيل المباراة">
-                <ShieldCheck className="h-5 w-5 text-primary" />
+                <Landmark className="h-5 w-5 text-primary" />
             </MobilePageHeader>
             <DesktopPageHeader
-                icon={ShieldCheck}
+                icon={Landmark}
                 title="تفاصيل المباراة العمومية"
                 description="هنا تجد جميع المعلومات المتعلقة بهذه المباراة."
             />

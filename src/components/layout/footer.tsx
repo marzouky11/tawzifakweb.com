@@ -20,7 +20,7 @@ Shield,
 FileText,
 HelpCircle,
 ArrowLeft,
-ShieldCheck,
+Landmark,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -31,7 +31,7 @@ const importantLinks = [
 { label: 'تسجيل الدخول', href: '/login', icon: LogIn, guestOnly: true },
 { label: 'إنشاء حساب', href: '/signup', icon: UserPlus, guestOnly: true },
 { label: 'الوظائف', href: '/jobs', icon: Briefcase },
-{ label: 'المباريات العمومية', href: '/competitions', icon: ShieldCheck },
+{ label: 'المباريات العمومية', href: '/competitions', icon: Landmark },
 { label: 'العمال', href: '/workers', icon: Users },
 { label: 'نشر إعلان', href: '/post-job/select-type', icon: PlusCircle },
 { label: 'إنشاء سيرة ذاتية', href: '/cv-builder', icon: FileText },

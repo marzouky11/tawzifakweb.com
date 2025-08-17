@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { AppLayout } from '@/components/layout/app-layout';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { PlusCircle, Users, Briefcase, LogIn, ShieldCheck, MessageCircleWarning } from 'lucide-react';
+import { PlusCircle, Users, Briefcase, LogIn, Landmark, MessageCircleWarning } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -129,7 +129,7 @@ export default function SelectPostTypePage() {
            {userData?.isAdmin ? (
             <Link href="/post-competition" onClick={(e) => handleLinkClick(e, 'competition')} className="lg:col-span-1">
               <Card className="p-6 text-center hover:shadow-xl hover:border-[#14532d] transition-all duration-300 cursor-pointer h-full flex flex-col justify-center items-center bg-[#14532d]/5 dark:bg-[#14532d]/20">
-                <ShieldCheck className="h-16 w-16 text-[#14532d] mb-4" />
+                <Landmark className="h-16 w-16 text-[#14532d] mb-4" />
                 <h3 className="text-xl font-semibold text-[#14532d]">نشر مباراة عمومية</h3>
                 <p className="text-muted-foreground mt-2">
                   (خاص بالمشرفين) انشر إعلانات المباريات والوظائف الحكومية.
@@ -138,7 +138,7 @@ export default function SelectPostTypePage() {
             </Link>
            ) : (
              <DisabledCard 
-                icon={ShieldCheck}
+                icon={Landmark}
                 title="نشر مباراة عمومية"
                 description="إذا أردت نشر مباراة عمومية، يجب الاتصال بالدعم."
                 color="#14532d"
