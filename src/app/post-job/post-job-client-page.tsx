@@ -12,25 +12,41 @@ import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import type { Category, PostType } from '@/lib/types';
 import { AnimatePresence } from 'framer-motion';
+import { useToast } from '@/hooks/use-toast';
 
 interface PostJobClientPageProps {
     categories: Category[];
 }
 
 export default function PostJobClientPage({ categories }: PostJobClientPageProps) {
-  const { user, loading } = useAuth();
+  const { user, userData, loading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { toast } = useToast();
   const postType = searchParams.get('type') as PostType | null;
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push(`/login?redirect=/post-job?${searchParams.toString()}`);
+    if (!loading) {
+        if (!user) {
+          router.push(`/login?redirect=/post-job?${searchParams.toString()}`);
+          return;
+        }
+
+        if (!postType && !window.location.pathname.includes('edit-job')) {
+            router.push('/post-job/select-type');
+            return;
+        }
+
+        if (postType === 'seeking_worker' && !userData?.isAdmin) {
+             toast({
+                variant: "destructive",
+                title: "صلاحية غير كافية",
+                description: "نشر عروض العمل متاح للمشرفين فقط.",
+            });
+            router.push('/');
+        }
     }
-    if (!loading && !postType && !window.location.pathname.includes('edit-job')) {
-        router.push('/post-job/select-type');
-    }
-  }, [user, loading, router, postType, searchParams]);
+  }, [user, userData, loading, router, postType, searchParams, toast]);
 
   const pageTitle = postType === 'seeking_job' ? 'نشر طلب عمل' : 'نشر عرض عمل';
   const pageDescription = postType === 'seeking_job' 
@@ -48,7 +64,7 @@ export default function PostJobClientPage({ categories }: PostJobClientPageProps
         description={pageDescription}
       />
       <div className="flex-grow">
-        {loading || !user ? (
+        {(loading || !user) ? (
             <div className="flex h-full items-center justify-center p-8 min-h-[50vh]">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>

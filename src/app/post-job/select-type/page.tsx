@@ -13,17 +13,31 @@ import { Loader2 } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { useToast } from '@/hooks/use-toast';
 
 
 export default function SelectPostTypePage() {
   const { user, userData, loading } = useAuth();
   const router = useRouter();
+  const { toast } = useToast();
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, type: string) => {
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, type: 'seeking_job' | 'seeking_worker') => {
+    e.preventDefault();
     if (!user) {
-      e.preventDefault();
       router.push(`/login?redirect=/post-job?type=${type}`);
+      return;
     }
+
+    if (type === 'seeking_worker' && !userData?.isAdmin) {
+      toast({
+        variant: "destructive",
+        title: "صلاحية غير كافية",
+        description: "نشر عروض العمل متاح للمشرفين فقط.",
+      });
+      return;
+    }
+    
+    router.push(`/post-job?type=${type}`);
   };
 
   const handleCompetitionClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -35,8 +49,11 @@ export default function SelectPostTypePage() {
     if (userData?.isAdmin) {
       router.push('/post-competition');
     } else {
-        // Optionally, show a toast or message that this is for admins only
-        alert("هذه الميزة متاحة للمشرفين فقط.");
+        toast({
+            variant: "destructive",
+            title: "صلاحية غير كافية",
+            description: "هذه الميزة متاحة للمشرفين فقط.",
+        });
     }
   }
 
@@ -78,7 +95,7 @@ export default function SelectPostTypePage() {
               <Briefcase className="h-16 w-16 text-[#0D47A1] mb-4" />
               <h3 className="text-xl font-semibold text-[#0D47A1]">أبحث عن موظف/عامل</h3>
               <p className="text-muted-foreground mt-2">
-                انشر فرصة عمل لديك واعثر على أفضل المرشحين لمشروعك أو شركتك.
+                 (خاص بالمشرفين) انشر فرصة عمل واعثر على أفضل المرشحين.
               </p>
             </Card>
           </Link>
