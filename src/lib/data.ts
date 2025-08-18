@@ -421,10 +421,9 @@ export async function deleteTestimonial(testimonialId: string) {
 export async function getViewsCount(adId: string): Promise<number> {
     if (!adId) return 0;
     try {
+        let viewsCollectionRef;
         const adDocRef = doc(db, 'ads', adId);
         const adSnap = await getDoc(adDocRef);
-
-        let viewsCollectionRef;
 
         if (adSnap.exists()) {
             viewsCollectionRef = collection(db, 'ads', adId, 'views');
@@ -434,7 +433,7 @@ export async function getViewsCount(adId: string): Promise<number> {
             if (competitionSnap.exists()) {
                 viewsCollectionRef = collection(db, 'competitions', adId, 'views');
             } else {
-                return 0;
+                return 0; // Return 0 if neither ad nor competition exists
             }
         }
         
@@ -493,7 +492,8 @@ export async function postCompetition(competitionData: Omit<Competition, 'id' | 
         }
     });
     
-    if (!('positionsAvailable' in newCompetition)) {
+    // Ensure positionsAvailable is set to null if it's not provided or empty
+    if (newCompetition.positionsAvailable === undefined || newCompetition.positionsAvailable === '') {
         newCompetition.positionsAvailable = null;
     }
 
@@ -610,7 +610,7 @@ export async function updateCompetition(id: string, competitionData: Partial<Com
             }
         });
         
-        if (!('positionsAvailable' in dataToUpdate)) {
+        if (dataToUpdate.positionsAvailable === undefined || dataToUpdate.positionsAvailable === '') {
             dataToUpdate.positionsAvailable = null;
         }
 

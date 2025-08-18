@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Users, Building } from 'lucide-react';
+import { Calendar, Users, Building, MapPin } from 'lucide-react';
 import type { Competition } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -79,12 +79,14 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
       <Separator />
 
       <CardContent className="p-4 flex-grow flex flex-wrap items-start gap-2">
-        <InfoBadge
-            icon={Users}
-            text={`${competition.positionsAvailable} منصب`}
-            variant="accent"
-            className="bg-green-100 text-green-800 border-green-200 dark:bg-green-900/50 dark:text-green-200 dark:border-green-800"
-        />
+        {competition.location && (
+            <InfoBadge
+                icon={MapPin}
+                text={competition.location}
+                variant="accent"
+                className="bg-green-100 text-green-800 border-green-200 dark:bg-green-900/50 dark:text-green-200 dark:border-green-800"
+            />
+        )}
         <InfoBadge
             icon={Calendar}
             text={`آخر أجل: ${competition.deadline}`}
