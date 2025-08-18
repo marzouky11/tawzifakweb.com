@@ -418,26 +418,29 @@ export async function deleteTestimonial(testimonialId: string) {
     }
 }
 
-export async function getViewsCount(adId: string): Promise<number> {
+export async function getViewsCount(adId: string, viewerId: string | null): Promise<number> {
     if (!adId) return 0;
+    
     try {
+        // Try to record a view first
+        if(viewerId) {
+             await recordView(adId, viewerId);
+        }
+
         const adDocRef = doc(db, 'ads', adId);
         const competitionDocRef = doc(db, 'competitions', adId);
 
-        // Check both collections in parallel
         const [adSnap, competitionSnap] = await Promise.all([
             getDoc(adDocRef),
             getDoc(competitionDocRef)
         ]);
         
         let viewsCollectionRef;
-
         if (adSnap.exists()) {
             viewsCollectionRef = collection(adDocRef, 'views');
         } else if (competitionSnap.exists()) {
             viewsCollectionRef = collection(competitionDocRef, 'views');
         } else {
-            // If the document doesn't exist in either collection, return 0
             return 0;
         }
         
@@ -452,7 +455,6 @@ export async function getViewsCount(adId: string): Promise<number> {
 
 export async function recordView(adId: string, viewerId: string): Promise<void> {
   if (!adId || !viewerId) {
-    console.warn("recordView: adId or viewerId is missing.");
     return;
   }
   try {

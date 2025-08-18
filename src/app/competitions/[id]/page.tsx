@@ -29,9 +29,9 @@ import { CategoryIcon } from '@/components/icons';
 import { Separator } from '@/components/ui/separator';
 import { ReportAdDialog } from '@/app/jobs/[id]/report-ad-dialog';
 import { SaveAdButton } from '@/app/jobs/[id]/save-ad-button';
-import { ViewCounter } from '@/app/jobs/[id]/view-counter';
 import { CompetitionCard } from '@/components/competition-card';
-import { cn } from '@/lib/utils';
+import { cookies, headers } from 'next/headers';
+import { v4 as uuidv4 } from 'uuid';
 
 interface CompetitionDetailPageProps {
   params: { id: string };
@@ -134,6 +134,16 @@ const FormattedText = ({ text }: { text?: string }) => {
     );
 }
 
+function getVisitorId() {
+    const cookieStore = cookies();
+    let visitorId = cookieStore.get('visitorId')?.value;
+    if (!visitorId) {
+        visitorId = uuidv4();
+        cookieStore.set('visitorId', visitorId, { maxAge: 60 * 60 * 24 * 365 }); // 1 year expiry
+    }
+    return visitorId;
+}
+
 export default async function CompetitionDetailPage({ params }: CompetitionDetailPageProps) {
     const competition = await getCompetitionById(params.id);
 
@@ -141,9 +151,15 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
         notFound();
     }
     
+    // Get viewer ID (either from auth or a generated guest ID)
+    const headersList = headers();
+    const visitorId = getVisitorId();
+    const userId = headersList.get('x-user-id'); // Assuming middleware adds this
+    const viewerId = userId || visitorId;
+
     const [similarCompetitions, viewsCount] = await Promise.all([
       getCompetitions({ count: 2, excludeId: competition.id }),
-      getViewsCount(params.id)
+      getViewsCount(params.id, viewerId)
     ]);
     
     const organizer = getOrganizerByName(competition.organizer);
@@ -153,7 +169,6 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
 
     return (
         <AppLayout>
-            <ViewCounter adId={params.id} />
             <MobilePageHeader title="تفاصيل المباراة">
                 <Landmark className="h-5 w-5 text-primary" />
             </MobilePageHeader>

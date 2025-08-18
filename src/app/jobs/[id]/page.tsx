@@ -206,7 +206,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
             count: 2,
             excludeId: job.id,
         }),
-        getViewsCount(params.id)
+        getViewsCount(params.id, null)
     ]);
 
     const category = getCategoryById(job.categoryId || '');
