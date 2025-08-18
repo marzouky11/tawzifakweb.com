@@ -165,27 +165,27 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                 <Card className="overflow-hidden shadow-lg border-t-4" style={{borderColor: sectionColor}}>
                     <CardHeader className="bg-muted/30 p-4 sm:p-6">
                         <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
-                            <div className="flex items-start gap-4 flex-grow min-w-0">
-                                <div className="w-12 h-12 flex-shrink-0 mt-1 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${organizerColor}1A` }}>
-                                    <CategoryIcon name={organizerIcon} className="w-8 h-8" style={{color: organizerColor}} />
-                                </div>
-                                <div className='flex-grow min-w-0'>
-                                    <h1 className="text-2xl sm:text-3xl font-bold text-foreground break-words">
+                            <div className="flex-grow">
+                                <div className="flex items-center gap-3 mb-2">
+                                    <div className="p-2 sm:p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${organizerColor}1A` }}>
+                                        <CategoryIcon name={organizerIcon} className="w-6 h-6 sm:w-8 sm:h-8" style={{ color: organizerColor }} />
+                                    </div>
+                                    <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                                         {competition.title || 'عنوان غير متوفر'}
                                     </h1>
-                                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground mt-2 text-sm">
-                                        <div className="flex items-center gap-1.5">
-                                            <CalendarDays className="h-4 w-4" style={{color: sectionColor}} />
-                                            <span>نُشرت: {competition.postedAt}</span>
-                                        </div>
-                                        <div className="flex items-center gap-1.5">
-                                            <Eye className="h-4 w-4" style={{color: sectionColor}} />
-                                            <span>{viewsCount} مشاهدات</span>
-                                        </div>
+                                </div>
+                                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground mt-2 text-sm">
+                                    <div className="flex items-center gap-1.5">
+                                        <CalendarDays className="h-4 w-4" style={{color: sectionColor}} />
+                                        <span>نُشرت: {competition.postedAt}</span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                        <Eye className="h-4 w-4" style={{color: sectionColor}} />
+                                        <span>{viewsCount} مشاهدات</span>
                                     </div>
                                 </div>
                             </div>
-                             <div className="flex-shrink-0 sm:self-end">
+                             <div className="flex-shrink-0 flex flex-col items-end gap-2">
                                 <SaveAdButton adId={competition.id} adType="competition" />
                             </div>
                         </div>
