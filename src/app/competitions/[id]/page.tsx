@@ -166,15 +166,17 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
             <div className="container mx-auto max-w-4xl px-4 pb-8 space-y-6">
                 <Card className="overflow-hidden shadow-lg border-t-4" style={{borderColor: sectionColor}}>
                      <CardHeader className="bg-muted/30 p-4 sm:p-6">
-                         <div className="flex items-center gap-4">
-                            <div className="p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${organizerColor}1A` }}>
-                                <CategoryIcon name={organizerIcon} className="w-8 h-8" style={{ color: organizerColor }} />
-                            </div>
+                         <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                             <div className="flex-grow">
-                                <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
-                                    {competition.title || 'عنوان غير متوفر'}
-                                </h1>
-                                <div className="flex flex-col items-start gap-2 mt-2">
+                                <div className="flex items-center gap-4 mb-2">
+                                    <div className="p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${organizerColor}1A` }}>
+                                        <CategoryIcon name={organizerIcon} className="w-8 h-8" style={{ color: organizerColor }} />
+                                    </div>
+                                    <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+                                        {competition.title || 'عنوان غير متوفر'}
+                                    </h1>
+                                </div>
+                                <div className="flex flex-col items-start gap-2">
                                      {competition.location && (
                                         <div className="flex items-center gap-1.5 text-muted-foreground text-sm">
                                             <MapPin className="h-4 w-4" />
