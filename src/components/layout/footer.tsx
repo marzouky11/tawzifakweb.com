@@ -157,10 +157,13 @@ const DesktopFooter = () => {
 };
 
 export function Footer() {  
-return (  
-<>  
-<MobileFooter />  
-<DesktopFooter />  
-</>  
-);  
+  const pathname = usePathname();
+  const showMobileFooter = pathname === '/';
+
+  return (
+    <>  
+      {showMobileFooter && <MobileFooter />}
+      <DesktopFooter />  
+    </>  
+  );  
 }
