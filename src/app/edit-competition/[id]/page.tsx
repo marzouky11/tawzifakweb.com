@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -39,7 +40,7 @@ export default function EditCompetitionPage() {
           router.push('/profile/my-ads');
           return;
         }
-        setCompetition(competitionData);
+        setCompetition({ ...competitionData, positionsAvailable: competitionData.positionsAvailable || null });
       }
       setLoading(false);
     };

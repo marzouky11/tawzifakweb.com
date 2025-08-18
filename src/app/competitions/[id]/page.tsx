@@ -31,6 +31,7 @@ import { ReportAdDialog } from '@/app/jobs/[id]/report-ad-dialog';
 import { SaveAdButton } from '@/app/jobs/[id]/save-ad-button';
 import { ViewCounter } from '@/app/jobs/[id]/view-counter';
 import { CompetitionCard } from '@/components/competition-card';
+import { cn } from '@/lib/utils';
 
 interface CompetitionDetailPageProps {
   params: { id: string };
@@ -78,7 +79,7 @@ export async function generateMetadata({ params }: CompetitionDetailPageProps): 
 }
 
 
-const InfoItem = ({ icon: Icon, label, value, color, href, isDate }: { icon: React.ElementType; label: string; value: string | number | undefined; color?: string; href?: string; isDate?: boolean }) => {
+const InfoItem = ({ icon: Icon, label, value, color, href, isDate }: { icon: React.ElementType; label: string; value: string | number | undefined | null; color?: string; href?: string; isDate?: boolean }) => {
     if (!value) return null;
 
     const content = (
@@ -190,9 +191,9 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                                         <span>{viewsCount} مشاهدات</span>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="flex-shrink-0">
-                                <SaveAdButton adId={competition.id} adType="competition" />
+                                 <div className="pt-2">
+                                     <SaveAdButton adId={competition.id} adType="competition" />
+                                 </div>
                             </div>
                         </div>
                     </CardHeader>

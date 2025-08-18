@@ -28,7 +28,7 @@ import type { Competition } from '@/lib/types';
 const formSchema = z.object({
   title: z.string().min(5, 'العنوان يجب أن يكون 5 أحرف على الأقل.'),
   organizer: z.string().min(2, 'الجهة المنظمة مطلوبة.'),
-  positionsAvailable: z.coerce.number().int().positive('عدد المناصب يجب أن يكون رقمًا صحيحًا موجبًا.').optional(),
+  positionsAvailable: z.coerce.number().int().positive('عدد المناصب يجب أن يكون رقمًا صحيحًا موجبًا.').optional().nullable(),
   competitionType: z.string().optional(),
   location: z.string().optional(),
   
@@ -134,7 +134,7 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
       title: competition?.title || '',
       organizer: competition?.organizer || '',
       competitionType: competition?.competitionType || '',
-      positionsAvailable: competition?.positionsAvailable || undefined,
+      positionsAvailable: competition?.positionsAvailable || null,
       requirements: competition?.requirements || '',
       documentsNeeded: competition?.documentsNeeded || '',
       officialLink: competition?.officialLink || '',
@@ -231,7 +231,7 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
             type="number"
             {...field}
             value={field.value ?? ''}
-            onChange={e => field.onChange(e.target.value === '' ? undefined : +e.target.value)}
+            onChange={e => field.onChange(e.target.value === '' ? null : +e.target.value)}
         /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="competitionType" render={({ field }) => (<FormItem><FormLabelIcon icon={Briefcase} label="نوع المباراة (اختياري)" /><FormControl><Input placeholder="مفتوحة للجميع، لفئة معينة..." {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="location" render={({ field }) => (<FormItem><FormLabelIcon icon={MapPin} label="الموقع (اختياري)" /><FormControl><Input placeholder="مكان إجراء التكوين أو المباراة" {...field} /></FormControl><FormMessage /></FormItem>)} />
