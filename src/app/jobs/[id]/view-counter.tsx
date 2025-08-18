@@ -36,21 +36,25 @@ export function ViewCounter({ adId }: { adId: string }) {
     }
 
     const record = (viewerId: string) => {
-        recordView(adId, viewerId);
+        // We no longer record views from here for server components.
+        // It's handled in `getViewsCount`. This component is for `use client` pages if needed.
+        // recordView(adId, viewerId);
         viewRecordedRef.current = true; // Mark as recorded for this session
     };
 
-    // Determine the viewer ID (either logged-in user or guest) and record the view.
+    // This component will now only be used to get the visitorId and won't record views itself for pages that are server-rendered.
     if (user) {
-        record(user.uid);
+      // User is logged in, their ID is handled on the server.
     } else {
-        const visitorId = getVisitorId();
-        if (visitorId) {
-            record(visitorId);
-        }
+      // Guest user, ensure they have an ID.
+      getVisitorId();
     }
+    viewRecordedRef.current = true; // Mark as "handled" to prevent re-runs.
+
 
   }, [adId, user, isClient]);
 
   return null;
 }
+
+    

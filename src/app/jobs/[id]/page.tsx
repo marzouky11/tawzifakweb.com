@@ -206,7 +206,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
             count: 2,
             excludeId: job.id,
         }),
-        getViewsCount(params.id)
+        getViewsCount(params.id, null)
     ]);
 
     const category = getCategoryById(job.categoryId || '');
@@ -256,23 +256,25 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                             {job.title || 'عنوان غير متوفر'}
                                         </h1>
                                     </div>
-                                    <div className="flex flex-wrap items-center gap-4 text-muted-foreground mt-2 text-sm">
-                                        <div className="flex items-center gap-1.5">
-                                            <MapPin className="h-4 w-4" />
-                                            <span>{job.country || 'دولة غير محددة'}, {job.city || 'مدينة غير محددة'}</span>
+                                    <div className="flex flex-col items-start gap-2">
+                                        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground text-sm">
+                                            <div className="flex items-center gap-1.5">
+                                                <MapPin className="h-4 w-4" />
+                                                <span>{job.country || 'دولة غير محددة'}, {job.city || 'مدينة غير محددة'}</span>
+                                            </div>
+                                            <div className="flex items-center gap-1.5">
+                                                <CalendarDays className="h-4 w-4" />
+                                                <span>نُشر: {job.postedAt}</span>
+                                            </div>
+                                            <div className="flex items-center gap-1.5">
+                                                <Eye className="h-4 w-4" />
+                                                <span>{viewsCount} مشاهدات</span>
+                                            </div>
                                         </div>
-                                        <div className="flex items-center gap-1.5">
-                                            <CalendarDays className="h-4 w-4" />
-                                            <span>نُشر: {job.postedAt}</span>
-                                        </div>
-                                        <div className="flex items-center gap-1.5">
-                                            <Eye className="h-4 w-4" />
-                                            <span>{viewsCount} مشاهدات</span>
+                                        <div className="pt-2">
+                                            <SaveAdButton adId={job.id} adType="job" />
                                         </div>
                                     </div>
-                                </div>
-                                <div className="flex-shrink-0">
-                                    <SaveAdButton adId={job.id} adType="job" />
                                 </div>
                             </div>
                         </CardHeader>
@@ -388,3 +390,5 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
         </AppLayout>
     );
 }
+
+    

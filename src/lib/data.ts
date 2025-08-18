@@ -418,9 +418,41 @@ export async function deleteTestimonial(testimonialId: string) {
     }
 }
 
-export async function getViewsCount(adId: string): Promise<number> {
+export async function recordView(adId: string, viewerId: string): Promise<void> {
+  if (!adId || !viewerId) {
+    return;
+  }
+  try {
+    const docRef = doc(db, 'competitions', adId);
+    const docSnap = await getDoc(docRef);
+
+    let viewDocRef;
+    if (docSnap.exists()) {
+      viewDocRef = doc(db, 'competitions', adId, 'views', viewerId);
+    } else {
+      const adDocRef = doc(db, 'ads', adId);
+      const adSnap = await getDoc(adDocRef);
+      if (adSnap.exists()) {
+        viewDocRef = doc(db, 'ads', adId, 'views', viewerId);
+      } else {
+        console.error(`Error recording view: Document with ID ${adId} not found in ads or competitions.`);
+        return;
+      }
+    }
+    await setDoc(viewDocRef, { viewedAt: serverTimestamp() });
+  } catch (error) {
+    console.error(`Error recording view for item ${adId} by viewer ${viewerId}:`, error);
+  }
+}
+
+export async function getViewsCount(adId: string, viewerId: string | null): Promise<number> {
     if (!adId) return 0;
     
+    // Record the view first if a viewerId is provided
+    if (viewerId) {
+        await recordView(adId, viewerId);
+    }
+
     try {
         const adDocRef = doc(db, 'ads', adId);
         const competitionDocRef = doc(db, 'competitions', adId);
@@ -436,7 +468,7 @@ export async function getViewsCount(adId: string): Promise<number> {
         } else if (competitionSnap.exists()) {
             viewsCollectionRef = collection(competitionDocRef, 'views');
         } else {
-            return 0;
+            return 0; // Document doesn't exist in either collection
         }
         
         const snapshot = await getDocs(viewsCollectionRef);
@@ -447,35 +479,6 @@ export async function getViewsCount(adId: string): Promise<number> {
     }
 }
 
-
-export async function recordView(adId: string, viewerId: string): Promise<void> {
-  if (!adId || !viewerId) {
-    return;
-  }
-  try {
-    const adDocRef = doc(db, 'ads', adId);
-    const competitionDocRef = doc(db, 'competitions', adId);
-
-    const [adSnap, competitionSnap] = await Promise.all([
-      getDoc(adDocRef),
-      getDoc(competitionDocRef)
-    ]);
-    
-    let viewDocRef;
-    if (adSnap.exists()) {
-        viewDocRef = doc(db, 'ads', adId, 'views', viewerId);
-    } else if (competitionSnap.exists()) {
-        viewDocRef = doc(db, 'competitions', adId, 'views', viewerId);
-    } else {
-         console.error(`Error recording view: Ad or competition with ID ${adId} not found.`);
-         return;
-    }
-    
-    await setDoc(viewDocRef, { viewedAt: serverTimestamp() });
-  } catch (error) {
-    console.error(`Error recording view for ad ${adId} by user ${viewerId}:`, error);
-  }
-}
 
 
 // Functions for Competitions
@@ -729,3 +732,5 @@ export async function toggleSaveAd(userId: string, adId: string, adType: 'job' |
         throw new Error("Failed to update saved status.");
     }
 }
+
+    

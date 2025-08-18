@@ -137,7 +137,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
         count: 2,
         excludeId: job.id,
       }),
-      getViewsCount(params.id)
+      getViewsCount(params.id, null)
     ]);
 
 
@@ -316,3 +316,5 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
         </AppLayout>
     );
 }
+
+    

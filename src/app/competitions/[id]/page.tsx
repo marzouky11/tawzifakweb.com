@@ -33,9 +33,20 @@ import { SaveAdButton } from '@/app/jobs/[id]/save-ad-button';
 import { CompetitionCard } from '@/components/competition-card';
 import { cookies } from 'next/headers';
 import { ViewCounter } from '@/app/jobs/[id]/view-counter';
+import { v4 as uuidv4 } from 'uuid';
 
 interface CompetitionDetailPageProps {
   params: { id: string };
+}
+
+function getVisitorId(): string {
+  const cookieStore = cookies();
+  let visitorId = cookieStore.get('visitorId')?.value;
+  if (!visitorId) {
+    visitorId = uuidv4();
+    cookieStore.set('visitorId', visitorId, { maxAge: 365 * 24 * 60 * 60 }); // 1 year expiry
+  }
+  return visitorId;
 }
 
 export async function generateMetadata({ params }: CompetitionDetailPageProps): Promise<Metadata> {
@@ -136,6 +147,7 @@ const FormattedText = ({ text }: { text?: string }) => {
 }
 
 export default async function CompetitionDetailPage({ params }: CompetitionDetailPageProps) {
+    const visitorId = getVisitorId();
     const competition = await getCompetitionById(params.id);
 
     if (!competition) {
@@ -144,7 +156,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
     
     const [similarCompetitions, viewsCount] = await Promise.all([
       getCompetitions({ count: 2, excludeId: competition.id }),
-      getViewsCount(params.id)
+      getViewsCount(params.id, visitorId)
     ]);
     
     const organizer = getOrganizerByName(competition.organizer);
@@ -154,7 +166,6 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
 
     return (
         <AppLayout>
-            <ViewCounter adId={params.id} />
             <MobilePageHeader title="تفاصيل المباراة">
                 <Landmark className="h-5 w-5 text-primary" />
             </MobilePageHeader>
@@ -166,35 +177,39 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
             <div className="container mx-auto max-w-4xl px-4 pb-8 space-y-6">
                 <Card className="overflow-hidden shadow-lg border-t-4" style={{borderColor: sectionColor}}>
                     <CardHeader className="bg-muted/30 p-4 sm:p-6">
-                        <div className="flex justify-center mb-3">
-                             <div className="p-3 sm:p-4 rounded-xl flex-shrink-0" style={{ backgroundColor: `${organizerColor}1A` }}>
-                                <CategoryIcon name={organizerIcon} className="w-8 h-8 sm:w-10 sm:h-10" style={{ color: organizerColor }} />
-                            </div>
-                        </div>
-                        <h1 className="text-2xl sm:text-3xl font-bold text-foreground break-words text-center" style={{wordBreak: 'break-word'}}>
-                            {competition.title || 'عنوان غير متوفر'}
-                        </h1>
-                         <div className="flex flex-col items-center gap-4 mt-4">
-                            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-muted-foreground text-sm">
-                                {competition.location && (
-                                <div className="flex items-center gap-1.5">
-                                    <MapPin className="h-4 w-4" />
-                                    <span>{competition.location}</span>
+                         <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+                                <div className="flex-grow">
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <div className="p-2 sm:p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${organizerColor}1A` }}>
+                                            <CategoryIcon name={organizerIcon} className="w-6 h-6 sm:w-8 sm:h-8" style={{ color: organizerColor }} />
+                                        </div>
+                                        <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+                                            {competition.title || 'عنوان غير متوفر'}
+                                        </h1>
+                                    </div>
+                                    <div className="flex flex-col items-start gap-2">
+                                        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground text-sm">
+                                            {competition.location && (
+                                            <div className="flex items-center gap-1.5">
+                                                <MapPin className="h-4 w-4" />
+                                                <span>{competition.location}</span>
+                                            </div>
+                                            )}
+                                            <div className="flex items-center gap-1.5">
+                                                <CalendarDays className="h-4 w-4" />
+                                                <span>نُشرت: {competition.postedAt}</span>
+                                            </div>
+                                            <div className="flex items-center gap-1.5">
+                                                <Eye className="h-4 w-4" />
+                                                <span>{viewsCount} مشاهدات</span>
+                                            </div>
+                                        </div>
+                                        <div className="pt-2">
+                                            <SaveAdButton adId={competition.id} adType="competition" />
+                                        </div>
+                                    </div>
                                 </div>
-                                )}
-                                <div className="flex items-center gap-1.5">
-                                    <CalendarDays className="h-4 w-4" />
-                                    <span>نُشرت: {competition.postedAt}</span>
-                                </div>
-                                <div className="flex items-center gap-1.5">
-                                    <Eye className="h-4 w-4" />
-                                    <span>{viewsCount} مشاهدات</span>
-                                </div>
                             </div>
-                            <div className="pt-2">
-                                <SaveAdButton adId={competition.id} adType="competition" />
-                            </div>
-                        </div>
                     </CardHeader>
                     <CardContent className="p-4 sm:p-6 space-y-8">
                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
@@ -281,3 +296,5 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
         </AppLayout>
     );
 }
+
+    
