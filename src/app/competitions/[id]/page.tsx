@@ -164,38 +164,43 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
             <div className="container mx-auto max-w-4xl px-4 pb-8 space-y-6">
                 <Card className="overflow-hidden shadow-lg border-t-4" style={{borderColor: sectionColor}}>
                     <CardHeader className="bg-muted/30 p-4 sm:p-6">
+                        <div className="flex items-center gap-3 mb-2">
+                            <div className="p-2 sm:p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${organizerColor}1A` }}>
+                                <CategoryIcon name={organizerIcon} className="w-6 h-6 sm:w-8 sm:h-8" style={{ color: organizerColor }} />
+                            </div>
+                            <h1 className="text-2xl sm:text-3xl font-bold text-foreground break-words">
+                                {competition.title || 'عنوان غير متوفر'}
+                            </h1>
+                        </div>
                         <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
-                            <div className="flex-grow">
-                                <div className="flex items-center gap-3 mb-2">
-                                    <div className="p-2 sm:p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${organizerColor}1A` }}>
-                                        <CategoryIcon name={organizerIcon} className="w-6 h-6 sm:w-8 sm:h-8" style={{ color: organizerColor }} />
-                                    </div>
-                                    <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
-                                        {competition.title || 'عنوان غير متوفر'}
-                                    </h1>
-                                </div>
-                                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground mt-2 text-sm">
+                            <div className="flex-grow space-y-2">
+                                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground text-sm">
+                                    {competition.location && (
                                     <div className="flex items-center gap-1.5">
-                                        <CalendarDays className="h-4 w-4" style={{color: sectionColor}} />
+                                        <MapPin className="h-4 w-4" />
+                                        <span>{competition.location}</span>
+                                    </div>
+                                    )}
+                                    <div className="flex items-center gap-1.5">
+                                        <CalendarDays className="h-4 w-4" />
                                         <span>نُشرت: {competition.postedAt}</span>
                                     </div>
                                     <div className="flex items-center gap-1.5">
-                                        <Eye className="h-4 w-4" style={{color: sectionColor}} />
+                                        <Eye className="h-4 w-4" />
                                         <span>{viewsCount} مشاهدات</span>
                                     </div>
                                 </div>
                             </div>
-                             <div className="flex-shrink-0 flex flex-col items-end gap-2">
+                            <div className="flex-shrink-0">
                                 <SaveAdButton adId={competition.id} adType="competition" />
                             </div>
                         </div>
                     </CardHeader>
                     <CardContent className="p-4 sm:p-6 space-y-8">
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                            <InfoItem icon={Building} label="الجهة المنظمة" value={competition.organizer} color={sectionColor} />
-                            {competition.positionsAvailable && <InfoItem icon={Users2} label="عدد المناصب" value={competition.positionsAvailable} color={sectionColor} />}
+                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                            <InfoItem icon={Building} label="الجهة المنظمة" value={competition.organizer} color={organizerColor} />
+                            {competition.positionsAvailable && <InfoItem icon={Users2} label="عدد المناصب" value={competition.positionsAvailable} color={organizerColor} />}
                             <InfoItem icon={Briefcase} label="نوع المباراة" value={competition.competitionType} color={sectionColor} />
-                            <InfoItem icon={MapPin} label="الموقع" value={competition.location} color={sectionColor} />
                         </div>
                         <Separator />
                         <div className="space-y-6">
