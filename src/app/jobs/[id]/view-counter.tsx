@@ -1,60 +1,48 @@
 
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { recordView } from '@/lib/data';
 import { v4 as uuidv4 } from 'uuid';
 
-// Function to get or create a unique visitor ID
-const getVisitorId = (): string | null => {
-    // Check if we are in a browser environment
-    if (typeof window !== 'undefined' && window.localStorage) {
-        let visitorId = localStorage.getItem('visitorId');
-        if (!visitorId) {
-            visitorId = uuidv4();
-            localStorage.setItem('visitorId', visitorId);
-        }
-        return visitorId;
-    }
-    return null; // Return null if not in a browser
-};
-
 export function ViewCounter({ adId }: { adId: string }) {
   const { user } = useAuth();
-  const viewRecordedRef = useRef(false);
-  const [isClient, setIsClient] = useState(false);
+  const hasRecorded = useRef(false);
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    // We only want to record the view once per page load and only on the client.
-    if (!adId || !isClient || viewRecordedRef.current) {
+    if (!adId || hasRecorded.current) {
       return;
     }
 
-    const record = (viewerId: string) => {
-        // We no longer record views from here for server components.
-        // It's handled in `getViewsCount`. This component is for `use client` pages if needed.
-        // recordView(adId, viewerId);
-        viewRecordedRef.current = true; // Mark as recorded for this session
-    };
+    // Use sessionStorage to track viewed ads within the current session
+    const viewedAdsKey = 'viewedAds';
+    try {
+      const viewedAds = JSON.parse(sessionStorage.getItem(viewedAdsKey) || '[]');
+      if (viewedAds.includes(adId)) {
+        hasRecorded.current = true; // Already viewed in this session
+        return;
+      }
+      
+      const viewerId = user?.uid || uuidv4();
+      recordView(adId, viewerId).then(() => {
+          // Add to session storage after successful recording
+          viewedAds.push(adId);
+          sessionStorage.setItem(viewedAdsKey, JSON.stringify(viewedAds));
+      });
 
-    // This component will now only be used to get the visitorId and won't record views itself for pages that are server-rendered.
-    if (user) {
-      // User is logged in, their ID is handled on the server.
-    } else {
-      // Guest user, ensure they have an ID.
-      getVisitorId();
+      hasRecorded.current = true; // Mark as recorded for this component instance
+
+    } catch (error) {
+        // If sessionStorage is not available or fails, still try to record the view
+        // but we won't be able to prevent re-recording on page refresh in this session.
+        console.error("Session storage is not available or failed:", error);
+        const viewerId = user?.uid || uuidv4();
+        recordView(adId, viewerId);
+        hasRecorded.current = true;
     }
-    viewRecordedRef.current = true; // Mark as "handled" to prevent re-runs.
 
-
-  }, [adId, user, isClient]);
+  }, [adId, user]);
 
   return null;
 }
-
-    
