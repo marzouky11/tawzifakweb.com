@@ -52,12 +52,13 @@ export interface Competition {
   id: string;
   title: string;
   organizer: string;
-  positionsAvailable: number | string | null;
+  positionsAvailable: string | number | null;
   deadline: string; // last day for registration
   officialLink: string;
   
   // Optional fields for more detail
   description?: string;
+  trainingFeatures?: string;
   fileUrl?: string;
   
   jobProspects?: string; // أفق العمل

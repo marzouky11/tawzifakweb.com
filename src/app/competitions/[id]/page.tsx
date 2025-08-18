@@ -23,6 +23,7 @@ import {
   FileUp,
   LogIn,
   Eye,
+  Award,
 } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { CategoryIcon } from '@/components/icons';
@@ -180,35 +181,33 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
             <div className="container mx-auto max-w-4xl px-4 pb-8 space-y-6">
                 <Card className="overflow-hidden shadow-lg border-t-4" style={{borderColor: sectionColor}}>
                     <CardHeader className="bg-muted/30 p-4 sm:p-6">
-                        <div className="flex items-center gap-3 mb-2">
-                            <div className="p-2 sm:p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${organizerColor}1A` }}>
-                                <CategoryIcon name={organizerIcon} className="w-6 h-6 sm:w-8 sm:h-8" style={{ color: organizerColor }} />
+                        <div className="flex justify-center mb-3">
+                             <div className="p-3 sm:p-4 rounded-xl flex-shrink-0" style={{ backgroundColor: `${organizerColor}1A` }}>
+                                <CategoryIcon name={organizerIcon} className="w-8 h-8 sm:w-10 sm:h-10" style={{ color: organizerColor }} />
                             </div>
-                            <h1 className="text-2xl sm:text-3xl font-bold text-foreground break-words">
-                                {competition.title || 'عنوان غير متوفر'}
-                            </h1>
                         </div>
-                        <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
-                            <div className="flex-grow space-y-2">
-                                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground text-sm">
-                                    {competition.location && (
-                                    <div className="flex items-center gap-1.5">
-                                        <MapPin className="h-4 w-4" />
-                                        <span>{competition.location}</span>
-                                    </div>
-                                    )}
-                                    <div className="flex items-center gap-1.5">
-                                        <CalendarDays className="h-4 w-4" />
-                                        <span>نُشرت: {competition.postedAt}</span>
-                                    </div>
-                                    <div className="flex items-center gap-1.5">
-                                        <Eye className="h-4 w-4" />
-                                        <span>{viewsCount} مشاهدات</span>
-                                    </div>
+                        <h1 className="text-2xl sm:text-3xl font-bold text-foreground break-words text-center">
+                            {competition.title || 'عنوان غير متوفر'}
+                        </h1>
+                         <div className="flex flex-col items-center gap-4 mt-4">
+                            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-muted-foreground text-sm">
+                                {competition.location && (
+                                <div className="flex items-center gap-1.5">
+                                    <MapPin className="h-4 w-4" />
+                                    <span>{competition.location}</span>
                                 </div>
-                                 <div className="pt-2">
-                                     <SaveAdButton adId={competition.id} adType="competition" />
-                                 </div>
+                                )}
+                                <div className="flex items-center gap-1.5">
+                                    <CalendarDays className="h-4 w-4" />
+                                    <span>نُشرت: {competition.postedAt}</span>
+                                </div>
+                                <div className="flex items-center gap-1.5">
+                                    <Eye className="h-4 w-4" />
+                                    <span>{viewsCount} مشاهدات</span>
+                                </div>
+                            </div>
+                            <div className="pt-2">
+                                <SaveAdButton adId={competition.id} adType="competition" />
                             </div>
                         </div>
                     </CardHeader>
@@ -221,7 +220,10 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                         <Separator />
                         <div className="space-y-6">
                            {competition.description && <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={competition.description} /></DetailSection>}
-                           {competition.description && (competition.jobProspects || competition.requirements || competition.competitionStages || competition.documentsNeeded) && <Separator />}
+                           {competition.description && (competition.trainingFeatures || competition.jobProspects || competition.requirements || competition.competitionStages || competition.documentsNeeded) && <Separator />}
+
+                           {competition.trainingFeatures && <DetailSection icon={Award} title="مميزات التكوين والفرص" color={sectionColor}><FormattedText text={competition.trainingFeatures} /></DetailSection>}
+                           {competition.trainingFeatures && (competition.jobProspects || competition.requirements || competition.competitionStages || competition.documentsNeeded) && <Separator />}
 
                            {competition.jobProspects && <DetailSection icon={Target} title="أفق العمل بعد المباراة" color={sectionColor}><FormattedText text={competition.jobProspects} /></DetailSection>}
                            {competition.jobProspects && (competition.requirements || competition.competitionStages || competition.documentsNeeded) && <Separator />}

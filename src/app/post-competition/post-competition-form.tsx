@@ -15,7 +15,7 @@ import { postCompetition, getOrganizers, updateCompetition } from '@/lib/data';
 import { useRouter } from 'next/navigation';
 import { 
     Loader2, Calendar as CalendarIcon, FileText, FileSignature, Info, Check, 
-    ArrowLeft, ArrowRight, Building, Target, ListOrdered, FileUp, LogIn, Users2, MapPin, Briefcase 
+    ArrowLeft, ArrowRight, Building, Target, ListOrdered, FileUp, LogIn, Users2, MapPin, Briefcase, Award
 } from 'lucide-react';
 import { cn } from "@/lib/utils"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -33,6 +33,7 @@ const formSchema = z.object({
   location: z.string().optional(),
   
   description: z.string().optional(),
+  trainingFeatures: z.string().optional(),
   jobProspects: z.string().optional(),
   
   requirements: z.string().min(10, 'الشروط مطلوبة.'),
@@ -49,7 +50,7 @@ const formSchema = z.object({
 
 const stepFields = [
   ['title', 'organizer', 'positionsAvailable', 'competitionType', 'location'],
-  ['description', 'jobProspects', 'requirements', 'competitionStages', 'documentsNeeded'],
+  ['description', 'trainingFeatures', 'jobProspects', 'requirements', 'competitionStages', 'documentsNeeded'],
   ['registrationStartDate', 'deadline', 'competitionDate', 'officialLink', 'fileUrl'],
 ];
 
@@ -139,6 +140,7 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
       documentsNeeded: competition?.documentsNeeded || '',
       officialLink: competition?.officialLink || '',
       description: competition?.description || '',
+      trainingFeatures: competition?.trainingFeatures || '',
       fileUrl: competition?.fileUrl || '',
       location: competition?.location || '',
       jobProspects: competition?.jobProspects || '',
@@ -193,7 +195,7 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
     try {
       const dataToSave = { 
         ...values,
-        positionsAvailable: values.positionsAvailable || null,
+        positionsAvailable: values.positionsAvailable === undefined || values.positionsAvailable === '' ? null : values.positionsAvailable,
       };
 
       if (isEditing && competition) {
@@ -243,6 +245,7 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
     // Step 2
     <div className="space-y-6" key="step2">
        <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabelIcon icon={Info} label="وصف تفصيلي (اختياري)" /><FormControl><Textarea placeholder="معلومات إضافية حول المباراة..." rows={4} {...field} /></FormControl><FormMessage /></FormItem>)} />
+       <FormField control={form.control} name="trainingFeatures" render={({ field }) => (<FormItem><FormLabelIcon icon={Award} label="مميزات التكوين والفرص المقدمة (اختياري)" /><FormControl><Textarea placeholder="اكتب هنا عن مميزات التكوين، مثل: منحة شهرية، سكن مجاني، توظيف مضمون..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
        <FormField control={form.control} name="jobProspects" render={({ field }) => (<FormItem><FormLabelIcon icon={Target} label="أفق العمل بعد المباراة (اختياري)" /><FormControl><Textarea placeholder="المهام والوظائف المتاحة بعد التخرج أو النجاح" rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
        <FormField control={form.control} name="requirements" render={({ field }) => (<FormItem><FormLabelIcon icon={FileSignature} label="الشروط المطلوبة" /><FormControl><Textarea placeholder="المؤهلات، السن، الطول، حدة البصر..." rows={4} {...field} /></FormControl><FormMessage /></FormItem>)} />
        <FormField control={form.control} name="competitionStages" render={({ field }) => (<FormItem><FormLabelIcon icon={ListOrdered} label="مراحل المباراة (اختياري)" /><FormControl><Textarea placeholder="الاختبارات الأولية، البدنية، الكتابية، المقابلة..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
