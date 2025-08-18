@@ -52,7 +52,7 @@ export interface Competition {
   id: string;
   title: string;
   organizer: string;
-  positionsAvailable: number;
+  positionsAvailable: number | string | null;
   deadline: string; // last day for registration
   officialLink: string;
   

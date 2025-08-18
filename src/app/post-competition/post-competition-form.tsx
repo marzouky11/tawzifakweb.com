@@ -28,7 +28,7 @@ import type { Competition } from '@/lib/types';
 const formSchema = z.object({
   title: z.string().min(5, 'العنوان يجب أن يكون 5 أحرف على الأقل.'),
   organizer: z.string().min(2, 'الجهة المنظمة مطلوبة.'),
-  positionsAvailable: z.coerce.number().int().positive('عدد المناصب يجب أن يكون رقمًا صحيحًا موجبًا.').optional().nullable(),
+  positionsAvailable: z.union([z.string(), z.number()]).optional().nullable(),
   competitionType: z.string().optional(),
   location: z.string().optional(),
   
@@ -228,10 +228,10 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
       <FormField control={form.control} name="organizer" render={({ field }) => (<FormItem><FormLabelIcon icon={Building} label="الجهة المنظمة" /><Select onValueChange={field.onChange} value={field.value}><FormControl><SelectTrigger><SelectValue placeholder="اختر الجهة المنظمة من القائمة" /></SelectTrigger></FormControl><SelectContent><ScrollArea className="h-[250px]">{organizers.map(org => (<SelectItem key={org.name} value={org.name}><div className="flex items-center gap-2"><CategoryIcon name={org.icon} className="h-5 w-5" style={{color: org.color}} /> {org.name}</div></SelectItem>))}</ScrollArea></SelectContent></Select><FormMessage /></FormItem>)} />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <FormField control={form.control} name="positionsAvailable" render={({ field }) => (<FormItem><FormLabelIcon icon={Users2} label="عدد المناصب (اختياري)" /><FormControl><Input
-            type="number"
+            type="text"
             {...field}
             value={field.value ?? ''}
-            onChange={e => field.onChange(e.target.value === '' ? null : +e.target.value)}
+            onChange={e => field.onChange(e.target.value === '' ? null : e.target.value)}
         /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="competitionType" render={({ field }) => (<FormItem><FormLabelIcon icon={Briefcase} label="نوع المباراة (اختياري)" /><FormControl><Input placeholder="مفتوحة للجميع، لفئة معينة..." {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="location" render={({ field }) => (<FormItem><FormLabelIcon icon={MapPin} label="الموقع (اختياري)" /><FormControl><Input placeholder="مكان إجراء التكوين أو المباراة" {...field} /></FormControl><FormMessage /></FormItem>)} />
