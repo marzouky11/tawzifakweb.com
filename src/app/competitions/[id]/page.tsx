@@ -1,7 +1,7 @@
 
 
 import { notFound } from 'next/navigation';
-import { getCompetitionById, getOrganizerByName, getCompetitions } from '@/lib/data';
+import { getCompetitionById, getOrganizerByName, getCompetitions, getViewsCount } from '@/lib/data';
 import { AppLayout } from '@/components/layout/app-layout';
 import type { Metadata } from 'next';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
@@ -275,4 +275,3 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
         </AppLayout>
     );
 }
-
