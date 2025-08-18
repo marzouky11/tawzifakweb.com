@@ -292,12 +292,6 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                                         {job.ownerName || 'صاحب الإعلان'}
                                     </div>
                                 </div>
-                                <Button asChild variant="outline" size="sm" className="w-full">
-                                    <Link href={`/user/${job.userId}`}>
-                                        <Search className="mr-2 h-4 w-4" />
-                                        عرض جميع إعلاناته
-                                    </Link>
-                                </Button>
                             </CardContent>
                         </Card>
 
