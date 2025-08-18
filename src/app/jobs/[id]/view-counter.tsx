@@ -12,6 +12,7 @@ export function ViewCounter({ adId }: { adId: string }) {
       return;
     }
 
+    // Use a more reliable way to prevent re-recording within the same session.
     const viewedAdsKey = 'viewedAds';
     try {
       const viewedAds = JSON.parse(sessionStorage.getItem(viewedAdsKey) || '[]');
@@ -30,7 +31,8 @@ export function ViewCounter({ adId }: { adId: string }) {
       hasRecorded.current = true; // Mark as recorded for this component instance
 
     } catch (error) {
-        console.error("Session storage is not available or failed:", error);
+        // Fallback for environments where sessionStorage is not available or fails
+        console.error("Session storage is not available or failed, recording view without session tracking:", error);
         recordView(adId);
         hasRecorded.current = true;
     }

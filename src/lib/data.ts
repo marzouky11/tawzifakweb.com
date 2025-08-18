@@ -426,12 +426,12 @@ export async function recordView(adId: string): Promise<void> {
   try {
     let docRef;
     const adDocRef = doc(db, 'ads', adId);
-    const adSnap = await getDoc(adDocRef);
+    const competitionDocRef = doc(db, 'competitions', adId);
 
+    const adSnap = await getDoc(adDocRef);
     if (adSnap.exists()) {
       docRef = adDocRef;
     } else {
-      const competitionDocRef = doc(db, 'competitions', adId);
       const competitionSnap = await getDoc(competitionDocRef);
       if (competitionSnap.exists()) {
         docRef = competitionDocRef;
