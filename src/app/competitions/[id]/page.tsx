@@ -166,19 +166,15 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                 <Card className="overflow-hidden shadow-lg border-t-4" style={{borderColor: sectionColor}}>
                     <CardHeader className="bg-muted/30 p-4 sm:p-6">
                         <div className="flex justify-between items-start gap-4">
-                            <div className="flex items-start gap-4 flex-grow">
+                            <div className="flex items-start gap-4 flex-grow min-w-0">
                                 <div className="w-12 h-12 flex-shrink-0 mt-1 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${organizerColor}1A` }}>
                                     <CategoryIcon name={organizerIcon} className="w-8 h-8" style={{color: organizerColor}} />
                                 </div>
-                                <div className='flex-grow'>
-                                    <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+                                <div className='flex-grow min-w-0'>
+                                    <h1 className="text-2xl sm:text-3xl font-bold text-foreground break-words">
                                         {competition.title || 'عنوان غير متوفر'}
                                     </h1>
                                     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground mt-2 text-sm">
-                                        <div className="flex items-center gap-1.5">
-                                            <Building className="h-4 w-4" style={{color: sectionColor}} />
-                                            <span>الجهة المنظمة: {competition.organizer}</span>
-                                        </div>
                                         <div className="flex items-center gap-1.5">
                                             <CalendarDays className="h-4 w-4" style={{color: sectionColor}} />
                                             <span>نُشرت: {competition.postedAt}</span>
@@ -197,8 +193,9 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                     </CardHeader>
                     <CardContent className="p-4 sm:p-6 space-y-8">
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                            <InfoItem icon={Briefcase} label="نوع المباراة" value={competition.competitionType} color={sectionColor} />
+                            <InfoItem icon={Building} label="الجهة المنظمة" value={competition.organizer} color={sectionColor} />
                             <InfoItem icon={Users2} label="عدد المناصب" value={competition.positionsAvailable} color={sectionColor} />
+                            <InfoItem icon={Briefcase} label="نوع المباراة" value={competition.competitionType} color={sectionColor} />
                             <InfoItem icon={MapPin} label="الموقع" value={competition.location} color={sectionColor} />
                         </div>
                         <Separator />
