@@ -314,7 +314,6 @@ export async function postJob(jobData: Omit<Job, 'id' | 'createdAt' | 'likes' | 
             createdAt: serverTimestamp(),
             likes: 0,
             rating: parseFloat((Math.random() * (5.0 - 3.5) + 3.5).toFixed(1)),
-            viewsCount: 0,
         };
         
         Object.keys(newJob).forEach(key => {
@@ -419,58 +418,6 @@ export async function deleteTestimonial(testimonialId: string) {
     }
 }
 
-export async function recordView(adId: string): Promise<void> {
-  if (!adId) {
-    return;
-  }
-  try {
-    let docRef;
-    const adDocRef = doc(db, 'ads', adId);
-    const competitionDocRef = doc(db, 'competitions', adId);
-
-    const adSnap = await getDoc(adDocRef);
-    if (adSnap.exists()) {
-      docRef = adDocRef;
-    } else {
-      const competitionSnap = await getDoc(competitionDocRef);
-      if (competitionSnap.exists()) {
-        docRef = competitionDocRef;
-      } else {
-        console.error(`Error recording view: Document with ID ${adId} not found in ads or competitions.`);
-        return;
-      }
-    }
-    await updateDoc(docRef, { viewsCount: increment(1) });
-  } catch (error) {
-    console.error(`Error recording view for item ${adId}:`, error);
-  }
-}
-
-export async function getViewsCount(adId: string): Promise<number> {
-    if (!adId) return 0;
-    
-    try {
-        const adDocRef = doc(db, 'ads', adId);
-        const competitionDocRef = doc(db, 'competitions', adId);
-
-        const [adSnap, competitionSnap] = await Promise.all([
-            getDoc(adDocRef).catch(() => null),
-            getDoc(competitionDocRef).catch(() => null)
-        ]);
-        
-        if (adSnap && adSnap.exists()) {
-            return adSnap.data()?.viewsCount || 0;
-        } else if (competitionSnap && competitionSnap.exists()) {
-            return competitionSnap.data()?.viewsCount || 0;
-        }
-        
-        return 0; // Document doesn't exist in either collection
-    } catch (error) {
-        console.error(`Error getting views for item ${adId}:`, error);
-        return 0;
-    }
-}
-
 
 
 // Functions for Competitions
@@ -480,7 +427,6 @@ export async function postCompetition(competitionData: Omit<Competition, 'id' | 
     const newCompetition: { [key: string]: any } = {
         ...competitionData,
         createdAt: serverTimestamp(),
-        viewsCount: 0,
         positionsAvailable: competitionData.positionsAvailable === undefined ? null : competitionData.positionsAvailable,
     };
     

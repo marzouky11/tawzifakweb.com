@@ -44,7 +44,6 @@ export interface Job {
   tasks?: string;
   education?: string;
   status?: 'open' | 'closed';
-  viewsCount?: number;
   howToApply?: string;
   isNew?: boolean;
 }
@@ -79,7 +78,6 @@ export interface Competition {
   postedAt: string;
   createdAt: Timestamp;
   isNew?: boolean;
-  viewsCount?: number;
 }
 
 

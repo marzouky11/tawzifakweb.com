@@ -1,7 +1,7 @@
 
 
 import { notFound } from 'next/navigation';
-import { getCompetitionById, getOrganizerByName, getCompetitions, getViewsCount } from '@/lib/data';
+import { getCompetitionById, getOrganizerByName, getCompetitions } from '@/lib/data';
 import { AppLayout } from '@/components/layout/app-layout';
 import type { Metadata } from 'next';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
@@ -22,7 +22,6 @@ import {
   ListOrdered,
   FileUp,
   LogIn,
-  Eye,
   Award,
 } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
@@ -31,7 +30,6 @@ import { Separator } from '@/components/ui/separator';
 import { ReportAdDialog } from '@/app/jobs/[id]/report-ad-dialog';
 import { SaveAdButton } from '@/app/jobs/[id]/save-ad-button';
 import { CompetitionCard } from '@/components/competition-card';
-import { ViewCounter } from '@/app/jobs/[id]/view-counter';
 
 
 interface CompetitionDetailPageProps {
@@ -142,9 +140,8 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
         notFound();
     }
     
-    const [similarCompetitions, viewsCount] = await Promise.all([
+    const [similarCompetitions] = await Promise.all([
       getCompetitions({ count: 2, excludeId: competition.id }),
-      getViewsCount(params.id)
     ]);
     
     const organizer = getOrganizerByName(competition.organizer);
@@ -154,7 +151,6 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
 
     return (
         <AppLayout>
-            <ViewCounter adId={params.id} />
             <MobilePageHeader title="تفاصيل المباراة">
                 <Landmark className="h-5 w-5 text-primary" />
             </MobilePageHeader>
@@ -177,20 +173,16 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                                     </h1>
                                 </div>
                                 <div className="flex flex-col items-start gap-2">
-                                     {competition.location && (
-                                        <div className="flex items-center gap-1.5 text-muted-foreground text-sm">
-                                            <MapPin className="h-4 w-4" />
-                                            <span>{competition.location}</span>
-                                        </div>
-                                    )}
-                                    <div className="flex items-center gap-4 text-muted-foreground text-sm">
+                                     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground text-sm">
+                                        {competition.location && (
+                                            <div className="flex items-center gap-1.5">
+                                                <MapPin className="h-4 w-4" />
+                                                <span>{competition.location}</span>
+                                            </div>
+                                        )}
                                         <div className="flex items-center gap-1.5">
                                             <CalendarDays className="h-4 w-4" />
                                             <span>نُشرت: {competition.postedAt}</span>
-                                        </div>
-                                        <div className="flex items-center gap-1.5">
-                                            <Eye className="h-4 w-4" />
-                                            <span>{viewsCount} مشاهدات</span>
                                         </div>
                                     </div>
                                     <div className="pt-2">

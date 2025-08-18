@@ -1,7 +1,7 @@
 
 
 import { notFound } from 'next/navigation';
-import { getJobById, getCategoryById, getJobs, getViewsCount } from '@/lib/data';
+import { getJobById, getCategoryById, getJobs } from '@/lib/data';
 import { AppLayout } from '@/components/layout/app-layout';
 import type { Metadata } from 'next';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
@@ -28,7 +28,6 @@ import {
   LayoutGrid,
   ClipboardList,
   FileText,
-  Eye,
   Search,
   CheckSquare,
   HelpCircle,
@@ -41,7 +40,6 @@ import { ReportAdDialog } from './report-ad-dialog';
 import { JobCard } from '@/components/job-card';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import Link from 'next/link';
-import { ViewCounter } from './view-counter';
 import { cn } from '@/lib/utils';
 import { SaveAdButton } from './save-ad-button';
 
@@ -199,14 +197,13 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
         notFound();
     }
 
-    const [similarJobs, viewsCount] = await Promise.all([
+    const [similarJobs] = await Promise.all([
         getJobs({
             categoryId: job.categoryId,
             postType: 'seeking_worker',
             count: 2,
             excludeId: job.id,
         }),
-        getViewsCount(params.id)
     ]);
 
     const category = getCategoryById(job.categoryId || '');
@@ -233,7 +230,6 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
     
     return (
         <AppLayout>
-            <ViewCounter adId={params.id} />
             <MobilePageHeader title="تفاصيل عرض العمل">
                 <Briefcase className="h-5 w-5 text-primary" />
             </MobilePageHeader>
@@ -265,10 +261,6 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                             <div className="flex items-center gap-1.5">
                                                 <CalendarDays className="h-4 w-4" />
                                                 <span>نُشر: {job.postedAt}</span>
-                                            </div>
-                                            <div className="flex items-center gap-1.5">
-                                                <Eye className="h-4 w-4" />
-                                                <span>{viewsCount} مشاهدات</span>
                                             </div>
                                         </div>
                                         <div className="pt-2">
