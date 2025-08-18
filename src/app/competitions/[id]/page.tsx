@@ -31,8 +31,8 @@ import { Separator } from '@/components/ui/separator';
 import { ReportAdDialog } from '@/app/jobs/[id]/report-ad-dialog';
 import { SaveAdButton } from '@/app/jobs/[id]/save-ad-button';
 import { CompetitionCard } from '@/components/competition-card';
-import { cookies, headers } from 'next/headers';
-import { v4 as uuidv4 } from 'uuid';
+import { cookies } from 'next/headers';
+import { ViewCounter } from '@/app/jobs/[id]/view-counter';
 
 interface CompetitionDetailPageProps {
   params: { id: string };
@@ -87,7 +87,7 @@ const InfoItem = ({ icon: Icon, label, value, color, href, isDate }: { icon: Rea
         <div className="flex flex-col gap-1 p-3 bg-muted/50 rounded-lg text-center h-full">
             <Icon className="h-6 w-6 mx-auto mb-1" style={{ color }} />
             <dt className="text-xs text-muted-foreground">{label}</dt>
-            <dd className={`font-semibold text-sm ${isDate ? 'text-destructive' : ''}`}>{value}</dd>
+            <dd className={`font-semibold text-sm ${isDate ? 'text-destructive' : ''}`}>{String(value)}</dd>
         </div>
     );
     
@@ -135,16 +135,6 @@ const FormattedText = ({ text }: { text?: string }) => {
     );
 }
 
-function getVisitorId() {
-    const cookieStore = cookies();
-    let visitorId = cookieStore.get('visitorId')?.value;
-    if (!visitorId) {
-        visitorId = uuidv4();
-        cookieStore.set('visitorId', visitorId, { maxAge: 60 * 60 * 24 * 365 }); // 1 year expiry
-    }
-    return visitorId;
-}
-
 export default async function CompetitionDetailPage({ params }: CompetitionDetailPageProps) {
     const competition = await getCompetitionById(params.id);
 
@@ -152,15 +142,9 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
         notFound();
     }
     
-    // Get viewer ID (either from auth or a generated guest ID)
-    const headersList = headers();
-    const visitorId = getVisitorId();
-    const userId = headersList.get('x-user-id'); // Assuming middleware adds this
-    const viewerId = userId || visitorId;
-
     const [similarCompetitions, viewsCount] = await Promise.all([
       getCompetitions({ count: 2, excludeId: competition.id }),
-      getViewsCount(params.id, viewerId)
+      getViewsCount(params.id)
     ]);
     
     const organizer = getOrganizerByName(competition.organizer);
@@ -170,6 +154,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
 
     return (
         <AppLayout>
+            <ViewCounter adId={params.id} />
             <MobilePageHeader title="تفاصيل المباراة">
                 <Landmark className="h-5 w-5 text-primary" />
             </MobilePageHeader>
@@ -186,7 +171,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                                 <CategoryIcon name={organizerIcon} className="w-8 h-8 sm:w-10 sm:h-10" style={{ color: organizerColor }} />
                             </div>
                         </div>
-                        <h1 className="text-2xl sm:text-3xl font-bold text-foreground break-words text-center">
+                        <h1 className="text-2xl sm:text-3xl font-bold text-foreground break-words text-center" style={{wordBreak: 'break-word'}}>
                             {competition.title || 'عنوان غير متوفر'}
                         </h1>
                          <div className="flex flex-col items-center gap-4 mt-4">

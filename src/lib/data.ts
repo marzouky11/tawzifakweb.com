@@ -418,15 +418,10 @@ export async function deleteTestimonial(testimonialId: string) {
     }
 }
 
-export async function getViewsCount(adId: string, viewerId: string | null): Promise<number> {
+export async function getViewsCount(adId: string): Promise<number> {
     if (!adId) return 0;
     
     try {
-        // Try to record a view first
-        if(viewerId) {
-             await recordView(adId, viewerId);
-        }
-
         const adDocRef = doc(db, 'ads', adId);
         const competitionDocRef = doc(db, 'competitions', adId);
 
