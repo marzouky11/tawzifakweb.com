@@ -17,6 +17,10 @@ export const metadata: Metadata = {
   description: 'تصفح آخر مباريات التوظيف في القطاع العام في المغرب والدول العربية. فرص عمل حكومية محدثة يوميًا.',
 };
 
+function CompetitionFiltersSkeleton() {
+    return <div className="h-14 bg-muted rounded-xl w-full animate-pulse" />;
+}
+
 function CompetitionsListSkeleton() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -59,7 +63,9 @@ export default async function CompetitionsPage({
         description="تصفح أحدث إعلانات التوظيف والمباريات في القطاع العام."
       />
       <div className="container py-6 space-y-6">
-        <CompetitionFilters />
+        <Suspense fallback={<CompetitionFiltersSkeleton />}>
+          <CompetitionFilters />
+        </Suspense>
         <Suspense fallback={<CompetitionsListSkeleton />}>
           <CompetitionsList searchParams={searchParams} />
         </Suspense>
@@ -67,4 +73,3 @@ export default async function CompetitionsPage({
     </AppLayout>
   );
 }
-
