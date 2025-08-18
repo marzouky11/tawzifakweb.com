@@ -1,4 +1,5 @@
 
+
 import type { Timestamp } from 'firebase/firestore';
 
 export interface Category {
@@ -43,7 +44,7 @@ export interface Job {
   tasks?: string;
   education?: string;
   status?: 'open' | 'closed';
-  views?: number;
+  viewsCount?: number;
   howToApply?: string;
   isNew?: boolean;
 }
@@ -78,6 +79,7 @@ export interface Competition {
   postedAt: string;
   createdAt: Timestamp;
   isNew?: boolean;
+  viewsCount?: number;
 }
 
 

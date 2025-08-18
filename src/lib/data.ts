@@ -314,6 +314,7 @@ export async function postJob(jobData: Omit<Job, 'id' | 'createdAt' | 'likes' | 
             createdAt: serverTimestamp(),
             likes: 0,
             rating: parseFloat((Math.random() * (5.0 - 3.5) + 3.5).toFixed(1)),
+            viewsCount: 0,
         };
         
         Object.keys(newJob).forEach(key => {
@@ -418,61 +419,52 @@ export async function deleteTestimonial(testimonialId: string) {
     }
 }
 
-export async function recordView(adId: string, viewerId: string): Promise<void> {
-  if (!adId || !viewerId) {
+export async function recordView(adId: string): Promise<void> {
+  if (!adId) {
     return;
   }
   try {
-    const docRef = doc(db, 'competitions', adId);
-    const docSnap = await getDoc(docRef);
+    let docRef;
+    const adDocRef = doc(db, 'ads', adId);
+    const adSnap = await getDoc(adDocRef);
 
-    let viewDocRef;
-    if (docSnap.exists()) {
-      viewDocRef = doc(db, 'competitions', adId, 'views', viewerId);
+    if (adSnap.exists()) {
+      docRef = adDocRef;
     } else {
-      const adDocRef = doc(db, 'ads', adId);
-      const adSnap = await getDoc(adDocRef);
-      if (adSnap.exists()) {
-        viewDocRef = doc(db, 'ads', adId, 'views', viewerId);
+      const competitionDocRef = doc(db, 'competitions', adId);
+      const competitionSnap = await getDoc(competitionDocRef);
+      if (competitionSnap.exists()) {
+        docRef = competitionDocRef;
       } else {
         console.error(`Error recording view: Document with ID ${adId} not found in ads or competitions.`);
         return;
       }
     }
-    await setDoc(viewDocRef, { viewedAt: serverTimestamp() });
+    await updateDoc(docRef, { viewsCount: increment(1) });
   } catch (error) {
-    console.error(`Error recording view for item ${adId} by viewer ${viewerId}:`, error);
+    console.error(`Error recording view for item ${adId}:`, error);
   }
 }
 
-export async function getViewsCount(adId: string, viewerId: string | null): Promise<number> {
+export async function getViewsCount(adId: string): Promise<number> {
     if (!adId) return 0;
     
-    // Record the view first if a viewerId is provided
-    if (viewerId) {
-        await recordView(adId, viewerId);
-    }
-
     try {
         const adDocRef = doc(db, 'ads', adId);
         const competitionDocRef = doc(db, 'competitions', adId);
 
         const [adSnap, competitionSnap] = await Promise.all([
-            getDoc(adDocRef),
-            getDoc(competitionDocRef)
+            getDoc(adDocRef).catch(() => null),
+            getDoc(competitionDocRef).catch(() => null)
         ]);
         
-        let viewsCollectionRef;
-        if (adSnap.exists()) {
-            viewsCollectionRef = collection(adDocRef, 'views');
-        } else if (competitionSnap.exists()) {
-            viewsCollectionRef = collection(competitionDocRef, 'views');
-        } else {
-            return 0; // Document doesn't exist in either collection
+        if (adSnap && adSnap.exists()) {
+            return adSnap.data()?.viewsCount || 0;
+        } else if (competitionSnap && competitionSnap.exists()) {
+            return competitionSnap.data()?.viewsCount || 0;
         }
         
-        const snapshot = await getDocs(viewsCollectionRef);
-        return snapshot.size;
+        return 0; // Document doesn't exist in either collection
     } catch (error) {
         console.error(`Error getting views for item ${adId}:`, error);
         return 0;
@@ -488,6 +480,7 @@ export async function postCompetition(competitionData: Omit<Competition, 'id' | 
     const newCompetition: { [key: string]: any } = {
         ...competitionData,
         createdAt: serverTimestamp(),
+        viewsCount: 0,
         positionsAvailable: competitionData.positionsAvailable === undefined ? null : competitionData.positionsAvailable,
     };
     
