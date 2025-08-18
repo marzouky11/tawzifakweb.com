@@ -96,18 +96,17 @@ const InfoItem = ({ icon: Icon, label, value, color, href, isDate }: { icon: Rea
 };
 
 
-const DetailSection = ({ icon: Icon, title, color, children, hasSeparator }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode, hasSeparator?: boolean }) => {
+const DetailSection = ({ icon: Icon, title, color, children }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode }) => {
     if (!children) return null;
     return (
-        <div className="space-y-4">
-            <h3 className="text-xl font-bold flex items-center gap-2" style={{color}}>
+        <div>
+            <h3 className="text-xl font-bold flex items-center gap-2 mb-3" style={{color}}>
                 <Icon className="h-5 w-5" />
                 {title}
             </h3>
-            <div className="prose prose-lg dark:prose-invert max-w-none text-foreground bg-muted/30 p-4 rounded-lg">
+            <div className="prose prose-lg dark:prose-invert max-w-none text-foreground">
                 {children}
             </div>
-            {hasSeparator && <Separator className="my-6" />}
         </div>
     );
 };
@@ -194,28 +193,29 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                     <CardContent className="p-4 sm:p-6 space-y-8">
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                             <InfoItem icon={Building} label="الجهة المنظمة" value={competition.organizer} color={sectionColor} />
-                            <InfoItem icon={Users2} label="عدد المناصب" value={competition.positionsAvailable} color={sectionColor} />
+                            {competition.positionsAvailable && <InfoItem icon={Users2} label="عدد المناصب" value={competition.positionsAvailable} color={sectionColor} />}
                             <InfoItem icon={Briefcase} label="نوع المباراة" value={competition.competitionType} color={sectionColor} />
                             <InfoItem icon={MapPin} label="الموقع" value={competition.location} color={sectionColor} />
                         </div>
                         <Separator />
                         <div className="space-y-6">
-                           <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor} hasSeparator={!!competition.jobProspects}>
-                                <FormattedText text={competition.description} />
-                           </DetailSection>
-                           <DetailSection icon={Target} title="أفق العمل بعد المباراة" color={sectionColor} hasSeparator={!!competition.requirements}>
-                                <FormattedText text={competition.jobProspects} />
-                           </DetailSection>
-                           <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor} hasSeparator={!!competition.competitionStages}>
-                                <FormattedText text={competition.requirements} />
-                           </DetailSection>
-                           <DetailSection icon={ListOrdered} title="مراحل المباراة" color={sectionColor} hasSeparator={!!competition.documentsNeeded}>
-                                <FormattedText text={competition.competitionStages} />
-                           </DetailSection>
-                           <DetailSection icon={FileText} title="الوثائق المطلوبة" color={sectionColor} hasSeparator>
-                                <FormattedText text={competition.documentsNeeded} />
-                           </DetailSection>
+                           {competition.description && <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={competition.description} /></DetailSection>}
+                           {competition.description && (competition.jobProspects || competition.requirements || competition.competitionStages || competition.documentsNeeded) && <Separator />}
 
+                           {competition.jobProspects && <DetailSection icon={Target} title="أفق العمل بعد المباراة" color={sectionColor}><FormattedText text={competition.jobProspects} /></DetailSection>}
+                           {competition.jobProspects && (competition.requirements || competition.competitionStages || competition.documentsNeeded) && <Separator />}
+
+                           {competition.requirements && <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor}><FormattedText text={competition.requirements} /></DetailSection>}
+                           {competition.requirements && (competition.competitionStages || competition.documentsNeeded) && <Separator />}
+
+                           {competition.competitionStages && <DetailSection icon={ListOrdered} title="مراحل المباراة" color={sectionColor}><FormattedText text={competition.competitionStages} /></DetailSection>}
+                           {competition.competitionStages && competition.documentsNeeded && <Separator />}
+
+                           {competition.documentsNeeded && <DetailSection icon={FileText} title="الوثائق المطلوبة" color={sectionColor}><FormattedText text={competition.documentsNeeded} /></DetailSection>}
+                           
+                           {(competition.registrationStartDate || competition.deadline || competition.competitionDate) && <Separator />}
+
+                           {(competition.registrationStartDate || competition.deadline || competition.competitionDate) && (
                             <DetailSection icon={CalendarDays} title="التواريخ المهمة" color={sectionColor}>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 not-prose">
                                     <InfoItem icon={CalendarDays} label="بداية التسجيل" value={competition.registrationStartDate} color={sectionColor} />
@@ -223,6 +223,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                                     <InfoItem icon={CalendarDays} label="تاريخ المباراة" value={competition.competitionDate} color={sectionColor} />
                                 </div>
                             </DetailSection>
+                           )}
                         </div>
                     </CardContent>
                 </Card>
