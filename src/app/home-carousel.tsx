@@ -40,6 +40,19 @@ const slidesData = [
     buttonClass: "bg-[#0D47A1] hover:bg-[#0D47A1]/90"
   },
   {
+    key: 'competitions',
+    mobileOnly: true,
+    desktopSrc: null, // No desktop image
+    mobileSrc: "/Sliderphone5.jpg",
+    alt: "المباريات العمومية",
+    hint: "public competitions",
+    title: "تصفح المباريات العمومية",
+    description: "اكتشف آخر مباريات التوظيف في القطاع العام.",
+    buttonText: "اكتشف الآن",
+    buttonLink: "/competitions",
+    buttonClass: "bg-green-600 hover:bg-green-700"
+  },
+  {
     key: 'explore-jobs',
     desktopSrc: "/web3.png",
     mobileSrc: "/Sliderphone3.png",
@@ -98,28 +111,30 @@ export function HomeCarousel() {
             <CarouselItem key={slide.key}>
               <div className="relative h-64 md:h-80">
                 {/* Desktop view */}
-                <div className="hidden md:block w-full h-full">
-                  <img
-                    src={slide.desktopSrc}
-                    alt={slide.alt}
-                    className="absolute inset-0 w-full h-full object-cover"
-                    loading={index === 0 ? "eager" : "lazy"}
-                    data-ai-hint={slide.hint}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent flex items-center p-12">
-                    <div className="w-1/2 text-white space-y-4">
-                      <h2 className="text-5xl font-bold leading-tight drop-shadow-md">{title}</h2>
-                      <p className="text-lg text-white/90 drop-shadow-sm">{description}</p>
-                      <Button asChild size="lg" className={cn("text-white font-semibold transition-transform hover:scale-105", slide.buttonClass)}>
-                        <Link href={buttonLink!}>{buttonText}</Link>
-                      </Button>
+                {!slide.mobileOnly && slide.desktopSrc && (
+                  <div className="hidden md:block w-full h-full">
+                    <img
+                      src={slide.desktopSrc}
+                      alt={slide.alt}
+                      className="absolute inset-0 w-full h-full object-cover"
+                      loading={index === 0 ? "eager" : "lazy"}
+                      data-ai-hint={slide.hint}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent flex items-center p-12">
+                      <div className="w-1/2 text-white space-y-4">
+                        <h2 className="text-5xl font-bold leading-tight drop-shadow-md">{title}</h2>
+                        <p className="text-lg text-white/90 drop-shadow-sm">{description}</p>
+                        <Button asChild size="lg" className={cn("text-white font-semibold transition-transform hover:scale-105", slide.buttonClass)}>
+                          <Link href={buttonLink!}>{buttonText}</Link>
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
 
                 {/* Mobile view */}
                 {slide.mobileSrc && (
-                    <div className="md:hidden w-full h-full">
+                    <div className={cn("w-full h-full", slide.mobileOnly ? "md:hidden" : "md:hidden")}>
                         <img
                             src={slide.mobileSrc}
                             alt={slide.alt}
