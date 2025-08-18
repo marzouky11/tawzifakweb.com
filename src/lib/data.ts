@@ -421,10 +421,10 @@ export async function deleteTestimonial(testimonialId: string) {
 export async function getViewsCount(adId: string): Promise<number> {
     if (!adId) return 0;
     try {
-        let viewsCollectionRef;
         const adDocRef = doc(db, 'ads', adId);
         const adSnap = await getDoc(adDocRef);
 
+        let viewsCollectionRef;
         if (adSnap.exists()) {
             viewsCollectionRef = collection(db, 'ads', adId, 'views');
         } else {
@@ -451,23 +451,24 @@ export async function recordView(adId: string, viewerId: string): Promise<void> 
     return;
   }
   try {
-    // Check if it's a job/ad or a competition
     const adDocRef = doc(db, 'ads', adId);
-    const adSnap = await getDoc(adDocRef);
+    const competitionDocRef = doc(db, 'competitions', adId);
 
+    const [adSnap, competitionSnap] = await Promise.all([
+      getDoc(adDocRef),
+      getDoc(competitionDocRef)
+    ]);
+    
     let viewDocRef;
     if (adSnap.exists()) {
         viewDocRef = doc(db, 'ads', adId, 'views', viewerId);
+    } else if (competitionSnap.exists()) {
+        viewDocRef = doc(db, 'competitions', adId, 'views', viewerId);
     } else {
-        const competitionDocRef = doc(db, 'competitions', adId);
-        const competitionSnap = await getDoc(competitionDocRef);
-        if (competitionSnap.exists()) {
-            viewDocRef = doc(db, 'competitions', adId, 'views', viewerId);
-        } else {
-             console.error(`Error recording view: Ad or competition with ID ${adId} not found.`);
-             return;
-        }
+         console.error(`Error recording view: Ad or competition with ID ${adId} not found.`);
+         return;
     }
+    
     await setDoc(viewDocRef, { viewedAt: serverTimestamp() });
   } catch (error) {
     console.error(`Error recording view for ad ${adId} by user ${viewerId}:`, error);
@@ -482,6 +483,7 @@ export async function postCompetition(competitionData: Omit<Competition, 'id' | 
     const newCompetition: { [key: string]: any } = {
         ...competitionData,
         createdAt: serverTimestamp(),
+        positionsAvailable: competitionData.positionsAvailable === undefined ? null : competitionData.positionsAvailable,
     };
     
     Object.keys(newCompetition).forEach(key => {
@@ -491,11 +493,6 @@ export async function postCompetition(competitionData: Omit<Competition, 'id' | 
              delete newCompetition[key];
         }
     });
-    
-    // Ensure positionsAvailable is set to null if it's not provided or empty
-    if (newCompetition.positionsAvailable === undefined || newCompetition.positionsAvailable === '') {
-        newCompetition.positionsAvailable = null;
-    }
 
     const newDocRef = await addDoc(competitionsCollection, newCompetition);
     return { id: newDocRef.id };
