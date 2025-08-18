@@ -1,4 +1,5 @@
 
+
 import { db } from '@/lib/firebase';
 import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, Query, and, QueryConstraint, QueryFilterConstraint, documentId, increment } from 'firebase/firestore';
 import type { Job, Category, PostType, User, WorkType, Testimonial, Competition, Organizer } from './types';
@@ -486,15 +487,15 @@ export async function postCompetition(competitionData: Omit<Competition, 'id' | 
     
     Object.keys(newCompetition).forEach(key => {
         if (newCompetition[key] === undefined) {
-             if (key === 'positionsAvailable') {
-                newCompetition[key] = null; // Set to null instead of deleting
-            } else {
-                delete newCompetition[key];
-            }
+             delete newCompetition[key];
         } else if (newCompetition[key] === '') {
              delete newCompetition[key];
         }
     });
+    
+    if (!('positionsAvailable' in newCompetition)) {
+        newCompetition.positionsAvailable = null;
+    }
 
     const newDocRef = await addDoc(competitionsCollection, newCompetition);
     return { id: newDocRef.id };
@@ -605,13 +606,13 @@ export async function updateCompetition(id: string, competitionData: Partial<Com
         
         Object.keys(dataToUpdate).forEach(key => {
             if (dataToUpdate[key] === undefined) {
-                 if (key === 'positionsAvailable') {
-                    dataToUpdate[key] = null;
-                } else {
-                    delete dataToUpdate[key];
-                }
+                 delete dataToUpdate[key];
             }
         });
+        
+        if (!('positionsAvailable' in dataToUpdate)) {
+            dataToUpdate.positionsAvailable = null;
+        }
 
         await updateDoc(competitionRef, dataToUpdate);
     } catch (e) {

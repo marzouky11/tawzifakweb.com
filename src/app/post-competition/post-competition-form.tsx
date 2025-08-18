@@ -191,7 +191,10 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     try {
-      const dataToSave = { ...values };
+      const dataToSave = { 
+        ...values,
+        positionsAvailable: values.positionsAvailable || null,
+      };
 
       if (isEditing && competition) {
         await updateCompetition(competition.id, dataToSave);
