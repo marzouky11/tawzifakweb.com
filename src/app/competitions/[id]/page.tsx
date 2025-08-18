@@ -144,7 +144,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
     
     const [similarCompetitions, viewsCount] = await Promise.all([
       getCompetitions({ count: 2, excludeId: competition.id }),
-      getViewsCount(params.id)
+      getViewsCount(params.id, null)
     ]);
     
     const organizer = getOrganizerByName(competition.organizer);
@@ -285,5 +285,3 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
         </AppLayout>
     );
 }
-
-    
