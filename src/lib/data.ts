@@ -422,19 +422,23 @@ export async function getViewsCount(adId: string): Promise<number> {
     if (!adId) return 0;
     try {
         const adDocRef = doc(db, 'ads', adId);
-        const adSnap = await getDoc(adDocRef);
+        const competitionDocRef = doc(db, 'competitions', adId);
 
+        // Check both collections in parallel
+        const [adSnap, competitionSnap] = await Promise.all([
+            getDoc(adDocRef),
+            getDoc(competitionDocRef)
+        ]);
+        
         let viewsCollectionRef;
+
         if (adSnap.exists()) {
-            viewsCollectionRef = collection(db, 'ads', adId, 'views');
+            viewsCollectionRef = collection(adDocRef, 'views');
+        } else if (competitionSnap.exists()) {
+            viewsCollectionRef = collection(competitionDocRef, 'views');
         } else {
-            const competitionDocRef = doc(db, 'competitions', adId);
-            const competitionSnap = await getDoc(competitionDocRef);
-            if (competitionSnap.exists()) {
-                viewsCollectionRef = collection(db, 'competitions', adId, 'views');
-            } else {
-                return 0; // Return 0 if neither ad nor competition exists
-            }
+            // If the document doesn't exist in either collection, return 0
+            return 0;
         }
         
         const snapshot = await getDocs(viewsCollectionRef);
@@ -444,6 +448,7 @@ export async function getViewsCount(adId: string): Promise<number> {
         return 0;
     }
 }
+
 
 export async function recordView(adId: string, viewerId: string): Promise<void> {
   if (!adId || !viewerId) {
