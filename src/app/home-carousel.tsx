@@ -40,22 +40,8 @@ const slidesData = [
     buttonClass: "bg-[#0D47A1] hover:bg-[#0D47A1]/90"
   },
   {
-    key: 'competitions-desktop',
-    desktopOnly: true,
-    desktopSrc: "/web5.png",
-    mobileSrc: null,
-    alt: "المباريات العمومية",
-    hint: "public competitions",
-    title: "تصفح المباريات العمومية",
-    description: "اكتشف آخر مباريات التوظيف في القطاع العام.",
-    buttonText: "اكتشف الآن",
-    buttonLink: "/competitions",
-    buttonClass: "bg-green-600 hover:bg-green-700"
-  },
-  {
     key: 'competitions',
-    mobileOnly: true,
-    desktopSrc: null, // No desktop image
+    desktopSrc: "/web5.png",
     mobileSrc: "/Sliderphone5.jpg",
     alt: "المباريات العمومية",
     hint: "public competitions",
@@ -123,49 +109,45 @@ export function HomeCarousel() {
           return (
             <CarouselItem key={slide.key}>
               <div className="relative h-64 md:h-80">
-                {/* Desktop view */}
-                {!slide.mobileOnly && slide.desktopSrc && (
-                  <div className={cn("w-full h-full", slide.desktopOnly ? "hidden md:block" : "hidden md:block")}>
-                    <img
-                      src={slide.desktopSrc}
-                      alt={slide.alt}
-                      className="absolute inset-0 w-full h-full object-cover"
-                      loading={index === 0 ? "eager" : "lazy"}
-                      data-ai-hint={slide.hint}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent flex items-center p-12">
-                      <div className="w-[45%] text-white space-y-4">
-                        <h2 className="text-5xl font-bold leading-tight drop-shadow-md">{title}</h2>
-                        <p className="text-lg text-white/90 drop-shadow-sm">{description}</p>
-                        <Button asChild size="lg" className={cn("text-white font-semibold transition-transform hover:scale-105", slide.buttonClass)}>
-                          <Link href={buttonLink!}>{buttonText}</Link>
-                        </Button>
-                      </div>
+                {/* Desktop View */}
+                <div className="hidden md:block w-full h-full">
+                  <img
+                    src={slide.desktopSrc!}
+                    alt={slide.alt}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    loading={index === 0 ? "eager" : "lazy"}
+                    data-ai-hint={slide.hint}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent flex items-center p-12">
+                    <div className="w-[45%] text-white space-y-4">
+                      <h2 className="text-5xl font-bold leading-tight drop-shadow-md">{title}</h2>
+                      <p className="text-lg text-white/90 drop-shadow-sm">{description}</p>
+                      <Button asChild size="lg" className={cn("text-white font-semibold transition-transform hover:scale-105", slide.buttonClass)}>
+                        <Link href={buttonLink!}>{buttonText}</Link>
+                      </Button>
                     </div>
                   </div>
-                )}
+                </div>
 
-                {/* Mobile view */}
-                {!slide.desktopOnly && slide.mobileSrc && (
-                    <div className={cn("w-full h-full", slide.mobileOnly ? "" : "md:hidden")}>
-                        <img
-                            src={slide.mobileSrc}
-                            alt={slide.alt}
-                            className="absolute inset-0 w-full h-full object-cover"
-                            loading={index === 0 ? "eager" : "lazy"}
-                            data-ai-hint={slide.hint}
-                        />
-                        <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center p-4">
-                            <div className="text-white space-y-2">
-                                <h2 className="text-2xl font-bold leading-tight drop-shadow-md">{title}</h2>
-                                <p className="text-sm text-white/90 drop-shadow-sm">{description}</p>
-                                <Button asChild size="sm" className={cn("text-white font-semibold mt-2", slide.buttonClass)}>
-                                    <Link href={buttonLink!}>{buttonText}</Link>
-                                </Button>
-                            </div>
-                        </div>
+                {/* Mobile View */}
+                <div className="md:hidden w-full h-full">
+                  <img
+                    src={slide.mobileSrc!}
+                    alt={slide.alt}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    loading={index === 0 ? "eager" : "lazy"}
+                    data-ai-hint={slide.hint}
+                  />
+                  <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center p-4">
+                    <div className="text-white space-y-2">
+                      <h2 className="text-2xl font-bold leading-tight drop-shadow-md">{title}</h2>
+                      <p className="text-sm text-white/90 drop-shadow-sm">{description}</p>
+                      <Button asChild size="sm" className={cn("text-white font-semibold mt-2", slide.buttonClass)}>
+                        <Link href={buttonLink!}>{buttonText}</Link>
+                      </Button>
                     </div>
-                )}
+                  </div>
+                </div>
               </div>
             </CarouselItem>
           );
