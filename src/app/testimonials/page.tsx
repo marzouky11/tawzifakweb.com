@@ -12,6 +12,8 @@ export const metadata: Metadata = {
     description: 'شاهد ماذا يقول المستخدمون عن تجاربهم مع منصة توظيفك.',
 };
 
+export const revalidate = 0; // Force dynamic rendering
+
 export default async function TestimonialsPage() {
   const testimonials = await getTestimonials();
 
