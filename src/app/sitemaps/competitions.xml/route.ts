@@ -27,7 +27,7 @@ export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
-    const competitions = await getCompetitions();
+    const competitions = await getCompetitions({ count: 9999 }); // Fetch all competitions
     const sitemap = generateSitemap(competitions);
 
     return new Response(sitemap, {
@@ -40,4 +40,3 @@ export async function GET() {
     return new Response('Error generating competitions sitemap', { status: 500 });
   }
 }
-
