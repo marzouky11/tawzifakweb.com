@@ -1,12 +1,14 @@
 
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { getArticleBySlug } from '@/lib/articles';
+import { getArticleBySlug, getArticles } from '@/lib/articles';
 import { AppLayout } from '@/components/layout/app-layout';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Card, CardContent } from '@/components/ui/card';
-import { User, Newspaper, CalendarDays } from 'lucide-react';
+import { User, Newspaper } from 'lucide-react';
 import type { Metadata } from 'next';
+import { ArticleCard } from '../article-card';
+import { Separator } from '@/components/ui/separator';
 
 interface Props {
   params: { slug: string };
@@ -95,6 +97,11 @@ export default function ArticlePage({ params }: Props) {
   if (!article) {
     notFound();
   }
+
+  const allArticles = getArticles();
+  const relatedArticles = allArticles
+    .filter(a => a.slug !== article.slug)
+    .slice(0, 3);
   
   const contentBlocks = article.content.split('\n').map(paragraph => paragraph.trim()).filter(p => p.length > 0);
 
@@ -161,6 +168,20 @@ export default function ArticlePage({ params }: Props) {
             </CardContent>
           </Card>
         </article>
+        
+        {relatedArticles.length > 0 && (
+          <section className="mt-12">
+            <Separator className="my-8" />
+            <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
+              مقالات قد تعجبك أيضاً
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {relatedArticles.map((relatedArticle) => (
+                <ArticleCard key={relatedArticle.slug} article={relatedArticle} />
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </AppLayout>
   );
