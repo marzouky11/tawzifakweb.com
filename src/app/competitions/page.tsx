@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   description: 'تصفح آخر مباريات التوظيف في القطاع العام في المغرب والدول العربية. فرص عمل حكومية محدثة يوميًا.',
 };
 
+export const revalidate = 0; // Force dynamic rendering to fetch latest data
+
 function CompetitionFiltersSkeleton() {
     return <div className="h-14 bg-muted rounded-xl w-full animate-pulse" />;
 }
