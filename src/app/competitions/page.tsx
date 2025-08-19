@@ -23,36 +23,15 @@ function CompetitionFiltersSkeleton() {
     return <div className="h-14 bg-muted rounded-xl w-full animate-pulse" />;
 }
 
-function CompetitionsListSkeleton() {
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-      {Array.from({ length: 12 }).map((_, i) => (
-        <CompetitionCard key={i} competition={null} />
-      ))}
-    </div>
-  );
-}
-
-async function CompetitionsList({ searchParams }: { searchParams?: { [key: string]: string | string[] | undefined } }) {
-  const competitions = await getCompetitions({
-      searchQuery: typeof searchParams?.q === 'string' ? searchParams.q : undefined,
-  });
-
-  if (competitions.length > 0) {
-    return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {competitions.map((comp) => <CompetitionCard key={comp.id} competition={comp} />)}
-      </div>
-    );
-  }
-  return <p className="col-span-full text-center text-muted-foreground py-10">لا توجد مباريات تطابق بحثك.</p>;
-}
-
 export default async function CompetitionsPage({
   searchParams,
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
+
+  const competitions = await getCompetitions({
+      searchQuery: typeof searchParams?.q === 'string' ? searchParams.q : undefined,
+  });
 
   return (
     <AppLayout>
@@ -68,9 +47,15 @@ export default async function CompetitionsPage({
         <Suspense fallback={<CompetitionFiltersSkeleton />}>
           <CompetitionFilters />
         </Suspense>
-        <Suspense fallback={<CompetitionsListSkeleton />}>
-          <CompetitionsList searchParams={searchParams} />
-        </Suspense>
+        
+        {competitions.length > 0 ? (
+           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {competitions.map((comp) => <CompetitionCard key={comp.id} competition={comp} />)}
+          </div>
+        ) : (
+          <p className="col-span-full text-center text-muted-foreground py-10">لا توجد مباريات تطابق بحثك.</p>
+        )}
+
       </div>
     </AppLayout>
   );
