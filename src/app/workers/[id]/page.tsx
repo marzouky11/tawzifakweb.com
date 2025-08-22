@@ -40,20 +40,16 @@ interface JobDetailPageProps {
 
 export async function generateMetadata({ params }: JobDetailPageProps): Promise<Metadata> {
   const job = await getJobById(params.id);
-  const baseUrl = 'https://www.tawzifak.com';
-  const siteThumbnail = 'https://www.tawzifak.com/og-image.jpg';
   
   if (!job) {
     return {
       title: 'الإعلان غير موجود',
-      description: 'لم نتمكن من العثور على الإعلان الذي تبحث عنه.',
-      openGraph: { images: [{ url: siteThumbnail }] },
-      twitter: { images: [siteThumbnail] }
     };
   }
 
   // Prevent indexing of job seeker profiles
   return {
+    title: job.title,
     robots: {
       index: false,
       follow: false,
