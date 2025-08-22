@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { AppLayout } from '@/components/layout/app-layout';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { PlusCircle, Users, Briefcase, LogIn, Landmark, MessageCircleWarning, Newspaper } from 'lucide-react';
+import { PlusCircle, Users, Briefcase, LogIn, Landmark, Plane } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -31,7 +31,7 @@ export default function SelectPostTypePage() {
   const router = useRouter();
   const { toast } = useToast();
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, type: 'seeking_job' | 'seeking_worker' | 'competition') => {
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, type: 'seeking_job' | 'seeking_worker' | 'competition' | 'immigration') => {
     e.preventDefault();
     if (!user) {
       router.push(`/login?redirect=/post-job/select-type`);
@@ -47,7 +47,7 @@ export default function SelectPostTypePage() {
       return;
     }
     
-    if (type === 'competition' && !userData?.isAdmin) {
+    if ((type === 'competition' || type === 'immigration') && !userData?.isAdmin) {
        toast({
             variant: "destructive",
             title: "صلاحية غير كافية",
@@ -56,7 +56,15 @@ export default function SelectPostTypePage() {
         return;
     }
     
-    const path = type === 'competition' ? '/post-competition' : `/post-job?type=${type}`;
+    let path = '';
+    if (type === 'competition') {
+        path = '/post-competition';
+    } else if (type === 'immigration') {
+        path = '/post-immigration';
+    } else {
+        path = `/post-job?type=${type}`;
+    }
+
     router.push(path);
   };
 
@@ -82,7 +90,7 @@ export default function SelectPostTypePage() {
         title="نشر إعلان جديد"
         description="اختر نوع الإعلان الذي تريد نشره لتتمكن من ملء النموذج المناسب."
       />
-      <div className="container mx-auto max-w-4xl px-4 pb-8">
+      <div className="container mx-auto max-w-5xl px-4 pb-8">
         {!user && (
           <Alert className="mb-6 border-primary/50 text-primary">
             <LogIn className="h-4 w-4" />
@@ -92,9 +100,9 @@ export default function SelectPostTypePage() {
             </AlertDescription>
           </Alert>
         )}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Card 1: Seeking Job (for everyone) */}
-          <Link href="/post-job?type=seeking_job" onClick={(e) => handleLinkClick(e, 'seeking_job')} className="lg:col-span-1">
+          <Link href="/post-job?type=seeking_job" onClick={(e) => handleLinkClick(e, 'seeking_job')}>
             <Card className="p-6 text-center hover:shadow-xl hover:border-[#424242] transition-all duration-300 cursor-pointer h-full flex flex-col justify-center items-center bg-[#424242]/5 dark:bg-[#424242]/20">
               <Users className="h-16 w-16 text-[#424242] mb-4" />
               <h3 className="text-xl font-semibold text-[#424242]">أبحث عن عمل</h3>
@@ -106,7 +114,7 @@ export default function SelectPostTypePage() {
           
           {/* Card 2: Seeking Worker (admin only) */}
           {userData?.isAdmin ? (
-            <Link href="/post-job?type=seeking_worker" onClick={(e) => handleLinkClick(e, 'seeking_worker')} className="lg:col-span-1">
+            <Link href="/post-job?type=seeking_worker" onClick={(e) => handleLinkClick(e, 'seeking_worker')}>
               <Card className="p-6 text-center hover:shadow-xl hover:border-[#0D47A1] transition-all duration-300 cursor-pointer h-full flex flex-col justify-center items-center bg-[#0D47A1]/5 dark:bg-[#0D47A1]/20">
                 <Briefcase className="h-16 w-16 text-[#0D47A1] mb-4" />
                 <h3 className="text-xl font-semibold text-[#0D47A1]">أبحث عن موظف/عامل</h3>
@@ -126,7 +134,7 @@ export default function SelectPostTypePage() {
 
           {/* Card 3: Post Competition (admin only) */}
            {userData?.isAdmin ? (
-            <Link href="/post-competition" onClick={(e) => handleLinkClick(e, 'competition')} className="lg:col-span-1">
+            <Link href="/post-competition" onClick={(e) => handleLinkClick(e, 'competition')}>
               <Card className="p-6 text-center hover:shadow-xl hover:border-[#14532d] transition-all duration-300 cursor-pointer h-full flex flex-col justify-center items-center bg-[#14532d]/5 dark:bg-[#14532d]/20">
                 <Landmark className="h-16 w-16 text-[#14532d] mb-4" />
                 <h3 className="text-xl font-semibold text-[#14532d]">نشر مباراة عمومية</h3>
@@ -141,6 +149,26 @@ export default function SelectPostTypePage() {
                 title="نشر مباراة عمومية"
                 description="إذا أردت نشر مباراة عمومية، يجب الاتصال بالدعم."
                 color="#14532d"
+             />
+           )}
+           
+          {/* Card 4: Post Immigration Ad (admin only) */}
+           {userData?.isAdmin ? (
+            <Link href="/post-immigration" onClick={(e) => handleLinkClick(e, 'immigration')}>
+              <Card className="p-6 text-center hover:shadow-xl hover:border-[#0ea5e9] transition-all duration-300 cursor-pointer h-full flex flex-col justify-center items-center bg-sky-500/5 dark:bg-sky-500/20">
+                <Plane className="h-16 w-16 text-sky-500 mb-4" />
+                <h3 className="text-xl font-semibold text-sky-500">نشر إعلان هجرة</h3>
+                <p className="text-muted-foreground mt-2">
+                  (خاص بالمشرفين) انشر فرص الهجرة والعمل بالخارج.
+                </p>
+              </Card>
+            </Link>
+           ) : (
+             <DisabledCard 
+                icon={Plane}
+                title="نشر إعلان هجرة"
+                description="إذا أردت نشر إعلان هجرة، يجب الاتصال بالدعم."
+                color="#0ea5e9"
              />
            )}
         </div>
