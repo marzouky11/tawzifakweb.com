@@ -59,7 +59,8 @@ import {
   LifeBuoy,
   Landmark,
   TrainTrack,
-  FileText
+  FileText,
+  Plane
 } from 'lucide-react';
 import type { CSSProperties } from 'react';
 
@@ -123,6 +124,7 @@ const iconMap: { [key: string]: LucideIcon } = {
   Landmark,
   TrainTrack,
   FileText,
+  Plane,
   Briefcase,
   Default: Briefcase,
 };

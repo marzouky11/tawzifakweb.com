@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -25,7 +26,8 @@ import {
   Newspaper,
   Settings,
   FileText,
-  Landmark
+  Landmark,
+  Plane
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -36,6 +38,7 @@ const navLinks = [
     { href: '/', label: 'الرئيسية' },
     { href: '/jobs', label: 'الوظائف' },
     { href: '/competitions', label: 'المباريات' },
+    { href: '/immigration', label: 'الهجرة' },
     { href: '/workers', label: 'العمال' },
 ];
 

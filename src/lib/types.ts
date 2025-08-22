@@ -80,6 +80,25 @@ export interface Competition {
   isNew?: boolean;
 }
 
+export interface ImmigrationPost {
+  id: string;
+  title: string;
+  targetCountry: string;
+  city?: string;
+  programType: 'work' | 'study' | 'seasonal' | 'training';
+  targetAudience: string;
+  deadline: string;
+  description?: string;
+  requirements?: string;
+  qualifications?: string;
+  experience?: string;
+  benefitsAndSalary?: string;
+  applyUrl: string;
+  createdAt: Timestamp;
+  postedAt: string;
+  isNew?: boolean;
+}
+
 
 export interface Organizer {
   name: string;

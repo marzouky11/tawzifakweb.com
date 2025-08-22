@@ -6,9 +6,9 @@ import { AppLayout } from '@/components/layout/app-layout';
 import { JobCard } from '@/components/job-card';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { getJobs, getTestimonials, getCompetitions } from '@/lib/data';
+import { getJobs, getTestimonials, getCompetitions, getImmigrationPosts } from '@/lib/data';
 import React, { Suspense } from 'react';
-import { Newspaper, Briefcase, Users, ArrowLeft, FileText, User as UserIcon, Landmark } from 'lucide-react';
+import { Newspaper, Briefcase, Users, ArrowLeft, FileText, User as UserIcon, Landmark, Plane } from 'lucide-react';
 import { JobFilters } from '@/components/job-filters';
 import { HomeCarousel } from './home-carousel';
 import { HomeExtraSections } from './home-extra-sections';
@@ -20,6 +20,7 @@ import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { HomeHeaderMobile } from './home-header-mobile';
 import { CompetitionCard } from '@/components/competition-card';
+import { ImmigrationCard } from '@/components/immigration-card';
 
 
 export const revalidate = 60; // Revalidate every 60 seconds
@@ -98,6 +99,30 @@ async function CompetitionsSection() {
           {competitions.map((comp, index) => (
              <div key={comp.id} className={cn(index >= 5 && "hidden sm:block")}>
                 <CompetitionCard competition={comp} />
+            </div>
+          ))}
+        </div>
+      </>
+    );
+}
+
+async function ImmigrationSection() {
+    const immigrationPosts = await getImmigrationPosts({ count: 4 });
+    if (immigrationPosts.length === 0) return null;
+
+    return (
+      <>
+        <SectionHeader 
+          icon={Plane}
+          title="فرص الهجرة"
+          description="اكتشف أحدث فرص الهجرة للعمل، الدراسة، أو التدريب حول العالم."
+          href="/immigration"
+          iconColor="#0ea5e9" // sky-500
+        />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {immigrationPosts.map((post, index) => (
+             <div key={post.id} className={cn(index >= 5 && "hidden sm:block")}>
+                <ImmigrationCard post={post} />
             </div>
           ))}
         </div>
@@ -232,9 +257,14 @@ export default function HomePage() {
           <Suspense>
               <CompetitionsSection />
           </Suspense>
-          
+
           <Separator />
 
+          <Suspense>
+              <ImmigrationSection />
+          </Suspense>
+          
+          <Separator />
 
           <section>
             <SectionHeader

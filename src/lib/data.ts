@@ -2,7 +2,7 @@
 
 import { db } from '@/lib/firebase';
 import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, Query, and, QueryConstraint, QueryFilterConstraint, documentId, increment } from 'firebase/firestore';
-import type { Job, Category, PostType, User, WorkType, Testimonial, Competition, Organizer, Article, Report, ContactMessage } from './types';
+import type { Job, Category, PostType, User, WorkType, Testimonial, Competition, Organizer, Article, Report, ContactMessage, ImmigrationPost } from './types';
 import Fuse from 'fuse.js';
 
 const categories: Category[] = [
@@ -571,6 +571,126 @@ export async function deleteCompetition(competitionId: string) {
     }
 }
 
+// Functions for Immigration Posts
+export async function getImmigrationPosts(options: { 
+  count?: number;
+  searchQuery?: string;
+  excludeId?: string;
+} = {}): Promise<ImmigrationPost[]> {
+  try {
+    const { count, searchQuery, excludeId } = options;
+    const postsRef = collection(db, 'immigration');
+    const q = query(postsRef, orderBy('createdAt', 'desc'));
+    const querySnapshot = await getDocs(q);
+
+    let posts = querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        postedAt: formatTimeAgo(data.createdAt),
+        isNew: (new Date().getTime() - data.createdAt.toDate().getTime()) < 24 * 60 * 60 * 1000,
+      } as ImmigrationPost;
+    });
+
+    if (excludeId) {
+      posts = posts.filter(post => post.id !== excludeId);
+    }
+
+    if (searchQuery) {
+      const fuse = new Fuse(posts, {
+        keys: ['title', 'targetCountry', 'description'],
+        includeScore: true,
+        threshold: 0.4,
+      });
+      posts = fuse.search(searchQuery).map(result => result.item);
+    }
+
+    if (count) {
+      return posts.slice(0, count);
+    }
+    
+    return posts;
+  } catch (error) {
+    console.error("Error fetching immigration posts: ", error);
+    return [];
+  }
+}
+
+export async function getImmigrationPostById(id: string): Promise<ImmigrationPost | null> {
+  try {
+    const docRef = doc(db, 'immigration', id);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      return { 
+          id: docSnap.id, 
+          ...data,
+          postedAt: formatTimeAgo(data.createdAt),
+     } as ImmigrationPost;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching immigration post by ID: ", error);
+    return null;
+  }
+}
+
+export async function postImmigration(postData: Omit<ImmigrationPost, 'id' | 'createdAt' | 'postedAt' | 'isNew'>): Promise<{ id: string }> {
+  try {
+    const postsCollection = collection(db, 'immigration');
+    const newPost: { [key: string]: any } = {
+        ...postData,
+        createdAt: serverTimestamp(),
+    };
+    
+    Object.keys(newPost).forEach(key => {
+        if (newPost[key] === undefined || newPost[key] === '') {
+             delete newPost[key];
+        }
+    });
+
+    const newDocRef = await addDoc(postsCollection, newPost);
+    return { id: newDocRef.id };
+  } catch (e) {
+    console.error("Error adding immigration post: ", e);
+    throw new Error("Failed to post immigration ad");
+  }
+}
+
+export async function updateImmigrationPost(id: string, postData: Partial<ImmigrationPost>): Promise<void> {
+    try {
+        const postRef = doc(db, 'immigration', id);
+        const dataToUpdate: { [key: string]: any } = {
+            ...postData,
+            updatedAt: serverTimestamp()
+        };
+        
+        Object.keys(dataToUpdate).forEach(key => {
+            if (dataToUpdate[key] === undefined) {
+                 delete dataToUpdate[key];
+            }
+        });
+        
+        await updateDoc(postRef, dataToUpdate);
+    } catch (e) {
+        console.error("Error updating immigration post: ", e);
+        throw new Error("Failed to update immigration post");
+    }
+}
+
+export async function deleteImmigrationPost(postId: string) {
+    try {
+        await deleteDoc(doc(db, 'immigration', postId));
+    } catch (e) {
+        console.error("Error deleting immigration post: ", e);
+        throw new Error("Failed to delete immigration post");
+    }
+}
+
+
 export function getCategories() {
   return categories;
 }
@@ -718,7 +838,7 @@ export async function getSavedAds(userId: string): Promise<(Job | Competition)[]
     }
 }
 
-export async function toggleSaveAd(userId: string, adId: string, adType: 'job' | 'competition') {
+export async function toggleSaveAd(userId: string, adId: string, adType: 'job' | 'competition' | 'immigration') {
     if (!userId || !adId) {
         throw new Error("User ID and Ad ID are required.");
     }

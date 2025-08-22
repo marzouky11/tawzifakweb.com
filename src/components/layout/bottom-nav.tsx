@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import Link from 'next/link';
@@ -21,9 +22,7 @@ function BottomNavContent() {
   return (
     <div className="relative flex items-center justify-around h-16 mx-4 bg-card border rounded-2xl shadow-lg">
       {navItems.map((item, index) => {
-        const isActive = item.href === '/' 
-          ? pathname === '/' 
-          : pathname.startsWith(item.href);
+        const isActive = (item.href === '/' && pathname === '/') || (item.href !== '/' && pathname.startsWith(item.href));
 
         if (item.isFab) {
           return (
