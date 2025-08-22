@@ -26,6 +26,7 @@ import { Separator } from '@/components/ui/separator';
 import { ReportAdDialog } from '@/app/jobs/[id]/report-ad-dialog';
 import { SaveAdButton } from '@/app/jobs/[id]/save-ad-button';
 import { ImmigrationCard } from '@/components/immigration-card';
+import { CategoryIcon } from '@/components/icons';
 
 interface ImmigrationDetailPageProps {
   params: { id: string };
@@ -130,6 +131,8 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
         seasonal: 'موسمي',
         training: 'تدريب',
     };
+    
+    const iconName = post.iconName || 'Plane';
 
     return (
         <AppLayout>
@@ -146,7 +149,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                      <CardHeader className="bg-sky-500/10 p-4 sm:p-6">
                         <div className="flex items-center gap-4 mb-2">
                            <div className="p-3 rounded-xl flex-shrink-0 bg-sky-500/20">
-                                <Plane className="w-8 h-8 text-sky-500" />
+                                <CategoryIcon name={iconName} className="w-8 h-8 text-sky-500" />
                             </div>
                             <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                                 {post.title}
@@ -167,6 +170,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                             <InfoItem icon={Briefcase} label="نوع البرنامج" value={programTypeTranslations[post.programType]} color={sectionColor} />
                             <InfoItem icon={Users} label="الفئة المستهدفة" value={post.targetAudience} color={sectionColor} />
                             <InfoItem icon={CalendarDays} label="آخر أجل" value={post.deadline} color={sectionColor} />
+                            {post.salary && <InfoItem icon={Wallet} label="الأجر" value={post.salary} color={sectionColor} />}
                         </div>
                         <Separator />
                         <div className="space-y-6">
@@ -182,7 +186,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                            {post.experience && <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={post.experience} /></DetailSection>}
                            {post.experience && <Separator />}
 
-                           {post.benefitsAndSalary && <DetailSection icon={Wallet} title="المزايا والأجر" color={sectionColor}><FormattedText text={post.benefitsAndSalary} /></DetailSection>}
+                           {post.salaryAndBenefits && <DetailSection icon={Wallet} title="المزايا" color={sectionColor}><FormattedText text={post.salaryAndBenefits} /></DetailSection>}
                         </div>
                     </CardContent>
                 </Card>

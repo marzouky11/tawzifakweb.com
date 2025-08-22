@@ -93,8 +93,14 @@ export interface ImmigrationPost {
   requirements?: string;
   qualifications?: string;
   experience?: string;
-  benefitsAndSalary?: string;
+  salaryAndBenefits?: string;
+  salary?: string;
   applyUrl: string;
+  iconName?: string;
+  phone?: string;
+  whatsapp?: string;
+  email?: string;
+  instagram?: string;
   createdAt: Timestamp;
   postedAt: string;
   isNew?: boolean;

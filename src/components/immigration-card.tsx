@@ -9,6 +9,7 @@ import { Plane, Calendar, MapPin, ArrowRight } from 'lucide-react';
 import type { ImmigrationPost } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
+import { CategoryIcon } from './icons';
 
 interface ImmigrationCardProps {
   post: ImmigrationPost | null;
@@ -46,6 +47,7 @@ export function ImmigrationCard({ post }: ImmigrationCardProps) {
 
   const detailUrl = `/immigration/${post.id}`;
   const sectionColor = '#0ea5e9'; // sky-500
+  const iconName = post.iconName || 'Plane';
 
   const programTypeTranslations = {
     work: 'عمل',
@@ -55,11 +57,11 @@ export function ImmigrationCard({ post }: ImmigrationCardProps) {
   };
 
   return (
-    <Card className="flex flex-col h-full overflow-hidden rounded-xl shadow-lg border-2 border-transparent hover:border-sky-400/50 transition-all duration-300 bg-gradient-to-br from-sky-50/50 to-white dark:from-sky-950/20 dark:to-background">
+    <Card className="flex flex-col h-full overflow-hidden rounded-xl shadow-lg border-2 border-sky-500/50 bg-gradient-to-br from-sky-50/50 to-white dark:from-sky-950/20 dark:to-background transition-all duration-300 hover:shadow-2xl hover:border-sky-500">
       <CardHeader className="p-4">
         <div className="flex items-start gap-3">
           <div className="p-2.5 bg-sky-100 dark:bg-sky-900/50 rounded-lg mt-1">
-            <Plane className="h-6 w-6 text-sky-500" />
+             <CategoryIcon name={iconName} className="h-6 w-6 text-sky-500" />
           </div>
           <div className="flex-grow">
             <h3 className="font-bold text-lg leading-snug">
