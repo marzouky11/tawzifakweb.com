@@ -55,11 +55,15 @@ export async function generateMetadata({ params }: CompetitionDetailPageProps): 
   const jsonLdDescription = competition.description || `مباراة منظمة من طرف ${competition.organizer} لـ ${competition.positionsAvailable} منصب.`;
   const canonicalUrl = `${baseUrl}/competitions/${competition.id}`;
 
-  const createdAtDate = (competition.createdAt && typeof competition.createdAt.toDate === 'function') 
+  const createdAtDate = competition.createdAt && typeof competition.createdAt.toDate === 'function' 
     ? competition.createdAt.toDate() 
     : new Date();
 
-  const jobPostingJsonLd = {
+  // Validate the deadline date before using it
+  const deadlineDate = competition.deadline ? new Date(competition.deadline) : null;
+  const validDeadline = deadlineDate && !isNaN(deadlineDate.getTime());
+
+  const jobPostingJsonLd: any = {
       '@context': 'https://schema.org',
       '@type': 'JobPosting',
       title: metaTitle,
@@ -79,9 +83,15 @@ export async function generateMetadata({ params }: CompetitionDetailPageProps): 
           addressCountry: 'MA', // Default to Morocco, can be improved later
         },
       },
-      ...(competition.positionsAvailable && { totalJobOpenings: String(competition.positionsAvailable) }),
-      ...(competition.deadline && { validThrough: new Date(competition.deadline).toISOString() }),
   };
+
+  if (competition.positionsAvailable) {
+      jobPostingJsonLd.totalJobOpenings = String(competition.positionsAvailable);
+  }
+  if (validDeadline) {
+      jobPostingJsonLd.validThrough = deadlineDate.toISOString();
+  }
+
 
   return {
     title: metaTitle,
