@@ -1,10 +1,12 @@
 
+
 const baseUrl = 'https://www.tawzifak.com';
 
 const staticPages = [
   { url: '/jobs', priority: 0.9, changeFrequency: 'daily' },
   { url: '/workers', priority: 0.9, changeFrequency: 'daily' },
   { url: '/competitions', priority: 0.9, changeFrequency: 'daily' },
+  { url: '/immigration', priority: 0.9, changeFrequency: 'daily' },
   { url: '/articles', priority: 0.7, changeFrequency: 'weekly' },
   { url: '/cv-builder', priority: 0.8, changeFrequency: 'monthly' },
   { url: '/about', priority: 0.5, changeFrequency: 'yearly' },

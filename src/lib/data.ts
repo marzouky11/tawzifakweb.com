@@ -617,6 +617,26 @@ export async function getImmigrationPosts(options: {
   }
 }
 
+export async function getImmigrationPostBySlug(slug: string): Promise<ImmigrationPost | null> {
+    try {
+        const q = query(collection(db, "immigration"), where("slug", "==", slug), limit(1));
+        const querySnapshot = await getDocs(q);
+        if (querySnapshot.empty) {
+            return null;
+        }
+        const docSnap = querySnapshot.docs[0];
+        const data = docSnap.data();
+        return {
+            id: docSnap.id,
+            ...data,
+            postedAt: formatTimeAgo(data.createdAt)
+        } as ImmigrationPost;
+    } catch (error) {
+        console.error("Error fetching immigration post by slug:", error);
+        return null;
+    }
+}
+
 export async function getImmigrationPostById(id: string): Promise<ImmigrationPost | null> {
   try {
     const docRef = doc(db, 'immigration', id);

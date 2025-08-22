@@ -151,17 +151,6 @@ export function Header() {
                 </Link>
               );
             })}
-             {user && (
-                 <Link
-                  href="/profile/my-ads"
-                  className={cn(
-                    'text-lg font-medium transition-colors hover:text-primary',
-                    pathname.startsWith('/profile/my-ads') ? 'text-primary' : 'text-muted-foreground'
-                  )}
-                >
-                  إعلاناتي
-                </Link>
-            )}
           </div>
         </div>
 

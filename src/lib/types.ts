@@ -82,6 +82,7 @@ export interface Competition {
 
 export interface ImmigrationPost {
   id: string;
+  slug: string;
   title: string;
   targetCountry: string;
   city?: string;
