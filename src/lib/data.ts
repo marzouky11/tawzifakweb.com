@@ -2,7 +2,7 @@
 
 import { db } from '@/lib/firebase';
 import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, Query, and, QueryConstraint, QueryFilterConstraint, documentId, increment } from 'firebase/firestore';
-import type { Job, Category, PostType, User, WorkType, Testimonial, Competition, Organizer } from './types';
+import type { Job, Category, PostType, User, WorkType, Testimonial, Competition, Organizer, Article, Report, ContactMessage } from './types';
 import Fuse from 'fuse.js';
 
 const categories: Category[] = [
@@ -588,7 +588,81 @@ export function getOrganizerByName(organizerName?: string): Organizer | undefine
     return organizers.find(o => o.name === organizerName);
 }
 
-// Admin Functions
+// --- Articles Functions ---
+export async function getArticles(options: { count?: number } = {}): Promise<Article[]> {
+  try {
+    const articlesRef = collection(db, 'articles');
+    let q = query(articlesRef, orderBy('createdAt', 'desc'));
+    if (options.count) {
+      q = query(q, limit(options.count));
+    }
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+      postedAt: formatTimeAgo(doc.data().createdAt),
+    } as Article));
+  } catch (error) {
+    console.error("Error fetching articles: ", error);
+    return [];
+  }
+}
+
+export async function getArticleBySlug(slug: string): Promise<Article | null> {
+  try {
+    const q = query(collection(db, 'articles'), where('slug', '==', slug), limit(1));
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) {
+      return null;
+    }
+    const docSnap = querySnapshot.docs[0];
+    const data = docSnap.data();
+    return {
+      id: docSnap.id,
+      ...data,
+      postedAt: formatTimeAgo(data.createdAt),
+    } as Article;
+  } catch (error) {
+    console.error("Error fetching article by slug:", error);
+    return null;
+  }
+}
+
+export async function addArticle(articleData: Omit<Article, 'id' | 'createdAt' | 'postedAt'>): Promise<{ id: string }> {
+    try {
+        const docRef = await addDoc(collection(db, 'articles'), {
+            ...articleData,
+            createdAt: serverTimestamp()
+        });
+        return { id: docRef.id };
+    } catch (e) {
+        console.error("Error adding article: ", e);
+        throw new Error("Failed to add article");
+    }
+}
+
+export async function updateArticle(articleId: string, articleData: Partial<Article>): Promise<void> {
+    try {
+        await updateDoc(doc(db, 'articles', articleId), {
+            ...articleData,
+            updatedAt: serverTimestamp()
+        });
+    } catch (e) {
+        console.error("Error updating article: ", e);
+        throw new Error("Failed to update article");
+    }
+}
+
+export async function deleteArticle(articleId: string): Promise<void> {
+    try {
+        await deleteDoc(doc(db, 'articles', articleId));
+    } catch (e) {
+        console.error("Error deleting article: ", e);
+        throw new Error("Failed to delete article");
+    }
+}
+
+// --- Admin Functions ---
 export async function getAllUsers(): Promise<User[]> {
   try {
     const usersRef = collection(db, 'users');
@@ -606,8 +680,6 @@ export async function getAllUsers(): Promise<User[]> {
 
 export async function deleteUser(userId: string) {
     try {
-        // This only deletes the Firestore document, not the Firebase Auth user.
-        // Deleting the Auth user requires admin privileges, typically via a backend function.
         await deleteDoc(doc(db, 'users', userId));
     } catch (e) {
         console.error("Error deleting user document: ", e);
@@ -616,7 +688,6 @@ export async function deleteUser(userId: string) {
 }
 
 // --- Saved Ads Functions ---
-
 export async function getSavedAdIds(userId: string): Promise<string[]> {
   if (!userId) return [];
   try {
@@ -672,4 +743,37 @@ export async function toggleSaveAd(userId: string, adId: string, adType: 'job' |
     }
 }
 
-    
+// --- Reports and Contacts Functions ---
+export async function addReport(reportData: Omit<Report, 'id' | 'createdAt'>): Promise<void> {
+  await addDoc(collection(db, 'reports'), {
+    ...reportData,
+    createdAt: serverTimestamp(),
+  });
+}
+
+export async function getReports(): Promise<Report[]> {
+  const q = query(collection(db, 'reports'), orderBy('createdAt', 'desc'));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Report));
+}
+
+export async function deleteReport(reportId: string): Promise<void> {
+  await deleteDoc(doc(db, 'reports', reportId));
+}
+
+export async function addContactMessage(messageData: Omit<ContactMessage, 'id' | 'createdAt'>): Promise<void> {
+  await addDoc(collection(db, 'contacts'), {
+    ...messageData,
+    createdAt: serverTimestamp(),
+  });
+}
+
+export async function getContactMessages(): Promise<ContactMessage[]> {
+  const q = query(collection(db, 'contacts'), orderBy('createdAt', 'desc'));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as ContactMessage));
+}
+
+export async function deleteContactMessage(messageId: string): Promise<void> {
+  await deleteDoc(doc(db, 'contacts', messageId));
+}

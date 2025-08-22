@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -21,6 +22,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Flag, Loader2 } from 'lucide-react';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { addReport } from '@/lib/data';
 
 const reportReasons = [
   'إعلان احتيالي أو مضلل',
@@ -53,41 +55,29 @@ export function ReportAdDialog({ adId }: ReportAdDialogProps) {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof reportSchema>) => {
+  const onSubmit = async (data: z.infer<typeof reportSchema>) => {
     setIsSubmitting(true);
     try {
-      const adUrl = window.location.href;
-      const subject = `بلاغ بخصوص إعلان مخالف (${adId})`;
-      const body = `
-مرحبًا فريق توظيفك،
-
-أود الإبلاغ عن المحتوى التالي:
-- رابط الإعلان: ${adUrl}
-- سبب الإبلاغ: ${data.reason}
-- تفاصيل إضافية: ${data.details || 'لا يوجد'}
-
-شكرًا لكم لمراجعة هذا البلاغ.
-      `.trim().replace(/^\s+/gm, '');
-
-      const mailtoLink = `mailto:tawzifakweb@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-      window.location.href = mailtoLink;
-
-      toast({
-        title: 'تم تحويلك إلى برنامج البريد',
-        description: 'يرجى إرسال البريد الإلكتروني الذي تم تجهيزه لإتمام عملية الإبلاغ.',
+      await addReport({
+        adId,
+        adUrl: window.location.href,
+        reason: data.reason,
+        details: data.details,
       });
 
-      setTimeout(() => {
-        setIsOpen(false);
-        form.reset();
-      }, 500);
+      toast({
+        title: 'تم إرسال البلاغ بنجاح',
+        description: 'شكرًا لك. سيقوم فريقنا بمراجعة البلاغ واتخاذ الإجراء المناسب.',
+      });
+
+      setIsOpen(false);
+      form.reset();
 
     } catch (error) {
       toast({
         variant: 'destructive',
-        title: 'فشل فتح برنامج البريد',
-        description: 'حدث خطأ ما. يمكنك نسخ بريدنا الإلكتروني يدويًا: tawzifakweb@gmail.com',
+        title: 'فشل إرسال البلاغ',
+        description: 'حدث خطأ ما. يرجى المحاولة مرة أخرى.',
       });
     } finally {
       setIsSubmitting(false);
@@ -113,7 +103,7 @@ export function ReportAdDialog({ adId }: ReportAdDialogProps) {
             <AlertDialogHeader>
               <AlertDialogTitle>الإبلاغ عن إعلان</AlertDialogTitle>
               <AlertDialogDescription>
-                سيتم فتح برنامج البريد الإلكتروني لديك لإرسال تفاصيل البلاغ إلى فريقنا. لن تتم مشاركة معلوماتك مع المعلن.
+                سبب إبلاغك يساعدنا في الحفاظ على بيئة آمنة وموثوقة للجميع. لن تتم مشاركة معلوماتك مع المعلن.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <div className="py-4 space-y-4">

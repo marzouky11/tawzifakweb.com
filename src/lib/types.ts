@@ -115,6 +115,37 @@ export interface Testimonial {
     postedAt: string;
 }
 
+export interface Article {
+    id: string;
+    slug: string;
+    title: string;
+    author: string;
+    imageUrl: string;
+    imageHint: string;
+    summary: string;
+    content: string;
+    createdAt: Timestamp;
+    postedAt: string;
+}
+
+export interface Report {
+    id: string;
+    adId: string;
+    adUrl: string;
+    reason: string;
+    details?: string;
+    createdAt: Timestamp;
+}
+
+export interface ContactMessage {
+    id: string;
+    name: string;
+    email: string;
+    message: string;
+    createdAt: Timestamp;
+}
+
+
 export interface Country {
   name: string;
   cities: string[];

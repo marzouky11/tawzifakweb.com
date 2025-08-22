@@ -9,7 +9,7 @@ import { useAuth } from '@/context/auth-context';
 import { AppLayout } from '@/components/layout/app-layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { User, LogOut, ChevronLeft, Loader2, Settings as SettingsIcon, Newspaper, HelpCircle, Info, Mail, Shield, FileText, Facebook, UserPlus, LogIn as LogInIcon, MessageSquare, Bookmark } from 'lucide-react';
+import { User, LogOut, ChevronLeft, Loader2, Settings as SettingsIcon, Newspaper, HelpCircle, Info, Mail, Shield, FileText, Facebook, UserPlus, LogIn as LogInIcon, MessageSquare, Bookmark, Flag } from 'lucide-react';
 import { getCategories } from '@/lib/data';
 import { UserAvatar } from '@/components/user-avatar';
 import { useToast } from '@/hooks/use-toast';
@@ -133,8 +133,11 @@ function LoggedInView({ userData, onLogout }: { userData: any, onLogout: () => v
                 <CardContent className="p-0">
                     <ul className="divide-y divide-border">
                         <SettingItem icon={FileText} label="إدارة الإعلانات" href="/profile/my-ads" />
+                        <SettingItem icon={Newspaper} label="إدارة المقالات" href="/admin/articles" />
                         <SettingItem icon={User} label="إدارة المستخدمين" href="/admin/users" />
                         <SettingItem icon={MessageSquare} label="إدارة الآراء" href="/admin/testimonials" />
+                        <SettingItem icon={Flag} label="إدارة البلاغات" href="/admin/reports" />
+                        <SettingItem icon={Mail} label="رسائل التواصل" href="/admin/contacts" />
                     </ul>
                 </CardContent>
             </Card>
