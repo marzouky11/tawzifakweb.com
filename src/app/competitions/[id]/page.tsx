@@ -52,7 +52,36 @@ export async function generateMetadata({ params }: CompetitionDetailPageProps): 
 
   const metaTitle = competition.title || 'مباراة عمومية';
   const metaDescription = (competition.description || `مباراة منظمة من طرف ${competition.organizer} لـ ${competition.positionsAvailable} منصب.`).substring(0, 160);
+  const jsonLdDescription = competition.description || `مباراة منظمة من طرف ${competition.organizer} لـ ${competition.positionsAvailable} منصب.`;
   const canonicalUrl = `${baseUrl}/competitions/${competition.id}`;
+
+  const createdAtDate = (competition.createdAt && typeof competition.createdAt.toDate === 'function') 
+    ? competition.createdAt.toDate() 
+    : new Date();
+
+  const jobPostingJsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'JobPosting',
+      title: metaTitle,
+      description: jsonLdDescription,
+      datePosted: createdAtDate.toISOString(),
+      hiringOrganization: {
+        '@type': 'Organization',
+        name: competition.organizer,
+        sameAs: baseUrl,
+        logo: siteThumbnail,
+      },
+      jobLocation: {
+        '@type': 'Place',
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: competition.location || 'غير محدد',
+          addressCountry: 'MA', // Default to Morocco, can be improved later
+        },
+      },
+      ...(competition.positionsAvailable && { totalJobOpenings: String(competition.positionsAvailable) }),
+      ...(competition.deadline && { validThrough: new Date(competition.deadline).toISOString() }),
+  };
 
   return {
     title: metaTitle,
@@ -74,6 +103,9 @@ export async function generateMetadata({ params }: CompetitionDetailPageProps): 
         description: metaDescription,
         images: [siteThumbnail],
     },
+    other: {
+        'application/ld+json': JSON.stringify(jobPostingJsonLd, null, 2)
+    }
   };
 }
 
