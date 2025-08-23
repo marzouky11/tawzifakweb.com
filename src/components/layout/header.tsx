@@ -27,7 +27,8 @@ import {
   Settings,
   FileText,
   Landmark,
-  Plane
+  Plane,
+  Users
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -87,12 +88,6 @@ export function Header() {
               <p className="text-xs font-normal text-muted-foreground">{userData.email}</p>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/profile/my-ads">
-                <FileText className="mr-2 h-4 w-4" />
-                <span>إعلاناتي</span>
-              </Link>
-            </DropdownMenuItem>
              <DropdownMenuItem asChild>
               <Link href="/profile">
                 <Settings className="mr-2 h-4 w-4" />

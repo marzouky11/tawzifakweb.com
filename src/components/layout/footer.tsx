@@ -21,6 +21,7 @@ FileText,
 HelpCircle,
 ArrowLeft,
 Landmark,
+Plane,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -32,6 +33,7 @@ const importantLinks = [
 { label: 'إنشاء حساب', href: '/signup', icon: UserPlus, guestOnly: true },
 { label: 'الوظائف', href: '/jobs', icon: Briefcase },
 { label: 'المباريات العمومية', href: '/competitions', icon: Landmark },
+{ label: 'فرص الهجرة', href: '/immigration', icon: Plane },
 { label: 'العمال', href: '/workers', icon: Users },
 { label: 'نشر إعلان', href: '/post-job/select-type', icon: PlusCircle },
 { label: 'إنشاء سيرة ذاتية', href: '/cv-builder', icon: FileText },
@@ -121,6 +123,7 @@ const DesktopFooter = () => {
             <ul className="space-y-2">
               <li><Link href="/jobs" className="text-sm text-muted-foreground hover:text-primary">الوظائف</Link></li>
               <li><Link href="/competitions" className="text-sm text-muted-foreground hover:text-primary">المباريات العمومية</Link></li>
+              <li><Link href="/immigration" className="text-sm text-muted-foreground hover:text-primary">فرص الهجرة</Link></li>
               <li><Link href="/workers" className="text-sm text-muted-foreground hover:text-primary">العمال</Link></li>
               <li><Link href="/articles" className="text-sm text-muted-foreground hover:text-primary">مقالات</Link></li>
               <li><Link href="/post-job/select-type" className="text-sm text-muted-foreground hover:text-primary">نشر إعلان</Link></li>

@@ -4,7 +4,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Briefcase, Plus, Users, Settings, Landmark } from 'lucide-react';
+import { Home, Briefcase, Plus, Plane, Landmark } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState, useEffect } from 'react';
 
@@ -13,7 +13,7 @@ const navItems = [
   { href: '/jobs', label: 'الوظائف', icon: Briefcase },
   { href: '/post-job/select-type', label: 'إضافة', icon: Plus, isFab: true },
   { href: '/competitions', label: 'المباريات', icon: Landmark },
-  { href: '/workers', label: 'العمال', icon: Users },
+  { href: '/immigration', label: 'الهجرة', icon: Plane },
 ];
 
 function BottomNavContent() {

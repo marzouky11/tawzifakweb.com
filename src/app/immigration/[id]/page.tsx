@@ -172,7 +172,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                            <div className="p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${programDetails.color}3A` }}>
                                 <CategoryIcon name={iconName} className="w-8 h-8" style={{ color: programDetails.color }} />
                             </div>
-                            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-200">
+                            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                                 {post.title}
                             </h1>
                         </div>
@@ -189,8 +189,8 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                             <InfoItem icon={MapPin} label="الموقع" value={`${post.targetCountry}${post.city ? ', ' + post.city : ''}`} color={programDetails.color} />
                             <InfoItem icon={Briefcase} label="نوع البرنامج" value={programDetails.label} color={programDetails.color} />
                             <InfoItem icon={Users} label="الفئة المستهدفة" value={post.targetAudience} color={programDetails.color} />
-                            {post.deadline && <InfoItem icon={CalendarDays} label="آخر أجل" value={post.deadline} color={programDetails.color} />}
                             {post.salary && <InfoItem icon={Wallet} label="الأجر" value={post.salary} color={programDetails.color} />}
+                            {post.deadline && <InfoItem icon={CalendarDays} label="آخر أجل" value={post.deadline} color={programDetails.color} />}
                         </div>
                         <Separator />
                         <div className="space-y-6">
