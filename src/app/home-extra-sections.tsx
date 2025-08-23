@@ -3,7 +3,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Briefcase, Star, Users, MessageSquare, Landmark, Plane } from 'lucide-react';
+import { Briefcase, Star, Users, MessageSquare, Landmark, Plane, BarChart3, StarIcon } from 'lucide-react';
 import { motion, useInView } from "framer-motion";
 import type { Testimonial } from '@/lib/types';
 import { Button } from '@/components/ui/button';
@@ -86,7 +86,10 @@ function StatsSection({ stats }: { stats: { jobs: number, competitions: number, 
           transition={{ duration: 0.5 }}
           className="text-center mb-10"
         >
-          <h2 className="text-3xl font-bold tracking-tight text-foreground">منصتنا بالأرقام</h2>
+          <h2 className="text-3xl font-bold tracking-tight text-foreground flex justify-center items-center gap-2">
+            <BarChart3 className="h-8 w-8 text-primary" />
+            منصتنا بالأرقام
+          </h2>
           <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">نحن ننمو كل يوم بفضل ثقتكم، ونسعى لربط الكفاءات بأفضل الفرص.</p>
         </motion.div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 max-w-5xl mx-auto">
@@ -144,7 +147,10 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
           transition={{ duration: 0.5 }}
           className="text-center mb-10"
         >
-          <h2 className="text-3xl font-bold tracking-tight text-foreground">ماذا يقول مستخدمونا؟</h2>
+          <h2 className="text-3xl font-bold tracking-tight text-foreground flex justify-center items-center gap-2">
+            <StarIcon className="h-8 w-8 text-yellow-500" />
+            ماذا يقول مستخدمونا؟
+          </h2>
           <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">آراؤكم هي مصدر إلهامنا ووقودنا للتطور المستمر.</p>
         </motion.div>
 

@@ -68,8 +68,8 @@ export function ImmigrationCard({ post }: ImmigrationCardProps) {
              <CategoryIcon name={iconName} className="h-6 w-6 text-sky-500" />
           </div>
           <div className="flex-grow overflow-hidden">
-            <h3 className="font-bold text-lg leading-snug truncate text-gray-800 dark:text-gray-200">
-              <Link href={detailUrl} className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
+            <h3 className="font-bold text-base leading-snug truncate text-foreground/90">
+              <Link href={detailUrl} className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors visited:text-primary/80 dark:visited:text-primary/70">
                 {post.title}
               </Link>
             </h3>
