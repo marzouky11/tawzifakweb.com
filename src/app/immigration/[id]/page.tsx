@@ -1,4 +1,5 @@
 
+
 import { notFound } from 'next/navigation';
 import { getImmigrationPostById, getImmigrationPosts } from '@/lib/data';
 import { AppLayout } from '@/components/layout/app-layout';
@@ -20,6 +21,7 @@ import {
   Users,
   Award,
   Wallet,
+  HelpCircle,
 } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { Separator } from '@/components/ui/separator';
@@ -179,14 +181,17 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
 
                            {post.requirements && <DetailSection icon={ClipboardList} title="الشروط العامة" color={sectionColor}><FormattedText text={post.requirements} /></DetailSection>}
                            {post.requirements && <Separator />}
-
+                           
                            {post.qualifications && <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={post.qualifications} /></DetailSection>}
                            {post.qualifications && <Separator />}
-                           
+
                            {post.experience && <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={post.experience} /></DetailSection>}
                            {post.experience && <Separator />}
-
-                           {post.salaryAndBenefits && <DetailSection icon={Wallet} title="المزايا" color={sectionColor}><FormattedText text={post.salaryAndBenefits} /></DetailSection>}
+                           
+                           {post.featuresAndOpportunities && <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={post.featuresAndOpportunities} /></DetailSection>}
+                           {post.featuresAndOpportunities && <Separator />}
+                           
+                           {post.howToApply && <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={post.howToApply} /></DetailSection>}
                         </div>
                     </CardContent>
                 </Card>

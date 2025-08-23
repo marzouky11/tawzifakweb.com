@@ -82,6 +82,7 @@ export interface Competition {
 export interface ImmigrationPost {
   id: string;
   title: string;
+  slug: string;
   targetCountry: string;
   city?: string;
   programType: 'work' | 'study' | 'seasonal' | 'training';
@@ -93,7 +94,7 @@ export interface ImmigrationPost {
   requirements?: string;
   qualifications?: string;
   experience?: string;
-  featuresAndOpportunities?: string; // Renamed from salaryAndBenefits
+  featuresAndOpportunities?: string;
   howToApply?: string;
   applyUrl?: string;
   phone?: string;

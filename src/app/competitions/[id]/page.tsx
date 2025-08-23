@@ -245,17 +245,17 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                            {competition.description && <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={competition.description} /></DetailSection>}
                            {competition.description && (competition.trainingFeatures || competition.jobProspects || competition.requirements || competition.competitionStages || competition.documentsNeeded) && <Separator />}
 
-                           {competition.trainingFeatures && <DetailSection icon={Award} title="مميزات التكوين والفرص" color={sectionColor}><FormattedText text={competition.trainingFeatures} /></DetailSection>}
-                           {competition.trainingFeatures && (competition.jobProspects || competition.requirements || competition.competitionStages || competition.documentsNeeded) && <Separator />}
-
-                           {competition.jobProspects && <DetailSection icon={Target} title="أفق العمل بعد المباراة" color={sectionColor}><FormattedText text={competition.jobProspects} /></DetailSection>}
-                           {competition.jobProspects && (competition.requirements || competition.competitionStages || competition.documentsNeeded) && <Separator />}
-
                            {competition.requirements && <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor}><FormattedText text={competition.requirements} /></DetailSection>}
-                           {competition.requirements && (competition.competitionStages || competition.documentsNeeded) && <Separator />}
+                           {competition.requirements && (competition.trainingFeatures || competition.jobProspects || competition.competitionStages || competition.documentsNeeded) && <Separator />}
 
                            {competition.competitionStages && <DetailSection icon={ListOrdered} title="مراحل المباراة" color={sectionColor}><FormattedText text={competition.competitionStages} /></DetailSection>}
-                           {competition.competitionStages && competition.documentsNeeded && <Separator />}
+                           {competition.competitionStages && (competition.trainingFeatures || competition.jobProspects || competition.documentsNeeded) && <Separator />}
+                           
+                           {competition.trainingFeatures && <DetailSection icon={Award} title="مميزات التكوين والفرص" color={sectionColor}><FormattedText text={competition.trainingFeatures} /></DetailSection>}
+                           {competition.trainingFeatures && (competition.jobProspects || competition.documentsNeeded) && <Separator />}
+
+                           {competition.jobProspects && <DetailSection icon={Target} title="أفق العمل بعد المباراة" color={sectionColor}><FormattedText text={competition.jobProspects} /></DetailSection>}
+                           {competition.jobProspects && competition.documentsNeeded && <Separator />}
 
                            {competition.documentsNeeded && <DetailSection icon={FileText} title="الوثائق المطلوبة" color={sectionColor}><FormattedText text={competition.documentsNeeded} /></DetailSection>}
                            
@@ -284,7 +284,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                         </CardHeader>
                         <CardContent className="flex flex-col sm:flex-row justify-center gap-4 p-6">
                                 {competition.fileUrl && (
-                                <Button asChild size="lg" variant="outline" className="flex-1 text-base py-6">
+                                <Button asChild size="lg" variant="outline" className="flex-1 text-base py-6 hover:bg-green-500/10 hover:border-green-500 hover:text-green-600">
                                     <a href={competition.fileUrl} target="_blank" rel="noopener noreferrer">
                                         <FileUp className="ml-2 h-4 w-4" />
                                         تحميل إعلان المباراة (PDF)

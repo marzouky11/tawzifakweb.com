@@ -15,7 +15,7 @@ import { useRouter } from 'next/navigation';
 import { 
     Loader2, Plane, FileText, Globe, MapPin, Users, Calendar, Award, Wallet, Link as LinkIcon, 
     GraduationCap, ClipboardList, Info, Briefcase, Check, ArrowRight, ArrowLeft, Mail, MessageSquare, Instagram,
-    Landmark, Newspaper
+    Landmark, Newspaper, HelpCircle, Target
 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import type { ImmigrationPost } from '@/lib/types';
@@ -55,8 +55,9 @@ const formSchema = z.object({
   qualifications: z.string().optional(),
   experience: z.string().optional(),
   salary: z.string().optional(),
-  salaryAndBenefits: z.string().optional(),
+  featuresAndOpportunities: z.string().optional(),
   applyUrl: z.string().url('رابط التقديم يجب أن يكون رابطًا صحيحًا.'),
+  howToApply: z.string().optional(),
   
   phone: z.string().optional(),
   whatsapp: z.string().optional(),
@@ -74,7 +75,7 @@ interface PostImmigrationFormProps {
 
 const stepFields = [
   ['title', 'slug', 'targetCountry', 'city', 'programType', 'iconName'],
-  ['targetAudience', 'deadline', 'description', 'requirements', 'qualifications', 'experience', 'salary', 'salaryAndBenefits'],
+  ['targetAudience', 'deadline', 'description', 'requirements', 'qualifications', 'experience', 'salary', 'featuresAndOpportunities', 'howToApply'],
   ['applyUrl', 'phone', 'whatsapp', 'email', 'instagram'],
 ];
 
@@ -143,8 +144,9 @@ export function PostImmigrationForm({ post }: PostImmigrationFormProps) {
       qualifications: post?.qualifications || '',
       experience: post?.experience || '',
       salary: post?.salary || '',
-      salaryAndBenefits: post?.salaryAndBenefits || '',
+      featuresAndOpportunities: post?.featuresAndOpportunities || '',
       applyUrl: post?.applyUrl || '',
+      howToApply: post?.howToApply || '',
       phone: post?.phone || '',
       whatsapp: post?.whatsapp || '',
       email: post?.email || '',
@@ -223,12 +225,13 @@ export function PostImmigrationForm({ post }: PostImmigrationFormProps) {
     <div className="space-y-6" key="step2">
         <FormField control={form.control} name="targetAudience" render={({ field }) => (<FormItem><FormLabelIcon icon={Users} label="الفئة المستهدفة" /><FormControl><Input placeholder="طلاب، عمال، مهنيين..." {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="deadline" render={({ field }) => (<FormItem><FormLabelIcon icon={Calendar} label="آخر أجل للتقديم" /><FormControl><Input placeholder="YYYY-MM-DD" {...field} /></FormControl><FormMessage /></FormItem>)} />
-        <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabelIcon icon={Info} label="وصف البرنامج (اختياري)" /><FormControl><Textarea placeholder="تفاصيل حول فرصة الهجرة..." {...field} /></FormControl><FormMessage /></FormItem>)} />
-        <FormField control={form.control} name="requirements" render={({ field }) => (<FormItem><FormLabelIcon icon={ClipboardList} label="الشروط العامة (اختياري)" /><FormControl><Textarea placeholder="شروط العمر، اللغة، الحالة الصحية..." {...field} /></FormControl><FormMessage /></FormItem>)} />
-        <FormField control={form.control} name="qualifications" render={({ field }) => (<FormItem><FormLabelIcon icon={GraduationCap} label="المؤهلات المطلوبة (اختياري)" /><FormControl><Textarea placeholder="الشهادات التعليمية المطلوبة..." {...field} /></FormControl><FormMessage /></FormItem>)} />
-        <FormField control={form.control} name="experience" render={({ field }) => (<FormItem><FormLabelIcon icon={Award} label="الخبرة المطلوبة (اختياري)" /><FormControl><Textarea placeholder="سنوات الخبرة أو نوعها..." {...field} /></FormControl><FormMessage /></FormItem>)} />
+        <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabelIcon icon={Info} label="وصف تفصيلي للبرنامج" /><FormControl><Textarea placeholder="تفاصيل حول فرصة الهجرة، مهام العمل، مدة البرنامج..." {...field} /></FormControl><FormMessage /></FormItem>)} />
+        <FormField control={form.control} name="requirements" render={({ field }) => (<FormItem><FormLabelIcon icon={ClipboardList} label="الشروط العامة" /><FormControl><Textarea placeholder="شروط العمر، اللغة، الحالة الصحية..." {...field} /></FormControl><FormMessage /></FormItem>)} />
+        <FormField control={form.control} name="qualifications" render={({ field }) => (<FormItem><FormLabelIcon icon={GraduationCap} label="المؤهلات المطلوبة" /><FormControl><Textarea placeholder="الشهادات التعليمية المطلوبة..." {...field} /></FormControl><FormMessage /></FormItem>)} />
+        <FormField control={form.control} name="experience" render={({ field }) => (<FormItem><FormLabelIcon icon={Award} label="الخبرة المطلوبة" /><FormControl><Textarea placeholder="سنوات الخبرة أو نوعها..." {...field} /></FormControl><FormMessage /></FormItem>)} />
+        <FormField control={form.control} name="featuresAndOpportunities" render={({ field }) => (<FormItem><FormLabelIcon icon={Target} label="المميزات والفرص" /><FormControl><Textarea placeholder="معلومات عن السكن، التأمين، فرص التدريب أو التوظيف بعد البرنامج..." {...field} /></FormControl><FormMessage /></FormItem>)} />
+        <FormField control={form.control} name="howToApply" render={({ field }) => (<FormItem><FormLabelIcon icon={HelpCircle} label="كيفية التقديم" /><FormControl><Textarea placeholder="اشرح هنا خطوات التقديم. مثلاً: أرسل سيرتك الذاتية إلى البريد الإلكتروني المذكور أعلاه." {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="salary" render={({ field }) => (<FormItem><FormLabelIcon icon={Wallet} label="الأجر (اختياري)" /><FormControl><Input placeholder="مثال: 3000 دولار شهريا" {...field} /></FormControl><FormMessage /></FormItem>)} />
-        <FormField control={form.control} name="salaryAndBenefits" render={({ field }) => (<FormItem><FormLabelIcon icon={Wallet} label="مزايا إضافية (اختياري)" /><FormControl><Textarea placeholder="معلومات عن السكن، التأمين..." {...field} /></FormControl><FormMessage /></FormItem>)} />
     </div>,
     <div className="space-y-6" key="step3">
         <FormField control={form.control} name="applyUrl" render={({ field }) => (<FormItem><FormLabelIcon icon={LinkIcon} label="رابط التقديم الرسمي" /><FormControl><Input type="url" placeholder="https://example.com/apply" {...field} /></FormControl><FormMessage /></FormItem>)} />

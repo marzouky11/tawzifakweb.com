@@ -86,11 +86,11 @@ export function ImmigrationCard({ post }: ImmigrationCardProps) {
         </div>
       </CardContent>
 
-      <CardFooter className="p-4 pt-0 mt-auto bg-card">
-         <Button asChild size="sm" variant="link" className="text-sky-600 dark:text-sky-400 p-0 h-auto w-full justify-start">
+      <CardFooter className="p-4 pt-0 mt-auto bg-card flex items-center justify-between">
+         <span className="text-xs text-muted-foreground">{post.postedAt}</span>
+         <Button asChild size="sm" className="text-sm rounded-lg active:scale-95 transition-transform" style={{ backgroundColor: `${sectionColor}1A`, color: sectionColor }}>
           <Link href={detailUrl}>
-            عرض كل التفاصيل
-            <ArrowRight className="mr-2 h-4 w-4" />
+            عرض التفاصيل
           </Link>
         </Button>
       </CardFooter>
