@@ -15,7 +15,7 @@ import { useRouter } from 'next/navigation';
 import { 
     Loader2, Plane, FileText, Globe, MapPin, Users, Calendar, Award, Wallet, Link as LinkIcon, 
     GraduationCap, ClipboardList, Info, Briefcase, Check, ArrowRight, ArrowLeft, Mail, MessageSquare, Instagram,
-    Landmark, Newspaper, HelpCircle, Target
+    Landmark, Newspaper, HelpCircle, Target, Phone
 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import type { ImmigrationPost } from '@/lib/types';
@@ -75,7 +75,7 @@ interface PostImmigrationFormProps {
 
 const stepFields = [
   ['title', 'slug', 'targetCountry', 'city', 'programType', 'iconName'],
-  ['targetAudience', 'deadline', 'description', 'requirements', 'qualifications', 'experience', 'salary', 'featuresAndOpportunities', 'howToApply'],
+  ['description', 'requirements', 'qualifications', 'experience', 'featuresAndOpportunities', 'howToApply', 'targetAudience', 'deadline', 'salary'],
   ['applyUrl', 'phone', 'whatsapp', 'email', 'instagram'],
 ];
 
@@ -223,14 +223,14 @@ export function PostImmigrationForm({ post }: PostImmigrationFormProps) {
        <FormField control={form.control} name="iconName" render={({ field }) => (<FormItem><FormLabelIcon icon={Plane} label="أيقونة الإعلان" /><Select onValueChange={field.onChange} value={field.value}><FormControl><SelectTrigger><SelectValue placeholder="اختر أيقونة للإعلان" /></SelectTrigger></FormControl><SelectContent>{immigrationIcons.map(i => (<SelectItem key={i.value} value={i.value}><div className="flex items-center gap-2"><i.icon className="w-5 h-5" /> {i.label}</div></SelectItem>))}</SelectContent></Select><FormMessage /></FormItem>)} />
     </div>,
     <div className="space-y-6" key="step2">
-        <FormField control={form.control} name="targetAudience" render={({ field }) => (<FormItem><FormLabelIcon icon={Users} label="الفئة المستهدفة" /><FormControl><Input placeholder="طلاب، عمال، مهنيين..." {...field} /></FormControl><FormMessage /></FormItem>)} />
-        <FormField control={form.control} name="deadline" render={({ field }) => (<FormItem><FormLabelIcon icon={Calendar} label="آخر أجل للتقديم" /><FormControl><Input placeholder="YYYY-MM-DD" {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabelIcon icon={Info} label="وصف تفصيلي للبرنامج" /><FormControl><Textarea placeholder="تفاصيل حول فرصة الهجرة، مهام العمل، مدة البرنامج..." {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="requirements" render={({ field }) => (<FormItem><FormLabelIcon icon={ClipboardList} label="الشروط العامة" /><FormControl><Textarea placeholder="شروط العمر، اللغة، الحالة الصحية..." {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="qualifications" render={({ field }) => (<FormItem><FormLabelIcon icon={GraduationCap} label="المؤهلات المطلوبة" /><FormControl><Textarea placeholder="الشهادات التعليمية المطلوبة..." {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="experience" render={({ field }) => (<FormItem><FormLabelIcon icon={Award} label="الخبرة المطلوبة" /><FormControl><Textarea placeholder="سنوات الخبرة أو نوعها..." {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="featuresAndOpportunities" render={({ field }) => (<FormItem><FormLabelIcon icon={Target} label="المميزات والفرص" /><FormControl><Textarea placeholder="معلومات عن السكن، التأمين، فرص التدريب أو التوظيف بعد البرنامج..." {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="howToApply" render={({ field }) => (<FormItem><FormLabelIcon icon={HelpCircle} label="كيفية التقديم" /><FormControl><Textarea placeholder="اشرح هنا خطوات التقديم. مثلاً: أرسل سيرتك الذاتية إلى البريد الإلكتروني المذكور أعلاه." {...field} /></FormControl><FormMessage /></FormItem>)} />
+        <FormField control={form.control} name="targetAudience" render={({ field }) => (<FormItem><FormLabelIcon icon={Users} label="الفئة المستهدفة" /><FormControl><Input placeholder="طلاب، عمال، مهنيين..." {...field} /></FormControl><FormMessage /></FormItem>)} />
+        <FormField control={form.control} name="deadline" render={({ field }) => (<FormItem><FormLabelIcon icon={Calendar} label="آخر أجل للتقديم" /><FormControl><Input placeholder="YYYY-MM-DD" {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="salary" render={({ field }) => (<FormItem><FormLabelIcon icon={Wallet} label="الأجر (اختياري)" /><FormControl><Input placeholder="مثال: 3000 دولار شهريا" {...field} /></FormControl><FormMessage /></FormItem>)} />
     </div>,
     <div className="space-y-6" key="step3">
