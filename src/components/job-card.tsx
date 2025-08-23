@@ -78,8 +78,8 @@ export function JobCard({ job }: JobCardProps) {
                 <CategoryIcon name={categoryIcon} className="w-6 h-6" style={{ color: categoryColor }} />
             </div>
              <div className="w-full overflow-hidden">
-                <h3 className="font-bold text-base leading-snug truncate text-foreground/90">
-                    <Link href={detailUrl} className="hover:underline visited:text-primary/80 dark:visited:text-primary/70">
+                <h3 className="font-bold text-base leading-snug truncate">
+                    <Link href={detailUrl} className="text-gray-900 dark:text-gray-100 hover:underline visited:text-primary/80 dark:visited:text-primary/70">
                         {job.title}
                     </Link>
                 </h3>
