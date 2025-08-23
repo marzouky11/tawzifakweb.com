@@ -68,7 +68,7 @@ export function ImmigrationCard({ post }: ImmigrationCardProps) {
              <CategoryIcon name={iconName} className="h-6 w-6 text-sky-500" />
           </div>
           <div className="flex-grow overflow-hidden">
-            <h3 className="font-bold text-lg leading-snug truncate text-foreground">
+            <h3 className="font-bold text-lg leading-snug truncate text-gray-800 dark:text-gray-200">
               <Link href={detailUrl} className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
                 {post.title}
               </Link>
@@ -82,14 +82,14 @@ export function ImmigrationCard({ post }: ImmigrationCardProps) {
 
       <CardContent className="p-4 pt-3 flex-grow">
         <div className="flex flex-wrap gap-2">
-          <InfoBadge icon={MapPin} text={`${post.targetCountry}${post.city ? ', ' + post.city : ''}`} className="bg-sky-100/60 dark:bg-sky-900/40 text-sky-700 dark:text-sky-300 border-sky-200/50 dark:border-sky-800/50"/>
-          {post.salary && <InfoBadge icon={Wallet} text={post.salary} className="bg-green-100 text-green-800 border-green-200 dark:bg-green-900/50 dark:text-green-200 dark:border-green-800" />}
+          <InfoBadge icon={MapPin} text={`${post.targetCountry}${post.city ? ', ' + post.city : ''}`} className="bg-sky-100/60 dark:bg-sky-900/40 text-sky-700/80 dark:text-sky-300/80 border-sky-200/50 dark:border-sky-800/50"/>
+          {post.salary && <InfoBadge icon={Wallet} text={post.salary} className="bg-green-100/60 dark:bg-green-900/40 text-green-800/80 dark:text-green-200/80 border-green-200/50 dark:border-green-800/50" />}
         </div>
       </CardContent>
 
       <CardFooter className="p-4 pt-0 mt-auto bg-card flex items-center justify-between">
          <span className="text-xs text-muted-foreground">{post.postedAt}</span>
-         <Button asChild size="sm" className="text-sm rounded-lg active:scale-95 transition-transform" style={{ backgroundColor: `${sectionColor}1A`, color: sectionColor }}>
+         <Button asChild size="sm" variant="secondary" className="text-sm rounded-lg active:scale-95 transition-transform text-secondary-foreground hover:bg-secondary/80">
           <Link href={detailUrl}>
             عرض التفاصيل
           </Link>

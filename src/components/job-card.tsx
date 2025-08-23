@@ -16,11 +16,11 @@ interface JobCardProps {
   job: Job | null;
 }
 
-const InfoBadge = ({ icon, text, variant, className }: { icon?: React.ElementType, text: string | number | undefined, variant: "secondary" | "destructive" | "accent" | "default", className?: string }) => {
+const InfoBadge = ({ icon, text, className }: { icon?: React.ElementType, text: string | number | undefined, className?: string }) => {
   if (!text) return null;
   const Icon = icon;
   return (
-    <Badge variant={variant} className={cn("flex items-center gap-1.5 font-normal text-xs py-1 max-w-full", className)}>
+    <Badge variant="secondary" className={cn("flex items-center gap-1.5 font-normal text-xs py-1 max-w-full", className)}>
       {Icon && <Icon className="h-3.5 w-3.5 flex-shrink-0" />}
       <span className="truncate font-medium">{text}</span>
     </Badge>
@@ -78,7 +78,7 @@ export function JobCard({ job }: JobCardProps) {
                 <CategoryIcon name={categoryIcon} className="w-6 h-6" style={{ color: categoryColor }} />
             </div>
              <div className="w-full overflow-hidden">
-                <h3 className="font-bold text-base leading-tight text-foreground truncate">
+                <h3 className="font-bold text-base leading-tight text-gray-800 dark:text-gray-200 truncate">
                     <Link href={detailUrl} className="hover:underline">
                         {job.title}
                     </Link>
@@ -99,14 +99,12 @@ export function JobCard({ job }: JobCardProps) {
             <InfoBadge
                 icon={MapPin}
                 text={`${job.country}, ${job.city}`}
-                variant="destructive"
-                className="bg-red-100 text-red-800 border-red-200 dark:bg-red-900/50 dark:text-red-200 dark:border-red-800"
+                className="bg-gray-100/60 dark:bg-gray-900/40 text-gray-700/80 dark:text-gray-300/80 border-gray-200/50 dark:border-gray-800/50"
             />
             <InfoBadge
                 icon={UserIcon}
                 text={job.ownerName}
-                variant="secondary"
-                className="bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-900/50 dark:text-gray-200 dark:border-gray-800"
+                className="bg-gray-100/60 dark:bg-gray-900/40 text-gray-700/80 dark:text-gray-300/80 border-gray-200/50 dark:border-gray-800/50"
             />
           </>
         ) : (
@@ -114,15 +112,13 @@ export function JobCard({ job }: JobCardProps) {
             <InfoBadge
                 icon={MapPin}
                 text={`${job.country}, ${job.city}`}
-                variant="destructive"
-                className="bg-red-100 text-red-800 border-red-200 dark:bg-red-900/50 dark:text-red-200 dark:border-red-800"
+                className="bg-blue-100/60 dark:bg-blue-900/40 text-blue-800/80 dark:text-blue-200/80 border-blue-200/50 dark:border-blue-800/50"
             />
             {salaryText && (
                 <InfoBadge 
                     icon={Wallet} 
                     text={salaryText} 
-                    variant="accent"
-                    className="bg-green-100 text-green-800 border-green-200 dark:bg-green-900/50 dark:text-green-200 dark:border-green-800"
+                    className="bg-green-100/60 dark:bg-green-900/40 text-green-800/80 dark:text-green-200/80 border-green-200/50 dark:border-green-800/50"
                 />
             )}
           </>
@@ -131,7 +127,7 @@ export function JobCard({ job }: JobCardProps) {
 
       <CardFooter className="p-4 pt-0 mt-auto flex items-center justify-between">
          <span className="text-xs text-muted-foreground">{job.postedAt}</span>
-        <Button asChild size="sm" className="text-sm rounded-lg active:scale-95 transition-transform" style={{ backgroundColor: `${sectionColor}1A`, color: sectionColor }}>
+        <Button asChild size="sm" variant="secondary" className="text-sm rounded-lg active:scale-95 transition-transform text-secondary-foreground hover:bg-secondary/80">
           <Link href={detailUrl}>{isSeekingJob ? 'عرض الملف' : 'عرض التفاصيل'}</Link>
         </Button>
       </CardFooter>

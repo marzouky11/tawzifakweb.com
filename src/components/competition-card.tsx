@@ -16,13 +16,13 @@ interface CompetitionCardProps {
   competition: Competition | null;
 }
 
-const InfoBadge = ({ icon, text, variant, className }: { icon?: React.ElementType, text: string | number | undefined, variant: "secondary" | "destructive" | "accent" | "default", className?: string }) => {
+const InfoBadge = ({ icon, text, variant, className, textColor }: { icon?: React.ElementType, text: string | number | undefined, variant: "secondary" | "destructive" | "accent" | "default", className?: string, textColor?: string }) => {
   if (!text) return null;
   const Icon = icon;
   return (
     <Badge variant={variant} className={cn("flex items-center gap-1.5 font-normal text-xs py-1", className)}>
       {Icon && <Icon className="h-3.5 w-3.5" />}
-      <span className="truncate font-medium">{text}</span>
+      <span className={cn("truncate font-medium", textColor)}>{text}</span>
     </Badge>
   );
 };
@@ -63,7 +63,7 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
                 <CategoryIcon name={organizerIcon} className="w-6 h-6" style={{ color: organizerColor }} />
              </div>
              <div className="w-full overflow-hidden">
-                <h3 className="font-bold text-base leading-tight text-foreground truncate">
+                <h3 className="font-bold text-base leading-tight text-gray-800 dark:text-gray-200 truncate">
                     <Link href={detailUrl} className="hover:underline">
                         {competition.title}
                     </Link>
@@ -83,21 +83,21 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
             <InfoBadge
                 icon={MapPin}
                 text={competition.location}
-                variant="accent"
-                className="bg-green-100 text-green-800 border-green-200 dark:bg-green-900/50 dark:text-green-200 dark:border-green-800"
+                variant="secondary"
+                className="bg-green-100/60 dark:bg-green-900/40 text-green-800/80 dark:text-green-200/80 border-green-200/50 dark:border-green-800/50"
             />
         )}
         <InfoBadge
             icon={Calendar}
             text={`آخر أجل: ${competition.deadline}`}
-            variant="destructive"
-            className="bg-red-100 text-red-800 border-red-200 dark:bg-red-900/50 dark:text-red-200 dark:border-red-800"
+            variant="secondary"
+            className="bg-red-100/60 dark:bg-red-900/40 text-red-800/80 dark:text-red-200/80 border-red-200/50 dark:border-red-800/50"
         />
       </CardContent>
 
       <CardFooter className="p-4 pt-0 mt-auto flex items-center justify-between">
          <span className="text-xs text-muted-foreground">{competition.postedAt}</span>
-        <Button asChild size="sm" className="text-sm rounded-lg active:scale-95 transition-transform" style={{ backgroundColor: `${sectionColor}1A`, color: sectionColor }}>
+        <Button asChild size="sm" variant="secondary" className="text-sm rounded-lg active:scale-95 transition-transform text-secondary-foreground hover:bg-secondary/80">
           <Link href={detailUrl}>عرض التفاصيل</Link>
         </Button>
       </CardFooter>
