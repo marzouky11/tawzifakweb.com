@@ -132,7 +132,7 @@ const InfoItem = ({ icon: Icon, label, value, color, href, isDate }: { icon: Rea
     );
     
     if (href) {
-        return <a href={href} target="_blank" rel="noopener noreferrer" className="hover:scale-105 transition-transform">{content}</a>;
+        return <a href={href} target="_blank" rel="noopener noreferrer" className="hover:scale-105 transition-transform text-foreground hover:text-primary">{content}</a>;
     }
     return content;
 };
@@ -216,12 +216,6 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                                 </div>
                                 <div className="flex flex-col items-start gap-2">
                                      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground text-sm">
-                                        {competition.location && (
-                                            <div className="flex items-center gap-1.5">
-                                                <MapPin className="h-4 w-4" />
-                                                <span>{competition.location}</span>
-                                            </div>
-                                        )}
                                         <div className="flex items-center gap-1.5">
                                             <CalendarDays className="h-4 w-4" />
                                             <span>نُشرت: {competition.postedAt}</span>
@@ -236,9 +230,10 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                     </CardHeader>
                     <CardContent className="p-4 sm:p-6 space-y-8">
                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                            {competition.location && <InfoItem icon={MapPin} label="الموقع" value={competition.location} color={organizerColor} />}
                             <InfoItem icon={Building} label="الجهة المنظمة" value={competition.organizer} color={organizerColor} />
-                            {competition.positionsAvailable && <InfoItem icon={Users2} label="عدد المناصب" value={competition.positionsAvailable} color={organizerColor} />}
                             <InfoItem icon={Briefcase} label="نوع المباراة" value={competition.competitionType} color={sectionColor} />
+                            {competition.positionsAvailable && <InfoItem icon={Users2} label="عدد المناصب" value={competition.positionsAvailable} color={organizerColor} />}
                         </div>
                         <Separator />
                         <div className="space-y-6">

@@ -152,7 +152,7 @@ const InfoItem = ({ icon: Icon, label, value, color }: { icon: React.ElementType
       <div className="flex flex-col gap-1 p-3 bg-muted/50 rounded-lg text-center">
         <Icon className="h-6 w-6 mx-auto mb-1" style={{ color }} />
         <dt className="text-xs text-muted-foreground">{label}</dt>
-        <dd className="font-semibold text-sm">{value}</dd>
+        <dd className="font-semibold text-sm">{String(value)}</dd>
       </div>
     );
 };
@@ -217,7 +217,14 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
     const jobTitle = job.title || 'هذا الإعلان';
     const whatsappMessage = `مرحبًا، اطلعت على إعلانكم لوظيفة '${jobTitle}' على منصة توظيفك وأنا مهتم بالتقديم. هل يمكن تزويدي بمزيد من التفاصيل؟ شكرًا.`;
     const emailSubject = `استفسار بخصوص وظيفة: ${jobTitle}`;
-    const emailBody = ``;
+    const emailBody = `مرحبًا،
+
+اطلعت على إعلانكم لوظيفة '${jobTitle}' على منصة توظيفك وأنا مهتم بالتقديم. أود الاستفسار عن المزيد من التفاصيل حول هذه الفرصة.
+
+شكرًا لاهتمامكم.
+
+مع أطيب التحيات،
+[اسمك]`;
 
     const contactButtons = [
         job.phone && { type: 'phone', href: `tel:${job.phone}`, label: 'اتصال', icon: Phone, color: sectionColor, className: 'text-primary-foreground hover:opacity-90' },
@@ -252,28 +259,33 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                             {job.title || 'عنوان غير متوفر'}
                                         </h1>
                                     </div>
-                                    <div className="flex flex-col items-start gap-2">
-                                        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground text-sm">
+                                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground text-sm">
+                                        {categoryName && (
                                             <div className="flex items-center gap-1.5">
-                                                <MapPin className="h-4 w-4" />
-                                                <span>{job.country || 'دولة غير محددة'}, {job.city || 'مدينة غير محددة'}</span>
+                                                <LayoutGrid className="h-4 w-4" style={{color: categoryColor}} />
+                                                <span style={{color: categoryColor}}>{categoryName}</span>
                                             </div>
+                                        )}
+                                        {translatedWorkType && (
                                             <div className="flex items-center gap-1.5">
-                                                <CalendarDays className="h-4 w-4" />
-                                                <span>نُشر: {job.postedAt}</span>
+                                                <Clock className="h-4 w-4" />
+                                                <span>{translatedWorkType}</span>
                                             </div>
-                                        </div>
-                                        <div className="pt-2">
-                                            <SaveAdButton adId={job.id} adType="job" />
+                                        )}
+                                        <div className="flex items-center gap-1.5">
+                                            <CalendarDays className="h-4 w-4" />
+                                            <span>نُشر: {job.postedAt}</span>
                                         </div>
                                     </div>
+                                </div>
+                                <div className="pt-2">
+                                    <SaveAdButton adId={job.id} adType="job" />
                                 </div>
                             </div>
                         </CardHeader>
                         <CardContent className="p-4 sm:p-6 space-y-6">
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                                <InfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={categoryColor} />
-                                {translatedWorkType && <InfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={categoryColor} />}
+                                <InfoItem icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} color={categoryColor} />
                                 <InfoItem icon={Wallet} label="الأجر" value={job.salary ? job.salary : 'عند الطلب'} color={categoryColor} />
                                 {job.companyName && <InfoItem icon={Building2} label="الشركة" value={job.companyName} color={categoryColor} />}
                                 {job.openPositions && <InfoItem icon={Users2} label="شواغر" value={job.openPositions} color={categoryColor} />}
@@ -351,7 +363,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                             className={cn(button.className, (isApplyUrl && isLastAndOdd) && 'col-span-2')}
                                             style={button.type === 'phone' ? { backgroundColor: sectionColor } : {}}
                                         >
-                                            <a href={button.href} target={button.type !== 'phone' && button.type !== 'email' ? '_blank' : undefined} rel="noopener noreferrer">
+                                            <a href={button.href} target={button.type !== 'phone' ? '_blank' : undefined} rel="noopener noreferrer">
                                                 <button.icon className="ml-2 h-4 w-4" />
                                                 {button.label}
                                             </a>

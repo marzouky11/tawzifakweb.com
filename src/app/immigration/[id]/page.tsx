@@ -77,10 +77,10 @@ export async function generateMetadata({ params }: ImmigrationDetailPageProps): 
 const InfoItem = ({ icon: Icon, label, value, color }: { icon: React.ElementType; label: string; value: string | number | undefined; color?: string }) => {
     if (!value) return null;
     return (
-        <div className="flex flex-col gap-1 p-3 bg-sky-500/10 rounded-lg text-center h-full">
+        <div className="flex flex-col gap-1 p-3 bg-muted/50 rounded-lg text-center h-full">
             <Icon className="h-6 w-6 mx-auto mb-1" style={{ color }} />
             <dt className="text-xs text-muted-foreground">{label}</dt>
-            <dd className="font-semibold text-sm text-sky-800 dark:text-sky-200">{String(value)}</dd>
+            <dd className="font-semibold text-sm">{String(value)}</dd>
         </div>
     );
 };
@@ -167,8 +167,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                     </CardHeader>
                     <CardContent className="p-4 sm:p-6 space-y-8">
                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-                            <InfoItem icon={MapPin} label="الدولة" value={post.targetCountry} color={sectionColor} />
-                            {post.city && <InfoItem icon={MapPin} label="المدينة" value={post.city} color={sectionColor} />}
+                            <InfoItem icon={MapPin} label="الموقع" value={`${post.targetCountry}${post.city ? ', ' + post.city : ''}`} color={sectionColor} />
                             <InfoItem icon={Briefcase} label="نوع البرنامج" value={programTypeTranslations[post.programType]} color={sectionColor} />
                             <InfoItem icon={Users} label="الفئة المستهدفة" value={post.targetAudience} color={sectionColor} />
                             <InfoItem icon={CalendarDays} label="آخر أجل" value={post.deadline} color={sectionColor} />
@@ -205,7 +204,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                     </CardHeader>
                     <CardContent className="flex flex-col sm:flex-row justify-center gap-4 p-6">
                         <Button asChild size="lg" className="flex-1 text-primary-foreground text-base py-6" style={{backgroundColor: sectionColor}}>
-                            <a href={post.applyUrl} target="_blank" rel="noopener noreferrer">
+                            <a href={post.applyUrl} target="_blank" rel="noopener noreferrer" className="text-primary-foreground hover:opacity-90">
                                 <LinkIcon className="ml-2 h-4 w-4" />
                                 الذهاب إلى رابط التسجيل
                             </a>

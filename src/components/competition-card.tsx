@@ -63,8 +63,8 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
                 <CategoryIcon name={organizerIcon} className="w-6 h-6" style={{ color: organizerColor }} />
              </div>
              <div className="w-full overflow-hidden">
-                <h3 className="font-bold text-base leading-tight truncate">
-                    <Link href={detailUrl} className="hover:underline" style={{ color: sectionColor }}>
+                <h3 className="font-bold text-base leading-tight text-foreground">
+                    <Link href={detailUrl} className="hover:underline">
                         {competition.title}
                     </Link>
                 </h3>

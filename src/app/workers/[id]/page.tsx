@@ -79,7 +79,7 @@ const SeekerInfoItem = ({ icon: Icon, label, value, color }: { icon: React.Eleme
        <div className="flex flex-col gap-1 p-3 bg-muted/50 rounded-lg text-center">
         <Icon className="h-6 w-6 mx-auto mb-1" style={{ color }} />
         <dt className="text-xs text-muted-foreground">{label}</dt>
-        <dd className="font-semibold text-sm">{value}</dd>
+        <dd className="font-semibold text-sm">{String(value)}</dd>
       </div>
     );
 };
@@ -173,17 +173,17 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                                 <div className="flex-grow">
                                     <div className="flex items-center gap-3 mb-2">
                                         <div className="p-2 sm:p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${categoryColor}1A` }}>
-                                            <CategoryIcon name={finalIconName} className="w-6 h-6 sm:w-8 sm:h-8" style={{ color: categoryColor }} />
+                                            <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-8 w-8 text-lg" />
                                         </div>
                                         <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                                             {job.title || 'عنوان غير متوفر'}
                                         </h1>
                                     </div>
                                    <div className="flex flex-wrap items-center gap-4 text-muted-foreground mt-2 text-sm">
-                                        <div className="flex items-center gap-1.5">
-                                            <MapPin className="h-4 w-4" />
-                                            <span>{job.country || 'دولة غير محددة'}, {job.city || 'مدينة غير محددة'}</span>
-                                        </div>
+                                         <Link href={`/user/${job.userId}`} className="flex items-center gap-1.5 hover:text-primary">
+                                            <UserIcon className="h-4 w-4" />
+                                            <span>{job.ownerName}</span>
+                                        </Link>
                                         <div className="flex items-center gap-1.5">
                                             <CalendarDays className="h-4 w-4" />
                                             <span>نُشر: {job.postedAt}</span>
@@ -197,6 +197,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                         </CardHeader>
                         <CardContent className="p-4 sm:p-6 space-y-6">
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                                <SeekerInfoItem icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} color={categoryColor} />
                                 <SeekerInfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={categoryColor} />
                                 {job.workType && <SeekerInfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={categoryColor} />}
                             </div>
@@ -227,63 +228,43 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                         </CardContent>
                     </Card>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2 text-lg">
-                                    <Phone className="h-5 w-5" style={{color: sectionColor}}/>
-                                    معلومات التواصل
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-2">
-                                <div className="grid grid-cols-2 gap-2">
-                                    {job.phone && (
-                                        <Button asChild style={{ backgroundColor: sectionColor }} className="text-primary-foreground hover:opacity-90">
-                                            <a href={`tel:${job.phone}`}><Phone className="ml-2 h-4 w-4" />اتصال</a>
-                                        </Button>
-                                    )}
-                                    {job.whatsapp && (
-                                        <Button asChild className="bg-green-600 hover:bg-green-700 text-primary-foreground">
-                                            <a href={`https://wa.me/${job.whatsapp.replace(/\+/g, '')}?text=${encodeURIComponent(whatsappMessage)}`} target="_blank" rel="noopener noreferrer">
-                                                <MessageSquare className="ml-2 h-4 w-4" />واتساب
-                                            </a>
-                                        </Button>
-                                    )}
-                                    {job.email && (
-                                        <Button asChild className="bg-gray-600 hover:bg-gray-700 text-primary-foreground">
-                                            <a href={`mailto:${job.email}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`}><Mail className="ml-2 h-4 w-4" />البريد الإلكتروني</a>
-                                        </Button>
-                                    )}
-                                    {job.instagram && (
-                                        <Button asChild className="text-primary-foreground bg-gradient-to-r from-pink-500 to-orange-500 hover:opacity-90">
-                                            <a href={`https://instagram.com/${job.instagram.replace(/@/g, '')}`} target="_blank" rel="noopener noreferrer">
-                                                <Instagram className="ml-2 h-4 w-4" />إنستغرام
-                                            </a>
-                                        </Button>
-                                    )}
-                                </div>
-                                <ShareButton title={job.title || ''} text={job.description || ''} />
-                            </CardContent>
-                        </Card>
-                        
-                         <Card>
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2 text-lg">
-                                    <UserIcon className="h-5 w-5" style={{color: sectionColor}}/>
-                                    صاحب الإعلان
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="flex flex-col gap-4">
-                                <div className="flex flex-row items-center gap-4">
-                                    <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-16 w-16 text-2xl flex-shrink-0" />
-                                    <div className="font-semibold text-lg text-right flex-grow">
-                                        {job.ownerName || 'صاحب الإعلان'}
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-
-                    </div>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2 text-lg">
+                                <Phone className="h-5 w-5" style={{color: sectionColor}}/>
+                                معلومات التواصل
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-2">
+                            <div className="grid grid-cols-2 gap-2">
+                                {job.phone && (
+                                    <Button asChild style={{ backgroundColor: sectionColor }} className="text-primary-foreground hover:opacity-90">
+                                        <a href={`tel:${job.phone}`}><Phone className="ml-2 h-4 w-4" />اتصال</a>
+                                    </Button>
+                                )}
+                                {job.whatsapp && (
+                                    <Button asChild className="bg-green-600 hover:bg-green-700 text-primary-foreground">
+                                        <a href={`https://wa.me/${job.whatsapp.replace(/\+/g, '')}?text=${encodeURIComponent(whatsappMessage)}`} target="_blank" rel="noopener noreferrer">
+                                            <MessageSquare className="ml-2 h-4 w-4" />واتساب
+                                        </a>
+                                    </Button>
+                                )}
+                                {job.email && (
+                                    <Button asChild className="bg-gray-600 hover:bg-gray-700 text-primary-foreground">
+                                        <a href={`mailto:${job.email}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`}><Mail className="ml-2 h-4 w-4" />البريد الإلكتروني</a>
+                                    </Button>
+                                )}
+                                {job.instagram && (
+                                    <Button asChild className="text-primary-foreground bg-gradient-to-r from-pink-500 to-orange-500 hover:opacity-90">
+                                        <a href={`https://instagram.com/${job.instagram.replace(/@/g, '')}`} target="_blank" rel="noopener noreferrer">
+                                            <Instagram className="ml-2 h-4 w-4" />إنستغرام
+                                        </a>
+                                    </Button>
+                                )}
+                            </div>
+                            <ShareButton title={job.title || ''} text={job.description || ''} />
+                        </CardContent>
+                    </Card>
                     
                     <div className="text-center pt-4">
                         <ReportAdDialog adId={job.id} />

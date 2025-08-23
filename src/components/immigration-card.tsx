@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import Link from 'next/link';
@@ -67,7 +68,7 @@ export function ImmigrationCard({ post }: ImmigrationCardProps) {
              <CategoryIcon name={iconName} className="h-6 w-6 text-sky-500" />
           </div>
           <div className="flex-grow overflow-hidden">
-            <h3 className="font-bold text-lg leading-snug truncate">
+            <h3 className="font-bold text-lg leading-snug truncate text-foreground">
               <Link href={detailUrl} className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
                 {post.title}
               </Link>
