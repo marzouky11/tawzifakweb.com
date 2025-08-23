@@ -48,7 +48,7 @@ export default function PostImmigrationPage() {
       />
       <div className="container mx-auto max-w-3xl px-4 pb-8">
         <Card>
-          <CardContent className="p-6">
+          <CardContent className="p-0">
             <PostImmigrationForm />
           </CardContent>
         </Card>
