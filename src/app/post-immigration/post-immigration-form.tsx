@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState } from 'react';
@@ -15,41 +16,24 @@ import { useRouter } from 'next/navigation';
 import { 
     Loader2, Plane, FileText, Globe, MapPin, Users, Calendar, Award, Wallet, Link as LinkIcon, 
     GraduationCap, ClipboardList, Info, Briefcase, Check, ArrowRight, ArrowLeft, Mail, MessageSquare, Instagram,
-    Landmark, Newspaper, HelpCircle, Target, Phone
+    Phone
 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import type { ImmigrationPost } from '@/lib/types';
-import { slugify, cn } from '@/lib/utils';
+import { slugify, cn, getProgramTypeDetails, programTypes } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Separator } from '@/components/ui/separator';
 import { CategoryIcon } from '@/components/icons';
 
 
-const programTypes = [
-    { value: 'work', label: 'عمل', icon: 'Briefcase' },
-    { value: 'study', label: 'دراسة', icon: 'BookOpen' },
-    { value: 'seasonal', label: 'موسمي', icon: 'Leaf' },
-    { value: 'training', label: 'تدريب', icon: 'Award' },
-];
-
-const immigrationIcons = [
-    { value: 'Plane', label: 'طائرة', icon: Plane },
-    { value: 'Briefcase', label: 'حقيبة', icon: Briefcase },
-    { value: 'Landmark', label: 'مبنى', icon: Landmark },
-    { value: 'Globe', label: 'كرة أرضية', icon: Globe },
-    { value: 'Newspaper', label: 'جريدة', icon: Newspaper },
-];
-
 const formSchema = z.object({
   title: z.string().min(5, 'العنوان يجب أن يكون 5 أحرف على الأقل.'),
-  slug: z.string().min(5, 'الرابط المختصر مطلوب.'),
   targetCountry: z.string().min(2, 'الدولة المستهدفة مطلوبة.'),
   city: z.string().optional(),
   programType: z.enum(['work', 'study', 'seasonal', 'training'], { required_error: "نوع البرنامج مطلوب." }),
-  iconName: z.string().optional(),
   
   targetAudience: z.string().min(2, "الفئة المستهدفة مطلوبة."),
-  deadline: z.string().min(1, "آخر أجل للتقديم مطلوب."),
+  deadline: z.string().optional(),
   description: z.string().optional(),
   requirements: z.string().optional(),
   qualifications: z.string().optional(),
@@ -74,8 +58,8 @@ interface PostImmigrationFormProps {
 }
 
 const stepFields = [
-  ['title', 'slug', 'targetCountry', 'city', 'programType', 'iconName'],
-  ['description', 'requirements', 'qualifications', 'experience', 'featuresAndOpportunities', 'howToApply', 'targetAudience', 'deadline', 'salary'],
+  ['title', 'targetCountry', 'city', 'programType', 'salary'],
+  ['description', 'requirements', 'qualifications', 'experience', 'featuresAndOpportunities', 'howToApply', 'targetAudience', 'deadline'],
   ['applyUrl', 'phone', 'whatsapp', 'email', 'instagram'],
 ];
 
@@ -132,11 +116,9 @@ export function PostImmigrationForm({ post }: PostImmigrationFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: post?.title || '',
-      slug: post?.slug || '',
       targetCountry: post?.targetCountry || '',
       city: post?.city || '',
       programType: post?.programType || undefined,
-      iconName: post?.iconName || 'Plane',
       targetAudience: post?.targetAudience || '',
       deadline: post?.deadline || '',
       description: post?.description || '',
@@ -183,22 +165,18 @@ export function PostImmigrationForm({ post }: PostImmigrationFormProps) {
 
   const prevStep = () => setCurrentStep(prev => prev - 1);
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    form.setValue('title', e.target.value);
-    if (!isEditing) {
-      form.setValue('slug', slugify(e.target.value));
-    }
-  };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     try {
+      const dataToSave = { ...values, slug: slugify(values.title) };
+
       if (isEditing && post) {
-        await updateImmigrationPost(post.id, values);
+        await updateImmigrationPost(post.id, dataToSave);
         toast({ title: "تم تحديث الإعلان بنجاح!" });
         router.push(`/immigration/${post.id}`);
       } else {
-        const { id } = await postImmigration(values);
+        const { id } = await postImmigration(dataToSave);
         toast({ title: "تم نشر الإعلان بنجاح!" });
         form.reset();
         router.push(`/immigration/${id}`);
@@ -213,25 +191,25 @@ export function PostImmigrationForm({ post }: PostImmigrationFormProps) {
 
   const stepsContent = [
     <div className="space-y-6" key="step1">
-      <FormField control={form.control} name="title" render={({ field }) => (<FormItem><FormLabelIcon icon={FileText} label="عنوان الفرصة" /><FormControl><Input placeholder="مثال: مطلوب عمال موسميون في كندا" {...field} onChange={handleTitleChange} /></FormControl><FormMessage /></FormItem>)} />
-      <FormField control={form.control} name="slug" render={({ field }) => (<FormItem><FormLabelIcon icon={LinkIcon} label="الرابط (Slug)" /><FormControl><Input placeholder="سيتم إنشاؤه تلقائيا" {...field} /></FormControl><FormMessage /></FormItem>)} />
+      <FormField control={form.control} name="title" render={({ field }) => (<FormItem><FormLabelIcon icon={FileText} label="عنوان الفرصة" /><FormControl><Input placeholder="مثال: مطلوب عمال موسميون في كندا" {...field} /></FormControl><FormMessage /></FormItem>)} />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <FormField control={form.control} name="targetCountry" render={({ field }) => (<FormItem><FormLabelIcon icon={Globe} label="الدولة المستهدفة" /><FormControl><Input placeholder="مثال: كندا" {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="city" render={({ field }) => (<FormItem><FormLabelIcon icon={MapPin} label="المدينة (اختياري)" /><FormControl><Input placeholder="مثال: مونتريال" {...field} /></FormControl><FormMessage /></FormItem>)} />
       </div>
-       <FormField control={form.control} name="programType" render={({ field }) => (<FormItem><FormLabelIcon icon={Briefcase} label="نوع البرنامج" /><Select onValueChange={field.onChange} value={field.value}><FormControl><SelectTrigger><SelectValue placeholder="اختر نوع البرنامج" /></SelectTrigger></FormControl><SelectContent>{programTypes.map(p => (<SelectItem key={p.value} value={p.value}><div className="flex items-center gap-2"><CategoryIcon name={p.icon} className="w-5 h-5" /> {p.label}</div></SelectItem>))}</SelectContent></Select><FormMessage /></FormItem>)} />
-       <FormField control={form.control} name="iconName" render={({ field }) => (<FormItem><FormLabelIcon icon={Plane} label="أيقونة الإعلان" /><Select onValueChange={field.onChange} value={field.value}><FormControl><SelectTrigger><SelectValue placeholder="اختر أيقونة للإعلان" /></SelectTrigger></FormControl><SelectContent>{immigrationIcons.map(i => (<SelectItem key={i.value} value={i.value}><div className="flex items-center gap-2"><i.icon className="w-5 h-5" /> {i.label}</div></SelectItem>))}</SelectContent></Select><FormMessage /></FormItem>)} />
+       <FormField control={form.control} name="programType" render={({ field }) => (<FormItem><FormLabelIcon icon={Briefcase} label="نوع البرنامج" /><Select onValueChange={field.onChange} value={field.value}><FormControl><SelectTrigger><SelectValue placeholder="اختر نوع البرنامج" /></SelectTrigger></FormControl><SelectContent>{programTypes.map(p => (<SelectItem key={p.value} value={p.value}><div className="flex items-center gap-2"><CategoryIcon name={p.icon} className="w-5 h-5" style={{ color: p.color }} /> {p.label}</div></SelectItem>))}</SelectContent></Select><FormMessage /></FormItem>)} />
+       <FormField control={form.control} name="salary" render={({ field }) => (<FormItem><FormLabelIcon icon={Wallet} label="الأجر (اختياري)" /><FormControl><Input placeholder="مثال: 3000 دولار شهريا" {...field} /></FormControl><FormMessage /></FormItem>)} />
     </div>,
     <div className="space-y-6" key="step2">
-        <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabelIcon icon={Info} label="وصف تفصيلي للبرنامج" /><FormControl><Textarea placeholder="تفاصيل حول فرصة الهجرة، مهام العمل، مدة البرنامج..." {...field} /></FormControl><FormMessage /></FormItem>)} />
-        <FormField control={form.control} name="requirements" render={({ field }) => (<FormItem><FormLabelIcon icon={ClipboardList} label="الشروط العامة" /><FormControl><Textarea placeholder="شروط العمر، اللغة، الحالة الصحية..." {...field} /></FormControl><FormMessage /></FormItem>)} />
-        <FormField control={form.control} name="qualifications" render={({ field }) => (<FormItem><FormLabelIcon icon={GraduationCap} label="المؤهلات المطلوبة" /><FormControl><Textarea placeholder="الشهادات التعليمية المطلوبة..." {...field} /></FormControl><FormMessage /></FormItem>)} />
-        <FormField control={form.control} name="experience" render={({ field }) => (<FormItem><FormLabelIcon icon={Award} label="الخبرة المطلوبة" /><FormControl><Textarea placeholder="سنوات الخبرة أو نوعها..." {...field} /></FormControl><FormMessage /></FormItem>)} />
-        <FormField control={form.control} name="featuresAndOpportunities" render={({ field }) => (<FormItem><FormLabelIcon icon={Target} label="المميزات والفرص" /><FormControl><Textarea placeholder="معلومات عن السكن، التأمين، فرص التدريب أو التوظيف بعد البرنامج..." {...field} /></FormControl><FormMessage /></FormItem>)} />
-        <FormField control={form.control} name="howToApply" render={({ field }) => (<FormItem><FormLabelIcon icon={HelpCircle} label="كيفية التقديم" /><FormControl><Textarea placeholder="اشرح هنا خطوات التقديم. مثلاً: أرسل سيرتك الذاتية إلى البريد الإلكتروني المذكور أعلاه." {...field} /></FormControl><FormMessage /></FormItem>)} />
-        <FormField control={form.control} name="targetAudience" render={({ field }) => (<FormItem><FormLabelIcon icon={Users} label="الفئة المستهدفة" /><FormControl><Input placeholder="طلاب، عمال، مهنيين..." {...field} /></FormControl><FormMessage /></FormItem>)} />
-        <FormField control={form.control} name="deadline" render={({ field }) => (<FormItem><FormLabelIcon icon={Calendar} label="آخر أجل للتقديم" /><FormControl><Input placeholder="YYYY-MM-DD" {...field} /></FormControl><FormMessage /></FormItem>)} />
-        <FormField control={form.control} name="salary" render={({ field }) => (<FormItem><FormLabelIcon icon={Wallet} label="الأجر (اختياري)" /><FormControl><Input placeholder="مثال: 3000 دولار شهريا" {...field} /></FormControl><FormMessage /></FormItem>)} />
+        <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabelIcon icon={Info} label="وصف تفصيلي للبرنامج" /><FormControl><Textarea placeholder="تفاصيل حول فرصة الهجرة، مهام العمل، مدة البرنامج..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
+        <FormField control={form.control} name="requirements" render={({ field }) => (<FormItem><FormLabelIcon icon={ClipboardList} label="الشروط العامة" /><FormControl><Textarea placeholder="شروط العمر، اللغة، الحالة الصحية..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
+        <FormField control={form.control} name="qualifications" render={({ field }) => (<FormItem><FormLabelIcon icon={GraduationCap} label="المؤهلات المطلوبة" /><FormControl><Textarea placeholder="الشهادات التعليمية المطلوبة..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
+        <FormField control={form.control} name="experience" render={({ field }) => (<FormItem><FormLabelIcon icon={Award} label="الخبرة المطلوبة" /><FormControl><Textarea placeholder="سنوات الخبرة أو نوعها..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
+        <FormField control={form.control} name="featuresAndOpportunities" render={({ field }) => (<FormItem><FormLabelIcon icon={Target} label="المميزات والفرص" /><FormControl><Textarea placeholder="معلومات عن السكن، التأمين، فرص التدريب أو التوظيف بعد البرنامج..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
+        <FormField control={form.control} name="howToApply" render={({ field }) => (<FormItem><FormLabelIcon icon={HelpCircle} label="كيفية التقديم" /><FormControl><Textarea placeholder="اشرح هنا خطوات التقديم. مثلاً: أرسل سيرتك الذاتية إلى البريد الإلكتروني المذكور أعلاه." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField control={form.control} name="targetAudience" render={({ field }) => (<FormItem><FormLabelIcon icon={Users} label="الفئة المستهدفة" /><FormControl><Input placeholder="طلاب، عمال، مهنيين..." {...field} /></FormControl><FormMessage /></FormItem>)} />
+            <FormField control={form.control} name="deadline" render={({ field }) => (<FormItem><FormLabelIcon icon={Calendar} label="آخر أجل للتقديم (اختياري)" /><FormControl><Input placeholder="YYYY-MM-DD" {...field} /></FormControl><FormMessage /></FormItem>)} />
+        </div>
     </div>,
     <div className="space-y-6" key="step3">
         <FormField control={form.control} name="applyUrl" render={({ field }) => (<FormItem><FormLabelIcon icon={LinkIcon} label="رابط التقديم الرسمي" /><FormControl><Input type="url" placeholder="https://example.com/apply" {...field} /></FormControl><FormMessage /></FormItem>)} />

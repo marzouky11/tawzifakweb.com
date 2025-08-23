@@ -1,4 +1,5 @@
 
+
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -23,4 +24,16 @@ export function slugify(text: string): string {
     .replace(/\s+/g, '-') // replace spaces with -
     .replace(/[^\w-]+/g, '') // remove all non-word chars
     .replace(/--+/g, '-'); // replace multiple - with single -
+}
+
+export const programTypes = [
+    { value: 'work', label: 'عمل', icon: 'Briefcase', color: '#0D47A1' },
+    { value: 'study', label: 'دراسة', icon: 'BookOpen', color: '#8E24AA' },
+    { value: 'seasonal', label: 'موسمي', icon: 'Leaf', color: '#43A047' },
+    { value: 'training', label: 'تدريب', icon: 'Award', color: '#FB8C00' },
+];
+
+export function getProgramTypeDetails(programType: 'work' | 'study' | 'seasonal' | 'training') {
+    const details = programTypes.find(p => p.value === programType);
+    return details || { value: 'work', label: 'عمل', icon: 'Briefcase', color: '#0ea5e9' }; // Default fallback
 }

@@ -4,6 +4,7 @@ import { db } from '@/lib/firebase';
 import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, Query, and, QueryConstraint, QueryFilterConstraint, documentId, increment } from 'firebase/firestore';
 import type { Job, Category, PostType, User, WorkType, Testimonial, Competition, Organizer, Article, Report, ContactMessage, ImmigrationPost } from './types';
 import Fuse from 'fuse.js';
+import { getProgramTypeDetails, slugify } from './utils';
 
 const categories: Category[] = [
   { id: 'it', name: 'تكنولوجيا المعلومات', iconName: 'Code', color: '#1E88E5' }, // Blue
@@ -585,9 +586,11 @@ export async function getImmigrationPosts(options: {
 
     let posts = querySnapshot.docs.map(doc => {
       const data = doc.data();
+      const programDetails = getProgramTypeDetails(data.programType);
       return {
         id: doc.id,
         ...data,
+        iconName: programDetails.icon,
         postedAt: formatTimeAgo(data.createdAt),
         isNew: (new Date().getTime() - data.createdAt.toDate().getTime()) < 24 * 60 * 60 * 1000,
       } as ImmigrationPost;
@@ -626,9 +629,11 @@ export async function getImmigrationPostBySlug(slug: string): Promise<Immigratio
         }
         const docSnap = querySnapshot.docs[0];
         const data = docSnap.data();
+        const programDetails = getProgramTypeDetails(data.programType);
         return {
             id: docSnap.id,
             ...data,
+            iconName: programDetails.icon,
             postedAt: formatTimeAgo(data.createdAt)
         } as ImmigrationPost;
     } catch (error) {
@@ -644,9 +649,11 @@ export async function getImmigrationPostById(id: string): Promise<ImmigrationPos
 
     if (docSnap.exists()) {
       const data = docSnap.data();
+      const programDetails = getProgramTypeDetails(data.programType);
       return { 
           id: docSnap.id, 
           ...data,
+          iconName: programDetails.icon,
           postedAt: formatTimeAgo(data.createdAt),
      } as ImmigrationPost;
     } else {
@@ -658,7 +665,7 @@ export async function getImmigrationPostById(id: string): Promise<ImmigrationPos
   }
 }
 
-export async function postImmigration(postData: Omit<ImmigrationPost, 'id' | 'createdAt' | 'postedAt' | 'isNew'>): Promise<{ id: string }> {
+export async function postImmigration(postData: Omit<ImmigrationPost, 'id' | 'createdAt' | 'postedAt' | 'isNew' | 'iconName'>): Promise<{ id: string }> {
   try {
     const postsCollection = collection(db, 'immigration');
     const newPost: { [key: string]: any } = {

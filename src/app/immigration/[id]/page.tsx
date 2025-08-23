@@ -29,6 +29,8 @@ import { ReportAdDialog } from '@/app/jobs/[id]/report-ad-dialog';
 import { SaveAdButton } from '@/app/jobs/[id]/save-ad-button';
 import { ImmigrationCard } from '@/components/immigration-card';
 import { CategoryIcon } from '@/components/icons';
+import { getProgramTypeDetails } from '@/lib/utils';
+
 
 interface ImmigrationDetailPageProps {
   params: { id: string };
@@ -48,7 +50,7 @@ export async function generateMetadata({ params }: ImmigrationDetailPageProps): 
   }
 
   const metaTitle = post.title;
-  const metaDescription = (post.description || post.requirements || `فرصة هجرة إلى ${post.targetCountry} في مجال ${post.programType}`).substring(0, 160);
+  const metaDescription = (post.description || post.requirements || `فرصة هجرة إلى ${post.targetCountry} في مجال ${getProgramTypeDetails(post.programType)?.label}`).substring(0, 160);
   const canonicalUrl = `${baseUrl}/immigration/${post.id}`;
 
   return {
@@ -125,16 +127,10 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
     
     const similarPosts = await getImmigrationPosts({ count: 2, excludeId: post.id });
     
-    const sectionColor = '#0ea5e9'; // sky-500
+    const programDetails = getProgramTypeDetails(post.programType);
+    const sectionColor = programDetails.color;
+    const iconName = programDetails.icon;
 
-    const programTypeTranslations: { [key: string]: string } = {
-        work: 'عمل',
-        study: 'دراسة',
-        seasonal: 'موسمي',
-        training: 'تدريب',
-    };
-    
-    const iconName = post.iconName || 'Plane';
 
     return (
         <AppLayout>
@@ -144,14 +140,14 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
             <DesktopPageHeader
                 icon={Plane}
                 title={post.title}
-                description={`فرصة هجرة إلى ${post.targetCountry} ضمن برنامج ${programTypeTranslations[post.programType]}`}
+                description={`فرصة هجرة إلى ${post.targetCountry} ضمن برنامج ${programDetails.label}`}
             />
             <div className="container mx-auto max-w-4xl px-4 pb-8 space-y-6">
                 <Card className="overflow-hidden shadow-lg border-t-4" style={{borderColor: sectionColor}}>
-                     <CardHeader className="bg-sky-500/10 p-4 sm:p-6">
+                     <CardHeader className="p-4 sm:p-6" style={{ backgroundColor: `${sectionColor}1A`}}>
                         <div className="flex items-center gap-4 mb-2">
-                           <div className="p-3 rounded-xl flex-shrink-0 bg-sky-500/20">
-                                <CategoryIcon name={iconName} className="w-8 h-8 text-sky-500" />
+                           <div className="p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${sectionColor}3A` }}>
+                                <CategoryIcon name={iconName} className="w-8 h-8" style={{ color: sectionColor }} />
                             </div>
                             <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                                 {post.title}
@@ -168,9 +164,9 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                     <CardContent className="p-4 sm:p-6 space-y-8">
                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                             <InfoItem icon={MapPin} label="الموقع" value={`${post.targetCountry}${post.city ? ', ' + post.city : ''}`} color={sectionColor} />
-                            <InfoItem icon={Briefcase} label="نوع البرنامج" value={programTypeTranslations[post.programType]} color={sectionColor} />
+                            <InfoItem icon={Briefcase} label="نوع البرنامج" value={programDetails.label} color={sectionColor} />
                             <InfoItem icon={Users} label="الفئة المستهدفة" value={post.targetAudience} color={sectionColor} />
-                            <InfoItem icon={CalendarDays} label="آخر أجل" value={post.deadline} color={sectionColor} />
+                            {post.deadline && <InfoItem icon={CalendarDays} label="آخر أجل" value={post.deadline} color={sectionColor} />}
                             {post.salary && <InfoItem icon={Wallet} label="الأجر" value={post.salary} color={sectionColor} />}
                         </div>
                         <Separator />
@@ -203,7 +199,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="flex flex-col sm:flex-row justify-center gap-4 p-6">
-                        <Button asChild size="lg" className="flex-1 text-primary-foreground text-base py-6" style={{backgroundColor: sectionColor}}>
+                        <Button asChild size="lg" className="flex-1 text-base py-6" style={{backgroundColor: sectionColor}}>
                             <a href={post.applyUrl} target="_blank" rel="noopener noreferrer" className="text-primary-foreground hover:opacity-90">
                                 <LinkIcon className="ml-2 h-4 w-4" />
                                 الذهاب إلى رابط التسجيل
