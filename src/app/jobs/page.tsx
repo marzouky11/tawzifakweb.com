@@ -1,14 +1,12 @@
 
-
 import type { Metadata } from 'next';
 import { AppLayout } from '@/components/layout/app-layout';
 import { JobCard } from '@/components/job-card';
-import { getJobs, getCategories } from '@/lib/data';
+import { getJobs } from '@/lib/data';
 import { JobFilters } from '@/components/job-filters';
 import type { WorkType } from '@/lib/types';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Card } from '@/components/ui/card';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Briefcase } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
@@ -57,7 +55,6 @@ export default async function JobsPage({
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
-  const categories = getCategories();
 
   return (
     <AppLayout>
@@ -72,7 +69,7 @@ export default async function JobsPage({
       <div className="container py-6">
         <div className="mb-6">
           <Suspense fallback={<JobFiltersSkeleton />}>
-            <JobFilters categories={categories} />
+            <JobFilters />
           </Suspense>
         </div>
         
@@ -84,4 +81,3 @@ export default async function JobsPage({
     </AppLayout>
   );
 }
-

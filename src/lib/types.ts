@@ -1,5 +1,4 @@
 
-
 import type { Timestamp } from 'firebase/firestore';
 
 export interface Category {
@@ -82,21 +81,21 @@ export interface Competition {
 
 export interface ImmigrationPost {
   id: string;
-  slug: string;
   title: string;
   targetCountry: string;
   city?: string;
   programType: 'work' | 'study' | 'seasonal' | 'training';
+  iconName: string;
   targetAudience: string;
-  deadline: string;
+  salary?: string;
+  deadline?: string;
   description?: string;
   requirements?: string;
   qualifications?: string;
   experience?: string;
-  salaryAndBenefits?: string;
-  salary?: string;
-  applyUrl: string;
-  iconName?: string;
+  featuresAndOpportunities?: string; // Renamed from salaryAndBenefits
+  howToApply?: string;
+  applyUrl?: string;
   phone?: string;
   whatsapp?: string;
   email?: string;

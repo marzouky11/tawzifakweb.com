@@ -1,5 +1,4 @@
 
-
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { AppLayout } from '@/components/layout/app-layout';
@@ -9,14 +8,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { getJobs, getTestimonials, getCompetitions, getImmigrationPosts } from '@/lib/data';
 import React, { Suspense } from 'react';
 import { Newspaper, Briefcase, Users, ArrowLeft, FileText, User as UserIcon, Landmark, Plane } from 'lucide-react';
-import { JobFilters } from '@/components/job-filters';
+import { HomePageFilters } from './home-page-filters';
 import { HomeCarousel } from './home-carousel';
 import { HomeExtraSections } from './home-extra-sections';
 import { Separator } from '@/components/ui/separator';
-import { getCategories } from '@/lib/data';
-import Image from 'next/image';
-import { UserAvatar } from '@/components/user-avatar';
-import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { HomeHeaderMobile } from './home-header-mobile';
 import { CompetitionCard } from '@/components/competition-card';
@@ -53,8 +48,7 @@ export const metadata: Metadata = {
 function JobFiltersSkeleton() {
     return (
         <div className="flex gap-2 items-center">
-            <div className="h-14 bg-muted rounded-xl w-full animate-pulse flex-grow" />
-            <div className="h-14 w-14 bg-muted rounded-xl animate-pulse flex-shrink-0" />
+            <div className="h-16 bg-muted rounded-2xl w-full animate-pulse flex-grow" />
         </div>
     );
 }
@@ -73,8 +67,8 @@ async function JobOffersSection() {
     const jobOffers = await getJobs({ postType: 'seeking_worker', count: 8 });
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {jobOffers.map((job, index) => (
-                <div key={job.id} className={cn(index >= 5 && "hidden sm:block")}>
+            {jobOffers.map((job) => (
+                <div key={job.id}>
                     <JobCard job={job} />
                 </div>
             ))}
@@ -96,8 +90,8 @@ async function CompetitionsSection() {
           iconColor="#14532d"
         />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {competitions.map((comp, index) => (
-             <div key={comp.id} className={cn(index >= 5 && "hidden sm:block")}>
+          {competitions.map((comp) => (
+             <div key={comp.id}>
                 <CompetitionCard competition={comp} />
             </div>
           ))}
@@ -120,8 +114,8 @@ async function ImmigrationSection() {
           iconColor="#0ea5e9" // sky-500
         />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {immigrationPosts.map((post, index) => (
-             <div key={post.id} className={cn(index >= 5 && "hidden sm:block")}>
+          {immigrationPosts.map((post) => (
+             <div key={post.id}>
                 <ImmigrationCard post={post} />
             </div>
           ))}
@@ -134,8 +128,8 @@ async function JobSeekersSection() {
     const jobSeekers = await getJobs({ postType: 'seeking_job', count: 8 });
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {jobSeekers.map((job, index) => (
-                <div key={job.id} className={cn(index >= 5 && "hidden sm:block")}>
+            {jobSeekers.map((job) => (
+                <div key={job.id}>
                     <JobCard job={job} />
                 </div>
             ))}
@@ -147,6 +141,7 @@ async function ExtraSections() {
     const testimonials = await getTestimonials();
     const jobOffersCount = (await getJobs({ postType: 'seeking_worker', count: 9999 })).length;
     const competitionsCount = (await getCompetitions({ count: 9999 })).length;
+    const immigrationCount = (await getImmigrationPosts({ count: 9999 })).length;
     const jobSeekersCount = (await getJobs({ postType: 'seeking_job', count: 9999 })).length;
 
     return (
@@ -154,6 +149,7 @@ async function ExtraSections() {
             testimonials={testimonials}
             jobOffersCount={jobOffersCount}
             competitionsCount={competitionsCount}
+            immigrationCount={immigrationCount}
             jobSeekersCount={jobSeekersCount}
         />
     );
@@ -216,24 +212,14 @@ function CVBuilderSection() {
 }
 
 export default function HomePage() {
-  const categories = getCategories();
-  
   return (
     <AppLayout>
       <HomeHeaderMobile />
       
-      <div className="md:hidden container mt-4">
+      <div className="container mt-4">
         <Suspense fallback={<JobFiltersSkeleton />}>
-          <JobFilters categories={categories} showPostTypeSelect={true} />
+          <HomePageFilters />
         </Suspense>
-      </div>
-      
-      <div className="container hidden md:block pt-6">
-        <Card className="p-2 rounded-2xl shadow-lg">
-          <Suspense fallback={<JobFiltersSkeleton />}>
-            <JobFilters categories={categories} showPostTypeSelect={true} />
-          </Suspense>
-        </Card>
       </div>
       
       <div className="container space-y-12 mt-6 md:mt-8">
