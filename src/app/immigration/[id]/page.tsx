@@ -22,6 +22,10 @@ import {
   Award,
   Wallet,
   HelpCircle,
+  Mail,
+  MessageSquare,
+  Instagram,
+  Phone,
 } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { Separator } from '@/components/ui/separator';
@@ -30,6 +34,7 @@ import { SaveAdButton } from '@/app/jobs/[id]/save-ad-button';
 import { ImmigrationCard } from '@/components/immigration-card';
 import { CategoryIcon } from '@/components/icons';
 import { getProgramTypeDetails } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 
 
 interface ImmigrationDetailPageProps {
@@ -130,6 +135,24 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
     const programDetails = getProgramTypeDetails(post.programType);
     const sectionColor = programDetails.color;
     const iconName = programDetails.icon;
+    
+    const whatsappMessage = `مرحبًا، اطلعت على إعلانكم لفرصة الهجرة بعنوان '${post.title}' على منصة توظيفك وأنا مهتم بالتقديم.`;
+    const emailSubject = `استفسار بخصوص فرصة هجرة: ${post.title}`;
+    const emailBody = `مرحبًا،
+
+اطلعت على إعلانكم لفرصة الهجرة بعنوان '${post.title}' على منصة توظيفك، وأود الاستفسار عن المزيد من التفاصيل.
+
+شكرًا لاهتمامكم.
+
+مع أطيب التحيات،
+[اسمك]`;
+
+    const contactButtons = [
+        post.phone && { type: 'phone', href: `tel:${post.phone}`, label: 'اتصال', icon: Phone, className: 'bg-[#0D47A1] hover:bg-[#0D47A1]/90' },
+        post.whatsapp && { type: 'whatsapp', href: `https://wa.me/${post.whatsapp.replace(/\+/g, '')}?text=${encodeURIComponent(whatsappMessage)}`, label: 'واتساب', icon: MessageSquare, className: 'bg-green-600 hover:bg-green-700' },
+        post.email && { type: 'email', href: `mailto:${post.email}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`, label: 'البريد الإلكتروني', icon: Mail, className: 'bg-gray-600 hover:bg-gray-700' },
+        post.instagram && { type: 'instagram', href: `https://instagram.com/${post.instagram.replace(/@/g, '')}`, label: 'إنستغرام', icon: Instagram, className: 'bg-gradient-to-r from-pink-500 to-orange-500 hover:opacity-90' },
+    ].filter(Boolean);
 
 
     return (
@@ -149,7 +172,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                            <div className="p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${sectionColor}3A` }}>
                                 <CategoryIcon name={iconName} className="w-8 h-8" style={{ color: sectionColor }} />
                             </div>
-                            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+                            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-200">
                                 {post.title}
                             </h1>
                         </div>
@@ -172,19 +195,19 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                         <Separator />
                         <div className="space-y-6">
                            {post.description && <DetailSection icon={Info} title="وصف البرنامج" color={sectionColor}><FormattedText text={post.description} /></DetailSection>}
-                           {post.description && <Separator />}
+                           {post.description && (post.requirements || post.qualifications || post.experience || post.featuresAndOpportunities || post.howToApply) && <Separator />}
 
                            {post.requirements && <DetailSection icon={ClipboardList} title="الشروط العامة" color={sectionColor}><FormattedText text={post.requirements} /></DetailSection>}
-                           {post.requirements && <Separator />}
+                           {post.requirements && (post.qualifications || post.experience || post.featuresAndOpportunities || post.howToApply) && <Separator />}
                            
                            {post.qualifications && <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={post.qualifications} /></DetailSection>}
-                           {post.qualifications && <Separator />}
+                           {post.qualifications && (post.experience || post.featuresAndOpportunities || post.howToApply) && <Separator />}
 
                            {post.experience && <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={post.experience} /></DetailSection>}
-                           {post.experience && <Separator />}
+                           {post.experience && (post.featuresAndOpportunities || post.howToApply) && <Separator />}
                            
                            {post.featuresAndOpportunities && <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={post.featuresAndOpportunities} /></DetailSection>}
-                           {post.featuresAndOpportunities && <Separator />}
+                           {post.featuresAndOpportunities && post.howToApply && <Separator />}
                            
                            {post.howToApply && <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={post.howToApply} /></DetailSection>}
                         </div>
@@ -198,13 +221,26 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                             التقديم على الفرصة
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="flex flex-col sm:flex-row justify-center gap-4 p-6">
-                        <Button asChild size="lg" className="flex-1 text-base py-6" style={{backgroundColor: sectionColor}}>
-                            <a href={post.applyUrl} target="_blank" rel="noopener noreferrer" className="text-primary-foreground hover:opacity-90">
-                                <LinkIcon className="ml-2 h-4 w-4" />
-                                الذهاب إلى رابط التسجيل
-                            </a>
-                        </Button>
+                    <CardContent className="flex flex-col gap-3 p-6">
+                        {post.applyUrl && (
+                            <Button asChild size="lg" className="text-primary-foreground font-semibold text-base py-6" style={{backgroundColor: sectionColor}}>
+                                <a href={post.applyUrl} target="_blank" rel="noopener noreferrer" className="hover:opacity-90">
+                                    <LinkIcon className="ml-2 h-5 w-5" />
+                                    الذهاب إلى رابط التسجيل
+                                </a>
+                            </Button>
+                        )}
+                        {contactButtons.length > 0 && post.applyUrl && <Separator />}
+                        <div className={cn("grid grid-cols-1 gap-3", contactButtons.length > 1 && "sm:grid-cols-2")}>
+                           {contactButtons.map(button => (
+                                <Button key={button.type} asChild size="lg" className={cn("text-primary-foreground font-semibold text-base py-6", button.className)}>
+                                    <a href={button.href} target={button.type !== 'phone' ? '_blank' : undefined} rel="noopener noreferrer">
+                                        <button.icon className="ml-2 h-5 w-5" />
+                                        {button.label}
+                                    </a>
+                                </Button>
+                            ))}
+                        </div>
                     </CardContent>
                 </Card>
                 

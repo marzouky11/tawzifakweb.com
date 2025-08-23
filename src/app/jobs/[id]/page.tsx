@@ -7,7 +7,6 @@ import type { Metadata } from 'next';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { UserAvatar } from '@/components/user-avatar';
 import {
   Phone,
   MessageSquare,
@@ -227,11 +226,11 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
 [اسمك]`;
 
     const contactButtons = [
-        job.phone && { type: 'phone', href: `tel:${job.phone}`, label: 'اتصال', icon: Phone, color: sectionColor, className: 'text-primary-foreground hover:opacity-90' },
-        job.whatsapp && { type: 'whatsapp', href: `https://wa.me/${job.whatsapp.replace(/\+/g, '')}?text=${encodeURIComponent(whatsappMessage)}`, label: 'واتساب', icon: MessageSquare, color: '#25D366', className: 'bg-green-600 hover:bg-green-700 text-primary-foreground' },
-        job.email && { type: 'email', href: `mailto:${job.email}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`, label: 'البريد الإلكتروني', icon: Mail, color: '#7f8c8d', className: 'bg-gray-600 hover:bg-gray-700 text-primary-foreground' },
-        job.instagram && { type: 'instagram', href: `https://instagram.com/${job.instagram.replace(/@/g, '')}`, label: 'إنستغرام', icon: Instagram, color: '#E4405F', className: 'text-primary-foreground bg-gradient-to-r from-pink-500 to-orange-500 hover:opacity-90' },
-        job.applyUrl && { type: 'applyUrl', href: job.applyUrl, label: 'تسجيل عبر الموقع', icon: LinkIcon, color: '#007bff', className: 'bg-blue-600 hover:bg-blue-700 text-primary-foreground' },
+        job.phone && { type: 'phone', href: `tel:${job.phone}`, label: 'اتصال', icon: Phone, color: '#FFFFFF', className: 'bg-[#0D47A1] hover:bg-[#0D47A1]/90' },
+        job.whatsapp && { type: 'whatsapp', href: `https://wa.me/${job.whatsapp.replace(/\+/g, '')}?text=${encodeURIComponent(whatsappMessage)}`, label: 'واتساب', icon: MessageSquare, color: '#FFFFFF', className: 'bg-green-600 hover:bg-green-700' },
+        job.email && { type: 'email', href: `mailto:${job.email}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`, label: 'البريد الإلكتروني', icon: Mail, color: '#FFFFFF', className: 'bg-gray-600 hover:bg-gray-700' },
+        job.instagram && { type: 'instagram', href: `https://instagram.com/${job.instagram.replace(/@/g, '')}`, label: 'إنستغرام', icon: Instagram, color: '#FFFFFF', className: 'bg-gradient-to-r from-pink-500 to-orange-500 hover:opacity-90' },
+        job.applyUrl && { type: 'applyUrl', href: job.applyUrl, label: 'تسجيل عبر الموقع', icon: LinkIcon, color: '#FFFFFF', className: 'bg-blue-600 hover:bg-blue-700' },
     ].filter(Boolean);
 
     
@@ -255,7 +254,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                         <div className="p-2 sm:p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${categoryColor}1A` }}>
                                             <CategoryIcon name={finalIconName} className="w-6 h-6 sm:w-8 sm:h-8" style={{ color: categoryColor }} />
                                         </div>
-                                        <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+                                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-200">
                                             {job.title || 'عنوان غير متوفر'}
                                         </h1>
                                     </div>
@@ -263,7 +262,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                         {categoryName && (
                                             <div className="flex items-center gap-1.5">
                                                 <LayoutGrid className="h-4 w-4" style={{color: categoryColor}} />
-                                                <span style={{color: categoryColor}}>{categoryName}</span>
+                                                <span className="font-medium" style={{color: categoryColor}}>{categoryName}</span>
                                             </div>
                                         )}
                                         {translatedWorkType && (
@@ -346,25 +345,22 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-lg">
                                 <Phone className="h-5 w-5" style={{color: sectionColor}} />
-                                معلومات التواصل
+                                التقديم على الوظيفة
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-2">
-                             <div className="grid grid-cols-2 gap-2">
+                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 {contactButtons.map(button => {
                                     if (!button) return null;
-                                    const isApplyUrl = button.type === 'applyUrl';
-                                    const isLastAndOdd = contactButtons.filter(b => !!b).length % 2 !== 0 && button === contactButtons[contactButtons.length - 1];
-
                                     return (
                                         <Button
                                             key={button.type}
                                             asChild
-                                            className={cn(button.className, (isApplyUrl && isLastAndOdd) && 'col-span-2')}
-                                            style={button.type === 'phone' ? { backgroundColor: sectionColor } : {}}
+                                            size="lg"
+                                            className={cn("text-primary-foreground font-semibold text-base py-6", button.className)}
                                         >
                                             <a href={button.href} target={button.type !== 'phone' ? '_blank' : undefined} rel="noopener noreferrer">
-                                                <button.icon className="ml-2 h-4 w-4" />
+                                                <button.icon className="ml-2 h-5 w-5" />
                                                 {button.label}
                                             </a>
                                         </Button>

@@ -32,6 +32,7 @@ import { JobCard } from '@/components/job-card';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import Link from 'next/link';
 import { SaveAdButton } from '@/app/jobs/[id]/save-ad-button';
+import { cn } from '@/lib/utils';
 
 
 interface JobDetailPageProps {
@@ -152,6 +153,13 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
 
 شكرًا لك.`;
 
+    const contactButtons = [
+        job.phone && { type: 'phone', href: `tel:${job.phone}`, label: 'اتصال', icon: Phone, className: 'bg-[#424242] hover:bg-[#424242]/90' },
+        job.whatsapp && { type: 'whatsapp', href: `https://wa.me/${job.whatsapp.replace(/\+/g, '')}?text=${encodeURIComponent(whatsappMessage)}`, label: 'واتساب', icon: MessageSquare, className: 'bg-green-600 hover:bg-green-700' },
+        job.email && { type: 'email', href: `mailto:${job.email}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`, label: 'البريد الإلكتروني', icon: Mail, className: 'bg-gray-600 hover:bg-gray-700' },
+        job.instagram && { type: 'instagram', href: `https://instagram.com/${job.instagram.replace(/@/g, '')}`, label: 'إنستغرام', icon: Instagram, className: 'bg-gradient-to-r from-pink-500 to-orange-500 hover:opacity-90' },
+    ].filter(Boolean);
+
     return (
         <AppLayout>
             <MobilePageHeader title="ملف باحث عن عمل">
@@ -175,14 +183,14 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                                         <div className="p-2 sm:p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${categoryColor}1A` }}>
                                             <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-8 w-8 text-lg" />
                                         </div>
-                                        <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+                                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-200">
                                             {job.title || 'عنوان غير متوفر'}
                                         </h1>
                                     </div>
                                    <div className="flex flex-wrap items-center gap-4 text-muted-foreground mt-2 text-sm">
                                          <Link href={`/user/${job.userId}`} className="flex items-center gap-1.5 hover:text-primary">
                                             <UserIcon className="h-4 w-4" />
-                                            <span>{job.ownerName}</span>
+                                            <span className="font-medium">{job.ownerName}</span>
                                         </Link>
                                         <div className="flex items-center gap-1.5">
                                             <CalendarDays className="h-4 w-4" />
@@ -232,35 +240,27 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-lg">
                                 <Phone className="h-5 w-5" style={{color: sectionColor}}/>
-                                معلومات التواصل
+                                تواصل مع الباحث عن عمل
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-2">
-                            <div className="grid grid-cols-2 gap-2">
-                                {job.phone && (
-                                    <Button asChild style={{ backgroundColor: sectionColor }} className="text-primary-foreground hover:opacity-90">
-                                        <a href={`tel:${job.phone}`}><Phone className="ml-2 h-4 w-4" />اتصال</a>
-                                    </Button>
-                                )}
-                                {job.whatsapp && (
-                                    <Button asChild className="bg-green-600 hover:bg-green-700 text-primary-foreground">
-                                        <a href={`https://wa.me/${job.whatsapp.replace(/\+/g, '')}?text=${encodeURIComponent(whatsappMessage)}`} target="_blank" rel="noopener noreferrer">
-                                            <MessageSquare className="ml-2 h-4 w-4" />واتساب
-                                        </a>
-                                    </Button>
-                                )}
-                                {job.email && (
-                                    <Button asChild className="bg-gray-600 hover:bg-gray-700 text-primary-foreground">
-                                        <a href={`mailto:${job.email}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`}><Mail className="ml-2 h-4 w-4" />البريد الإلكتروني</a>
-                                    </Button>
-                                )}
-                                {job.instagram && (
-                                    <Button asChild className="text-primary-foreground bg-gradient-to-r from-pink-500 to-orange-500 hover:opacity-90">
-                                        <a href={`https://instagram.com/${job.instagram.replace(/@/g, '')}`} target="_blank" rel="noopener noreferrer">
-                                            <Instagram className="ml-2 h-4 w-4" />إنستغرام
-                                        </a>
-                                    </Button>
-                                )}
+                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                {contactButtons.map(button => {
+                                    if (!button) return null;
+                                    return (
+                                        <Button
+                                            key={button.type}
+                                            asChild
+                                            size="lg"
+                                            className={cn("text-primary-foreground font-semibold text-base py-6", button.className)}
+                                        >
+                                            <a href={button.href} target={button.type !== 'phone' ? '_blank' : undefined} rel="noopener noreferrer">
+                                                <button.icon className="ml-2 h-5 w-5" />
+                                                {button.label}
+                                            </a>
+                                        </Button>
+                                    )
+                                })}
                             </div>
                             <ShareButton title={job.title || ''} text={job.description || ''} />
                         </CardContent>

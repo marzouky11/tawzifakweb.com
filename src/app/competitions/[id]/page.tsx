@@ -21,7 +21,6 @@ import {
   Target,
   ListOrdered,
   FileUp,
-  LogIn,
   Award,
 } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
@@ -59,7 +58,6 @@ export async function generateMetadata({ params }: CompetitionDetailPageProps): 
     ? competition.createdAt.toDate() 
     : new Date();
 
-  // Validate the deadline date before using it
   const deadlineDate = competition.deadline ? new Date(competition.deadline) : null;
   const validDeadline = deadlineDate && !isNaN(deadlineDate.getTime());
 
@@ -80,7 +78,7 @@ export async function generateMetadata({ params }: CompetitionDetailPageProps): 
         address: {
           '@type': 'PostalAddress',
           addressLocality: competition.location || 'غير محدد',
-          addressCountry: 'MA', // Default to Morocco, can be improved later
+          addressCountry: 'MA',
         },
       },
   };
@@ -210,7 +208,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                                     <div className="p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${organizerColor}1A` }}>
                                         <CategoryIcon name={organizerIcon} className="w-8 h-8" style={{ color: organizerColor }} />
                                     </div>
-                                    <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+                                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-200">
                                         {competition.title || 'عنوان غير متوفر'}
                                     </h1>
                                 </div>
@@ -273,24 +271,24 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2" style={{color: sectionColor}}>
-                                <LogIn className="h-5 w-5" />
+                                <LinkIcon className="h-5 w-5" />
                                 التقديم على المباراة
                             </CardTitle>
                         </CardHeader>
-                        <CardContent className="flex flex-col sm:flex-row justify-center gap-4 p-6">
-                                {competition.fileUrl && (
+                        <CardContent className="flex flex-col sm:flex-row justify-center gap-3 p-6">
+                            {competition.officialLink && (
+                                <Button asChild size="lg" className="flex-1 text-base py-6 text-primary-foreground" style={{backgroundColor: sectionColor}}>
+                                    <a href={competition.officialLink} target="_blank" rel="noopener noreferrer" className="hover:opacity-90">
+                                        <LinkIcon className="ml-2 h-4 w-4" />
+                                        الذهاب إلى رابط التسجيل
+                                    </a>
+                                </Button>
+                            )}
+                            {competition.fileUrl && (
                                 <Button asChild size="lg" variant="outline" className="flex-1 text-base py-6 hover:bg-green-500/10 hover:border-green-500 hover:text-green-600">
                                     <a href={competition.fileUrl} target="_blank" rel="noopener noreferrer">
                                         <FileUp className="ml-2 h-4 w-4" />
                                         تحميل إعلان المباراة (PDF)
-                                    </a>
-                                </Button>
-                            )}
-                            {competition.officialLink && (
-                                <Button asChild size="lg" className="flex-1 text-primary-foreground text-base py-6" style={{backgroundColor: sectionColor}}>
-                                    <a href={competition.officialLink} target="_blank" rel="noopener noreferrer">
-                                        <LinkIcon className="ml-2 h-4 w-4" />
-                                        الذهاب إلى رابط التسجيل
                                     </a>
                                 </Button>
                             )}
