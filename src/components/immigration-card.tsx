@@ -69,7 +69,7 @@ export function ImmigrationCard({ post }: ImmigrationCardProps) {
           </div>
           <div className="flex-grow overflow-hidden">
             <h3 className="font-bold text-base leading-snug truncate">
-              <Link href={detailUrl} className="text-gray-900 dark:text-gray-100 hover:underline visited:text-primary/80 dark:visited:text-primary/70">
+              <Link href={detailUrl} className="text-gray-900 dark:text-gray-100 hover:underline">
                 {post.title}
               </Link>
             </h3>

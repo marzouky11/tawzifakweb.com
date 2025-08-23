@@ -79,7 +79,7 @@ export function JobCard({ job }: JobCardProps) {
             </div>
              <div className="w-full overflow-hidden">
                 <h3 className="font-bold text-base leading-snug truncate">
-                    <Link href={detailUrl} className="text-gray-900 dark:text-gray-100 hover:underline visited:text-primary/80 dark:visited:text-primary/70">
+                    <Link href={detailUrl} className="text-gray-900 dark:text-gray-100 hover:underline">
                         {job.title}
                     </Link>
                 </h3>
