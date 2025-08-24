@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search, SlidersHorizontal } from 'lucide-react';
+import { Search } from 'lucide-react';
 
 export function HomePageFilters() {
   const router = useRouter();
@@ -18,6 +18,8 @@ export function HomePageFilters() {
       params.set('q', searchQuery.trim());
       // Default to searching jobs, user can switch on the results page
       router.push(`/jobs?${params.toString()}`);
+    } else {
+       router.push(`/jobs`);
     }
   };
 

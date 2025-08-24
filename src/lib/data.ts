@@ -212,31 +212,26 @@ export async function getJobs(
     });
 
     // Fuzzy search using Fuse.js if a search query is provided
-    if (searchQuery || country || city) {
-        const searchList = jobs;
-        let results = searchList;
-
-        if(searchQuery) {
-            const fuse = new Fuse(results, {
-                keys: ['title', 'description', 'categoryName', 'country', 'city'],
-                includeScore: true,
-                threshold: 0.4, // Adjust threshold for more or less strict matching
-            });
-            results = fuse.search(searchQuery).map(result => result.item);
-        }
-
-        if(country) {
-            const fuse = new Fuse(results, { keys: ['country'], includeScore: true, threshold: 0.3 });
-            results = fuse.search(country).map(result => result.item);
-        }
-
-        if(city) {
-            const fuse = new Fuse(results, { keys: ['city'], includeScore: true, threshold: 0.3 });
-            results = fuse.search(city).map(result => result.item);
-        }
-
-        jobs = results;
+    if (searchQuery) {
+        const fuse = new Fuse(jobs, {
+            keys: ['title', 'description', 'categoryName', 'country', 'city', 'companyName', 'experience', 'qualifications'],
+            includeScore: true,
+            threshold: 0.4, // Adjust threshold for more or less strict matching
+        });
+        jobs = fuse.search(searchQuery).map(result => result.item);
     }
+    
+    // These filters are applied after the main search to refine results
+    if (country) {
+        const fuse = new Fuse(jobs, { keys: ['country'], includeScore: true, threshold: 0.3 });
+        jobs = fuse.search(country).map(result => result.item);
+    }
+
+    if (city) {
+        const fuse = new Fuse(jobs, { keys: ['city'], includeScore: true, threshold: 0.3 });
+        jobs = fuse.search(city).map(result => result.item);
+    }
+
 
     if (count) {
       return jobs.slice(0, count);
@@ -479,29 +474,22 @@ export async function getCompetitions(options: {
       return true;
     });
 
-    if (searchQuery || location) {
-        const searchList = competitions;
-        let results = searchList;
-
-        if (searchQuery) {
-            const fuse = new Fuse(results, {
-                keys: ['title', 'organizer', 'description'],
-                includeScore: true,
-                threshold: 0.4,
-            });
-            results = fuse.search(searchQuery).map(result => result.item);
-        }
-
-        if (location) {
-            const fuse = new Fuse(results, {
-                keys: ['location'],
-                includeScore: true,
-                threshold: 0.3,
-            });
-            results = fuse.search(location).map(result => result.item);
-        }
-
-        competitions = results;
+    if (searchQuery) {
+        const fuse = new Fuse(competitions, {
+            keys: ['title', 'organizer', 'description', 'location', 'competitionType'],
+            includeScore: true,
+            threshold: 0.4,
+        });
+        competitions = fuse.search(searchQuery).map(result => result.item);
+    }
+    
+    if (location) {
+        const fuse = new Fuse(competitions, {
+            keys: ['location'],
+            includeScore: true,
+            threshold: 0.3,
+        });
+        competitions = fuse.search(location).map(result => result.item);
     }
 
     if (count) {
@@ -602,7 +590,7 @@ export async function getImmigrationPosts(options: {
 
     if (searchQuery) {
       const fuse = new Fuse(posts, {
-        keys: ['title', 'targetCountry', 'description'],
+        keys: ['title', 'targetCountry', 'city', 'description', 'targetAudience', 'programType'],
         includeScore: true,
         threshold: 0.4,
       });

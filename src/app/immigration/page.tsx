@@ -8,6 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { ImmigrationCard } from '@/components/immigration-card';
+import { ImmigrationFilters } from '@/components/immigration-filters';
 
 export const metadata: Metadata = {
   title: 'فرص الهجرة - آخر إعلانات الهجرة للعمل، الدراسة والتدريب',
@@ -16,18 +17,19 @@ export const metadata: Metadata = {
 
 export const revalidate = 0; // Force dynamic rendering
 
-function ImmigrationListSkeleton() {
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-      {Array.from({ length: 8 }).map((_, i) => (
-        <ImmigrationCard key={i} post={null} />
-      ))}
-    </div>
-  );
+function ImmigrationFiltersSkeleton() {
+    return <div className="h-14 bg-muted rounded-xl w-full animate-pulse" />;
 }
 
-export default async function ImmigrationPage() {
-  const immigrationPosts = await getImmigrationPosts();
+export default async function ImmigrationPage({
+  searchParams,
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
+
+  const immigrationPosts = await getImmigrationPosts({
+    searchQuery: typeof searchParams?.q === 'string' ? searchParams.q : undefined,
+  });
 
   return (
     <AppLayout>
@@ -40,12 +42,16 @@ export default async function ImmigrationPage() {
         description="استكشف أحدث إعلانات الهجرة للعمل، الدراسة، أو التدريب في مختلف الدول."
       />
       <div className="container py-6 space-y-6">
+        <Suspense fallback={<ImmigrationFiltersSkeleton />}>
+          <ImmigrationFilters />
+        </Suspense>
+
         {immigrationPosts.length > 0 ? (
            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {immigrationPosts.map((post) => <ImmigrationCard key={post.id} post={post} />)}
           </div>
         ) : (
-          <p className="col-span-full text-center text-muted-foreground py-10">لا توجد فرص هجرة متاحة حاليًا.</p>
+          <p className="col-span-full text-center text-muted-foreground py-10">لا توجد فرص هجرة تطابق بحثك.</p>
         )}
       </div>
     </AppLayout>
