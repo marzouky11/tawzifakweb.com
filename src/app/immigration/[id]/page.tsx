@@ -172,8 +172,8 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                      <CardHeader className="p-4 sm:p-6" style={{ backgroundColor: `${sectionColor}1A`}}>
                         <div className="flex items-center gap-4 mb-2">
                            <div className="p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${iconColor}2A` }}>
-                                <CategoryIcon name={iconName} className="w-8 h-8" style={{ color: iconColor }} />
-                            </div>
+                                <CategoryIcon name={iconName} className="h-6 w-6" style={{ color: iconColor }} />
+                           </div>
                             <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                                 {post.title}
                             </h1>
