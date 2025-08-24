@@ -47,7 +47,7 @@ const CountUp = ({ end, duration = 2 }: { end: number, duration?: number }) => {
 function StatsSection({ stats }: { stats: { jobs: number, competitions: number, immigration: number, seekers: number } }) {
   const statItems = [
     {
-      label: "عرض عمل منشور",
+      label: "عروض عمل",
       count: stats.jobs,
       icon: Briefcase,
       color: "#0D47A1", // Dark Blue for Job Offers
@@ -148,7 +148,7 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
           className="text-center mb-10"
         >
           <h2 className="text-3xl font-bold tracking-tight text-foreground flex justify-center items-center gap-2">
-            <StarIcon className="h-8 w-8 text-yellow-500" />
+            <MessageSquare className="h-8 w-8 text-primary" />
             ماذا يقول مستخدمونا؟
           </h2>
           <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">آراؤكم هي مصدر إلهامنا ووقودنا للتطور المستمر.</p>
