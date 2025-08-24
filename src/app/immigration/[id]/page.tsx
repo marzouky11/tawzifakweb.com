@@ -47,7 +47,7 @@ interface ImmigrationDetailPageProps {
 export async function generateMetadata({ params }: ImmigrationDetailPageProps): Promise<Metadata> {
   const post = await getImmigrationPostById(params.id);
   const baseUrl = 'https://www.tawzifak.com';
-  const siteThumbnail = 'https://i.postimg.cc/QtH6DP8p/man-diligently-working-his-desk.jpg'; // Generic immigration image
+  const siteThumbnail = 'https://i.postimg.cc/MH0BfvFB/og-image.jpg';
   
   if (!post) {
     return {
@@ -167,8 +167,8 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
             </MobilePageHeader>
             <DesktopPageHeader
                 icon={Plane}
-                title={post.title}
-                description={`فرصة هجرة إلى ${post.targetCountry} ضمن برنامج ${programDetails.label}`}
+                title="تفاصيل فرصة الهجرة"
+                description={`استكشف جميع المعلومات المتعلقة بفرصة الهجرة إلى ${post.targetCountry}.`}
             />
             <div className="container mx-auto max-w-4xl px-4 pb-8 space-y-6">
                 <Card className="overflow-hidden shadow-lg border-2" style={{borderColor: sectionColor}}>
@@ -217,51 +217,53 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                         </div>
                     </CardContent>
                 </Card>
-                         
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2" style={{color: sectionColor}}>
-                            <LinkIcon className="h-5 w-5" />
-                            التقديم على الفرصة
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex flex-col gap-3 p-6">
-                        {post.applyUrl && (
-                            <Button asChild size="lg" className="text-primary-foreground font-semibold text-base py-6" style={{backgroundColor: sectionColor}}>
-                                <a href={post.applyUrl} target="_blank" rel="noopener noreferrer" className="hover:opacity-90">
-                                    <LinkIcon className="ml-2 h-5 w-5" />
-                                    الذهاب إلى رابط التسجيل
-                                </a>
-                            </Button>
-                        )}
-                        {contactButtons.length > 0 && post.applyUrl && <Separator />}
-                        <div className={cn("grid grid-cols-1 gap-3", contactButtons.length > 1 && "sm:grid-cols-2")}>
-                           {contactButtons.map(button => {
-                                if (!button) return null;
-                                return (
-                                <Button key={button.type} asChild size="lg" className={cn("text-primary-foreground font-semibold text-base py-6", button.className)}>
-                                    <a href={button.href} target={button.type !== 'phone' ? '_blank' : undefined} rel="noopener noreferrer">
-                                        <button.icon className="ml-2 h-5 w-5" />
-                                        {button.label}
+                
+                 <div className="grid md:grid-cols-2 gap-6">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2" style={{color: sectionColor}}>
+                                <LinkIcon className="h-5 w-5" />
+                                التقديم على الفرصة
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="flex flex-col gap-3 p-6 pt-0">
+                            {post.applyUrl && (
+                                <Button asChild size="lg" className="text-primary-foreground font-semibold text-base py-6" style={{backgroundColor: sectionColor}}>
+                                    <a href={post.applyUrl} target="_blank" rel="noopener noreferrer" className="hover:opacity-90">
+                                        <LinkIcon className="ml-2 h-5 w-5" />
+                                        الذهاب إلى رابط التسجيل
                                     </a>
                                 </Button>
-                            )})}
-                        </div>
-                    </CardContent>
-                </Card>
+                            )}
+                            {contactButtons.length > 0 && post.applyUrl && <Separator />}
+                            <div className={cn("grid grid-cols-1 gap-3", contactButtons.length > 1 && "sm:grid-cols-2")}>
+                               {contactButtons.map(button => {
+                                    if (!button) return null;
+                                    return (
+                                    <Button key={button.type} asChild size="lg" className={cn("text-primary-foreground font-semibold text-base py-6", button.className)}>
+                                        <a href={button.href} target={button.type !== 'phone' ? '_blank' : undefined} rel="noopener noreferrer">
+                                            <button.icon className="ml-2 h-5 w-5" />
+                                            {button.label}
+                                        </a>
+                                    </Button>
+                                )})}
+                            </div>
+                        </CardContent>
+                    </Card>
 
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-lg">
-                            <Bookmark className="h-5 w-5" style={{color: sectionColor}}/>
-                            حفظ ومشاركة الإعلان
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex flex-col sm:flex-row gap-3">
-                        <SaveAdButton adId={post.id} adType="immigration" />
-                        <ShareButton title={post.title || ''} text={post.description || ''} />
-                    </CardContent>
-                </Card>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2 text-lg">
+                                <Bookmark className="h-5 w-5" style={{color: sectionColor}}/>
+                                حفظ ومشاركة الإعلان
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="flex flex-col sm:flex-row gap-3 p-6 pt-0">
+                            <SaveAdButton adId={post.id} adType="immigration" />
+                            <ShareButton title={post.title || ''} text={post.description || ''} />
+                        </CardContent>
+                    </Card>
+                </div>
                 
                 <div className="text-center">
                     <ReportAdDialog adId={post.id} />

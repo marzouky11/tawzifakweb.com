@@ -17,7 +17,7 @@ const tajawal = Tajawal({
 const baseUrl = 'https://www.tawzifak.com';
 const appName = 'توظيفك';
 const appDescription = "منصة توظيفك تجمع لك أحدث عروض العمل والمباريات العمومية وفرص البحث عن عمل بسهولة. تصفح الوظائف حسب المدينة والفئة وابقَ على اطلاع دائم بأحدث الفرص المهنية.";
-const appOgImage = 'https://www.tawzifak.com/og-image.jpg';
+const appOgImage = 'https://i.postimg.cc/MH0BfvFB/og-image.jpg';
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -135,4 +135,3 @@ export default function RootLayout({
     </html>
   );
 }
-

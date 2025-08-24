@@ -51,7 +51,7 @@ interface JobDetailPageProps {
 export async function generateMetadata({ params }: JobDetailPageProps): Promise<Metadata> {
   const job = await getJobById(params.id);
   const baseUrl = 'https://www.tawzifak.com';
-  const siteThumbnail = 'https://www.tawzifak.com/og-image.jpg';
+  const siteThumbnail = 'https://i.postimg.cc/MH0BfvFB/og-image.jpg';
   
   if (!job || job.postType !== 'seeking_worker') {
     return {
@@ -326,47 +326,49 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                         </CardContent>
                     </Card>
 
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2 text-lg">
-                                <Phone className="h-5 w-5" style={{color: sectionColor}} />
-                                التقديم على الوظيفة
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                {contactButtons.map(button => {
-                                    if (!button) return null;
-                                    return (
-                                        <Button
-                                            key={button.type}
-                                            asChild
-                                            size="lg"
-                                            className={cn("text-primary-foreground font-semibold text-base py-6", button.className)}
-                                        >
-                                            <a href={button.href} target={button.type !== 'phone' ? '_blank' : undefined} rel="noopener noreferrer">
-                                                <button.icon className="ml-2 h-5 w-5" />
-                                                {button.label}
-                                            </a>
-                                        </Button>
-                                    )
-                                })}
-                            </div>
-                        </CardContent>
-                    </Card>
-                    
-                     <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2 text-lg">
-                                <Bookmark className="h-5 w-5" style={{color: sectionColor}}/>
-                                حفظ ومشاركة الإعلان
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="flex flex-col sm:flex-row gap-3">
-                            <SaveAdButton adId={job.id} adType="job" />
-                            <ShareButton title={job.title || ''} text={job.description || ''} />
-                        </CardContent>
-                    </Card>
+                   <div className="grid md:grid-cols-2 gap-6">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-lg">
+                                    <Phone className="h-5 w-5" style={{color: sectionColor}} />
+                                    التقديم على الوظيفة
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="pt-0">
+                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    {contactButtons.map(button => {
+                                        if (!button) return null;
+                                        return (
+                                            <Button
+                                                key={button.type}
+                                                asChild
+                                                size="lg"
+                                                className={cn("text-primary-foreground font-semibold text-base py-6", button.className)}
+                                            >
+                                                <a href={button.href} target={button.type !== 'phone' ? '_blank' : undefined} rel="noopener noreferrer">
+                                                    <button.icon className="ml-2 h-5 w-5" />
+                                                    {button.label}
+                                                </a>
+                                            </Button>
+                                        )
+                                    })}
+                                </div>
+                            </CardContent>
+                        </Card>
+                        
+                         <Card>
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-lg">
+                                    <Bookmark className="h-5 w-5" style={{color: sectionColor}}/>
+                                    حفظ ومشاركة الإعلان
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="flex flex-col sm:flex-row gap-3 pt-0">
+                                <SaveAdButton adId={job.id} adType="job" />
+                                <ShareButton title={job.title || ''} text={job.description || ''} />
+                            </CardContent>
+                        </Card>
+                   </div>
 
                     <div className="text-center pt-4">
                         <ReportAdDialog adId={job.id} />
