@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils';
 
 interface SaveAdButtonProps {
   adId: string;
-  adType: 'job' | 'competition';
+  adType: 'job' | 'competition' | 'immigration';
 }
 
 export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {

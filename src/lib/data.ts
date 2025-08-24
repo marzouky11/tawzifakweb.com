@@ -835,7 +835,7 @@ export async function getSavedAdIds(userId: string): Promise<string[]> {
   }
 }
 
-export async function getSavedAds(userId: string): Promise<(Job | Competition)[]> {
+export async function getSavedAds(userId: string): Promise<(Job | Competition | ImmigrationPost)[]> {
     if (!userId) return [];
     try {
         const savedAdIds = await getSavedAdIds(userId);
@@ -843,10 +843,11 @@ export async function getSavedAds(userId: string): Promise<(Job | Competition)[]
 
         const adPromises = savedAdIds.map(id => getJobById(id));
         const competitionPromises = savedAdIds.map(id => getCompetitionById(id));
+        const immigrationPromises = savedAdIds.map(id => getImmigrationPostById(id));
 
-        const results = await Promise.all([...adPromises, ...competitionPromises]);
+        const results = await Promise.all([...adPromises, ...competitionPromises, ...immigrationPromises]);
         
-        return results.filter(item => item !== null) as (Job | Competition)[];
+        return results.filter(item => item !== null) as (Job | Competition | ImmigrationPost)[];
     } catch (error) {
         console.error("Error fetching saved ads details: ", error);
         return [];

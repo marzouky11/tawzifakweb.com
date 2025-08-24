@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -10,25 +11,30 @@ import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { Card, CardContent } from '@/components/ui/card';
 import { Loader2, Bookmark, Frown } from 'lucide-react';
 import { getSavedAds } from '@/lib/data';
-import type { Job, Competition } from '@/lib/types';
+import type { Job, Competition, ImmigrationPost } from '@/lib/types';
 import { JobCard } from '@/components/job-card';
 import { CompetitionCard } from '@/components/competition-card';
+import { ImmigrationCard } from '@/components/immigration-card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
-function isJob(item: Job | Competition): item is Job {
+function isJob(item: Job | Competition | ImmigrationPost): item is Job {
   return 'postType' in item;
 }
 
-function isCompetition(item: Job | Competition): item is Competition {
+function isCompetition(item: Job | Competition | ImmigrationPost): item is Competition {
   return 'organizer' in item;
+}
+
+function isImmigration(item: Job | Competition | ImmigrationPost): item is ImmigrationPost {
+  return 'programType' in item;
 }
 
 export default function SavedAdsPage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
 
-  const [savedItems, setSavedItems] = useState<(Job | Competition)[]>([]);
+  const [savedItems, setSavedItems] = useState<(Job | Competition | ImmigrationPost)[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -85,6 +91,9 @@ export default function SavedAdsPage() {
           }
           if (isCompetition(item)) {
             return <CompetitionCard key={`comp-${item.id}`} competition={item} />;
+          }
+          if (isImmigration(item)) {
+            return <ImmigrationCard key={`imm-${item.id}`} post={item} />;
           }
           return null;
         })}
