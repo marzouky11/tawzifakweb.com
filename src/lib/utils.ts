@@ -1,5 +1,3 @@
-
-
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -27,13 +25,14 @@ export function slugify(text: string): string {
 }
 
 export const programTypes = [
-    { value: 'work', label: 'عمل', icon: 'Briefcase', color: '#0D47A1' },
-    { value: 'study', label: 'دراسة', icon: 'BookOpen', color: '#8E24AA' },
-    { value: 'seasonal', label: 'موسمي', icon: 'Leaf', color: '#43A047' },
-    { value: 'training', label: 'تدريب', icon: 'Award', color: '#FB8C00' },
+    { value: 'work', label: 'عمل', icon: 'Briefcase', color: '#0D47A1' }, // Dark Blue
+    { value: 'study', label: 'دراسة', icon: 'BookOpen', color: '#8E24AA' }, // Purple
+    { value: 'seasonal', label: 'موسمي', icon: 'Leaf', color: '#43A047' }, // Green
+    { value: 'training', label: 'تدريب', icon: 'Award', color: '#FB8C00' }, // Orange
 ];
 
 export function getProgramTypeDetails(programType: 'work' | 'study' | 'seasonal' | 'training') {
     const details = programTypes.find(p => p.value === programType);
-    return details || { value: 'work', label: 'عمل', icon: 'Briefcase', color: '#0ea5e9' }; // Default fallback
+    // Return a default object if no match is found to prevent errors
+    return details || { value: 'work', label: 'عمل', icon: 'Plane', color: '#0ea5e9' };
 }

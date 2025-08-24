@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Plane, Calendar, MapPin, ArrowRight, Wallet, Briefcase } from 'lucide-react';
 import type { ImmigrationPost } from '@/lib/types';
-import { cn } from '@/lib/utils';
+import { cn, getProgramTypeDetails } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { CategoryIcon } from './icons';
 import { Separator } from './ui/separator';
@@ -50,30 +50,27 @@ export function ImmigrationCard({ post }: ImmigrationCardProps) {
   }
 
   const detailUrl = `/immigration/${post.id}`;
-  const sectionColor = '#0ea5e9'; // sky-500
-  const iconName = post.iconName || 'Plane';
+  const sectionColor = '#0ea5e9'; // Main section color (sky-500)
+  
+  const programDetails = getProgramTypeDetails(post.programType);
+  const iconName = programDetails.icon;
+  const iconColor = programDetails.color;
 
-  const programTypeTranslations: { [key: string]: string } = {
-    work: 'عمل',
-    study: 'دراسة',
-    seasonal: 'موسمي',
-    training: 'تدريب',
-  };
 
   return (
     <Card className="flex flex-col h-full overflow-hidden rounded-xl shadow-md border-2 bg-card hover:border-sky-500/80 hover:shadow-2xl transition-all duration-300" style={{ borderColor: sectionColor }}>
       <CardHeader className="p-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-sky-100 dark:bg-sky-900/50 rounded-lg">
-             <CategoryIcon name={iconName} className="h-6 w-6 text-sky-500" />
+          <div className="p-2.5 rounded-lg" style={{ backgroundColor: `${iconColor}1A` }}>
+             <CategoryIcon name={iconName} className="h-6 w-6" style={{ color: iconColor }} />
           </div>
           <div className="flex-grow overflow-hidden">
-            <h3 className="font-bold text-base leading-snug truncate">
-              <Link href={detailUrl} className="text-gray-900 dark:text-gray-100 hover:underline">
+            <h3 className="font-bold text-base leading-snug truncate text-gray-900 dark:text-gray-100">
+              <Link href={detailUrl} className="hover:underline">
                 {post.title}
               </Link>
             </h3>
-            <p className="text-sm text-muted-foreground">{programTypeTranslations[post.programType]}</p>
+            <p className="text-sm" style={{ color: iconColor }}>{programDetails.label}</p>
           </div>
         </div>
       </CardHeader>

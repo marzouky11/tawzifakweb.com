@@ -54,8 +54,9 @@ export async function generateMetadata({ params }: ImmigrationDetailPageProps): 
     };
   }
 
+  const programDetails = getProgramTypeDetails(post.programType);
   const metaTitle = post.title;
-  const metaDescription = (post.description || post.requirements || `فرصة هجرة إلى ${post.targetCountry} في مجال ${getProgramTypeDetails(post.programType)?.label}`).substring(0, 160);
+  const metaDescription = (post.description || post.requirements || `فرصة هجرة إلى ${post.targetCountry} في مجال ${programDetails.label}`).substring(0, 160);
   const canonicalUrl = `${baseUrl}/immigration/${post.id}`;
 
   return {
@@ -133,8 +134,9 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
     const similarPosts = await getImmigrationPosts({ count: 2, excludeId: post.id });
     
     const programDetails = getProgramTypeDetails(post.programType);
-    const sectionColor = '#0ea5e9'; // sky-500 color for the entire immigration section
+    const sectionColor = '#0ea5e9'; // Main section color remains sky-500
     const iconName = programDetails.icon;
+    const iconColor = programDetails.color;
     
     const whatsappMessage = `مرحبًا، اطلعت على إعلانكم لفرصة الهجرة بعنوان '${post.title}' على منصة توظيفك وأنا مهتم بالتقديم.`;
     const emailSubject = `استفسار بخصوص فرصة هجرة: ${post.title}`;
@@ -167,10 +169,10 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
             />
             <div className="container mx-auto max-w-4xl px-4 pb-8 space-y-6">
                 <Card className="overflow-hidden shadow-lg border-2" style={{borderColor: sectionColor}}>
-                     <CardHeader className="p-4 sm:p-6" style={{ backgroundColor: `${programDetails.color}1A`}}>
+                     <CardHeader className="p-4 sm:p-6" style={{ backgroundColor: `${sectionColor}1A`}}>
                         <div className="flex items-center gap-4 mb-2">
-                           <div className="p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${programDetails.color}3A` }}>
-                                <CategoryIcon name={iconName} className="w-8 h-8" style={{ color: programDetails.color }} />
+                           <div className="p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${iconColor}2A` }}>
+                                <CategoryIcon name={iconName} className="w-8 h-8" style={{ color: iconColor }} />
                             </div>
                             <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                                 {post.title}
@@ -186,11 +188,11 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                     </CardHeader>
                     <CardContent className="p-4 sm:p-6 space-y-8">
                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-                            <InfoItem icon={MapPin} label="الموقع" value={`${post.targetCountry}${post.city ? ', ' + post.city : ''}`} color={programDetails.color} />
-                            <InfoItem icon={Briefcase} label="نوع البرنامج" value={programDetails.label} color={programDetails.color} />
-                            <InfoItem icon={Users} label="الفئة المستهدفة" value={post.targetAudience} color={programDetails.color} />
-                            {post.salary && <InfoItem icon={Wallet} label="الأجر" value={post.salary} color={programDetails.color} />}
-                            {post.deadline && <InfoItem icon={CalendarDays} label="آخر أجل" value={post.deadline} color={programDetails.color} />}
+                            <InfoItem icon={MapPin} label="الموقع" value={`${post.targetCountry}${post.city ? ', ' + post.city : ''}`} color={iconColor} />
+                            <InfoItem icon={Briefcase} label="نوع البرنامج" value={programDetails.label} color={iconColor} />
+                            <InfoItem icon={Users} label="الفئة المستهدفة" value={post.targetAudience} color={iconColor} />
+                             {post.salary && <InfoItem icon={Wallet} label="الأجر" value={post.salary} color={iconColor} />}
+                            {post.deadline && <InfoItem icon={CalendarDays} label="آخر أجل" value={post.deadline} color={iconColor} />}
                         </div>
                         <Separator />
                         <div className="space-y-6">
@@ -253,7 +255,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                         <h2 className="text-2xl font-bold">فرص هجرة مشابهة</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {similarPosts.map((similarPost) => (
-                            <ImmigrationCard key={similarPost.id} post={similarPost} />
+                            <ImmigrationCard key={similarPost.id} post={post} />
                         ))}
                         </div>
                     </div>
