@@ -218,7 +218,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                     </CardContent>
                 </Card>
                 
-                 <div className="grid md:grid-cols-2 gap-6">
+                <div className="grid md:grid-cols-2 gap-6">
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2" style={{color: sectionColor}}>
@@ -236,7 +236,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                                 </Button>
                             )}
                             {contactButtons.length > 0 && post.applyUrl && <Separator />}
-                            <div className={cn("grid grid-cols-1 gap-3", contactButtons.length > 1 && "sm:grid-cols-2")}>
+                            <div className="grid grid-cols-1 gap-3">
                                {contactButtons.map(button => {
                                     if (!button) return null;
                                     return (
@@ -255,10 +255,10 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-lg">
                                 <Bookmark className="h-5 w-5" style={{color: sectionColor}}/>
-                                حفظ ومشاركة الإعلان
+                                احفظ الإعلان وشارك مع الآخرين
                             </CardTitle>
                         </CardHeader>
-                        <CardContent className="flex flex-col sm:flex-row gap-3 p-6 pt-0">
+                        <CardContent className="flex flex-col gap-3 p-6 pt-0">
                             <SaveAdButton adId={post.id} adType="immigration" />
                             <ShareButton title={post.title || ''} text={post.description || ''} />
                         </CardContent>

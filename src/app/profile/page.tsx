@@ -45,19 +45,9 @@ const commonLinks = (
     <CardContent className="p-0">
       <ul className="divide-y divide-border">
          <SettingItem
-            icon={Facebook}
-            label="تابعنا على فيسبوك"
-            href="https://www.facebook.com/profile.php?id=61578748771269"
-        />
-         <SettingItem
             icon={Newspaper}
             label="مقالات"
             href="/articles"
-        />
-        <SettingItem
-            icon={HelpCircle}
-            label="الأسئلة الشائعة"
-            href="/faq"
         />
         <SettingItem
             icon={Info}
@@ -78,6 +68,16 @@ const commonLinks = (
             icon={FileText}
             label="شروط الاستخدام"
             href="/terms"
+        />
+        <SettingItem
+            icon={HelpCircle}
+            label="الأسئلة الشائعة"
+            href="/faq"
+        />
+        <SettingItem
+            icon={Facebook}
+            label="تابعنا على فيسبوك"
+            href="https://www.facebook.com/profile.php?id=61578748771269"
         />
       </ul>
     </CardContent>

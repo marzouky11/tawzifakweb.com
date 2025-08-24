@@ -398,43 +398,25 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
 
     // Step 2: Job/Candidate Details
     <div className="space-y-6" key="step2">
-        {postType === 'seeking_worker' && (
-            <FormField control={form.control} name="companyName" render={({ field }) => (
-              <FormItem><FormLabelIcon icon={Building2} label="اسم الشركة (اختياري)" /><FormControl><Input placeholder="اسم الشركة أو الجهة" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
-            )} />
-        )}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField control={form.control} name="salary" render={({ field }) => (
-                <FormItem><FormLabelIcon icon={Wallet} label="الأجر (اختياري)" /><FormControl><Input placeholder="مثال: 5000 درهم / شهري" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
-            )} />
-            {postType === 'seeking_worker' && (
-                <FormField control={form.control} name="openPositions" render={({ field }) => (
-                    <FormItem><FormLabelIcon icon={Users2} label="الوظائف المتاحة (اختياري)" /><FormControl><Input
-                      type="number"
-                      placeholder="مثال: 3"
-                      {...field}
-                      value={field.value ?? ''}
-                      onChange={e => field.onChange(e.target.value === '' ? undefined : +e.target.value)} /></FormControl><FormMessage /></FormItem>
-                )} />
-            )}
-        </div>
-        <FormField control={form.control} name="description" render={({ field }) => (
-            <FormItem><FormLabelIcon icon={FileSignature} label={postType === 'seeking_job' ? "وصف المهارات والخبرة" : "وصف الوظيفة (اختياري)"}/><FormControl><Textarea placeholder={postType === 'seeking_job' ? "اكتب تفاصيل عن مهاراتك وخبراتك..." : "اكتب تفاصيل إضافية عن الوظيفة، المتطلبات، إلخ."} {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
-        )} />
-        <FormField control={form.control} name="qualifications" render={({ field }) => (
-            <FormItem><FormLabelIcon icon={GraduationCap} label={postType === 'seeking_job' ? 'الشهادات والمؤهلات' : 'المؤهلات المطلوبة (اختياري)'} /><FormControl><Textarea placeholder="مثال: بكالوريوس هندسة، دبلوم تقني..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
-        )} />
-        <FormField control={form.control} name="experience" render={({ field }) => (
-            <FormItem><FormLabelIcon icon={Award} label={postType === 'seeking_job' ? 'الخبرة' : 'الخبرة المطلوبة'} /><FormControl><Textarea placeholder="مثال: 5 سنوات في مجال التسويق، أو حديث التخرج بخبرة تدريبية في شركة..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
-        )} />
-        {postType === 'seeking_worker' && (
-            <>
-                <FormField control={form.control} name="conditions" render={({ field }) => (
-                <FormItem><FormLabelIcon icon={ClipboardList} label="الشروط المطلوبة (اختياري)" /><FormControl><Textarea placeholder="اكتب الشروط الإضافية هنا، مثل: العمر، توفر وسيلة نقل، أوقات العمل..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
-                )} />
-                <FormField control={form.control} name="tasks" render={({ field }) => (
-                <FormItem><FormLabelIcon icon={CheckSquare} label="المهام المطلوبة (اختياري)" /><FormControl><Textarea placeholder="اكتب قائمة بالمهام والمسؤوليات للوظيفة..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
-                )} />
+        {postType === 'seeking_job' ? (
+          <>
+            <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabelIcon icon={FileSignature} label="وصف المهارات والخبرة" /><FormControl><Textarea placeholder="اكتب تفاصيل عن مهاراتك وخبراتك..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
+            <FormField control={form.control} name="qualifications" render={({ field }) => (<FormItem><FormLabelIcon icon={GraduationCap} label="الشهادات والمؤهلات" /><FormControl><Textarea placeholder="مثال: بكالوريوس هندسة، دبلوم تقني..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
+            <FormField control={form.control} name="experience" render={({ field }) => (<FormItem><FormLabelIcon icon={Award} label="الخبرة" /><FormControl><Textarea placeholder="مثال: 5 سنوات في مجال التسويق، أو حديث التخرج بخبرة تدريبية في شركة..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
+          </>
+        ) : (
+           <>
+                <FormField control={form.control} name="companyName" render={({ field }) => (<FormItem><FormLabelIcon icon={Building2} label="اسم الشركة (اختياري)" /><FormControl><Input placeholder="اسم الشركة أو الجهة" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <FormField control={form.control} name="salary" render={({ field }) => (<FormItem><FormLabelIcon icon={Wallet} label="الأجر (اختياري)" /><FormControl><Input placeholder="مثال: 5000 درهم / شهري" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="openPositions" render={({ field }) => (<FormItem><FormLabelIcon icon={Users2} label="الوظائف المتاحة (اختياري)" /><FormControl><Input type="number" placeholder="مثال: 3" {...field} value={field.value ?? ''} onChange={e => field.onChange(e.target.value === '' ? undefined : +e.target.value)} /></FormControl><FormMessage /></FormItem>)} />
+                </div>
+                <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabelIcon icon={FileSignature} label="وصف الوظيفة (اختياري)"/><FormControl><Textarea placeholder="اكتب تفاصيل إضافية عن الوظيفة..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
+                <FormField control={form.control} name="conditions" render={({ field }) => (<FormItem><FormLabelIcon icon={ClipboardList} label="الشروط المطلوبة (اختياري)" /><FormControl><Textarea placeholder="اكتب الشروط الإضافية هنا، مثل: العمر، توفر وسيلة نقل، أوقات العمل..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
+                <FormField control={form.control} name="qualifications" render={({ field }) => (<FormItem><FormLabelIcon icon={GraduationCap} label='المؤهلات المطلوبة (اختياري)' /><FormControl><Textarea placeholder="مثال: بكالوريوس هندسة، دبلوم تقني..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
+                <FormField control={form.control} name="experience" render={({ field }) => (<FormItem><FormLabelIcon icon={Award} label='الخبرة المطلوبة' /><FormControl><Textarea placeholder="مثال: 5 سنوات في مجال التسويق، أو حديث التخرج بخبرة تدريبية في شركة..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
+                <FormField control={form.control} name="tasks" render={({ field }) => (<FormItem><FormLabelIcon icon={CheckSquare} label="المهام المطلوبة (اختياري)" /><FormControl><Textarea placeholder="اكتب قائمة بالمهام والمسؤوليات للوظيفة..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
+                <FormField control={form.control} name="howToApply" render={({ field }) => (<FormItem><FormLabelIcon icon={HelpCircle} label="كيفية التقديم (اختياري)" /><FormControl><Textarea placeholder="اشرح هنا خطوات التقديم. مثلاً: أرسل سيرتك الذاتية إلى البريد الإلكتروني المذكور أعلاه." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
             </>
         )}
     </div>,
@@ -459,14 +441,9 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                 <FormItem><FormLabelIcon icon={Instagram} label="حساب إنستغرام (اختياري)" /><FormControl><Input placeholder="username" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
             )} />
              {postType === 'seeking_worker' && (
-                <>
                 <FormField control={form.control} name="applyUrl" render={({ field }) => (
                     <FormItem><FormLabelIcon icon={LinkIcon} label="رابط التقديم (اختياري)" /><FormControl><Input type="url" placeholder="https://example.com/apply" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
                 )} />
-                <FormField control={form.control} name="howToApply" render={({ field }) => (
-                    <FormItem><FormLabelIcon icon={HelpCircle} label="كيفية التقديم (اختياري)" /><FormControl><Textarea placeholder="اشرح هنا خطوات التقديم. مثلاً: أرسل سيرتك الذاتية إلى البريد الإلكتروني المذكور أعلاه." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
-                )} />
-                </>
              )}
               <FormMessage>{form.formState.errors.phone?.message}</FormMessage>
         </div>

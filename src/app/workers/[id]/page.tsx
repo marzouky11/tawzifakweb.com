@@ -7,7 +7,6 @@ import type { Metadata } from 'next';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { UserAvatar } from '@/components/user-avatar';
 import {
   Phone,
   MessageSquare,
@@ -211,71 +210,73 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
 
                             <Separator/>
                             
-                            {job.experience && (
-                               <DetailSection icon={Award} title="الخبرة" color={sectionColor}>
-                                    <FormattedText text={job.experience} />
-                               </DetailSection>
-                            )}
-
-                            {job.experience && (job.qualifications || job.description) && <Separator />}
-                            
-                            {job.qualifications && (
-                               <DetailSection icon={GraduationCap} title="المؤهلات" color={sectionColor}>
-                                    <FormattedText text={job.qualifications} />
-                               </DetailSection>
-                            )}
-                            
-                            {job.qualifications && job.description && <Separator />}
-
                             {job.description && (
                                <DetailSection icon={FileText} title="وصف المهارات والخبرة" color={sectionColor}>
                                     <FormattedText text={job.description} />
                                </DetailSection>
                             )}
+
+                            {job.description && (job.qualifications || job.experience) && <Separator />}
+                            
+                            {job.qualifications && (
+                               <DetailSection icon={GraduationCap} title="الشهادات والمؤهلات" color={sectionColor}>
+                                    <FormattedText text={job.qualifications} />
+                               </DetailSection>
+                            )}
+                            
+                            {job.qualifications && job.experience && <Separator />}
+
+                            {job.experience && (
+                               <DetailSection icon={Award} title="الخبرة" color={sectionColor}>
+                                    <FormattedText text={job.experience} />
+                               </DetailSection>
+                            )}
                         </CardContent>
                     </Card>
 
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2 text-lg">
-                                <Phone className="h-5 w-5" style={{color: sectionColor}}/>
-                                تواصل مع الباحث عن عمل
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                {contactButtons.map(button => {
-                                    if (!button) return null;
-                                    return (
-                                        <Button
-                                            key={button.type}
-                                            asChild
-                                            size="lg"
-                                            className={cn("text-primary-foreground font-semibold text-base py-6", button.className)}
-                                        >
-                                            <a href={button.href} target={button.type !== 'phone' ? '_blank' : undefined} rel="noopener noreferrer">
-                                                <button.icon className="ml-2 h-5 w-5" />
-                                                {button.label}
-                                            </a>
-                                        </Button>
-                                    )
-                                })}
-                            </div>
-                        </CardContent>
-                    </Card>
+                    <div className="grid md:grid-cols-2 gap-6">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-lg">
+                                    <Phone className="h-5 w-5" style={{color: sectionColor}}/>
+                                    تواصل مع الباحث عن عمل
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="pt-0">
+                                <div className="grid grid-cols-1 gap-3">
+                                    {contactButtons.map(button => {
+                                        if (!button) return null;
+                                        return (
+                                            <Button
+                                                key={button.type}
+                                                asChild
+                                                size="lg"
+                                                className={cn("text-primary-foreground font-semibold text-base py-6", button.className)}
+                                            >
+                                                <a href={button.href} target={button.type !== 'phone' ? '_blank' : undefined} rel="noopener noreferrer">
+                                                    <button.icon className="ml-2 h-5 w-5" />
+                                                    {button.label}
+                                                </a>
+                                            </Button>
+                                        )
+                                    })}
+                                </div>
+                            </CardContent>
+                        </Card>
 
-                     <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2 text-lg">
-                                <Bookmark className="h-5 w-5" style={{color: sectionColor}}/>
-                                حفظ ومشاركة الإعلان
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="flex flex-col sm:flex-row gap-3">
-                            <SaveAdButton adId={job.id} adType="job" />
-                            <ShareButton title={job.title || ''} text={job.description || ''} />
-                        </CardContent>
-                    </Card>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-lg">
+                                    <Bookmark className="h-5 w-5" style={{color: sectionColor}}/>
+                                    احفظ الإعلان وشارك مع الآخرين
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="flex flex-col gap-3 pt-0">
+                                <SaveAdButton adId={job.id} adType="job" />
+                                <ShareButton title={job.title || ''} text={job.description || ''} />
+                            </CardContent>
+                        </Card>
+                    </div>
                     
                     <div className="text-center pt-4">
                         <ReportAdDialog adId={job.id} />
