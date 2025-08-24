@@ -1,4 +1,5 @@
 
+
 import type { Metadata } from 'next';
 import { AppLayout } from '@/components/layout/app-layout';
 import { JobCard } from '@/components/job-card';
@@ -51,7 +52,7 @@ async function WorkerList({ searchParams }: { searchParams?: { [key: string]: st
   return <p className="col-span-full text-center text-muted-foreground py-10">لا يوجد باحثون عن عمل يطابقون بحثك.</p>;
 }
 
-export default async function WorkersPage({
+export default function WorkersPage({
   searchParams,
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };

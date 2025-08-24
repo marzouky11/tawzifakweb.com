@@ -236,14 +236,16 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                         )}
                         {contactButtons.length > 0 && post.applyUrl && <Separator />}
                         <div className={cn("grid grid-cols-1 gap-3", contactButtons.length > 1 && "sm:grid-cols-2")}>
-                           {contactButtons.map(button => (
+                           {contactButtons.map(button => {
+                                if (!button) return null;
+                                return (
                                 <Button key={button.type} asChild size="lg" className={cn("text-primary-foreground font-semibold text-base py-6", button.className)}>
                                     <a href={button.href} target={button.type !== 'phone' ? '_blank' : undefined} rel="noopener noreferrer">
                                         <button.icon className="ml-2 h-5 w-5" />
                                         {button.label}
                                     </a>
                                 </Button>
-                            ))}
+                            )})}
                         </div>
                     </CardContent>
                 </Card>
