@@ -26,6 +26,8 @@ import {
   MessageSquare,
   Instagram,
   Phone,
+  Bookmark,
+  Share2,
 } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { Separator } from '@/components/ui/separator';
@@ -35,6 +37,7 @@ import { ImmigrationCard } from '@/components/immigration-card';
 import { CategoryIcon } from '@/components/icons';
 import { getProgramTypeDetails } from '@/lib/utils';
 import { cn } from '@/lib/utils';
+import { ShareButton } from '@/app/jobs/[id]/share-button';
 
 
 interface ImmigrationDetailPageProps {
@@ -183,7 +186,6 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                                 <CalendarDays className="h-4 w-4" />
                                 <span>نُشرت: {post.postedAt}</span>
                             </div>
-                            <SaveAdButton adId={post.id} adType="immigration" />
                         </div>
                     </CardHeader>
                     <CardContent className="p-4 sm:p-6 space-y-8">
@@ -243,6 +245,19 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                                 </Button>
                             ))}
                         </div>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-lg">
+                            <Bookmark className="h-5 w-5" style={{color: sectionColor}}/>
+                            حفظ ومشاركة الإعلان
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex flex-col sm:flex-row gap-3">
+                        <SaveAdButton adId={post.id} adType="immigration" />
+                        <ShareButton title={post.title || ''} text={post.description || ''} />
                     </CardContent>
                 </Card>
                 

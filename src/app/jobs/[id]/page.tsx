@@ -30,6 +30,8 @@ import {
   Search,
   CheckSquare,
   HelpCircle,
+  Bookmark,
+  Share2,
 } from 'lucide-react';
 import type { WorkType } from '@/lib/types';
 import { CategoryIcon } from '@/components/icons';
@@ -248,25 +250,18 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                 <div className="space-y-6">
                     <Card className="overflow-hidden shadow-lg border-t-4" style={{ borderColor: sectionColor }}>
                         <CardHeader className="bg-muted/30 p-4 sm:p-6">
-                            <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
-                                <div className="flex-grow">
-                                    <div className="flex items-center gap-3 mb-2">
-                                        <div className="p-2 sm:p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${categoryColor}1A` }}>
-                                            <CategoryIcon name={finalIconName} className="w-6 h-6 sm:w-8 sm:h-8" style={{ color: categoryColor }} />
-                                        </div>
-                                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100">
-                                            {job.title || 'عنوان غير متوفر'}
-                                        </h1>
-                                    </div>
-                                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground text-sm">
-                                        <div className="flex items-center gap-1.5">
-                                            <CalendarDays className="h-4 w-4" />
-                                            <span>نُشر: {job.postedAt}</span>
-                                        </div>
-                                    </div>
+                            <div className="flex items-center gap-3 mb-2">
+                                <div className="p-2 sm:p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${categoryColor}1A` }}>
+                                    <CategoryIcon name={finalIconName} className="w-6 h-6 sm:w-8 sm:h-8" style={{ color: categoryColor }} />
                                 </div>
-                                <div className="pt-2">
-                                    <SaveAdButton adId={job.id} adType="job" />
+                                <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100">
+                                    {job.title || 'عنوان غير متوفر'}
+                                </h1>
+                            </div>
+                             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground text-sm">
+                                <div className="flex items-center gap-1.5">
+                                    <CalendarDays className="h-4 w-4" />
+                                    <span>نُشر: {job.postedAt}</span>
                                 </div>
                             </div>
                         </CardHeader>
@@ -338,7 +333,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                 التقديم على الوظيفة
                             </CardTitle>
                         </CardHeader>
-                        <CardContent className="space-y-2">
+                        <CardContent>
                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 {contactButtons.map(button => {
                                     if (!button) return null;
@@ -357,10 +352,22 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                     )
                                 })}
                             </div>
-                            <ShareButton title={job.title || ''} text={job.description || ''} />
                         </CardContent>
                     </Card>
                     
+                     <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2 text-lg">
+                                <Bookmark className="h-5 w-5" style={{color: sectionColor}}/>
+                                حفظ ومشاركة الإعلان
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="flex flex-col sm:flex-row gap-3">
+                            <SaveAdButton adId={job.id} adType="job" />
+                            <ShareButton title={job.title || ''} text={job.description || ''} />
+                        </CardContent>
+                    </Card>
+
                     <div className="text-center pt-4">
                         <ReportAdDialog adId={job.id} />
                     </div>
@@ -380,5 +387,3 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
         </AppLayout>
     );
 }
-
-    

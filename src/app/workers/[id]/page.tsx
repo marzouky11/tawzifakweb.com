@@ -22,6 +22,8 @@ import {
   LayoutGrid,
   FileText,
   Search,
+  Bookmark,
+  Share2,
 } from 'lucide-react';
 import type { WorkType } from '@/lib/types';
 import { CategoryIcon } from '@/components/icons';
@@ -198,9 +200,6 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="flex-shrink-0">
-                                    <SaveAdButton adId={job.id} adType="job" />
-                                </div>
                            </div>
                         </CardHeader>
                         <CardContent className="p-4 sm:p-6 space-y-6">
@@ -243,7 +242,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                                 تواصل مع الباحث عن عمل
                             </CardTitle>
                         </CardHeader>
-                        <CardContent className="space-y-2">
+                        <CardContent>
                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 {contactButtons.map(button => {
                                     if (!button) return null;
@@ -262,6 +261,18 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                                     )
                                 })}
                             </div>
+                        </CardContent>
+                    </Card>
+
+                     <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2 text-lg">
+                                <Bookmark className="h-5 w-5" style={{color: sectionColor}}/>
+                                حفظ ومشاركة الإعلان
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="flex flex-col sm:flex-row gap-3">
+                            <SaveAdButton adId={job.id} adType="job" />
                             <ShareButton title={job.title || ''} text={job.description || ''} />
                         </CardContent>
                     </Card>
@@ -285,5 +296,3 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
         </AppLayout>
     );
 }
-
-    

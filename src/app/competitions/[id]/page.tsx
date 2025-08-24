@@ -22,6 +22,8 @@ import {
   ListOrdered,
   FileUp,
   Award,
+  Bookmark,
+  Share2,
 } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { CategoryIcon } from '@/components/icons';
@@ -30,6 +32,7 @@ import { ReportAdDialog } from '@/app/jobs/[id]/report-ad-dialog';
 import { SaveAdButton } from '@/app/jobs/[id]/save-ad-button';
 import { CompetitionCard } from '@/components/competition-card';
 import { cn } from '@/lib/utils';
+import { ShareButton } from '@/app/jobs/[id]/share-button';
 
 
 interface CompetitionDetailPageProps {
@@ -220,9 +223,6 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                                             <span>نُشرت: {competition.postedAt}</span>
                                         </div>
                                     </div>
-                                    <div className="pt-2">
-                                        <SaveAdButton adId={competition.id} adType="competition" />
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -292,6 +292,19 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                                 </a>
                             </Button>
                         )}
+                    </CardContent>
+                </Card>
+                
+                 <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-lg">
+                            <Bookmark className="h-5 w-5" style={{color: sectionColor}}/>
+                            حفظ ومشاركة الإعلان
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex flex-col sm:flex-row gap-3">
+                        <SaveAdButton adId={competition.id} adType="competition" />
+                        <ShareButton title={competition.title} text={competition.description || ''} />
                     </CardContent>
                 </Card>
 
