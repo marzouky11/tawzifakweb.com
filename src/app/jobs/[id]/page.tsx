@@ -254,23 +254,11 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                         <div className="p-2 sm:p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${categoryColor}1A` }}>
                                             <CategoryIcon name={finalIconName} className="w-6 h-6 sm:w-8 sm:h-8" style={{ color: categoryColor }} />
                                         </div>
-                                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-200">
+                                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100">
                                             {job.title || 'عنوان غير متوفر'}
                                         </h1>
                                     </div>
                                     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground text-sm">
-                                        {categoryName && (
-                                            <div className="flex items-center gap-1.5">
-                                                <LayoutGrid className="h-4 w-4" style={{color: categoryColor}} />
-                                                <span className="font-medium" style={{color: categoryColor}}>{categoryName}</span>
-                                            </div>
-                                        )}
-                                        {translatedWorkType && (
-                                            <div className="flex items-center gap-1.5">
-                                                <Clock className="h-4 w-4" />
-                                                <span>{translatedWorkType}</span>
-                                            </div>
-                                        )}
                                         <div className="flex items-center gap-1.5">
                                             <CalendarDays className="h-4 w-4" />
                                             <span>نُشر: {job.postedAt}</span>
@@ -283,8 +271,10 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                             </div>
                         </CardHeader>
                         <CardContent className="p-4 sm:p-6 space-y-6">
-                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                                 <InfoItem icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} color={categoryColor} />
+                                {categoryName && <InfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={categoryColor} />}
+                                {translatedWorkType && <InfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={categoryColor} />}
                                 <InfoItem icon={Wallet} label="الأجر" value={job.salary ? job.salary : 'عند الطلب'} color={categoryColor} />
                                 {job.companyName && <InfoItem icon={Building2} label="الشركة" value={job.companyName} color={categoryColor} />}
                                 {job.openPositions && <InfoItem icon={Users2} label="شواغر" value={job.openPositions} color={categoryColor} />}

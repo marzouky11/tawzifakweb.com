@@ -29,6 +29,7 @@ import { Separator } from '@/components/ui/separator';
 import { ReportAdDialog } from '@/app/jobs/[id]/report-ad-dialog';
 import { SaveAdButton } from '@/app/jobs/[id]/save-ad-button';
 import { CompetitionCard } from '@/components/competition-card';
+import { cn } from '@/lib/utils';
 
 
 interface CompetitionDetailPageProps {
@@ -267,34 +268,33 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                     </CardContent>
                 </Card>
                          
-                {(competition.fileUrl || competition.officialLink) && (
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2" style={{color: sectionColor}}>
-                                <LinkIcon className="h-5 w-5" />
-                                التقديم على المباراة
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="flex flex-col sm:flex-row justify-center gap-3 p-6">
-                            {competition.officialLink && (
-                                <Button asChild size="lg" className="flex-1 text-base py-6 text-primary-foreground" style={{backgroundColor: sectionColor}}>
-                                    <a href={competition.officialLink} target="_blank" rel="noopener noreferrer" className="hover:opacity-90">
-                                        <LinkIcon className="ml-2 h-4 w-4" />
-                                        الذهاب إلى رابط التسجيل
-                                    </a>
-                                </Button>
-                            )}
-                            {competition.fileUrl && (
-                                <Button asChild size="lg" variant="outline" className="flex-1 text-base py-6 hover:bg-green-500/10 hover:border-green-500 hover:text-green-600">
-                                    <a href={competition.fileUrl} target="_blank" rel="noopener noreferrer">
-                                        <FileUp className="ml-2 h-4 w-4" />
-                                        تحميل إعلان المباراة (PDF)
-                                    </a>
-                                </Button>
-                            )}
-                        </CardContent>
-                    </Card>
-                )}
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2" style={{color: sectionColor}}>
+                            <LinkIcon className="h-5 w-5" />
+                            التقديم على المباراة
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="grid grid-cols-1 gap-3 p-6 sm:grid-cols-2">
+                        {competition.officialLink && (
+                            <Button asChild size="lg" className={cn("text-primary-foreground font-semibold text-base py-6", !competition.fileUrl && "sm:col-span-2")} style={{backgroundColor: sectionColor}}>
+                                <a href={competition.officialLink} target="_blank" rel="noopener noreferrer" className="hover:opacity-90">
+                                    <LinkIcon className="ml-2 h-5 w-5" />
+                                    الذهاب إلى رابط التسجيل
+                                </a>
+                            </Button>
+                        )}
+                        {competition.fileUrl && (
+                            <Button asChild size="lg" variant="outline" className={cn("text-base py-6 hover:bg-green-500/10 hover:border-green-500 hover:text-green-600 font-semibold", !competition.officialLink && "sm:col-span-2")}>
+                                <a href={competition.fileUrl} target="_blank" rel="noopener noreferrer">
+                                    <FileUp className="ml-2 h-5 w-5" />
+                                    تحميل إعلان المباراة (PDF)
+                                </a>
+                            </Button>
+                        )}
+                    </CardContent>
+                </Card>
+
                 <div className="text-center">
                     <ReportAdDialog adId={competition.id} />
                 </div>
