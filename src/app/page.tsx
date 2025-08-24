@@ -16,6 +16,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { HomeHeaderMobile } from './home-header-mobile';
 import { CompetitionCard } from '@/components/competition-card';
 import { ImmigrationCard } from '@/components/immigration-card';
+import { cn } from '@/lib/utils';
 
 
 export const revalidate = 60; // Revalidate every 60 seconds
@@ -67,8 +68,8 @@ async function JobOffersSection() {
     const jobOffers = await getJobs({ postType: 'seeking_worker', count: 8 });
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {jobOffers.map((job) => (
-                <div key={job.id}>
+            {jobOffers.map((job, index) => (
+                <div key={job.id} className={cn(index >= 4 && 'hidden sm:block')}>
                     <JobCard job={job} />
                 </div>
             ))}
@@ -90,8 +91,8 @@ async function CompetitionsSection() {
           iconColor="#14532d"
         />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {competitions.map((comp) => (
-             <div key={comp.id}>
+          {competitions.map((comp, index) => (
+             <div key={comp.id} className={cn(index >= 4 && 'hidden sm:block')}>
                 <CompetitionCard competition={comp} />
             </div>
           ))}
@@ -101,7 +102,7 @@ async function CompetitionsSection() {
 }
 
 async function ImmigrationSection() {
-    const immigrationPosts = await getImmigrationPosts({ count: 4 });
+    const immigrationPosts = await getImmigrationPosts({ count: 8 });
     if (immigrationPosts.length === 0) return null;
 
     return (
@@ -114,8 +115,8 @@ async function ImmigrationSection() {
           iconColor="#0ea5e9" // sky-500
         />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {immigrationPosts.map((post) => (
-             <div key={post.id}>
+          {immigrationPosts.map((post, index) => (
+             <div key={post.id} className={cn(index >= 4 && 'hidden sm:block')}>
                 <ImmigrationCard post={post} />
             </div>
           ))}
@@ -128,8 +129,8 @@ async function JobSeekersSection() {
     const jobSeekers = await getJobs({ postType: 'seeking_job', count: 8 });
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {jobSeekers.map((job) => (
-                <div key={job.id}>
+            {jobSeekers.map((job, index) => (
+                <div key={job.id} className={cn(index >= 4 && 'hidden sm:block')}>
                     <JobCard job={job} />
                 </div>
             ))}
