@@ -183,7 +183,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                                 <div className="flex-grow">
                                     <div className="flex items-center gap-3 mb-2">
                                         <div className="p-2 sm:p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${categoryColor}1A` }}>
-                                            <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-8 w-8 text-lg" />
+                                             <CategoryIcon name={finalIconName} className="h-8 w-8" style={{ color: categoryColor }} />
                                         </div>
                                         <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-200">
                                             {job.title || 'عنوان غير متوفر'}
