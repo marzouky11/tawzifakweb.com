@@ -80,7 +80,7 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
     ? job.createdAt.toDate() 
     : new Date();
 
-  const jobPostingJsonLd = {
+  const jobPostingJsonLd: any = {
       '@context': 'https://schema.org',
       '@type': 'JobPosting',
       title: jobTitle,
@@ -259,8 +259,6 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                 </h1>
                             </div>
                              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground text-sm">
-                                {categoryName && <InfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={categoryColor} />}
-                                {translatedWorkType && <InfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={categoryColor} />}
                                 <div className="flex items-center gap-1.5">
                                     <CalendarDays className="h-4 w-4" />
                                     <span>نُشر: {job.postedAt}</span>
@@ -271,6 +269,8 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                                 <InfoItem icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} color={categoryColor} />
                                 <InfoItem icon={Wallet} label="الأجر" value={job.salary ? job.salary : 'عند الطلب'} color={categoryColor} />
+                                {categoryName && <InfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={categoryColor} />}
+                                {translatedWorkType && <InfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={categoryColor} />}
                                 {job.companyName && <InfoItem icon={Building2} label="الشركة" value={job.companyName} color={categoryColor} />}
                                 {job.openPositions && <InfoItem icon={Users2} label="شواغر" value={job.openPositions} color={categoryColor} />}
                             </div>
