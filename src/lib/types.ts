@@ -22,7 +22,7 @@ export interface Job {
   categoryName?: string;
   country: string;
   city: string;
-  workType: WorkType;
+  workType?: WorkType;
   description?: string;
   experience?: string;
   salary?: string;
