@@ -70,7 +70,7 @@ export function ImmigrationCard({ post }: ImmigrationCardProps) {
                 {post.title}
               </Link>
             </h3>
-            <p className="text-sm" style={{ color: iconColor }}>{programDetails.label}</p>
+            <p className="text-sm text-muted-foreground">{programDetails.label}</p>
           </div>
         </div>
       </CardHeader>
