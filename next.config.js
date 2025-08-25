@@ -5,7 +5,6 @@ const nextConfig = {
     NEXT_PUBLIC_RECAPTCHA_SITE_KEY: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY,
   },
   images: {
-    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -25,6 +24,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+          protocol: 'https',
+          hostname: 'lh3.googleusercontent.com',
+          port: '',
+          pathname: '/**',
+      }
     ],
   },
 };

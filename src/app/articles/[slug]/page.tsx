@@ -17,7 +17,7 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const article = getArticleBySlug(params.slug);
   const baseUrl = 'https://www.tawzifak.com';
-  const siteThumbnail = 'https://www.tawzifak.com/og-image.jpg';
+  const siteThumbnail = 'https://i.postimg.cc/MH0BfvFB/og-image.jpg';
 
   if (!article) {
     return {

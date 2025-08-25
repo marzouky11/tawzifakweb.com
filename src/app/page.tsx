@@ -17,6 +17,7 @@ import { HomeHeaderMobile } from './home-header-mobile';
 import { CompetitionCard } from '@/components/competition-card';
 import { ImmigrationCard } from '@/components/immigration-card';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 
 export const revalidate = 60; // Revalidate every 60 seconds
