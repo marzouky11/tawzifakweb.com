@@ -12,6 +12,8 @@ const tajawal = Tajawal({
   subsets: ['arabic'],
   weight: ['200', '300', '400', '500', '700', '800', '900'],
   variable: '--font-tajawal',
+  display: 'swap',
+  fallback: ['system-ui', 'arial'],
 });
 
 const baseUrl = 'https://www.tawzifak.com';

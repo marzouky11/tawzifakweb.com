@@ -4,6 +4,7 @@
 import * as React from 'react';
 import Autoplay from 'embla-carousel-autoplay';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -111,11 +112,13 @@ export function HomeCarousel() {
               <div className="relative h-64 md:h-80">
                 {/* Desktop View */}
                 <div className="hidden md:block w-full h-full">
-                  <img
+                  <Image
                     src={slide.desktopSrc!}
                     alt={slide.alt}
-                    className="absolute inset-0 w-full h-full object-cover"
-                    loading={index === 0 ? "eager" : "lazy"}
+                    fill
+                    priority={index === 0}
+                    sizes="(max-width: 768px) 0, 100vw"
+                    className="object-cover"
                     data-ai-hint={slide.hint}
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent flex items-center p-12">
@@ -131,11 +134,13 @@ export function HomeCarousel() {
 
                 {/* Mobile View */}
                 <div className="md:hidden w-full h-full">
-                  <img
+                   <Image
                     src={slide.mobileSrc!}
                     alt={slide.alt}
-                    className="absolute inset-0 w-full h-full object-cover"
-                    loading={index === 0 ? "eager" : "lazy"}
+                    fill
+                    priority={index === 0}
+                    sizes="100vw"
+                    className="object-cover"
                     data-ai-hint={slide.hint}
                   />
                   <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center p-4">
