@@ -12,14 +12,12 @@ const tajawal = Tajawal({
   subsets: ['arabic'],
   weight: ['200', '300', '400', '500', '700', '800', '900'],
   variable: '--font-tajawal',
-  display: 'swap',
-  fallback: ['system-ui', 'arial'],
 });
 
 const baseUrl = 'https://www.tawzifak.com';
 const appName = 'توظيفك';
 const appDescription = "منصة توظيفك تجمع لك أحدث عروض العمل والمباريات العمومية وفرص البحث عن عمل بسهولة. تصفح الوظائف حسب المدينة والفئة وابقَ على اطلاع دائم بأحدث الفرص المهنية.";
-const appOgImage = 'https://i.postimg.cc/MH0BfvFB/og-image.jpg';
+const appOgImage = 'https://www.tawzifak.com/og-image.jpg';
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -137,3 +135,4 @@ export default function RootLayout({
     </html>
   );
 }
+
