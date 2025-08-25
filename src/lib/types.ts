@@ -42,6 +42,7 @@ export interface Job {
   qualifications?: string;
   conditions?: string;
   tasks?: string;
+  featuresAndOpportunities?: string;
   education?: string;
   status?: 'open' | 'closed';
   howToApply?: string;
@@ -95,6 +96,7 @@ export interface ImmigrationPost {
   requirements?: string;
   qualifications?: string;
   experience?: string;
+  tasks?: string;
   featuresAndOpportunities?: string;
   howToApply?: string;
   applyUrl?: string;

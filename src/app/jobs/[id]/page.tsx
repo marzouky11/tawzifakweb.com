@@ -32,6 +32,7 @@ import {
   HelpCircle,
   Bookmark,
   Share2,
+  Target,
 } from 'lucide-react';
 import type { WorkType } from '@/lib/types';
 import { CategoryIcon } from '@/components/icons';
@@ -291,7 +292,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                </DetailSection>
                             )}
 
-                             {job.conditions && (job.qualifications || job.experience || job.tasks || job.howToApply) && <Separator />}
+                             {job.conditions && (job.qualifications || job.experience || job.tasks || job.featuresAndOpportunities || job.howToApply) && <Separator />}
 
                             {job.qualifications && (
                                <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}>
@@ -299,7 +300,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                </DetailSection>
                             )}
 
-                            {job.qualifications && (job.experience || job.tasks || job.howToApply) && <Separator />}
+                            {job.qualifications && (job.experience || job.tasks || job.featuresAndOpportunities || job.howToApply) && <Separator />}
                             
                             {job.experience && (
                                <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}>
@@ -307,7 +308,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                </DetailSection>
                             )}
 
-                            {job.experience && (job.tasks || job.howToApply) && <Separator />}
+                            {job.experience && (job.tasks || job.featuresAndOpportunities || job.howToApply) && <Separator />}
 
                             {job.tasks && (
                                <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}>
@@ -315,7 +316,15 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                </DetailSection>
                             )}
 
-                            {job.tasks && job.howToApply && <Separator />}
+                            {job.tasks && (job.featuresAndOpportunities || job.howToApply) && <Separator />}
+                            
+                            {job.featuresAndOpportunities && (
+                               <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}>
+                                    <FormattedText text={job.featuresAndOpportunities} />
+                               </DetailSection>
+                            )}
+
+                            {job.featuresAndOpportunities && job.howToApply && <Separator />}
 
                             {job.howToApply && (
                                <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}>

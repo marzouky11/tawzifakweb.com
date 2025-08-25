@@ -28,6 +28,7 @@ import {
   Phone,
   Bookmark,
   Share2,
+  CheckSquare,
 } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { Separator } from '@/components/ui/separator';
@@ -199,16 +200,19 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                         <Separator />
                         <div className="space-y-6">
                            {post.description && <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={post.description} /></DetailSection>}
-                           {post.description && (post.requirements || post.qualifications || post.experience || post.featuresAndOpportunities || post.howToApply) && <Separator />}
+                           {post.description && (post.requirements || post.qualifications || post.experience || post.tasks || post.featuresAndOpportunities || post.howToApply) && <Separator />}
 
                            {post.requirements && <DetailSection icon={ClipboardList} title="الشروط العامة" color={sectionColor}><FormattedText text={post.requirements} /></DetailSection>}
-                           {post.requirements && (post.qualifications || post.experience || post.featuresAndOpportunities || post.howToApply) && <Separator />}
+                           {post.requirements && (post.qualifications || post.experience || post.tasks || post.featuresAndOpportunities || post.howToApply) && <Separator />}
                            
                            {post.qualifications && <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={post.qualifications} /></DetailSection>}
-                           {post.qualifications && (post.experience || post.featuresAndOpportunities || post.howToApply) && <Separator />}
+                           {post.qualifications && (post.experience || post.tasks || post.featuresAndOpportunities || post.howToApply) && <Separator />}
 
                            {post.experience && <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={post.experience} /></DetailSection>}
-                           {post.experience && (post.featuresAndOpportunities || post.howToApply) && <Separator />}
+                           {post.experience && (post.tasks || post.featuresAndOpportunities || post.howToApply) && <Separator />}
+                           
+                           {post.tasks && <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={post.tasks} /></DetailSection>}
+                           {post.tasks && (post.featuresAndOpportunities || post.howToApply) && <Separator />}
                            
                            {post.featuresAndOpportunities && <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={post.featuresAndOpportunities} /></DetailSection>}
                            {post.featuresAndOpportunities && post.howToApply && <Separator />}

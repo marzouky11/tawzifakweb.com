@@ -19,7 +19,7 @@ import {
   Loader2, Briefcase, Users, FileText, FileSignature, 
   LayoutGrid, Globe, MapPin, Wallet, Phone, MessageSquare, Mail,
   Building2, Award, Users2, Info, Instagram, GraduationCap, Link as LinkIcon,
-  ClipboardList, ArrowLeft, ArrowRight, CheckSquare, Check, HelpCircle,
+  ClipboardList, ArrowLeft, ArrowRight, CheckSquare, Check, HelpCircle, Target,
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -44,6 +44,7 @@ const formSchema = z.object({
   openPositions: z.coerce.number().int().positive().optional(),
   conditions: z.string().optional(),
   tasks: z.string().optional(),
+  featuresAndOpportunities: z.string().optional(),
   
   phone: z.string().optional(),
   whatsapp: z.string().optional(),
@@ -60,7 +61,7 @@ const formSchema = z.object({
 
 const stepFields = [
   ['postType', 'title', 'categoryId', 'customCategory', 'workType', 'country', 'city'],
-  ['companyName', 'experience', 'description', 'qualifications', 'salary', 'openPositions', 'conditions', 'tasks'],
+  ['companyName', 'experience', 'description', 'qualifications', 'salary', 'openPositions', 'conditions', 'tasks', 'featuresAndOpportunities'],
   ['phone', 'whatsapp', 'email', 'instagram', 'applyUrl', 'howToApply'],
 ];
 
@@ -136,7 +137,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
       customCategory: !job?.categoryId && job?.categoryName ? job.categoryName : '',
       country: job?.country || '',
       city: job?.city || '',
-      workType: job?.workType || undefined,
+      workType: job?.workType,
       salary: job?.salary || '',
       experience: job?.experience || '',
       description: job?.description || '',
@@ -145,6 +146,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
       openPositions: job?.openPositions || undefined,
       conditions: job?.conditions || '',
       tasks: job?.tasks || '',
+      featuresAndOpportunities: job?.featuresAndOpportunities || '',
       phone: job?.phone || '',
       whatsapp: job?.whatsapp || '',
       email: job?.email || '',
@@ -266,6 +268,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
           qualifications: values.qualifications,
           conditions: values.conditions,
           tasks: values.tasks,
+          featuresAndOpportunities: values.featuresAndOpportunities,
           openPositions: values.openPositions,
           phone: values.phone,
           whatsapp: values.whatsapp,
@@ -416,6 +419,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                 <FormField control={form.control} name="qualifications" render={({ field }) => (<FormItem><FormLabelIcon icon={GraduationCap} label='المؤهلات المطلوبة (اختياري)' /><FormControl><Textarea placeholder="مثال: بكالوريوس هندسة، دبلوم تقني..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
                 <FormField control={form.control} name="experience" render={({ field }) => (<FormItem><FormLabelIcon icon={Award} label='الخبرة المطلوبة' /><FormControl><Textarea placeholder="مثال: 5 سنوات في مجال التسويق، أو حديث التخرج بخبرة تدريبية في شركة..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
                 <FormField control={form.control} name="tasks" render={({ field }) => (<FormItem><FormLabelIcon icon={CheckSquare} label="المهام المطلوبة (اختياري)" /><FormControl><Textarea placeholder="اكتب قائمة بالمهام والمسؤوليات للوظيفة..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
+                <FormField control={form.control} name="featuresAndOpportunities" render={({ field }) => (<FormItem><FormLabelIcon icon={Target} label="المميزات والفرص (اختياري)" /><FormControl><Textarea placeholder="معلومات عن السكن، التأمين، فرص التدريب أو التوظيف بعد البرنامج..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
                 <FormField control={form.control} name="howToApply" render={({ field }) => (<FormItem><FormLabelIcon icon={HelpCircle} label="كيفية التقديم (اختياري)" /><FormControl><Textarea placeholder="اشرح هنا خطوات التقديم. مثلاً: أرسل سيرتك الذاتية إلى البريد الإلكتروني المذكور أعلاه." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
             </>
         )}

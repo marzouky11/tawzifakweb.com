@@ -302,7 +302,7 @@ export async function getUserById(id: string): Promise<User | null> {
 }
 
 
-export async function postJob(jobData: Omit<Job, 'id' | 'createdAt' | 'likes' | 'rating' | 'postedAt'>): Promise<{ id: string }> {
+export async function postJob(jobData: Omit<Job, 'id' | 'createdAt' | 'likes' | 'rating' | 'postedAt' | 'isNew'>): Promise<{ id: string }> {
     try {
         const adsCollection = collection(db, 'ads');
         const newJob: { [key: string]: any } = {
