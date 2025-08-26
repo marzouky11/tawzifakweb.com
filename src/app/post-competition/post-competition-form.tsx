@@ -134,7 +134,7 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
       title: competition?.title || '',
       organizer: competition?.organizer || '',
       competitionType: competition?.competitionType || '',
-      positionsAvailable: competition?.positionsAvailable || null,
+      positionsAvailable: competition?.positionsAvailable ?? '',
       requirements: competition?.requirements || '',
       documentsNeeded: competition?.documentsNeeded || '',
       officialLink: competition?.officialLink || '',
@@ -173,18 +173,22 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
         setCurrentStep(stepIndex);
         return;
     }
-    const fieldsToValidate = stepFields.slice(0, stepIndex + 1).flat() as (keyof z.infer<typeof formSchema>)[];
-    const isValid = await form.trigger(fieldsToValidate);
-
-    if(isValid) {
-        setCurrentStep(stepIndex);
-    } else {
-         toast({
-            variant: "destructive",
-            title: "حقول ناقصة",
-            description: "الرجاء تعبئة جميع الحقول في المراحل السابقة أولاً.",
-        });
+    
+    // Validate all steps up to the clicked one
+    for (let i = 0; i < stepIndex; i++) {
+        const fieldsToValidate = stepFields[i] as (keyof z.infer<typeof formSchema>)[];
+        const isValid = await form.trigger(fieldsToValidate);
+        if(!isValid) {
+            toast({
+                variant: "destructive",
+                title: "حقول ناقصة",
+                description: "الرجاء تعبئة جميع الحقول في المراحل السابقة أولاً.",
+            });
+            setCurrentStep(i);
+            return;
+        }
     }
+    setCurrentStep(stepIndex);
   }
 
   const prevStep = () => {
