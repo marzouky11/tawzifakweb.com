@@ -6,7 +6,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
 import { AppLayout } from '@/components/layout/app-layout';
 import { Card, CardContent } from '@/components/ui/card';
-import { PostImmigrationForm } from '@/app/post-immigration/post-immigration-form';
+import { EditImmigrationForm } from './edit-immigration-form';
 import { getImmigrationPostById } from '@/lib/data';
 import { Loader2, Edit } from 'lucide-react';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
@@ -72,10 +72,10 @@ export default function EditImmigrationPage() {
       <div className="flex-grow">
         <div className="container mx-auto max-w-3xl px-4 pb-8">
           <Card>
-            <CardContent className="p-0">
+            <CardContent className="p-6 md:p-8">
               <AnimatePresence>
                 {post ? (
-                  <PostImmigrationForm post={post} />
+                  <EditImmigrationForm post={post} />
                 ) : (
                   <div className="flex justify-center p-8">
                     <p>الإعلان غير موجود.</p>
@@ -89,3 +89,4 @@ export default function EditImmigrationPage() {
     </AppLayout>
   );
 }
+
