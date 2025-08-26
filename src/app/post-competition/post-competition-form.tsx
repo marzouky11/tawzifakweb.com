@@ -175,7 +175,6 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
         return;
     }
     
-    // Validate all steps up to the clicked one
     for (let i = 0; i < stepIndex; i++) {
         const fieldsToValidate = stepFields[i] as (keyof z.infer<typeof formSchema>)[];
         const isValid = await form.trigger(fieldsToValidate);
@@ -256,7 +255,7 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
        <FormField control={form.control} name="documentsNeeded" render={({ field }) => (<FormItem><FormLabelIcon icon={FileText} label="الوثائق المطلوبة" /><FormControl><Textarea placeholder="قائمة بالوثائق المطلوبة من المترشحين" rows={4} {...field} /></FormControl><FormMessage /></FormItem>)} />
        <FormField control={form.control} name="trainingFeatures" render={({ field }) => (<FormItem><FormLabelIcon icon={Award} label="مميزات التكوين والفرص المقدمة (اختياري)" /><FormControl><Textarea placeholder="اكتب هنا عن مميزات التكوين، مثل: منحة شهرية، سكن مجاني، توظيف مضمون..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
        <FormField control={form.control} name="jobProspects" render={({ field }) => (<FormItem><FormLabelIcon icon={Target} label="أفق العمل بعد المباراة (اختياري)" /><FormControl><Textarea placeholder="المهام والوظائف المتاحة بعد التخرج أو النجاح" rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
-       <FormField control={form.control} name="howToApply" render={({ field }) => (<FormItem><FormLabelIcon icon={HelpCircle} label="طريقة التسجيل (اختياري)" /><FormControl><Textarea placeholder="اشرح هنا خطوات التسجيل والتقديم على المباراة..." {...field} /></FormControl><FormMessage /></FormItem>)} />
+       <FormField control={form.control} name="howToApply" render={({ field }) => (<FormItem><FormLabelIcon icon={HelpCircle} label="طريقة التسجيل (اختياري)" /><FormControl><Textarea placeholder="اشرح هنا خطوات التسجيل والتقديم على المباراة..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
     </div>,
     // Step 3
     <div className="space-y-6" key="step3">

@@ -159,7 +159,6 @@ export function PostImmigrationForm({ post }: PostImmigrationFormProps) {
         return;
     }
     
-    // Validate all steps up to the clicked one
     for (let i = 0; i < stepIndex; i++) {
         const fieldsToValidate = stepFields[i] as (keyof z.infer<typeof formSchema>)[];
         const isValid = await form.trigger(fieldsToValidate);
