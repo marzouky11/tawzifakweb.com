@@ -247,7 +247,7 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
     </div>,
     // Step 2
     <div className="space-y-6" key="step2">
-       <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabelIcon icon={Info} label="وصف تفصيلي (اختياري)" /><FormControl><Textarea placeholder="معلومات إضافية حول المباراة..." rows={4} {...field} /></FormControl><FormMessage /></FormItem>)} />
+       <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabelIcon icon={Info} label="وصف تفصيلي (اختياري)" /><FormControl><Textarea placeholder="معلومات إضافية حول المباراة..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
        <FormField control={form.control} name="requirements" render={({ field }) => (<FormItem><FormLabelIcon icon={FileSignature} label="الشروط المطلوبة" /><FormControl><Textarea placeholder="المؤهلات، السن، الطول، حدة البصر..." rows={4} {...field} /></FormControl><FormMessage /></FormItem>)} />
        <FormField control={form.control} name="competitionStages" render={({ field }) => (<FormItem><FormLabelIcon icon={ListOrdered} label="مراحل المباراة (اختياري)" /><FormControl><Textarea placeholder="الاختبارات الأولية، البدنية، الكتابية، المقابلة..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
        <FormField control={form.control} name="documentsNeeded" render={({ field }) => (<FormItem><FormLabelIcon icon={FileText} label="الوثائق المطلوبة" /><FormControl><Textarea placeholder="قائمة بالوثائق المطلوبة من المترشحين" rows={4} {...field} /></FormControl><FormMessage /></FormItem>)} />
@@ -257,9 +257,9 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
     </div>,
     // Step 3
     <div className="space-y-6" key="step3">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <FormField control={form.control} name="deadline" render={({ field }) => (<FormItem><FormLabelIcon icon={CalendarIcon} label="آخر أجل للتسجيل" /><FormControl><Input placeholder="مثال: 2024-09-15" {...field} /></FormControl><FormMessage /></FormItem>)} />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField control={form.control} name="registrationStartDate" render={({ field }) => (<FormItem><FormLabelIcon icon={CalendarIcon} label="تاريخ فتح التسجيل (اختياري)" /><FormControl><Input placeholder="مثال: 2024-08-01" {...field} /></FormControl><FormMessage /></FormItem>)} />
-          <FormField control={form.control} name="deadline" render={({ field }) => (<FormItem><FormLabelIcon icon={CalendarIcon} label="آخر أجل للتسجيل" /><FormControl><Input placeholder="مثال: 2024-09-15" {...field} /></FormControl><FormMessage /></FormItem>)} />
           <FormField control={form.control} name="competitionDate" render={({ field }) => (<FormItem><FormLabelIcon icon={CalendarIcon} label="تاريخ إجراء المباراة (اختياري)" /><FormControl><Input placeholder="مثال: 2024-10-10" {...field} /></FormControl><FormMessage /></FormItem>)} />
       </div>
       <FormField control={form.control} name="fileUrl" render={({ field }) => (<FormItem><FormLabelIcon icon={FileUp} label="رابط ملف إضافي (PDF اختياري)" /><FormControl><Input type="url" placeholder="رابط مباشر لملف PDF رسمي" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
@@ -290,7 +290,10 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
         </div>
         <div className="flex gap-4 items-center justify-between p-6 border-t bg-muted/50 rounded-b-lg mt-auto">
           {currentStep > 0 ? (<Button type="button" variant="outline" onClick={prevStep}><ArrowRight className="ml-2 h-4 w-4" />السابق</Button>) : <div />}
-          {currentStep < steps.length - 1 ? (<Button type="button" onClick={nextStep} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>التالي<ArrowLeft className="mr-2 h-4 w-4" /></Button>) : (
+          
+          {currentStep < steps.length - 1 ? (
+            <Button type="button" onClick={nextStep} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>التالي<ArrowLeft className="mr-2 h-4 w-4" /></Button>
+          ) : (
             <Button type="submit" disabled={isSubmitting} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>
               {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {isEditing ? 'تحديث المباراة' : 'نشر المباراة'}

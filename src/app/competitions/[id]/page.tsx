@@ -239,22 +239,22 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                         <Separator />
                         <div className="space-y-6">
                            {competition.description && <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={competition.description} /></DetailSection>}
-                           <Separator />
+                           {competition.description && <Separator />}
 
                            {competition.requirements && <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor}><FormattedText text={competition.requirements} /></DetailSection>}
-                           <Separator />
+                           {competition.requirements && <Separator />}
 
                            {competition.competitionStages && <DetailSection icon={ListOrdered} title="مراحل المباراة" color={sectionColor}><FormattedText text={competition.competitionStages} /></DetailSection>}
-                           <Separator />
+                           {competition.competitionStages && <Separator />}
                            
                            {competition.documentsNeeded && <DetailSection icon={FileText} title="الوثائق المطلوبة" color={sectionColor}><FormattedText text={competition.documentsNeeded} /></DetailSection>}
-                           <Separator />
+                           {competition.documentsNeeded && <Separator />}
 
                            {competition.trainingFeatures && <DetailSection icon={Award} title="مميزات التكوين والفرص" color={sectionColor}><FormattedText text={competition.trainingFeatures} /></DetailSection>}
-                           <Separator />
+                           {competition.trainingFeatures && <Separator />}
 
                            {competition.jobProspects && <DetailSection icon={Target} title="أفق العمل بعد المباراة" color={sectionColor}><FormattedText text={competition.jobProspects} /></DetailSection>}
-                           <Separator />
+                           {competition.jobProspects && <Separator />}
 
                            {competition.howToApply && <DetailSection icon={HelpCircle} title="طريقة التسجيل" color={sectionColor}><FormattedText text={competition.howToApply} /></DetailSection>}
                            

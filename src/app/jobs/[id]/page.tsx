@@ -217,7 +217,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
     const finalIconName = category?.iconName || 'Briefcase';
     
     const jobTitle = job.title || 'هذا الإعلان';
-    const whatsappMessage = `مرحبًا، اطلعت على إعلانكم لوظيفة '${jobTitle}' على منصة توظيفك وأنا مهتم بالتقديم. هل يمكن تزويدي بمزيد من التفاصيل؟ شكرًا.`;
+    const whatsappMessage = `مرحبًا، اطلعت على إعلانكم لوظيفة '${jobTitle}' على منصة توظيفك وأنا مهتم بالتقديم.`;
     
     const contactButtons = [
         job.phone && { type: 'phone', href: `tel:${job.phone}`, label: 'اتصال', icon: Phone, color: '#FFFFFF', className: 'bg-[#0D47A1] hover:bg-[#0D47A1]/90' },
@@ -275,7 +275,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                </DetailSection>
                             )}
 
-                            {job.description && (job.conditions || job.qualifications || job.experience || job.tasks || job.howToApply) && <Separator />}
+                            {job.description && (job.conditions || job.qualifications || job.experience || job.tasks || job.featuresAndOpportunities || job.howToApply) && <Separator />}
 
                             {job.conditions && (
                                <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor}>

@@ -191,22 +191,22 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                         <Separator />
                         <div className="space-y-6">
                            {post.description && <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={post.description} /></DetailSection>}
-                           <Separator />
+                           {post.description && <Separator />}
 
                            {post.requirements && <DetailSection icon={ClipboardList} title="الشروط العامة" color={sectionColor}><FormattedText text={post.requirements} /></DetailSection>}
-                           <Separator />
+                           {post.requirements && <Separator />}
                            
                            {post.qualifications && <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={post.qualifications} /></DetailSection>}
-                           <Separator />
+                           {post.qualifications && <Separator />}
 
                            {post.experience && <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={post.experience} /></DetailSection>}
-                           <Separator />
+                           {post.experience && <Separator />}
                            
                            {post.tasks && <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={post.tasks} /></DetailSection>}
-                           <Separator />
+                           {post.tasks && <Separator />}
                            
                            {post.featuresAndOpportunities && <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={post.featuresAndOpportunities} /></DetailSection>}
-                           <Separator />
+                           {post.featuresAndOpportunities && <Separator />}
                            
                            {post.howToApply && <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={post.howToApply} /></DetailSection>}
                         </div>
