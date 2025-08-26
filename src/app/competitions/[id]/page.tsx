@@ -233,7 +233,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                             {competition.location && <InfoItem icon={MapPin} label="الموقع" value={competition.location} color={organizerColor} />}
                             <InfoItem icon={Building} label="الجهة المنظمة" value={competition.organizer} color={organizerColor} />
-                            <InfoItem icon={Briefcase} label="نوع المباراة" value={competition.competitionType} color={sectionColor} />
+                            <InfoItem icon={Briefcase} label="نوع المباراة" value={competition.competitionType} color={organizerColor} />
                             {competition.positionsAvailable && <InfoItem icon={Users2} label="عدد المناصب" value={competition.positionsAvailable} color={organizerColor} />}
                         </div>
                         <Separator />
