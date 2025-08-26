@@ -305,4 +305,4 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
       </form>
     </Form>
   );
-}
+    }
