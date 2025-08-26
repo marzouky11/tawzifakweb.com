@@ -144,7 +144,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
     
     const contactButtons = [
         post.phone && { type: 'phone', href: `tel:${post.phone}`, label: 'اتصال', icon: Phone, className: 'bg-[#0D47A1] hover:bg-[#0D47A1]/90' },
-        post.whatsapp && { type: 'whatsapp', href: `https://wa.me/${post.whatsapp.replace(/\+/g, '')}?text=`, label: 'واتساب', icon: MessageSquare, className: 'bg-green-600 hover:bg-green-700' },
+        post.whatsapp && { type: 'whatsapp', href: `https://wa.me/${post.whatsapp.replace(/\+/g, '')}`, label: 'واتساب', icon: MessageSquare, className: 'bg-green-600 hover:bg-green-700' },
         post.email && { type: 'email', href: `mailto:${post.email}`, label: 'البريد الإلكتروني', icon: Mail, className: 'bg-gray-600 hover:bg-gray-700' },
         post.instagram && { type: 'instagram', href: `https://instagram.com/${post.instagram.replace(/@/g, '')}`, label: 'إنستغرام', icon: Instagram, className: 'bg-gradient-to-r from-pink-500 to-orange-500 hover:opacity-90' },
     ].filter(Boolean);

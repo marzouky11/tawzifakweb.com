@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState } from 'react';
@@ -28,7 +29,7 @@ const formSchema = z.object({
   title: z.string().min(5, 'العنوان يجب أن يكون 5 أحرف على الأقل.'),
   targetCountry: z.string().min(2, 'الدولة المستهدفة مطلوبة.'),
   city: z.string().optional(),
-  programType: z.enum(['work', 'study', 'seasonal', 'training'], { required_error: "نوع البرنامج مطلوب." }),
+  programType: z.enum(['work', 'study', 'seasonal', 'training', 'volunteer'], { required_error: "نوع البرنامج مطلوب." }),
   
   salary: z.string().optional(),
   targetAudience: z.string().min(2, "الفئة المستهدفة مطلوبة."),
@@ -222,7 +223,7 @@ export function PostImmigrationForm({ post }: PostImmigrationFormProps) {
         <FormField control={form.control} name="experience" render={({ field }) => (<FormItem><FormLabelIcon icon={Award} label="الخبرة المطلوبة" /><FormControl><Textarea placeholder="سنوات الخبرة أو نوعها..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="tasks" render={({ field }) => (<FormItem><FormLabelIcon icon={CheckSquare} label="المهام المطلوبة (اختياري)" /><FormControl><Textarea placeholder="اكتب قائمة بالمهام والمسؤوليات للوظيفة..." rows={3} {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="featuresAndOpportunities" render={({ field }) => (<FormItem><FormLabelIcon icon={Target} label="المميزات والفرص" /><FormControl><Textarea placeholder="معلومات عن السكن، التأمين، فرص التدريب أو التوظيف بعد البرنامج..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
-        <FormField control={form.control} name="howToApply" render={({ field }) => (<FormItem><FormLabelIcon icon={HelpCircle} label="كيفية التقديم" /><FormControl><Textarea placeholder="اشرح هنا خطوات التقديم. مثلاً: أرسل سيرتك الذاتية إلى البريد الإلكتروني المذكور أعلاه." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
+        <FormField control={form.control} name="howToApply" render={({ field }) => (<FormItem><FormLabelIcon icon={HelpCircle} label="كيفية التقديم (اختياري)" /><FormControl><Textarea placeholder="اشرح هنا خطوات التقديم. مثلاً: أرسل سيرتك الذاتية إلى البريد الإلكتروني المذكور أعلاه." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
     </div>,
     <div className="space-y-6" key="step3">
         <FormField control={form.control} name="applyUrl" render={({ field }) => (<FormItem><FormLabelIcon icon={LinkIcon} label="رابط التقديم الرسمي" /><FormControl><Input type="url" placeholder="https://example.com/apply" {...field} /></FormControl><FormMessage /></FormItem>)} />

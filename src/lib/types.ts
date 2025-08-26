@@ -88,7 +88,7 @@ export interface ImmigrationPost {
   slug: string;
   targetCountry: string;
   city?: string;
-  programType: 'work' | 'study' | 'seasonal' | 'training';
+  programType: 'work' | 'study' | 'seasonal' | 'training' | 'volunteer';
   iconName: string;
   targetAudience: string;
   salary?: string;
