@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState } from 'react';
@@ -59,7 +58,7 @@ interface PostImmigrationFormProps {
 
 const stepFields = [
   ['title', 'targetCountry', 'city', 'programType', 'salary'],
-  ['description', 'requirements', 'qualifications', 'experience', 'featuresAndOpportunities', 'howToApply', 'targetAudience', 'deadline', 'tasks'],
+  ['description', 'requirements', 'qualifications', 'experience', 'tasks', 'featuresAndOpportunities', 'howToApply', 'targetAudience', 'deadline'],
   ['applyUrl', 'phone', 'whatsapp', 'email', 'instagram'],
 ];
 
@@ -241,7 +240,9 @@ export function PostImmigrationForm({ post }: PostImmigrationFormProps) {
         </div>
         <div className="flex gap-4 items-center justify-between p-6 border-t bg-muted/50 rounded-b-lg mt-auto">
           {currentStep > 0 ? (<Button type="button" variant="outline" onClick={prevStep}><ArrowRight className="ml-2 h-4 w-4" />السابق</Button>) : <div />}
-          {currentStep < steps.length - 1 ? (<Button type="button" onClick={nextStep} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>التالي<ArrowLeft className="mr-2 h-4 w-4" /></Button>) : (
+          {currentStep < steps.length - 1 ? (
+            <Button type="button" onClick={nextStep} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>التالي<ArrowLeft className="mr-2 h-4 w-4" /></Button>
+          ) : (
             <Button type="submit" disabled={isSubmitting} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>
               {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {isEditing ? 'تحديث الإعلان' : 'نشر الإعلان'}
