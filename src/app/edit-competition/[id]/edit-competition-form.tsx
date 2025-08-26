@@ -165,4 +165,3 @@ export function EditCompetitionForm({ competition }: EditCompetitionFormProps) {
     </Form>
   );
 }
-
