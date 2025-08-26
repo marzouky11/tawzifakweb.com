@@ -143,20 +143,11 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
     const iconColor = programDetails.color;
     
     const whatsappMessage = `مرحبًا، اطلعت على إعلانكم لفرصة الهجرة بعنوان '${post.title}' على منصة توظيفك وأنا مهتم بالتقديم.`;
-    const emailSubject = `استفسار بخصوص فرصة هجرة: ${post.title}`;
-    const emailBody = `مرحبًا،
-
-اطلعت على إعلانكم لفرصة الهجرة بعنوان '${post.title}' على منصة توظيفك، وأود الاستفسار عن المزيد من التفاصيل.
-
-شكرًا لاهتمامكم.
-
-مع أطيب التحيات،
-[اسمك]`;
 
     const contactButtons = [
         post.phone && { type: 'phone', href: `tel:${post.phone}`, label: 'اتصال', icon: Phone, className: 'bg-[#0D47A1] hover:bg-[#0D47A1]/90' },
         post.whatsapp && { type: 'whatsapp', href: `https://wa.me/${post.whatsapp.replace(/\+/g, '')}?text=${encodeURIComponent(whatsappMessage)}`, label: 'واتساب', icon: MessageSquare, className: 'bg-green-600 hover:bg-green-700' },
-        post.email && { type: 'email', href: `mailto:${post.email}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`, label: 'البريد الإلكتروني', icon: Mail, className: 'bg-gray-600 hover:bg-gray-700' },
+        post.email && { type: 'email', href: `mailto:${post.email}`, label: 'البريد الإلكتروني', icon: Mail, className: 'bg-gray-600 hover:bg-gray-700' },
         post.instagram && { type: 'instagram', href: `https://instagram.com/${post.instagram.replace(/@/g, '')}`, label: 'إنستغرام', icon: Instagram, className: 'bg-gradient-to-r from-pink-500 to-orange-500 hover:opacity-90' },
     ].filter(Boolean);
 
@@ -200,22 +191,22 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                         <Separator />
                         <div className="space-y-6">
                            {post.description && <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={post.description} /></DetailSection>}
-                           {post.description && (post.requirements || post.qualifications || post.experience || post.tasks || post.featuresAndOpportunities || post.howToApply) && <Separator />}
+                           <Separator />
 
                            {post.requirements && <DetailSection icon={ClipboardList} title="الشروط العامة" color={sectionColor}><FormattedText text={post.requirements} /></DetailSection>}
-                           {post.requirements && (post.qualifications || post.experience || post.tasks || post.featuresAndOpportunities || post.howToApply) && <Separator />}
+                           <Separator />
                            
                            {post.qualifications && <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={post.qualifications} /></DetailSection>}
-                           {post.qualifications && (post.experience || post.tasks || post.featuresAndOpportunities || post.howToApply) && <Separator />}
+                           <Separator />
 
                            {post.experience && <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={post.experience} /></DetailSection>}
-                           {post.experience && (post.tasks || post.featuresAndOpportunities || post.howToApply) && <Separator />}
+                           <Separator />
                            
                            {post.tasks && <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={post.tasks} /></DetailSection>}
-                           {post.tasks && (post.featuresAndOpportunities || post.howToApply) && <Separator />}
+                           <Separator />
                            
                            {post.featuresAndOpportunities && <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={post.featuresAndOpportunities} /></DetailSection>}
-                           {post.featuresAndOpportunities && post.howToApply && <Separator />}
+                           <Separator />
                            
                            {post.howToApply && <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={post.howToApply} /></DetailSection>}
                         </div>
@@ -230,7 +221,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                                 التقديم على الفرصة
                             </CardTitle>
                         </CardHeader>
-                        <CardContent className="flex flex-col gap-3 p-6 pt-0">
+                        <CardContent className="grid grid-cols-1 gap-3 p-6 pt-0">
                             {post.applyUrl && (
                                 <Button asChild size="lg" className="text-primary-foreground font-semibold text-base py-6" style={{backgroundColor: sectionColor}}>
                                     <a href={post.applyUrl} target="_blank" rel="noopener noreferrer" className="hover:opacity-90">
@@ -239,19 +230,16 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                                     </a>
                                 </Button>
                             )}
-                            {contactButtons.length > 0 && post.applyUrl && <Separator />}
-                            <div className="grid grid-cols-1 gap-3">
-                               {contactButtons.map(button => {
-                                    if (!button) return null;
-                                    return (
-                                    <Button key={button.type} asChild size="lg" className={cn("text-primary-foreground font-semibold text-base py-6", button.className)}>
-                                        <a href={button.href} target={button.type !== 'phone' ? '_blank' : undefined} rel="noopener noreferrer">
-                                            <button.icon className="ml-2 h-5 w-5" />
-                                            {button.label}
-                                        </a>
-                                    </Button>
-                                )})}
-                            </div>
+                            {contactButtons.map(button => {
+                                if (!button) return null;
+                                return (
+                                <Button key={button.type} asChild size="lg" className={cn("text-primary-foreground font-semibold text-base py-6", button.className)}>
+                                    <a href={button.href} target={button.type !== 'phone' ? '_blank' : undefined} rel="noopener noreferrer">
+                                        <button.icon className="ml-2 h-5 w-5" />
+                                        {button.label}
+                                    </a>
+                                </Button>
+                            )})}
                         </CardContent>
                     </Card>
 

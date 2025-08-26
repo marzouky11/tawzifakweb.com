@@ -56,7 +56,9 @@ export interface Competition {
   positionsAvailable: string | number | null;
   deadline: string; // last day for registration
   officialLink: string;
-  
+  email?: string;
+  howToApply?: string;
+
   // Optional fields for more detail
   description?: string;
   trainingFeatures?: string;

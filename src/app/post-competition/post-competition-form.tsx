@@ -15,7 +15,7 @@ import { postCompetition, getOrganizers, updateCompetition } from '@/lib/data';
 import { useRouter } from 'next/navigation';
 import { 
     Loader2, Calendar as CalendarIcon, FileText, FileSignature, Info, Check, 
-    ArrowLeft, ArrowRight, Building, Target, ListOrdered, FileUp, LogIn, Users2, MapPin, Briefcase, Award
+    ArrowLeft, ArrowRight, Building, Target, ListOrdered, FileUp, LogIn, Users2, MapPin, Briefcase, Award, Mail, HelpCircle
 } from 'lucide-react';
 import { cn } from "@/lib/utils"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -33,25 +33,26 @@ const formSchema = z.object({
   location: z.string().optional(),
   
   description: z.string().optional(),
-  trainingFeatures: z.string().optional(),
-  jobProspects: z.string().optional(),
-  
   requirements: z.string().min(10, 'الشروط مطلوبة.'),
   competitionStages: z.string().optional(),
   documentsNeeded: z.string().min(10, 'الوثائق المطلوبة.'),
-  
+  trainingFeatures: z.string().optional(),
+  jobProspects: z.string().optional(),
+  howToApply: z.string().optional(),
+
   registrationStartDate: z.string().optional(),
   deadline: z.string({ required_error: "آخر أجل للتسجيل مطلوب." }).min(1, "آخر أجل للتسجيل مطلوب."),
   competitionDate: z.string().optional(),
   
   officialLink: z.string().url('الرابط الرسمي يجب أن يكون رابطًا صحيحًا.'),
   fileUrl: z.string().url('رابط الملف يجب أن يكون رابطًا صحيحًا.').optional().or(z.literal('')),
+  email: z.string().email({ message: "الرجاء إدخال بريد إلكتروني صحيح." }).optional().or(z.literal('')),
 });
 
 const stepFields = [
   ['title', 'organizer', 'positionsAvailable', 'competitionType', 'location'],
-  ['description', 'trainingFeatures', 'jobProspects', 'requirements', 'competitionStages', 'documentsNeeded'],
-  ['registrationStartDate', 'deadline', 'competitionDate', 'officialLink', 'fileUrl'],
+  ['description', 'requirements', 'competitionStages', 'documentsNeeded', 'trainingFeatures', 'jobProspects', 'howToApply'],
+  ['registrationStartDate', 'deadline', 'competitionDate', 'officialLink', 'fileUrl', 'email'],
 ];
 
 const steps = [
@@ -148,6 +149,8 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
       deadline: competition?.deadline || '',
       registrationStartDate: competition?.registrationStartDate || '',
       competitionDate: competition?.competitionDate || '',
+      email: competition?.email || '',
+      howToApply: competition?.howToApply || '',
     },
   });
 
@@ -245,11 +248,12 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
     // Step 2
     <div className="space-y-6" key="step2">
        <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabelIcon icon={Info} label="وصف تفصيلي (اختياري)" /><FormControl><Textarea placeholder="معلومات إضافية حول المباراة..." rows={4} {...field} /></FormControl><FormMessage /></FormItem>)} />
-       <FormField control={form.control} name="trainingFeatures" render={({ field }) => (<FormItem><FormLabelIcon icon={Award} label="مميزات التكوين والفرص المقدمة (اختياري)" /><FormControl><Textarea placeholder="اكتب هنا عن مميزات التكوين، مثل: منحة شهرية، سكن مجاني، توظيف مضمون..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
-       <FormField control={form.control} name="jobProspects" render={({ field }) => (<FormItem><FormLabelIcon icon={Target} label="أفق العمل بعد المباراة (اختياري)" /><FormControl><Textarea placeholder="المهام والوظائف المتاحة بعد التخرج أو النجاح" rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
        <FormField control={form.control} name="requirements" render={({ field }) => (<FormItem><FormLabelIcon icon={FileSignature} label="الشروط المطلوبة" /><FormControl><Textarea placeholder="المؤهلات، السن، الطول، حدة البصر..." rows={4} {...field} /></FormControl><FormMessage /></FormItem>)} />
        <FormField control={form.control} name="competitionStages" render={({ field }) => (<FormItem><FormLabelIcon icon={ListOrdered} label="مراحل المباراة (اختياري)" /><FormControl><Textarea placeholder="الاختبارات الأولية، البدنية، الكتابية، المقابلة..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
        <FormField control={form.control} name="documentsNeeded" render={({ field }) => (<FormItem><FormLabelIcon icon={FileText} label="الوثائق المطلوبة" /><FormControl><Textarea placeholder="قائمة بالوثائق المطلوبة من المترشحين" rows={4} {...field} /></FormControl><FormMessage /></FormItem>)} />
+       <FormField control={form.control} name="trainingFeatures" render={({ field }) => (<FormItem><FormLabelIcon icon={Award} label="مميزات التكوين والفرص المقدمة (اختياري)" /><FormControl><Textarea placeholder="اكتب هنا عن مميزات التكوين، مثل: منحة شهرية، سكن مجاني، توظيف مضمون..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
+       <FormField control={form.control} name="jobProspects" render={({ field }) => (<FormItem><FormLabelIcon icon={Target} label="أفق العمل بعد المباراة (اختياري)" /><FormControl><Textarea placeholder="المهام والوظائف المتاحة بعد التخرج أو النجاح" rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
+       <FormField control={form.control} name="howToApply" render={({ field }) => (<FormItem><FormLabelIcon icon={HelpCircle} label="طريقة التسجيل (اختياري)" /><FormControl><Textarea placeholder="اشرح هنا خطوات التسجيل والتقديم على المباراة..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
     </div>,
     // Step 3
     <div className="space-y-6" key="step3">
@@ -260,6 +264,7 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
       </div>
       <FormField control={form.control} name="fileUrl" render={({ field }) => (<FormItem><FormLabelIcon icon={FileUp} label="رابط ملف إضافي (PDF اختياري)" /><FormControl><Input type="url" placeholder="رابط مباشر لملف PDF رسمي" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
       <FormField control={form.control} name="officialLink" render={({ field }) => (<FormItem><FormLabelIcon icon={LogIn} label="رابط التسجيل الإلكتروني" /><FormControl><Input type="url" placeholder="https://example.com/register" {...field} /></FormControl><FormMessage /></FormItem>)} />
+      <FormField control={form.control} name="email" render={({ field }) => (<FormItem><FormLabelIcon icon={Mail} label="البريد الإلكتروني للتواصل (اختياري)" /><FormControl><Input type="email" placeholder="contact@example.com" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
     </div>
   ];
 

@@ -24,6 +24,8 @@ import {
   Award,
   Bookmark,
   Share2,
+  Mail,
+  HelpCircle,
 } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { CategoryIcon } from '@/components/icons';
@@ -237,21 +239,24 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                         <Separator />
                         <div className="space-y-6">
                            {competition.description && <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={competition.description} /></DetailSection>}
-                           {competition.description && (competition.trainingFeatures || competition.jobProspects || competition.requirements || competition.competitionStages || competition.documentsNeeded) && <Separator />}
+                           <Separator />
 
                            {competition.requirements && <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor}><FormattedText text={competition.requirements} /></DetailSection>}
-                           {competition.requirements && (competition.trainingFeatures || competition.jobProspects || competition.competitionStages || competition.documentsNeeded) && <Separator />}
+                           <Separator />
 
                            {competition.competitionStages && <DetailSection icon={ListOrdered} title="مراحل المباراة" color={sectionColor}><FormattedText text={competition.competitionStages} /></DetailSection>}
-                           {competition.competitionStages && (competition.trainingFeatures || competition.jobProspects || competition.documentsNeeded) && <Separator />}
+                           <Separator />
                            
+                           {competition.documentsNeeded && <DetailSection icon={FileText} title="الوثائق المطلوبة" color={sectionColor}><FormattedText text={competition.documentsNeeded} /></DetailSection>}
+                           <Separator />
+
                            {competition.trainingFeatures && <DetailSection icon={Award} title="مميزات التكوين والفرص" color={sectionColor}><FormattedText text={competition.trainingFeatures} /></DetailSection>}
-                           {competition.trainingFeatures && (competition.jobProspects || competition.documentsNeeded) && <Separator />}
+                           <Separator />
 
                            {competition.jobProspects && <DetailSection icon={Target} title="أفق العمل بعد المباراة" color={sectionColor}><FormattedText text={competition.jobProspects} /></DetailSection>}
-                           {competition.jobProspects && competition.documentsNeeded && <Separator />}
+                           <Separator />
 
-                           {competition.documentsNeeded && <DetailSection icon={FileText} title="الوثائق المطلوبة" color={sectionColor}><FormattedText text={competition.documentsNeeded} /></DetailSection>}
+                           {competition.howToApply && <DetailSection icon={HelpCircle} title="طريقة التسجيل" color={sectionColor}><FormattedText text={competition.howToApply} /></DetailSection>}
                            
                            {(competition.registrationStartDate || competition.deadline || competition.competitionDate) && <Separator />}
 
@@ -277,7 +282,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="grid grid-cols-1 gap-3 p-6 pt-0">
-                            {competition.officialLink && (
+                             {competition.officialLink && (
                                 <Button asChild size="lg" className="text-primary-foreground font-semibold text-base py-6" style={{backgroundColor: sectionColor}}>
                                     <a href={competition.officialLink} target="_blank" rel="noopener noreferrer" className="hover:opacity-90">
                                         <LinkIcon className="ml-2 h-5 w-5" />
@@ -290,6 +295,14 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                                     <a href={competition.fileUrl} target="_blank" rel="noopener noreferrer">
                                         <FileUp className="ml-2 h-5 w-5" />
                                         تحميل إعلان المباراة (PDF)
+                                    </a>
+                                </Button>
+                            )}
+                             {competition.email && (
+                                <Button asChild size="lg" variant="outline" className="text-base py-6">
+                                    <a href={`mailto:${competition.email}`}>
+                                        <Mail className="ml-2 h-5 w-5" />
+                                        التواصل عبر البريد الإلكتروني
                                     </a>
                                 </Button>
                             )}

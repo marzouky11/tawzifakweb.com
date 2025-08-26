@@ -145,19 +145,11 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
 
     const jobTitle = job.title || 'هذا الإعلان';
     const whatsappMessage = `مرحبًا، اطلعت على ملفك الشخصي كـ'${jobTitle}' على منصة توظيفك وأنا مهتم بالتواصل بخصوص فرصة عمل.`;
-    const emailSubject = `فرصة عمل بخصوص: ${jobTitle}`;
-    const emailBody = `مرحبًا ${job.ownerName || ''},
-
-اطلعت على ملفك الشخصي كـ'${jobTitle}' على منصة توظيفك، وأود التواصل معك بخصوص فرصة عمل محتملة تتناسب مع خبراتك.
-
-يرجى إعلامي بالوقت المناسب للحديث.
-
-شكرًا لك.`;
-
+    
     const contactButtons = [
         job.phone && { type: 'phone', href: `tel:${job.phone}`, label: 'اتصال', icon: Phone, className: 'bg-[#424242] hover:bg-[#424242]/90' },
         job.whatsapp && { type: 'whatsapp', href: `https://wa.me/${job.whatsapp.replace(/\+/g, '')}?text=${encodeURIComponent(whatsappMessage)}`, label: 'واتساب', icon: MessageSquare, className: 'bg-green-600 hover:bg-green-700' },
-        job.email && { type: 'email', href: `mailto:${job.email}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`, label: 'البريد الإلكتروني', icon: Mail, className: 'bg-gray-600 hover:bg-gray-700' },
+        job.email && { type: 'email', href: `mailto:${job.email}`, label: 'البريد الإلكتروني', icon: Mail, className: 'bg-gray-600 hover:bg-gray-700' },
         job.instagram && { type: 'instagram', href: `https://instagram.com/${job.instagram.replace(/@/g, '')}`, label: 'إنستغرام', icon: Instagram, className: 'bg-gradient-to-r from-pink-500 to-orange-500 hover:opacity-90' },
     ].filter(Boolean);
 
@@ -242,25 +234,23 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                                     تواصل مع الباحث عن عمل
                                 </CardTitle>
                             </CardHeader>
-                            <CardContent className="pt-0">
-                                <div className="grid grid-cols-1 gap-3">
-                                    {contactButtons.map(button => {
-                                        if (!button) return null;
-                                        return (
-                                            <Button
-                                                key={button.type}
-                                                asChild
-                                                size="lg"
-                                                className={cn("text-primary-foreground font-semibold text-base py-6", button.className)}
-                                            >
-                                                <a href={button.href} target={button.type !== 'phone' ? '_blank' : undefined} rel="noopener noreferrer">
-                                                    <button.icon className="ml-2 h-5 w-5" />
-                                                    {button.label}
-                                                </a>
-                                            </Button>
-                                        )
-                                    })}
-                                </div>
+                            <CardContent className="pt-0 grid grid-cols-1 gap-3">
+                                {contactButtons.map(button => {
+                                    if (!button) return null;
+                                    return (
+                                        <Button
+                                            key={button.type}
+                                            asChild
+                                            size="lg"
+                                            className={cn("text-primary-foreground font-semibold text-base py-6", button.className)}
+                                        >
+                                            <a href={button.href} target={button.type !== 'phone' ? '_blank' : undefined} rel="noopener noreferrer">
+                                                <button.icon className="ml-2 h-5 w-5" />
+                                                {button.label}
+                                            </a>
+                                        </Button>
+                                    )
+                                })}
                             </CardContent>
                         </Card>
 
