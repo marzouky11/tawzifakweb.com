@@ -312,10 +312,9 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
     { id: 2, name: "التفاصيل", description: "معلومات إضافية عن الوظيفة أو خبرتك.", icon: FileSignature },
     { id: 3, name: "التواصل", description: "كيف يمكن للمهتمين التواصل معك.", icon: Phone },
   ];
-
-  const stepsContent = [
-    // Step 1: Basic Info
-    <div className="space-y-6" key="step1">
+  
+  const step1Content = (
+    <div className="space-y-6">
         <FormField control={form.control} name="title" render={({ field }) => (
             <FormItem><FormLabelIcon icon={FileText} label="عنوان الإعلان" /><FormControl><Input placeholder={postType === 'seeking_job' ? "مثال: مصمم جرافيك يبحث عن فرصة..." : "مثال: مطلوب مهندس مدني..."} {...field} /></FormControl><FormMessage /></FormItem>
         )} />
@@ -397,10 +396,11 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                 <FormItem><FormLabelIcon icon={MapPin} label="المدينة"/><FormControl><Input placeholder="مثال: الدار البيضاء" {...field} /></FormControl><FormMessage /></FormItem>
             )} />
         </div>
-    </div>,
-
-    // Step 2: Job/Candidate Details
-    <div className="space-y-6" key="step2">
+    </div>
+  );
+  
+  const step2Content = (
+     <div className="space-y-6">
         {postType === 'seeking_job' ? (
           <>
             <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabelIcon icon={FileSignature} label="وصف المهارات والخبرة" /><FormControl><Textarea placeholder="اكتب تفاصيل عن مهاراتك وخبراتك..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
@@ -423,10 +423,11 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                 <FormField control={form.control} name="howToApply" render={({ field }) => (<FormItem><FormLabelIcon icon={HelpCircle} label="كيفية التقديم (اختياري)" /><FormControl><Textarea placeholder="اشرح هنا خطوات التقديم. مثلاً: أرسل سيرتك الذاتية إلى البريد الإلكتروني المذكور أعلاه." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
             </>
         )}
-    </div>,
+    </div>
+  );
 
-    // Step 3: Contact Info
-    <div className="space-y-6" key="step3">
+  const step3Content = (
+      <div className="space-y-6">
         <div className="space-y-4">
             <h3 className="font-semibold flex items-center gap-2 text-base md:text-lg"><Info className="h-5 w-5" style={{color: getThemeColor()}} />طرق التواصل</h3>
             <p className="text-sm text-muted-foreground -mt-2">
@@ -452,58 +453,85 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
               <FormMessage>{form.formState.errors.phone?.message}</FormMessage>
         </div>
     </div>
-  ];
+  );
+
+  const stepsContent = [step1Content, step2Content, step3Content];
 
   return (
         <Form {...form}>
            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full">
-                <div className="p-6 md:p-8">
-                     <StepsIndicator currentStep={currentStep} steps={steps} onStepClick={handleStepClick} themeColor={getThemeColor()} />
-                </div>
-                
-                <Separator className="mx-auto w-[calc(100%-3rem)]" />
+            {isEditing ? (
+                 <div className="p-6 md:p-8 space-y-8">
+                     <h2 className="text-xl font-bold border-b pb-2">المعلومات الأساسية</h2>
+                     {step1Content}
+                     <Separator />
+                     <h2 className="text-xl font-bold border-b pb-2">التفاصيل</h2>
+                     {step2Content}
+                     <Separator />
+                     <h2 className="text-xl font-bold border-b pb-2">التواصل</h2>
+                     {step3Content}
+                     <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        style={{ backgroundColor: getThemeColor() }}
+                        className="text-primary-foreground w-full !mt-12"
+                        size="lg"
+                    >
+                        {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                        تحديث الإعلان
+                    </Button>
+                 </div>
+            ) : (
+                <>
+                    <div className="p-6 md:p-8">
+                        <StepsIndicator currentStep={currentStep} steps={steps} onStepClick={handleStepClick} themeColor={getThemeColor()} />
+                    </div>
+                    
+                    <Separator className="mx-auto w-[calc(100%-3rem)]" />
 
-                <div className="p-6 flex-grow">
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={currentStep}
-                            initial={{ y: 10, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            exit={{ y: -10, opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                        >
-                            {stepsContent[currentStep]}
-                        </motion.div>
-                    </AnimatePresence>
-                </div>
+                    <div className="p-6 flex-grow">
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={currentStep}
+                                initial={{ y: 10, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                exit={{ y: -10, opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                            >
+                                {stepsContent[currentStep]}
+                            </motion.div>
+                        </AnimatePresence>
+                    </div>
 
-                <div className="flex gap-4 items-center justify-between p-6 border-t bg-muted/50 rounded-b-lg mt-auto">
-                    {currentStep > 0 ? (
-                        <Button type="button" variant="outline" onClick={prevStep}>
-                            <ArrowRight className="ml-2 h-4 w-4" />
-                            السابق
-                        </Button>
-                    ) : <div />}
+                    <div className="flex gap-4 items-center justify-between p-6 border-t bg-muted/50 rounded-b-lg mt-auto">
+                        {currentStep > 0 ? (
+                            <Button type="button" variant="outline" onClick={prevStep}>
+                                <ArrowRight className="ml-2 h-4 w-4" />
+                                السابق
+                            </Button>
+                        ) : <div />}
 
-                    {currentStep < stepsContent.length - 1 && (
-                        <Button type="button" onClick={nextStep} style={{ backgroundColor: getThemeColor() }} className="text-primary-foreground">
-                            التالي
-                            <ArrowLeft className="mr-2 h-4 w-4" />
-                        </Button>
-                    )}
+                        {currentStep < stepsContent.length - 1 && (
+                            <Button type="button" onClick={nextStep} style={{ backgroundColor: getThemeColor() }} className="text-primary-foreground">
+                                التالي
+                                <ArrowLeft className="mr-2 h-4 w-4" />
+                            </Button>
+                        )}
 
-                    {currentStep === stepsContent.length - 1 && (
-                        <Button
-                            type="submit"
-                            disabled={isSubmitting}
-                            style={{ backgroundColor: getThemeColor() }}
-                            className="text-primary-foreground"
-                        >
-                            {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                            {isEditing ? 'تحديث الإعلان' : 'نشر الإعلان'}
-                        </Button>
-                    )}
-                </div>
+                        {currentStep === stepsContent.length - 1 && (
+                            <Button
+                                type="submit"
+                                disabled={isSubmitting}
+                                style={{ backgroundColor: getThemeColor() }}
+                                className="text-primary-foreground"
+                            >
+                                {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                                نشر الإعلان
+                            </Button>
+                        )}
+                    </div>
+                </>
+            )}
             </form>
         </Form>
   );
