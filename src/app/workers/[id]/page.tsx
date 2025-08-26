@@ -144,11 +144,10 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
     const finalIconName = category?.iconName || 'Users';
 
     const jobTitle = job.title || 'هذا الإعلان';
-    const whatsappMessage = `مرحبًا، اطلعت على ملفك الشخصي كـ'${jobTitle}' على منصة توظيفك وأنا مهتم بالتواصل بخصوص فرصة عمل.`;
     
     const contactButtons = [
         job.phone && { type: 'phone', href: `tel:${job.phone}`, label: 'اتصال', icon: Phone, className: 'bg-[#424242] hover:bg-[#424242]/90' },
-        job.whatsapp && { type: 'whatsapp', href: `https://wa.me/${job.whatsapp.replace(/\+/g, '')}?text=${encodeURIComponent(whatsappMessage)}`, label: 'واتساب', icon: MessageSquare, className: 'bg-green-600 hover:bg-green-700' },
+        job.whatsapp && { type: 'whatsapp', href: `https://wa.me/${job.whatsapp.replace(/\+/g, '')}`, label: 'واتساب', icon: MessageSquare, className: 'bg-green-600 hover:bg-green-700' },
         job.email && { type: 'email', href: `mailto:${job.email}`, label: 'البريد الإلكتروني', icon: Mail, className: 'bg-gray-600 hover:bg-gray-700' },
         job.instagram && { type: 'instagram', href: `https://instagram.com/${job.instagram.replace(/@/g, '')}`, label: 'إنستغرام', icon: Instagram, className: 'bg-gradient-to-r from-pink-500 to-orange-500 hover:opacity-90' },
     ].filter(Boolean);

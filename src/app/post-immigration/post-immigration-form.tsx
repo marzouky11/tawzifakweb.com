@@ -57,8 +57,8 @@ interface PostImmigrationFormProps {
 }
 
 const stepFields = [
-  ['title', 'targetCountry', 'city', 'programType', 'salary'],
-  ['description', 'requirements', 'qualifications', 'experience', 'tasks', 'featuresAndOpportunities', 'howToApply', 'targetAudience', 'deadline'],
+  ['title', 'targetCountry', 'city', 'programType', 'salary', 'targetAudience', 'deadline'],
+  ['description', 'requirements', 'qualifications', 'experience', 'tasks', 'featuresAndOpportunities', 'howToApply'],
   ['applyUrl', 'phone', 'whatsapp', 'email', 'instagram'],
 ];
 
@@ -210,6 +210,10 @@ export function PostImmigrationForm({ post }: PostImmigrationFormProps) {
       </div>
        <FormField control={form.control} name="programType" render={({ field }) => (<FormItem><FormLabelIcon icon={Briefcase} label="نوع البرنامج" /><Select onValueChange={field.onChange} value={field.value}><FormControl><SelectTrigger><SelectValue placeholder="اختر نوع البرنامج" /></SelectTrigger></FormControl><SelectContent>{programTypes.map(p => (<SelectItem key={p.value} value={p.value}><div className="flex items-center gap-2"><CategoryIcon name={p.icon} className="w-5 h-5" style={{ color: p.color }} /> {p.label}</div></SelectItem>))}</SelectContent></Select><FormMessage /></FormItem>)} />
        <FormField control={form.control} name="salary" render={({ field }) => (<FormItem><FormLabelIcon icon={Wallet} label="الأجر (اختياري)" /><FormControl><Input placeholder="مثال: 3000 دولار شهريا" {...field} /></FormControl><FormMessage /></FormItem>)} />
+       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField control={form.control} name="targetAudience" render={({ field }) => (<FormItem><FormLabelIcon icon={Users} label="الفئة المستهدفة" /><FormControl><Input placeholder="طلاب، عمال، مهنيين..." {...field} /></FormControl><FormMessage /></FormItem>)} />
+            <FormField control={form.control} name="deadline" render={({ field }) => (<FormItem><FormLabelIcon icon={Calendar} label="آخر أجل للتقديم (اختياري)" /><FormControl><Input placeholder="YYYY-MM-DD" {...field} /></FormControl><FormMessage /></FormItem>)} />
+        </div>
     </div>,
     <div className="space-y-6" key="step2">
         <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabelIcon icon={Info} label="وصف تفصيلي للبرنامج" /><FormControl><Textarea placeholder="تفاصيل حول فرصة الهجرة، مهام العمل، مدة البرنامج..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
@@ -219,10 +223,6 @@ export function PostImmigrationForm({ post }: PostImmigrationFormProps) {
         <FormField control={form.control} name="tasks" render={({ field }) => (<FormItem><FormLabelIcon icon={CheckSquare} label="المهام المطلوبة (اختياري)" /><FormControl><Textarea placeholder="اكتب قائمة بالمهام والمسؤوليات للوظيفة..." rows={3} {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="featuresAndOpportunities" render={({ field }) => (<FormItem><FormLabelIcon icon={Target} label="المميزات والفرص" /><FormControl><Textarea placeholder="معلومات عن السكن، التأمين، فرص التدريب أو التوظيف بعد البرنامج..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="howToApply" render={({ field }) => (<FormItem><FormLabelIcon icon={HelpCircle} label="كيفية التقديم" /><FormControl><Textarea placeholder="اشرح هنا خطوات التقديم. مثلاً: أرسل سيرتك الذاتية إلى البريد الإلكتروني المذكور أعلاه." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField control={form.control} name="targetAudience" render={({ field }) => (<FormItem><FormLabelIcon icon={Users} label="الفئة المستهدفة" /><FormControl><Input placeholder="طلاب، عمال، مهنيين..." {...field} /></FormControl><FormMessage /></FormItem>)} />
-            <FormField control={form.control} name="deadline" render={({ field }) => (<FormItem><FormLabelIcon icon={Calendar} label="آخر أجل للتقديم (اختياري)" /><FormControl><Input placeholder="YYYY-MM-DD" {...field} /></FormControl><FormMessage /></FormItem>)} />
-        </div>
     </div>,
     <div className="space-y-6" key="step3">
         <FormField control={form.control} name="applyUrl" render={({ field }) => (<FormItem><FormLabelIcon icon={LinkIcon} label="رابط التقديم الرسمي" /><FormControl><Input type="url" placeholder="https://example.com/apply" {...field} /></FormControl><FormMessage /></FormItem>)} />

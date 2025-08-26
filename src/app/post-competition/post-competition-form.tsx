@@ -54,7 +54,7 @@ const stepFields = [
 ];
 
 const steps = [
-    { id: 1, name: "المعلومات الأساسية", description: "تفاصيل المباراة الرئيسية.", icon: FileText },
+    { id: 1, name: "المعلومات الأساسية", description: "تفاصيل المباراة الرئيسية.", icon: Info },
     { id: 2, name: "الوصف والمتطلبات", description: "شروط وتفاصيل المباراة.", icon: FileSignature },
     { id: 3, name: "التواريخ والروابط", description: "مواعيد التسجيل والتقديم.", icon: CalendarIcon },
 ];
