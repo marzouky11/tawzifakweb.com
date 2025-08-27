@@ -264,7 +264,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                         <h2 className="text-2xl font-bold">فرص هجرة مشابهة</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {similarPosts.map((similarPost) => (
-                            <ImmigrationCard key={similarPost.id} post={post} />
+                            <ImmigrationCard key={similarPost.id} post={similarPost} />
                         ))}
                         </div>
                     </div>
