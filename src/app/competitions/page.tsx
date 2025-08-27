@@ -1,5 +1,4 @@
 
-
 import type { Metadata } from 'next';
 import { AppLayout } from '@/components/layout/app-layout';
 import { getCompetitions } from '@/lib/data';
@@ -15,6 +14,9 @@ import { CompetitionFilters } from '@/components/competition-filters';
 export const metadata: Metadata = {
   title: 'المباريات العمومية - آخر إعلانات التوظيف الحكومي',
   description: 'تصفح آخر مباريات التوظيف في القطاع العام في المغرب والدول العربية. فرص عمل حكومية محدثة يوميًا.',
+  alternates: {
+    canonical: '/competitions',
+  },
 };
 
 export const revalidate = 0; // Force dynamic rendering to fetch latest data
