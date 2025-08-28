@@ -10,7 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from "@/hooks/use-toast";
-import { postCompetition, getOrganizers, updateCompetition } from '@/lib/data';
+import { postCompetition } from '@/lib/data';
 import { useRouter } from 'next/navigation';
 import { 
     Loader2, Calendar as CalendarIcon, FileText, FileSignature, Info, Check, 
@@ -23,6 +23,7 @@ import { Separator } from '@/components/ui/separator';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CategoryIcon } from '@/components/icons';
 import type { Competition } from '@/lib/types';
+import { getOrganizers } from '@/lib/data';
 
 const formSchema = z.object({
   title: z.string().min(5, 'العنوان يجب أن يكون 5 أحرف على الأقل.'),
@@ -117,39 +118,34 @@ const FormLabelIcon = ({icon: Icon, label}: {icon: React.ElementType, label: str
     </FormLabel>
   );
 
-interface PostCompetitionFormProps {
-  competition?: Competition | null;
-}
-
-export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
+export function PostCompetitionForm() {
   const { toast } = useToast();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const organizers = getOrganizers();
-  const isEditing = !!competition;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: competition?.title || '',
-      organizer: competition?.organizer || '',
-      competitionType: competition?.competitionType || '',
-      positionsAvailable: competition?.positionsAvailable ?? '',
-      requirements: competition?.requirements || '',
-      documentsNeeded: competition?.documentsNeeded || '',
-      officialLink: competition?.officialLink || '',
-      description: competition?.description || '',
-      trainingFeatures: competition?.trainingFeatures || '',
-      fileUrl: competition?.fileUrl || '',
-      location: competition?.location || '',
-      jobProspects: competition?.jobProspects || '',
-      competitionStages: competition?.competitionStages || '',
-      deadline: competition?.deadline || '',
-      registrationStartDate: competition?.registrationStartDate || '',
-      competitionDate: competition?.competitionDate || '',
-      email: competition?.email || '',
-      howToApply: competition?.howToApply || '',
+      title: '',
+      organizer: '',
+      competitionType: '',
+      positionsAvailable: '',
+      requirements: '',
+      documentsNeeded: '',
+      officialLink: '',
+      description: '',
+      trainingFeatures: '',
+      fileUrl: '',
+      location: '',
+      jobProspects: '',
+      competitionStages: '',
+      deadline: '',
+      registrationStartDate: '',
+      competitionDate: '',
+      email: '',
+      howToApply: '',
     },
   });
 
@@ -188,28 +184,20 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
         positionsAvailable: values.positionsAvailable === undefined || values.positionsAvailable === '' ? null : values.positionsAvailable,
       };
 
-      if (isEditing && competition) {
-        await updateCompetition(competition.id, dataToSave);
-        toast({
-          title: "تم تحديث المباراة بنجاح!",
-          description: "تم حفظ التغييرات على المباراة.",
-        });
-        router.push(`/competitions/${competition.id}`);
-      } else {
-        const { id } = await postCompetition(dataToSave);
-        toast({
-          title: "تم النشر بنجاح!",
-          description: "تم نشر المباراة العمومية وسيتم عرضها في القسم المخصص.",
-        });
-        form.reset();
-        router.push(`/competitions/${id}`);
-      }
+      const { id } = await postCompetition(dataToSave);
+      toast({
+        title: "تم النشر بنجاح!",
+        description: "تم نشر المباراة العمومية وسيتم عرضها في القسم المخصص.",
+      });
+      form.reset();
+      router.push(`/competitions/${id}`);
+      
     } catch (error) {
       console.error("Failed to process competition:", error);
       toast({
         variant: "destructive",
         title: "خطأ في العملية",
-        description: `حدث خطأ غير متوقع أثناء ${isEditing ? 'تحديث' : 'نشر'} المباراة. يرجى المحاولة مرة أخرى.`,
+        description: `حدث خطأ غير متوقع أثناء نشر المباراة. يرجى المحاولة مرة أخرى.`,
       });
     } finally {
       setIsSubmitting(false);
@@ -217,10 +205,9 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
   }
 
   const stepsContent = [
-    // Step 1
     <div className="space-y-6" key="step1">
       <FormField control={form.control} name="title" render={({ field }) => (<FormItem><FormLabelIcon icon={FileText} label="عنوان المباراة" /><FormControl><Input placeholder="اسم المباراة أو الإعلان الرسمي" {...field} /></FormControl><FormMessage /></FormItem>)} />
-      <FormField control={form.control} name="organizer" render={({ field }) => (<FormItem><FormLabelIcon icon={Building} label="الجهة المنظمة" /><Select onValueChange={field.onChange} value={field.value}><FormControl><SelectTrigger><SelectValue placeholder="اختر الجهة المنظمة من القائمة" /></SelectTrigger></FormControl><SelectContent><ScrollArea className="h-[250px]">{organizers.map(org => (<SelectItem key={org.name} value={org.name}><div className="flex items-center gap-2"><CategoryIcon name={org.icon} className="h-5 w-5" style={{color: org.color}} /> {org.name}</div></SelectItem>))}</ScrollArea></SelectContent></Select><FormMessage /></FormItem>)} />
+      <FormField control={form.control} name="organizer" render={({ field }) => (<FormItem><FormLabelIcon icon={Building} label="الجهة المنظمة" /><Select onValueChange={field.onChange} value={field.value}><FormControl><SelectTrigger><SelectValue placeholder="اختر الجهة المنظمة من القائمة" /></SelectTrigger></FormControl><SelectContent><ScrollArea className="h-[250px]">{organizers.map(org => (<SelectItem key={org.name} value={org.name}><div className="flex items-center gap-2"><CategoryIcon name={org.icon} className="w-5 h-5" style={{color: org.color}} /> {org.name}</div></SelectItem>))}</ScrollArea></SelectContent></Select><FormMessage /></FormItem>)} />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <FormField control={form.control} name="positionsAvailable" render={({ field }) => (<FormItem><FormLabelIcon icon={Users2} label="عدد المناصب (اختياري)" /><FormControl><Input
             type="text"
@@ -232,7 +219,6 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
         <FormField control={form.control} name="location" render={({ field }) => (<FormItem><FormLabelIcon icon={MapPin} label="الموقع (اختياري)" /><FormControl><Input placeholder="مكان إجراء التكوين أو المباراة" {...field} /></FormControl><FormMessage /></FormItem>)} />
       </div>
     </div>,
-    // Step 2
     <div className="space-y-6" key="step2">
        <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabelIcon icon={Info} label="وصف تفصيلي (اختياري)" /><FormControl><Textarea placeholder="معلومات إضافية حول المباراة..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
        <FormField control={form.control} name="requirements" render={({ field }) => (<FormItem><FormLabelIcon icon={FileSignature} label="الشروط المطلوبة" /><FormControl><Textarea placeholder="المؤهلات، السن، الطول، حدة البصر..." rows={4} {...field} /></FormControl><FormMessage /></FormItem>)} />
@@ -242,7 +228,6 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
        <FormField control={form.control} name="jobProspects" render={({ field }) => (<FormItem><FormLabelIcon icon={Target} label="أفق العمل بعد المباراة (اختياري)" /><FormControl><Textarea placeholder="المهام والوظائف المتاحة بعد التخرج أو النجاح" rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
        <FormField control={form.control} name="howToApply" render={({ field }) => (<FormItem><FormLabelIcon icon={HelpCircle} label="طريقة التسجيل (اختياري)" /><FormControl><Textarea placeholder="اشرح هنا خطوات التسجيل والتقديم على المباراة..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
     </div>,
-    // Step 3
     <div className="space-y-6" key="step3">
       <FormField control={form.control} name="deadline" render={({ field }) => (<FormItem><FormLabelIcon icon={CalendarIcon} label="آخر أجل للتسجيل" /><FormControl><Input placeholder="مثال: 2024-09-15" {...field} /></FormControl><FormMessage /></FormItem>)} />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -258,60 +243,35 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full">
-        {isEditing ? (
-          <div className="p-6 md:p-8 space-y-8">
-            <h2 className="text-xl font-bold border-b pb-2">المعلومات الأساسية</h2>
-            {stepsContent[0]}
-            <Separator />
-            <h2 className="text-xl font-bold border-b pb-2">الوصف والمتطلبات</h2>
-            {stepsContent[1]}
-            <Separator />
-            <h2 className="text-xl font-bold border-b pb-2">التواريخ والروابط</h2>
-            {stepsContent[2]}
-            <Button
-                type="submit"
-                disabled={isSubmitting}
-                style={{ backgroundColor: sectionColor }}
-                className="text-primary-foreground w-full !mt-12"
-                size="lg"
+        <div className="p-6 md:p-8">
+          <StepsIndicator currentStep={currentStep} onStepClick={handleStepClick} />
+        </div>
+        <Separator className="mx-auto w-[calc(100%-3rem)]" />
+        <div className="p-6 flex-grow">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentStep}
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -10, opacity: 0 }}
+              transition={{ duration: 0.2 }}
             >
-                {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                تحديث المباراة
+              {stepsContent[currentStep]}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+        <div className="flex gap-4 items-center justify-between p-6 border-t bg-muted/50 rounded-b-lg mt-auto">
+          {currentStep > 0 ? (<Button type="button" variant="outline" onClick={prevStep}><ArrowRight className="ml-2 h-4 w-4" />السابق</Button>) : <div />}
+          
+          {currentStep < steps.length - 1 ? (
+            <Button type="button" onClick={nextStep} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>التالي<ArrowLeft className="mr-2 h-4 w-4" /></Button>
+          ) : (
+            <Button type="submit" disabled={isSubmitting} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>
+              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              نشر المباراة
             </Button>
-          </div>
-        ) : (
-            <>
-                <div className="p-6 md:p-8">
-                  <StepsIndicator currentStep={currentStep} onStepClick={handleStepClick} />
-                </div>
-                <Separator className="mx-auto w-[calc(100%-3rem)]" />
-                <div className="p-6 flex-grow">
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={currentStep}
-                      initial={{ y: 10, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      exit={{ y: -10, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      {stepsContent[currentStep]}
-                    </motion.div>
-                  </AnimatePresence>
-                </div>
-                <div className="flex gap-4 items-center justify-between p-6 border-t bg-muted/50 rounded-b-lg mt-auto">
-                  {currentStep > 0 ? (<Button type="button" variant="outline" onClick={prevStep}><ArrowRight className="ml-2 h-4 w-4" />السابق</Button>) : <div />}
-                  
-                  {currentStep < steps.length - 1 ? (
-                    <Button type="button" onClick={nextStep} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>التالي<ArrowLeft className="mr-2 h-4 w-4" /></Button>
-                  ) : (
-                    <Button type="submit" disabled={isSubmitting} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>
-                      {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                      {isEditing ? 'تحديث المباراة' : 'نشر المباراة'}
-                    </Button>
-                  )}
-                </div>
-            </>
-        )}
+          )}
+        </div>
       </form>
     </Form>
   );

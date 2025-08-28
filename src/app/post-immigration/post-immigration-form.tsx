@@ -10,7 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from "@/hooks/use-toast";
-import { postImmigration, updateImmigrationPost } from '@/lib/data';
+import { postImmigration } from '@/lib/data';
 import { useRouter } from 'next/navigation';
 import { 
     Loader2, Plane, FileText, Globe, MapPin, Users, Calendar, Award, Wallet, Link as LinkIcon, 
@@ -18,7 +18,6 @@ import {
     Phone, HelpCircle, Target, CheckSquare,
 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import type { ImmigrationPost } from '@/lib/types';
 import { slugify, cn, getProgramTypeDetails, programTypes } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Separator } from '@/components/ui/separator';
@@ -53,11 +52,7 @@ const formSchema = z.object({
 });
 
 
-interface PostImmigrationFormProps {
-  post?: ImmigrationPost | null;
-}
-
-const stepFields = [
+const stepFields: FieldPath<z.infer<typeof formSchema>>[][] = [
   ['title', 'targetCountry', 'city', 'programType', 'salary', 'targetAudience', 'deadline'],
   ['description', 'requirements', 'qualifications', 'experience', 'tasks', 'featuresAndOpportunities', 'howToApply'],
   ['applyUrl', 'phone', 'whatsapp', 'email', 'instagram'],
@@ -105,35 +100,34 @@ const FormLabelIcon = ({icon: Icon, label}: {icon: React.ElementType, label: str
   );
 
 
-export function PostImmigrationForm({ post }: PostImmigrationFormProps) {
+export function PostImmigrationForm() {
   const { toast } = useToast();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
-  const isEditing = !!post;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: post?.title || '',
-      targetCountry: post?.targetCountry || '',
-      city: post?.city || '',
-      programType: post?.programType || undefined,
-      targetAudience: post?.targetAudience || '',
-      deadline: post?.deadline || '',
-      description: post?.description || '',
-      requirements: post?.requirements || '',
-      qualifications: post?.qualifications || '',
-      experience: post?.experience || '',
-      tasks: post?.tasks || '',
-      salary: post?.salary || '',
-      featuresAndOpportunities: post?.featuresAndOpportunities || '',
-      applyUrl: post?.applyUrl || '',
-      howToApply: post?.howToApply || '',
-      phone: post?.phone || '',
-      whatsapp: post?.whatsapp || '',
-      email: post?.email || '',
-      instagram: post?.instagram || '',
+      title: '',
+      targetCountry: '',
+      city: '',
+      programType: undefined,
+      targetAudience: '',
+      deadline: '',
+      description: '',
+      requirements: '',
+      qualifications: '',
+      experience: '',
+      tasks: '',
+      salary: '',
+      featuresAndOpportunities: '',
+      applyUrl: '',
+      howToApply: '',
+      phone: '',
+      whatsapp: '',
+      email: '',
+      instagram: '',
     },
   });
 
@@ -168,16 +162,11 @@ export function PostImmigrationForm({ post }: PostImmigrationFormProps) {
     try {
       const dataToSave = { ...values, slug: slugify(values.title) };
 
-      if (isEditing && post) {
-        await updateImmigrationPost(post.id, dataToSave);
-        toast({ title: "تم تحديث الإعلان بنجاح!" });
-        router.push(`/immigration/${post.id}`);
-      } else {
-        const { id } = await postImmigration(dataToSave);
-        toast({ title: "تم نشر الإعلان بنجاح!" });
-        form.reset();
-        router.push(`/immigration/${id}`);
-      }
+      const { id } = await postImmigration(dataToSave);
+      toast({ title: "تم نشر الإعلان بنجاح!" });
+      form.reset();
+      router.push(`/immigration/${id}`);
+      
     } catch (error) {
       console.error("Failed to process immigration post:", error);
       toast({ variant: "destructive", title: "خطأ في العملية", description: `حدث خطأ غير متوقع.` });
@@ -224,53 +213,28 @@ export function PostImmigrationForm({ post }: PostImmigrationFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full">
-         {isEditing ? (
-            <div className="p-6 md:p-8 space-y-8">
-              <h2 className="text-xl font-bold border-b pb-2">المعلومات الأساسية</h2>
-              {stepsContent[0]}
-              <Separator />
-              <h2 className="text-xl font-bold border-b pb-2">الوصف والمتطلبات</h2>
-              {stepsContent[1]}
-              <Separator />
-              <h2 className="text-xl font-bold border-b pb-2">التواصل والتقديم</h2>
-              {stepsContent[2]}
-               <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full !mt-12"
-                  size="lg"
-                  style={{backgroundColor: sectionColor}}
-              >
-                  {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  تحديث الإعلان
-              </Button>
-            </div>
-         ) : (
-          <>
-            <div className="p-6 md:p-8">
-              <StepsIndicator currentStep={currentStep} onStepClick={handleStepClick} />
-            </div>
-            <Separator className="mx-auto w-[calc(100%-3rem)]" />
-            <div className="p-6 flex-grow">
-              <AnimatePresence mode="wait">
-                <motion.div key={currentStep} initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -10, opacity: 0 }} transition={{ duration: 0.2 }}>
-                  {stepsContent[currentStep]}
-                </motion.div>
-              </AnimatePresence>
-            </div>
-            <div className="flex gap-4 items-center justify-between p-6 border-t bg-muted/50 rounded-b-lg mt-auto">
-              {currentStep > 0 ? (<Button type="button" variant="outline" onClick={prevStep}><ArrowRight className="ml-2 h-4 w-4" />السابق</Button>) : <div />}
-              {currentStep < steps.length - 1 ? (
-                <Button type="button" onClick={nextStep} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>التالي<ArrowLeft className="mr-2 h-4 w-4" /></Button>
-              ) : (
-                <Button type="submit" disabled={isSubmitting} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>
-                  {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  {isEditing ? 'تحديث الإعلان' : 'نشر الإعلان'}
-                </Button>
-              )}
-            </div>
-          </>
-         )}
+        <div className="p-6 md:p-8">
+          <StepsIndicator currentStep={currentStep} onStepClick={handleStepClick} />
+        </div>
+        <Separator className="mx-auto w-[calc(100%-3rem)]" />
+        <div className="p-6 flex-grow">
+          <AnimatePresence mode="wait">
+            <motion.div key={currentStep} initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -10, opacity: 0 }} transition={{ duration: 0.2 }}>
+              {stepsContent[currentStep]}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+        <div className="flex gap-4 items-center justify-between p-6 border-t bg-muted/50 rounded-b-lg mt-auto">
+          {currentStep > 0 ? (<Button type="button" variant="outline" onClick={prevStep}><ArrowRight className="ml-2 h-4 w-4" />السابق</Button>) : <div />}
+          {currentStep < steps.length - 1 ? (
+            <Button type="button" onClick={nextStep} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>التالي<ArrowLeft className="mr-2 h-4 w-4" /></Button>
+          ) : (
+            <Button type="submit" disabled={isSubmitting} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>
+              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              نشر الإعلان
+            </Button>
+          )}
+        </div>
       </form>
     </Form>
   );
