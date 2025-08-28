@@ -48,7 +48,7 @@ const slidesData = [
     hint: "public competitions",
     title: "تصفح المباريات العمومية",
     description: "اكتشف آخر مباريات التوظيف في القطاع العام.",
-    buttonText: "اكتشف الآن",
+    buttonText: "استكشف الآن",
     buttonLink: "/competitions",
     buttonClass: "bg-green-600 hover:bg-green-700"
   },
