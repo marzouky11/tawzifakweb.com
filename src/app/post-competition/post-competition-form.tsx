@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, type FieldPath } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
@@ -48,7 +48,7 @@ const formSchema = z.object({
   email: z.string().email({ message: "الرجاء إدخال بريد إلكتروني صحيح." }).optional().or(z.literal('')),
 });
 
-const stepFields = [
+const stepFields: FieldPath<z.infer<typeof formSchema>>[][] = [
   ['title', 'organizer', 'positionsAvailable', 'competitionType', 'location'],
   ['description', 'requirements', 'competitionStages', 'documentsNeeded', 'trainingFeatures', 'jobProspects', 'howToApply'],
   ['registrationStartDate', 'deadline', 'competitionDate', 'officialLink', 'fileUrl', 'email'],
@@ -155,7 +155,7 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
 
   const nextStep = async () => {
     const fields = stepFields[currentStep];
-    const output = await form.trigger(fields as FieldPath<z.infer<typeof formSchema>>[], { shouldFocus: true });
+    const output = await form.trigger(fields, { shouldFocus: true });
 
     if (!output) {
          toast({
