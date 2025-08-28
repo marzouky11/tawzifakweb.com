@@ -132,27 +132,7 @@ export default function SelectPostTypePage() {
              />
           )}
 
-          {/* Card 3: Post Competition (admin only) */}
-           {userData?.isAdmin ? (
-            <Link href="/post-competition" onClick={(e) => handleLinkClick(e, 'competition')}>
-              <Card className="p-6 text-center hover:shadow-xl hover:border-[#14532d] transition-all duration-300 cursor-pointer h-full flex flex-col justify-center items-center bg-[#14532d]/5 dark:bg-[#14532d]/20">
-                <Landmark className="h-16 w-16 text-[#14532d] mb-4" />
-                <h3 className="text-xl font-semibold text-[#14532d]">نشر مباراة عمومية</h3>
-                <p className="text-muted-foreground mt-2">
-                  (خاص بالمشرفين) انشر إعلانات المباريات والوظائف الحكومية.
-                </p>
-              </Card>
-            </Link>
-           ) : (
-             <DisabledCard 
-                icon={Landmark}
-                title="نشر مباراة عمومية"
-                description="إذا أردت نشر مباراة عمومية، يجب الاتصال بالدعم."
-                color="#14532d"
-             />
-           )}
-           
-          {/* Card 4: Post Immigration Ad (admin only) */}
+          {/* Card 3: Post Immigration Ad (admin only) */}
            {userData?.isAdmin ? (
             <Link href="/post-immigration" onClick={(e) => handleLinkClick(e, 'immigration')}>
               <Card className="p-6 text-center hover:shadow-xl hover:border-[#0ea5e9] transition-all duration-300 cursor-pointer h-full flex flex-col justify-center items-center bg-sky-500/5 dark:bg-sky-500/20">
@@ -169,6 +149,26 @@ export default function SelectPostTypePage() {
                 title="نشر إعلان هجرة"
                 description="إذا أردت نشر إعلان هجرة، يجب الاتصال بالدعم."
                 color="#0ea5e9"
+             />
+           )}
+           
+           {/* Card 4: Post Competition (admin only) */}
+           {userData?.isAdmin ? (
+            <Link href="/post-competition" onClick={(e) => handleLinkClick(e, 'competition')}>
+              <Card className="p-6 text-center hover:shadow-xl hover:border-[#14532d] transition-all duration-300 cursor-pointer h-full flex flex-col justify-center items-center bg-[#14532d]/5 dark:bg-[#14532d]/20">
+                <Landmark className="h-16 w-16 text-[#14532d] mb-4" />
+                <h3 className="text-xl font-semibold text-[#14532d]">نشر مباراة عمومية</h3>
+                <p className="text-muted-foreground mt-2">
+                  (خاص بالمشرفين) انشر إعلانات المباريات والوظائف الحكومية.
+                </p>
+              </Card>
+            </Link>
+           ) : (
+             <DisabledCard 
+                icon={Landmark}
+                title="نشر مباراة عمومية"
+                description="إذا أردت نشر مباراة عمومية، يجب الاتصال بالدعم."
+                color="#14532d"
              />
            )}
         </div>
