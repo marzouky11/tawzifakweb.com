@@ -154,40 +154,25 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
   });
 
   const nextStep = async () => {
-    const fieldsToValidate = stepFields[currentStep] as (keyof z.infer<typeof formSchema>)[];
-    const isValid = await form.trigger(fieldsToValidate);
-    if (isValid) {
-      if (currentStep < steps.length - 1) {
-        setCurrentStep(prev => prev + 1);
-      }
-    } else {
-        toast({
+    const fields = stepFields[currentStep];
+    const output = await form.trigger(fields as FieldPath<z.infer<typeof formSchema>>[], { shouldFocus: true });
+
+    if (!output) {
+         toast({
             variant: "destructive",
             title: "حقول ناقصة",
             description: "الرجاء تعبئة جميع الحقول المطلوبة للمتابعة.",
         });
-    }
-  };
-  
-  const handleStepClick = async (stepIndex: number) => {
-    if (stepIndex < currentStep) {
-        setCurrentStep(stepIndex);
         return;
     }
-    
-    for (let i = 0; i < stepIndex; i++) {
-        const fieldsToValidate = stepFields[i] as (keyof z.infer<typeof formSchema>)[];
-        const isValid = await form.trigger(fieldsToValidate);
-        if(!isValid) {
-            toast({
-                variant: "destructive",
-                title: "حقول ناقصة",
-                description: "الرجاء تعبئة جميع الحقول في المراحل السابقة أولاً.",
-            });
-            setCurrentStep(i);
-            return;
-        }
+
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(step => step + 1);
     }
+  };
+
+  const handleStepClick = async (stepIndex: number) => {
+    if (stepIndex >= currentStep) return;
     setCurrentStep(stepIndex);
   }
 
@@ -273,35 +258,60 @@ export function PostCompetitionForm({ competition }: PostCompetitionFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full">
-        <div className="p-6 md:p-8">
-          <StepsIndicator currentStep={currentStep} onStepClick={handleStepClick} />
-        </div>
-        <Separator className="mx-auto w-[calc(100%-3rem)]" />
-        <div className="p-6 flex-grow">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentStep}
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -10, opacity: 0 }}
-              transition={{ duration: 0.2 }}
+        {isEditing ? (
+          <div className="p-6 md:p-8 space-y-8">
+            <h2 className="text-xl font-bold border-b pb-2">المعلومات الأساسية</h2>
+            {stepsContent[0]}
+            <Separator />
+            <h2 className="text-xl font-bold border-b pb-2">الوصف والمتطلبات</h2>
+            {stepsContent[1]}
+            <Separator />
+            <h2 className="text-xl font-bold border-b pb-2">التواريخ والروابط</h2>
+            {stepsContent[2]}
+            <Button
+                type="submit"
+                disabled={isSubmitting}
+                style={{ backgroundColor: sectionColor }}
+                className="text-primary-foreground w-full !mt-12"
+                size="lg"
             >
-              {stepsContent[currentStep]}
-            </motion.div>
-          </AnimatePresence>
-        </div>
-        <div className="flex gap-4 items-center justify-between p-6 border-t bg-muted/50 rounded-b-lg mt-auto">
-          {currentStep > 0 ? (<Button type="button" variant="outline" onClick={prevStep}><ArrowRight className="ml-2 h-4 w-4" />السابق</Button>) : <div />}
-          
-          {currentStep < steps.length - 1 ? (
-            <Button type="button" onClick={nextStep} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>التالي<ArrowLeft className="mr-2 h-4 w-4" /></Button>
-          ) : (
-            <Button type="submit" disabled={isSubmitting} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>
-              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isEditing ? 'تحديث المباراة' : 'نشر المباراة'}
+                {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                تحديث المباراة
             </Button>
-          )}
-        </div>
+          </div>
+        ) : (
+            <>
+                <div className="p-6 md:p-8">
+                  <StepsIndicator currentStep={currentStep} onStepClick={handleStepClick} />
+                </div>
+                <Separator className="mx-auto w-[calc(100%-3rem)]" />
+                <div className="p-6 flex-grow">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={currentStep}
+                      initial={{ y: 10, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ y: -10, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {stepsContent[currentStep]}
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+                <div className="flex gap-4 items-center justify-between p-6 border-t bg-muted/50 rounded-b-lg mt-auto">
+                  {currentStep > 0 ? (<Button type="button" variant="outline" onClick={prevStep}><ArrowRight className="ml-2 h-4 w-4" />السابق</Button>) : <div />}
+                  
+                  {currentStep < steps.length - 1 ? (
+                    <Button type="button" onClick={nextStep} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>التالي<ArrowLeft className="mr-2 h-4 w-4" /></Button>
+                  ) : (
+                    <Button type="submit" disabled={isSubmitting} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>
+                      {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                      {isEditing ? 'تحديث المباراة' : 'نشر المباراة'}
+                    </Button>
+                  )}
+                </div>
+            </>
+        )}
       </form>
     </Form>
   );
