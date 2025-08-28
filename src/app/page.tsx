@@ -243,13 +243,13 @@ export default function HomePage() {
           <Separator />
           
           <Suspense>
-              <CompetitionsSection />
+              <ImmigrationSection />
           </Suspense>
 
           <Separator />
 
           <Suspense>
-              <ImmigrationSection />
+              <CompetitionsSection />
           </Suspense>
           
           <Separator />

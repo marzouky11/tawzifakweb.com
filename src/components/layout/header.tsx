@@ -27,7 +27,8 @@ import {
   FileText,
   Landmark,
   Plane,
-  Users
+  Users,
+  Briefcase
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -37,8 +38,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 const navLinks = [
     { href: '/', label: 'الرئيسية' },
     { href: '/jobs', label: 'الوظائف' },
-    { href: '/competitions', label: 'المباريات' },
     { href: '/immigration', label: 'الهجرة' },
+    { href: '/competitions', label: 'المباريات' },
     { href: '/workers', label: 'العمال' },
 ];
 

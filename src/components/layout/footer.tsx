@@ -32,8 +32,8 @@ const importantLinks = [
 { label: 'تسجيل الدخول', href: '/login', icon: LogIn, guestOnly: true },
 { label: 'إنشاء حساب', href: '/signup', icon: UserPlus, guestOnly: true },
 { label: 'الوظائف', href: '/jobs', icon: Briefcase },
-{ label: 'المباريات العمومية', href: '/competitions', icon: Landmark },
 { label: 'فرص الهجرة', href: '/immigration', icon: Plane },
+{ label: 'المباريات العمومية', href: '/competitions', icon: Landmark },
 { label: 'العمال', href: '/workers', icon: Users },
 { label: 'نشر إعلان', href: '/post-job/select-type', icon: PlusCircle },
 { label: 'إنشاء سيرة ذاتية', href: '/cv-builder', icon: FileText },
@@ -122,8 +122,8 @@ const DesktopFooter = () => {
             <h4 className="font-bold text-lg">روابط مهمة</h4>
             <ul className="space-y-2">
               <li><Link href="/jobs" className="text-sm text-muted-foreground hover:text-primary">الوظائف</Link></li>
-              <li><Link href="/competitions" className="text-sm text-muted-foreground hover:text-primary">المباريات العمومية</Link></li>
               <li><Link href="/immigration" className="text-sm text-muted-foreground hover:text-primary">فرص الهجرة</Link></li>
+              <li><Link href="/competitions" className="text-sm text-muted-foreground hover:text-primary">المباريات العمومية</Link></li>
               <li><Link href="/workers" className="text-sm text-muted-foreground hover:text-primary">العمال</Link></li>
               <li><Link href="/articles" className="text-sm text-muted-foreground hover:text-primary">مقالات</Link></li>
               <li><Link href="/post-job/select-type" className="text-sm text-muted-foreground hover:text-primary">نشر إعلان</Link></li>
