@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState } from 'react';
@@ -164,6 +163,9 @@ export function PostCompetitionForm() {
 
     if (currentStep < steps.length - 1) {
       setCurrentStep(step => step + 1);
+    } else {
+      // فقط في الخطوة الأخيرة نقوم بالإرسال
+      form.handleSubmit(onSubmit)();
     }
   };
 
@@ -266,7 +268,7 @@ export function PostCompetitionForm() {
           {currentStep < steps.length - 1 ? (
             <Button type="button" onClick={nextStep} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>التالي<ArrowLeft className="mr-2 h-4 w-4" /></Button>
           ) : (
-            <Button type="submit" disabled={isSubmitting} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>
+            <Button type="button" onClick={nextStep} disabled={isSubmitting} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>
               {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               نشر المباراة
             </Button>
@@ -275,4 +277,4 @@ export function PostCompetitionForm() {
       </form>
     </Form>
   );
-}
+                               }
