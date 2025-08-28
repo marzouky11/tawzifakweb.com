@@ -53,16 +53,16 @@ function StatsSection({ stats }: { stats: { jobs: number, competitions: number, 
       color: "#0D47A1", // Dark Blue for Job Offers
     },
     {
-      label: "مباراة عمومية",
-      count: stats.competitions,
-      icon: Landmark,
-      color: "#14532d", // Dark Green for Competitions
-    },
-    {
       label: "فرصة هجرة",
       count: stats.immigration,
       icon: Plane,
       color: "#0ea5e9", // Sky Blue for Immigration
+    },
+    {
+      label: "مباراة عمومية",
+      count: stats.competitions,
+      icon: Landmark,
+      color: "#14532d", // Dark Green for Competitions
     },
     {
       label: "باحث عن عمل",
