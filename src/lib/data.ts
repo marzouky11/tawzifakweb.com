@@ -336,7 +336,7 @@ export async function updateAd(adId: string, adData: Partial<Job>) {
         };
         
         Object.keys(dataToUpdate).forEach(key => {
-            if (dataToUpdate[key] === undefined || dataToUpdate[key] === '') {
+            if (dataToUpdate[key] === undefined) {
                 delete dataToUpdate[key];
             }
         });
@@ -533,12 +533,12 @@ export async function updateCompetition(id: string, competitionData: Partial<Com
         };
         
         Object.keys(dataToUpdate).forEach(key => {
-            if (dataToUpdate[key] === undefined || dataToUpdate[key] === '') {
+            if (dataToUpdate[key] === undefined) {
                  delete dataToUpdate[key];
             }
         });
         
-        if (dataToUpdate.positionsAvailable === undefined || dataToUpdate.positionsAvailable === '') {
+        if (dataToUpdate.positionsAvailable === undefined) {
             dataToUpdate.positionsAvailable = null;
         }
 
@@ -682,7 +682,7 @@ export async function updateImmigrationPost(id: string, postData: Partial<Immigr
         };
         
         Object.keys(dataToUpdate).forEach(key => {
-            if (dataToUpdate[key] === undefined || dataToUpdate[key] === '') {
+            if (dataToUpdate[key] === undefined) {
                  delete dataToUpdate[key];
             }
         });
@@ -785,7 +785,7 @@ export async function updateArticle(articleId: string, articleData: Partial<Arti
             dataToUpdate.slug = slugify(articleData.title);
         }
         Object.keys(dataToUpdate).forEach(key => {
-            if (dataToUpdate[key] === undefined || dataToUpdate[key] === '') {
+            if (dataToUpdate[key] === undefined) {
                 delete dataToUpdate[key];
             }
         });
