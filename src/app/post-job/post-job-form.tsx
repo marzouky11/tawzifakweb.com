@@ -233,13 +233,13 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
 
       if (customCategory) {
           dataToSave.categoryName = customCategory;
-          dataToSave.categoryId = undefined;
+          dataToSave.categoryId = null; // Use null to clear the field in Firestore
       } else if (values.categoryId) {
           const selectedCat = categories.find(c => c.id === values.categoryId);
           dataToSave.categoryName = selectedCat?.name;
       } else {
-          dataToSave.categoryName = undefined;
-          dataToSave.categoryId = undefined;
+          dataToSave.categoryName = null;
+          dataToSave.categoryId = null;
       }
 
       if (isEditing && job) {
