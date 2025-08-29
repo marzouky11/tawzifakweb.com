@@ -336,7 +336,7 @@ export async function updateAd(adId: string, adData: Partial<Job>) {
         };
         
         Object.keys(dataToUpdate).forEach(key => {
-            if (dataToUpdate[key] === undefined) {
+            if (dataToUpdate[key] === undefined || dataToUpdate[key] === '') {
                 delete dataToUpdate[key];
             }
         });
@@ -427,9 +427,7 @@ export async function postCompetition(competitionData: Omit<Competition, 'id' | 
     };
     
     Object.keys(newCompetition).forEach(key => {
-        if (newCompetition[key] === undefined) {
-             delete newCompetition[key];
-        } else if (newCompetition[key] === '') {
+        if (newCompetition[key] === undefined || newCompetition[key] === '') {
              delete newCompetition[key];
         }
     });
@@ -535,7 +533,7 @@ export async function updateCompetition(id: string, competitionData: Partial<Com
         };
         
         Object.keys(dataToUpdate).forEach(key => {
-            if (dataToUpdate[key] === undefined) {
+            if (dataToUpdate[key] === undefined || dataToUpdate[key] === '') {
                  delete dataToUpdate[key];
             }
         });
@@ -684,7 +682,7 @@ export async function updateImmigrationPost(id: string, postData: Partial<Immigr
         };
         
         Object.keys(dataToUpdate).forEach(key => {
-            if (dataToUpdate[key] === undefined) {
+            if (dataToUpdate[key] === undefined || dataToUpdate[key] === '') {
                  delete dataToUpdate[key];
             }
         });
@@ -767,6 +765,7 @@ export async function addArticle(articleData: Omit<Article, 'id' | 'createdAt' |
     try {
         const docRef = await addDoc(collection(db, 'articles'), {
             ...articleData,
+            slug: slugify(articleData.title),
             createdAt: serverTimestamp()
         });
         return { id: docRef.id };
@@ -778,10 +777,19 @@ export async function addArticle(articleData: Omit<Article, 'id' | 'createdAt' |
 
 export async function updateArticle(articleId: string, articleData: Partial<Article>): Promise<void> {
     try {
-        await updateDoc(doc(db, 'articles', articleId), {
+        const dataToUpdate: { [key: string]: any } = {
             ...articleData,
             updatedAt: serverTimestamp()
+        };
+        if(articleData.title) {
+            dataToUpdate.slug = slugify(articleData.title);
+        }
+        Object.keys(dataToUpdate).forEach(key => {
+            if (dataToUpdate[key] === undefined || dataToUpdate[key] === '') {
+                delete dataToUpdate[key];
+            }
         });
+        await updateDoc(doc(db, 'articles', articleId), dataToUpdate);
     } catch (e) {
         console.error("Error updating article: ", e);
         throw new Error("Failed to update article");

@@ -38,7 +38,7 @@ const formSchema = z.object({
   experience: z.string().optional(),
   tasks: z.string().optional(),
   featuresAndOpportunities: z.string().optional(),
-  applyUrl: z.string().url('رابط التقديم يجب أن يكون رابطًا صحيحًا.'),
+  applyUrl: z.string().url('رابط التقديم يجب أن يكون رابطًا صحيحًا.').optional().or(z.literal('')),
   howToApply: z.string().optional(),
   
   phone: z.string().optional(),
@@ -145,9 +145,6 @@ export function PostImmigrationForm() {
 
     if (currentStep < steps.length - 1) {
       setCurrentStep(step => step + 1);
-    } else {
-      // فقط في الخطوة الأخيرة نقوم بالإرسال
-      form.handleSubmit(onSubmit)();
     }
   };
 
@@ -201,9 +198,12 @@ export function PostImmigrationForm() {
         <FormField control={form.control} name="howToApply" render={({ field }) => (<FormItem><FormLabelIcon icon={HelpCircle} label="كيفية التقديم (اختياري)" /><FormControl><Textarea placeholder="اشرح هنا خطوات التقديم. مثلاً: أرسل سيرتك الذاتية إلى البريد الإلكتروني المذكور أعلاه." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
     </div>,
     <div className="space-y-6" key="step3">
-        <FormField control={form.control} name="applyUrl" render={({ field }) => (<FormItem><FormLabelIcon icon={LinkIcon} label="رابط التقديم الرسمي" /><FormControl><Input type="url" placeholder="https://example.com/apply" {...field} /></FormControl><FormMessage /></FormItem>)} />
+        <FormField control={form.control} name="applyUrl" render={({ field }) => (<FormItem><FormLabelIcon icon={LinkIcon} label="رابط التقديم الرسمي (اختياري)" /><FormControl><Input type="url" placeholder="https://example.com/apply" {...field} /></FormControl><FormMessage /></FormItem>)} />
         <Separator />
         <h3 className="font-semibold flex items-center gap-2 text-base md:text-lg"><Info className="h-5 w-5" style={{color: sectionColor}} />معلومات التواصل (اختياري)</h3>
+        <p className="text-sm text-muted-foreground -mt-2">
+            أدخل وسيلة تواصل واحدة على الأقل، أو رابط التقديم الرسمي.
+        </p>
         <FormField control={form.control} name="phone" render={({ field }) => (<FormItem><FormLabelIcon icon={Phone} label="رقم الهاتف" /><FormControl><Input placeholder="+xxxxxxxxxx" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="whatsapp" render={({ field }) => (<FormItem><FormLabelIcon icon={MessageSquare} label="رقم واتساب" /><FormControl><Input placeholder="+xxxxxxxxxx" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="email" render={({ field }) => (<FormItem><FormLabelIcon icon={Mail} label="البريد الإلكتروني" /><FormControl><Input type="email" placeholder="example@mail.com" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
@@ -231,7 +231,7 @@ export function PostImmigrationForm() {
           {currentStep < steps.length - 1 ? (
             <Button type="button" onClick={nextStep} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>التالي<ArrowLeft className="mr-2 h-4 w-4" /></Button>
           ) : (
-            <Button type="button" onClick={nextStep} disabled={isSubmitting} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>
+            <Button type="submit" disabled={isSubmitting} className="text-primary-foreground" style={{backgroundColor: sectionColor}}>
               {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               نشر الإعلان
             </Button>
@@ -240,4 +240,4 @@ export function PostImmigrationForm() {
       </form>
     </Form>
   );
-           }
+}
