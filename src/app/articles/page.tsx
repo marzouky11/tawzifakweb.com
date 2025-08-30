@@ -1,5 +1,4 @@
 
-
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { getArticles } from '@/lib/articles';
 import { Newspaper } from 'lucide-react';
@@ -7,6 +6,8 @@ import { ArticleCard } from './article-card';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import type { Metadata } from 'next';
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
     title: 'مقالات ونصائح للعمل والتوظيف في الوطن العربي – تحسين فرصك الآن',

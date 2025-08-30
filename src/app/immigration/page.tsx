@@ -1,5 +1,4 @@
 
-
 import type { Metadata } from 'next';
 import { getImmigrationPosts } from '@/lib/data';
 import { Plane } from 'lucide-react';
@@ -9,6 +8,8 @@ import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { ImmigrationCard } from '@/components/immigration-card';
 import { ImmigrationFilters } from '@/components/immigration-filters';
+
+export const revalidate = 3600; // Revalidate every hour
 
 export const metadata: Metadata = {
   title: 'فرص الهجرة - آخر إعلانات الهجرة للعمل، الدراسة والتدريب',

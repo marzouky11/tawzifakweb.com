@@ -1,5 +1,4 @@
 
-
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { JobCard } from '@/components/job-card';
@@ -31,6 +30,7 @@ export const metadata: Metadata = {
     template: `%s | ${appName}`
   },
   description: appDescription,
+  robots: 'index, follow',
   alternates: {
     canonical: '/',
   },

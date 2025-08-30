@@ -1,5 +1,4 @@
 
-
 import type { Metadata } from 'next';
 import { getCompetitions } from '@/lib/data';
 import { Landmark } from 'lucide-react';
@@ -10,6 +9,7 @@ import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { CompetitionCard } from '@/components/competition-card';
 import { CompetitionFilters } from '@/components/competition-filters';
 
+export const revalidate = 3600; // Revalidate every hour
 
 export const metadata: Metadata = {
   title: 'المباريات العمومية - آخر إعلانات التوظيف الحكومي',
