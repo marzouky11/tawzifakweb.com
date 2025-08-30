@@ -49,7 +49,7 @@ export default function EditJobPage() {
 
   const categories = getCategories();
 
-  if (authLoading || loading || !job) {
+  if (authLoading || loading) {
     return (
         <div className="flex h-full items-center justify-center p-8 min-h-[50vh]">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -78,8 +78,8 @@ export default function EditJobPage() {
                     job={job}
                   />
                 ) : (
-                  <div className="flex justify-center p-8">
-                    <p>الإعلان غير موجود أو لا تملك صلاحية تعديله.</p>
+                   <div className="flex justify-center p-8">
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
                   </div>
                 )}
               </AnimatePresence>

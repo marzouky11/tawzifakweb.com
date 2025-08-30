@@ -4,64 +4,78 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Briefcase, Plus, Plane, Landmark, Users } from 'lucide-react';
+import { Home, Briefcase, Plus, Plane, Landmark } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { memo } from 'react';
 
-const navItems = [
+const mainNavItems = [
   { href: '/', label: 'الرئيسية', icon: Home },
   { href: '/jobs', label: 'الوظائف', icon: Briefcase },
-  { href: '/post-job/select-type', label: 'إضافة', icon: Plus, isFab: true },
   { href: '/immigration', label: 'الهجرة', icon: Plane },
   { href: '/competitions', label: 'المباريات', icon: Landmark },
 ];
 
+const Fab = () => (
+    <div className="relative -top-8 z-10">
+        <Link href="/post-job/select-type" className="block">
+            <div className="flex items-center justify-center w-16 h-16 bg-primary rounded-full shadow-lg border-4 border-background">
+                <Plus className="w-8 h-8 text-primary-foreground" />
+            </div>
+        </Link>
+    </div>
+);
+
+
+function NavItem({ href, label, icon: Icon }: { href: string; label: string; icon: React.ElementType }) {
+    const pathname = usePathname();
+    const isActive = (href === '/' && pathname === '/') || (href !== '/' && pathname.startsWith(href));
+
+    return (
+        <Link href={href} className="flex-1">
+            <div className="flex flex-col items-center justify-center gap-1 relative">
+                <Icon
+                    className={cn(
+                        'h-6 w-6 transition-colors',
+                        isActive ? 'text-primary' : 'text-muted-foreground'
+                    )}
+                />
+                <span
+                    className={cn(
+                        'text-xs font-medium transition-colors',
+                        isActive ? 'text-primary' : 'text-muted-foreground'
+                    )}
+                >
+                    {label}
+                </span>
+            </div>
+        </Link>
+    );
+}
+
 function BottomNavContent() {
-  const pathname = usePathname();
-  
   return (
     <div className="relative flex items-center justify-around h-16 mx-4 bg-card border rounded-2xl shadow-lg">
-      {navItems.map((item, index) => {
-        const isActive = (item.href === '/' && pathname === '/') || (item.href !== '/' && pathname.startsWith(item.href));
+      <div className="flex w-full justify-around items-center">
+        {/* Left side items */}
+        <div className="flex-1 flex justify-around">
+            <NavItem href={mainNavItems[0].href} label={mainNavItems[0].label} icon={mainNavItems[0].icon} />
+            <NavItem href={mainNavItems[1].href} label={mainNavItems[1].label} icon={mainNavItems[1].icon} />
+        </div>
+        
+        {/* Placeholder for the FAB button */}
+        <div className="w-16" />
 
-        if (item.isFab) {
-          return (
-            <div key={item.href} className="relative -top-8 z-50">
-              <Link href={item.href} className="block">
-                <div className="flex items-center justify-center w-16 h-16 bg-primary rounded-full shadow-lg border-4 border-background">
-                  <Plus className="w-8 h-8 text-primary-foreground" />
-                </div>
-              </Link>
-            </div>
-          );
-        }
-
-        const isPlaceholder = index === 2;
-        if (isPlaceholder) {
-          return <div key="placeholder" className="w-16 h-16" />;
-        }
-
-        return (
-          <Link href={item.href} key={item.href} className="flex-1">
-            <div className="flex flex-col items-center justify-center gap-1 relative">
-              <item.icon
-                className={cn(
-                  'h-6 w-6 transition-colors',
-                  isActive ? 'text-primary' : 'text-muted-foreground'
-                )}
-              />
-              <span
-                className={cn(
-                  'text-xs font-medium transition-colors',
-                  isActive ? 'text-primary' : 'text-muted-foreground'
-                )}
-              >
-                {item.label}
-              </span>
-            </div>
-          </Link>
-        );
-      })}
+        {/* Right side items */}
+        <div className="flex-1 flex justify-around">
+            <NavItem href={mainNavItems[2].href} label={mainNavItems[2].label} icon={mainNavItems[2].icon} />
+            <NavItem href={mainNavItems[3].href} label={mainNavItems[3].label} icon={mainNavItems[3].icon} />
+        </div>
+      </div>
+      
+      {/* Floating Action Button */}
+      <div className="absolute left-1/2 -translate-x-1/2">
+        <Fab />
+      </div>
     </div>
   );
 }
