@@ -1,5 +1,4 @@
 
-
 import { db } from '@/lib/firebase';
 import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, Query, and, QueryConstraint, QueryFilterConstraint, documentId, increment } from 'firebase/firestore';
 import type { Job, Category, PostType, User, WorkType, Testimonial, Competition, Organizer, Article, Report, ContactMessage, ImmigrationPost } from './types';
@@ -311,7 +310,6 @@ export async function postJob(jobData: Omit<Job, 'id' | 'createdAt' | 'likes' | 
             ...jobData,
             createdAt: serverTimestamp(),
             likes: 0,
-            rating: parseFloat((Math.random() * (5.0 - 3.5) + 3.5).toFixed(1)),
         };
         
         Object.keys(newJob).forEach(key => {
@@ -793,7 +791,7 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
     return {
       id: docSnap.id,
       ...data,
-      postedAt: formatTimeAgo(data.createdAt),
+      postedAt: formatTimeAgo(doc.data().createdAt),
     } as Article;
   } catch (error) {
     console.error("Error fetching article by slug:", error);
@@ -961,3 +959,6 @@ export async function getContactMessages(): Promise<ContactMessage[]> {
 export async function deleteContactMessage(messageId: string): Promise<void> {
   await deleteDoc(doc(db, 'contacts', messageId));
 }
+
+
+    
