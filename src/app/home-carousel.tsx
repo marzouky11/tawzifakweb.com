@@ -12,7 +12,7 @@ const slidesData = [
   {
     key: 'jobs',
     desktopSrc: "/web1.png",
-    mobileSrc: "/Sliderphone1.png",
+    mobileSrc: "/Sliderphone1.jpg",
     alt: "وظائف مميزة",
     title: "وظائف مميزة بانتظارك",
     description: "استكشف الفرص المناسبة لمهاراتك واهتماماتك",
@@ -23,29 +23,29 @@ const slidesData = [
   {
     key: 'immigration',
     desktopSrc: "/web2.png",
-    mobileSrc: "/Sliderphone2.jpg",
+    mobileSrc: "/Sliderphone2.png",
     alt: "فرص الهجرة",
     title: "فرص الهجرة حول العالم",
     description: "اكتشف أحدث فرص الهجرة للعمل والدراسة",
     buttonText: "استكشف الآن",
     buttonLink: "/immigration",
-    buttonClass: "bg-green-600 hover:bg-green-700"
+    buttonClass: "bg-[#0ea5e9] hover:bg-[#0ea5e9]/90"
   },
   {
     key: 'competitions',
     desktopSrc: "/web5.png",
-    mobileSrc: "/Sliderphone5.png",
+    mobileSrc: "/Sliderphone5.jpg",
     alt: "المباريات العمومية",
     title: "المباريات العمومية",
     description: "اكتشف آخر مباريات التوظيف في القطاع العام",
     buttonText: "استكشف الآن",
     buttonLink: "/competitions",
-    buttonClass: "bg-purple-600 hover:bg-purple-700"
+    buttonClass: "bg-[#14532d] hover:bg-[#14532d]/90"
   },
   {
     key: 'workers',
     desktopSrc: "/web3.png",
-    mobileSrc: "/Sliderphone3.jpg",
+    mobileSrc: "/Sliderphone3.png",
     alt: "باحثون عن عمل",
     title: "باحثون عن عمل",
     description: "تصفح ملفات الباحثين عن عمل في مختلف المجالات",
@@ -59,7 +59,6 @@ export function HomeCarousel() {
   const { user, loading: authLoading } = useAuth();
   const [isMounted, setIsMounted] = React.useState(false);
   const [currentSlide, setCurrentSlide] = React.useState(0);
-  const [imageLoaded, setImageLoaded] = React.useState(false);
   
   React.useEffect(() => {
     setIsMounted(true);
@@ -70,10 +69,6 @@ export function HomeCarousel() {
     
     return () => clearInterval(timer);
   }, []);
-
-  const handleImageLoad = () => {
-    setImageLoaded(true);
-  };
 
   if (!isMounted || authLoading) {
     return <Skeleton className="w-full h-64 md:h-80 rounded-2xl" />;
@@ -91,7 +86,6 @@ export function HomeCarousel() {
           sizes="100vw"
           priority
           className="absolute inset-0 w-full h-full object-cover"
-          onLoad={handleImageLoad}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent flex items-center p-12">
           <div className="w-[45%] text-white space-y-4">
@@ -112,7 +106,6 @@ export function HomeCarousel() {
           sizes="100vw"
           priority
           className="absolute inset-0 w-full h-full object-cover"
-          onLoad={handleImageLoad}
         />
         <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center p-4">
           <div className="text-white space-y-2">
