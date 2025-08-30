@@ -1,6 +1,3 @@
-
-'use client';
-
 import { notFound } from 'next/navigation';
 import { getImmigrationPostById, getImmigrationPosts } from '@/lib/data';
 import { AppLayout } from '@/components/layout/app-layout';
@@ -40,7 +37,6 @@ import { CategoryIcon } from '@/components/icons';
 import { getProgramTypeDetails } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import { ShareButton } from '@/app/jobs/[id]/share-button';
-
 
 interface ImmigrationDetailPageProps {
   params: { id: string };
@@ -131,7 +127,7 @@ const FormattedText = ({ text }: { text?: string }) => {
                     return <ul key={index} className="list-disc pr-5 space-y-2 mb-4">{listItems.map((item, i) => <li key={i}>{item}</li>)}</ul>;
                 }
                 return <p key={index} className="mb-4 last:mb-0">{block}</p>;
-            })}
+            });
         </div>
     );
 }
@@ -156,7 +152,6 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
         post.email && { type: 'email', href: `mailto:${post.email}`, label: 'البريد الإلكتروني', icon: Mail, className: 'bg-gray-600 hover:bg-gray-700' },
         post.instagram && { type: 'instagram', href: `https://instagram.com/${post.instagram.replace(/@/g, '')}`, label: 'إنستغرام', icon: Instagram, className: 'bg-gradient-to-r from-pink-500 to-orange-500 hover:opacity-90' },
     ].filter(Boolean);
-
 
     return (
         <AppLayout>
@@ -280,4 +275,4 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
             </div>
         </AppLayout>
     );
-}
+      }                            
