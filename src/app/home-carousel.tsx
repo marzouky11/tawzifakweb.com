@@ -55,19 +55,14 @@ const slidesData = [
   }
 ];
 
-let cachedImageLoaded = false;
-
 export function HomeCarousel() {
   const { user, loading: authLoading } = useAuth();
   const [isMounted, setIsMounted] = React.useState(false);
   const [currentSlide, setCurrentSlide] = React.useState(0);
-  const [imageLoaded, setImageLoaded] = React.useState(cachedImageLoaded);
+  const [imageLoaded, setImageLoaded] = React.useState(false);
   
   React.useEffect(() => {
     setIsMounted(true);
-    if (cachedImageLoaded) {
-      setImageLoaded(true);
-    }
 
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slidesData.length);
@@ -77,13 +72,10 @@ export function HomeCarousel() {
   }, []);
 
   const handleImageLoad = () => {
-    if (!cachedImageLoaded) {
-      cachedImageLoaded = true;
-      setImageLoaded(true);
-    }
+    setImageLoaded(true);
   };
 
-  if (!isMounted || authLoading || !imageLoaded) {
+  if (!isMounted || authLoading) {
     return <Skeleton className="w-full h-64 md:h-80 rounded-2xl" />;
   }
 
@@ -97,7 +89,7 @@ export function HomeCarousel() {
           alt={slide.alt}
           fill
           sizes="100vw"
-          priority={currentSlide === 0}
+          priority
           className="absolute inset-0 w-full h-full object-cover"
           onLoad={handleImageLoad}
         />
@@ -118,7 +110,7 @@ export function HomeCarousel() {
           alt={slide.alt}
           fill
           sizes="100vw"
-          priority={currentSlide === 0}
+          priority
           className="absolute inset-0 w-full h-full object-cover"
           onLoad={handleImageLoad}
         />
