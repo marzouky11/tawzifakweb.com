@@ -1,4 +1,5 @@
 
+
 import type { Metadata } from 'next';
 import { JobCard } from '@/components/job-card';
 import { getJobs } from '@/lib/data';
@@ -11,6 +12,7 @@ import { Users } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 
 export const revalidate = 3600; // Revalidate every hour
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'باحثون عن عمل من جميع الدول العربية – سِيَر ذاتية جاهزة للتوظيف',

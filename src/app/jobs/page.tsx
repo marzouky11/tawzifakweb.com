@@ -1,5 +1,6 @@
 
 
+
 import type { Metadata } from 'next';
 import { JobCard } from '@/components/job-card';
 import { getJobs } from '@/lib/data';
@@ -12,6 +13,7 @@ import { Briefcase } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 
 export const revalidate = 3600; // Revalidate every hour
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'وظائف شاغرة في الوطن العربي - فرص عمل جديدة يوميًا',
