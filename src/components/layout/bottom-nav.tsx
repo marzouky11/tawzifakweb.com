@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Briefcase, Plus, Plane, Landmark, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useState, useEffect } from 'react';
+import { memo } from 'react';
 
 const navItems = [
   { href: '/', label: 'الرئيسية', icon: Home },
@@ -67,20 +67,12 @@ function BottomNavContent() {
 }
 
 
-export function BottomNav() {
-  const [isClient, setIsClient] = useState(false);
-  
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    return null;
-  }
-  
+export const BottomNav = memo(function BottomNav() {
   return (
     <footer className="fixed bottom-0 left-0 z-40 w-full h-20 bg-transparent md:hidden">
       <BottomNavContent />
     </footer>
   );
-}
+});
+
+BottomNav.displayName = 'BottomNav';

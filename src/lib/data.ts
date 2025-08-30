@@ -5,6 +5,7 @@ import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc,
 import type { Job, Category, PostType, User, WorkType, Testimonial, Competition, Organizer, Article, Report, ContactMessage, ImmigrationPost } from './types';
 import Fuse from 'fuse.js';
 import { getProgramTypeDetails, slugify } from './utils';
+import { revalidatePath } from './revalidate';
 
 
 const categories: Category[] = [
@@ -321,6 +322,9 @@ export async function postJob(jobData: Omit<Job, 'id' | 'createdAt' | 'likes' | 
 
         const newDocRef = await addDoc(adsCollection, newJob);
         
+        revalidatePath('/');
+        revalidatePath(jobData.postType === 'seeking_job' ? '/workers' : '/jobs');
+        
         return { id: newDocRef.id };
     } catch (e) {
         console.error("Error adding document: ", e);
@@ -345,6 +349,12 @@ export async function updateAd(adId: string, adData: Partial<Job>) {
 
         await updateDoc(adRef, dataToUpdate);
 
+        revalidatePath('/');
+        revalidatePath('/jobs');
+        revalidatePath('/workers');
+        revalidatePath(`/jobs/${adId}`);
+        revalidatePath(`/workers/${adId}`);
+
     } catch (e) {
         console.error("Error updating ad: ", e);
         throw new Error("Failed to update ad");
@@ -355,6 +365,10 @@ export async function deleteAd(adId: string) {
     try {
         const adRef = doc(db, 'ads', adId);
         await deleteDoc(adRef);
+
+        revalidatePath('/');
+        revalidatePath('/jobs');
+        revalidatePath('/workers');
     } catch (e) {
         console.error("Error deleting ad: ", e);
         throw new Error("Failed to delete ad");
@@ -436,6 +450,10 @@ export async function postCompetition(competitionData: Omit<Competition, 'id' | 
     });
 
     const newDocRef = await addDoc(competitionsCollection, newCompetition);
+    
+    revalidatePath('/');
+    revalidatePath('/competitions');
+    
     return { id: newDocRef.id };
   } catch (e) {
     console.error("Error adding competition: ", e);
@@ -546,6 +564,10 @@ export async function updateCompetition(id: string, competitionData: Partial<Com
         }
 
         await updateDoc(competitionRef, dataToUpdate);
+
+        revalidatePath('/');
+        revalidatePath('/competitions');
+        revalidatePath(`/competitions/${id}`);
     } catch (e) {
         console.error("Error updating competition: ", e);
         throw new Error("Failed to update competition");
@@ -555,6 +577,9 @@ export async function updateCompetition(id: string, competitionData: Partial<Com
 export async function deleteCompetition(competitionId: string) {
     try {
         await deleteDoc(doc(db, 'competitions', competitionId));
+
+        revalidatePath('/');
+        revalidatePath('/competitions');
     } catch (e) {
         console.error("Error deleting competition: ", e);
         throw new Error("Failed to delete competition");
@@ -669,6 +694,10 @@ export async function postImmigration(postData: Omit<ImmigrationPost, 'id' | 'cr
     });
 
     const newDocRef = await addDoc(postsCollection, newPost);
+
+    revalidatePath('/');
+    revalidatePath('/immigration');
+
     return { id: newDocRef.id };
   } catch (e) {
     console.error("Error adding immigration post: ", e);
@@ -691,6 +720,11 @@ export async function updateImmigrationPost(id: string, postData: Partial<Immigr
         });
         
         await updateDoc(postRef, dataToUpdate);
+
+        revalidatePath('/');
+        revalidatePath('/immigration');
+        revalidatePath(`/immigration/${id}`);
+
     } catch (e) {
         console.error("Error updating immigration post: ", e);
         throw new Error("Failed to update immigration post");
@@ -700,6 +734,9 @@ export async function updateImmigrationPost(id: string, postData: Partial<Immigr
 export async function deleteImmigrationPost(postId: string) {
     try {
         await deleteDoc(doc(db, 'immigration', postId));
+
+        revalidatePath('/');
+        revalidatePath('/immigration');
     } catch (e) {
         console.error("Error deleting immigration post: ", e);
         throw new Error("Failed to delete immigration post");

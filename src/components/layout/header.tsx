@@ -1,7 +1,8 @@
 
+
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
@@ -43,8 +44,7 @@ const navLinks = [
     { href: '/workers', label: 'العمال' },
 ];
 
-export function Header() {
-  const pathname = usePathname();
+function AuthSection() {
   const router = useRouter();
   const { user, userData, loading } = useAuth();
   const { toast } = useToast();
@@ -64,64 +64,68 @@ export function Header() {
     }
   };
 
-  const renderAuthSection = () => {
-    if (!isMounted || loading) {
-      return (
-        <div className="flex items-center gap-2 sm:gap-4">
-          <Skeleton className="h-10 w-24 rounded-md" />
-          <Skeleton className="h-10 w-10 rounded-full" />
-        </div>
-      );
-    }
-
-    if (user && userData) {
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="secondary" size="icon" className="rounded-full">
-              <UserAvatar name={userData.name} color={userData.avatarColor} className="h-8 w-8" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>
-              <p>{userData.name}</p>
-              <p className="text-xs font-normal text-muted-foreground">{userData.email}</p>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-             <DropdownMenuItem asChild>
-              <Link href="/profile">
-                <Settings className="mr-2 h-4 w-4" />
-                <span>الإعدادات</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/articles">
-                <Newspaper className="mr-2 h-4 w-4" />
-                <span>مقالات</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout} className="text-destructive cursor-pointer focus:bg-destructive/10 focus:text-destructive">
-              <LogOut className="mr-2 h-4 w-4" />
-              <span>تسجيل الخروج</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    }
-
+  if (!isMounted || loading) {
     return (
-      <div className="flex items-center gap-2">
-        <Button variant="outline" asChild>
-          <Link href="/login">تسجيل الدخول</Link>
-        </Button>
-        <Button asChild className="hidden sm:inline-flex">
-          <Link href="/signup">إنشاء حساب</Link>
-        </Button>
+      <div className="flex items-center gap-2 sm:gap-4">
+        <Skeleton className="h-10 w-24 rounded-md" />
+        <Skeleton className="h-10 w-10 rounded-full" />
       </div>
     );
-  };
+  }
+
+  if (user && userData) {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="secondary" size="icon" className="rounded-full">
+            <UserAvatar name={userData.name} color={userData.avatarColor} className="h-8 w-8" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel>
+            <p>{userData.name}</p>
+            <p className="text-xs font-normal text-muted-foreground">{userData.email}</p>
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+           <DropdownMenuItem asChild>
+            <Link href="/profile">
+              <Settings className="mr-2 h-4 w-4" />
+              <span>الإعدادات</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem asChild>
+            <Link href="/articles">
+              <Newspaper className="mr-2 h-4 w-4" />
+              <span>مقالات</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={handleLogout} className="text-destructive cursor-pointer focus:bg-destructive/10 focus:text-destructive">
+            <LogOut className="mr-2 h-4 w-4" />
+            <span>تسجيل الخروج</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-2">
+      <Button variant="outline" asChild>
+        <Link href="/login">تسجيل الدخول</Link>
+      </Button>
+      <Button asChild className="hidden sm:inline-flex">
+        <Link href="/signup">إنشاء حساب</Link>
+      </Button>
+    </div>
+  );
+}
+
+const MemoizedAuthSection = memo(AuthSection);
+
+export function Header() {
+  const pathname = usePathname();
 
   return (
     <header className="hidden md:block bg-card border-b sticky top-0 z-50">
@@ -163,7 +167,7 @@ export function Header() {
               <span className="hidden sm:inline">نشر إعلان</span>
             </Link>
           </Button>
-          {renderAuthSection()}
+          <MemoizedAuthSection />
         </div>
       </nav>
     </header>
