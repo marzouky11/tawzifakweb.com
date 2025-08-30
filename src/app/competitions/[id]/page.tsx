@@ -99,6 +99,7 @@ export async function generateMetadata({ params }: CompetitionDetailPageProps): 
   return {
     title: metaTitle,
     description: metaDescription,
+    robots: 'index, follow',
     alternates: {
         canonical: canonicalUrl,
     },

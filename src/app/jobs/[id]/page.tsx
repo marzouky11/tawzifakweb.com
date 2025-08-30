@@ -110,6 +110,7 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
   return {
     title: jobTitle,
     description: metaDescription,
+    robots: 'index, follow',
     alternates: {
         canonical: canonicalUrl,
     },
