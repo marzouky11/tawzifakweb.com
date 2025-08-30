@@ -1,7 +1,6 @@
 
 
 import type { Metadata } from 'next';
-import { AppLayout } from '@/components/layout/app-layout';
 import { JobCard } from '@/components/job-card';
 import { getJobs } from '@/lib/data';
 import { JobFilters } from '@/components/job-filters';
@@ -58,7 +57,7 @@ export default function WorkersPage({
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
   return (
-    <AppLayout>
+    <>
       <MobilePageHeader title="باحثون عن عمل">
         <Users className="h-5 w-5 text-primary" />
       </MobilePageHeader>
@@ -79,6 +78,6 @@ export default function WorkersPage({
         </Suspense>
 
       </div>
-    </AppLayout>
+    </>
   );
 }

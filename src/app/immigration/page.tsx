@@ -1,7 +1,6 @@
 
 
 import type { Metadata } from 'next';
-import { AppLayout } from '@/components/layout/app-layout';
 import { getImmigrationPosts } from '@/lib/data';
 import { Plane } from 'lucide-react';
 import { Suspense } from 'react';
@@ -32,7 +31,7 @@ export default async function ImmigrationPage({
   });
 
   return (
-    <AppLayout>
+    <>
       <MobilePageHeader title="فرص الهجرة">
         <Plane className="h-5 w-5 text-primary" />
       </MobilePageHeader>
@@ -54,6 +53,6 @@ export default async function ImmigrationPage({
           <p className="col-span-full text-center text-muted-foreground py-10">لا توجد فرص هجرة تطابق بحثك.</p>
         )}
       </div>
-    </AppLayout>
+    </>
   );
 }

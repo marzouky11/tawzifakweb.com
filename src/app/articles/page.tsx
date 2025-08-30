@@ -1,6 +1,5 @@
 
 
-import { AppLayout } from '@/components/layout/app-layout';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { getArticles } from '@/lib/articles';
 import { Newspaper } from 'lucide-react';
@@ -19,7 +18,7 @@ export default function ArticlesPage() {
   const articles = getArticles();
 
   return (
-    <AppLayout>
+    <>
       <MobilePageHeader title="مقالات">
         <Newspaper className="h-5 w-5 text-primary" />
       </MobilePageHeader>
@@ -37,6 +36,6 @@ export default function ArticlesPage() {
           ))}
         </div>
       </div>
-    </AppLayout>
+    </>
   );
 }

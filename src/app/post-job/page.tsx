@@ -1,9 +1,9 @@
 
+
 import type { Metadata } from 'next';
 import { getCategories } from '@/lib/data';
 import PostJobClientPage from './post-job-client-page';
 import { Suspense } from 'react';
-import { AppLayout } from '@/components/layout/app-layout';
 import { Loader2 } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -13,11 +13,9 @@ export const metadata: Metadata = {
 
 function PostJobPageFallback() {
     return (
-        <AppLayout>
-            <div className="flex h-full items-center justify-center p-8 min-h-[50vh]">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            </div>
-        </AppLayout>
+        <div className="flex h-full items-center justify-center p-8 min-h-[50vh]">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
     )
 }
 
@@ -29,4 +27,3 @@ export default function PostJobPage() {
         </Suspense>
     );
 }
-

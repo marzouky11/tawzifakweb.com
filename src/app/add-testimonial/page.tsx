@@ -4,7 +4,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
-import { AppLayout } from '@/components/layout/app-layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { AddTestimonialForm } from './add-testimonial-form';
 import { Loader2, MessageSquare } from 'lucide-react';
@@ -23,16 +22,14 @@ export default function AddTestimonialPage() {
 
   if (loading || !user) {
     return (
-      <AppLayout>
         <div className="flex h-full items-center justify-center p-8 min-h-[50vh]">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
-      </AppLayout>
     );
   }
 
   return (
-    <AppLayout>
+    <>
       <MobilePageHeader title="إضافة رأي">
         <MessageSquare className="h-5 w-5 text-primary" />
       </MobilePageHeader>
@@ -48,6 +45,6 @@ export default function AddTestimonialPage() {
           </CardContent>
         </Card>
       </div>
-    </AppLayout>
+    </>
   );
 }

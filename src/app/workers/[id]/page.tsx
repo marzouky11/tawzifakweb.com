@@ -2,7 +2,6 @@
 
 import { notFound } from 'next/navigation';
 import { getJobById, getCategoryById, getJobs } from '@/lib/data';
-import { AppLayout } from '@/components/layout/app-layout';
 import type { Metadata } from 'next';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -153,7 +152,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
     ].filter(Boolean);
 
     return (
-        <AppLayout>
+        <>
             <MobilePageHeader title="ملف باحث عن عمل">
                 <UserIcon className="h-5 w-5 text-primary" />
             </MobilePageHeader>
@@ -283,6 +282,6 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                     )}
                 </div>
             </div>
-        </AppLayout>
+        </>
     );
 }

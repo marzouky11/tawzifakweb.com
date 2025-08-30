@@ -2,7 +2,6 @@
 
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { AppLayout } from '@/components/layout/app-layout';
 import { JobCard } from '@/components/job-card';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -216,7 +215,7 @@ function CVBuilderSection() {
 
 export default function HomePage() {
   return (
-    <AppLayout>
+    <>
       <HomeHeaderMobile />
       
       <div className="container mt-4">
@@ -278,6 +277,6 @@ export default function HomePage() {
             <ExtraSections />
           </Suspense>
       </div>
-    </AppLayout>
+    </>
   );
 }

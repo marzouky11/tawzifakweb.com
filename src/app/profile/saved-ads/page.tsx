@@ -5,7 +5,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
-import { AppLayout } from '@/components/layout/app-layout';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { Card, CardContent } from '@/components/ui/card';
@@ -102,7 +101,7 @@ export default function SavedAdsPage() {
   };
 
   return (
-    <AppLayout>
+    <>
       <MobilePageHeader title="الإعلانات المحفوظة">
         <Bookmark className="h-5 w-5 text-primary" />
       </MobilePageHeader>
@@ -120,6 +119,6 @@ export default function SavedAdsPage() {
           </Card>
         </div>
       </div>
-    </AppLayout>
+    </>
   );
 }

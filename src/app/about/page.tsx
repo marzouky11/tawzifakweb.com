@@ -1,7 +1,6 @@
 
 'use client';
 
-import { AppLayout } from '@/components/layout/app-layout';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Info } from 'lucide-react';
@@ -9,7 +8,7 @@ import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 
 export default function AboutUsPage() {
   return (
-    <AppLayout>
+    <>
       <MobilePageHeader title="من نحن">
         <Info className="h-5 w-5 text-primary" />
       </MobilePageHeader>
@@ -90,6 +89,6 @@ export default function AboutUsPage() {
           </CardContent>
         </Card>
       </div>
-    </AppLayout>
+    </>
   );
 }

@@ -4,7 +4,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
-import { AppLayout } from '@/components/layout/app-layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { PostImmigrationForm } from './post-immigration-form';
 import { Loader2, Plane } from 'lucide-react';
@@ -28,16 +27,14 @@ export default function PostImmigrationPage() {
   
   if (loading || !userData?.isAdmin) {
     return (
-      <AppLayout>
         <div className="flex h-full items-center justify-center p-8 min-h-[50vh]">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
-      </AppLayout>
     );
   }
 
   return (
-    <AppLayout>
+    <>
       <MobilePageHeader title="نشر إعلان هجرة">
         <Plane className="h-5 w-5 text-primary" />
       </MobilePageHeader>
@@ -53,6 +50,6 @@ export default function PostImmigrationPage() {
           </CardContent>
         </Card>
       </div>
-    </AppLayout>
+    </>
   );
 }

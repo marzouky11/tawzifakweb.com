@@ -2,7 +2,6 @@
 'use client';
 
 import Link from 'next/link';
-import { AppLayout } from '@/components/layout/app-layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Frown, ArrowLeft } from 'lucide-react';
@@ -10,7 +9,7 @@ import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 
 export default function NotFoundPage() {
   return (
-    <AppLayout>
+    <>
       <DesktopPageHeader
         icon={Frown}
         title="خطأ 404 - الصفحة غير موجودة"
@@ -35,6 +34,6 @@ export default function NotFoundPage() {
           </CardContent>
         </Card>
       </div>
-    </AppLayout>
+    </>
   );
 }

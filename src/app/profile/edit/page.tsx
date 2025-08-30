@@ -1,9 +1,9 @@
+
 'use client';
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
-import { AppLayout } from '@/components/layout/app-layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ProfileForm } from '@/app/profile/profile-form';
 import { getCategories } from '@/lib/data';
@@ -24,7 +24,7 @@ export default function EditProfilePage() {
   const categories = getCategories();
 
   return (
-    <AppLayout>
+    <>
       <MobilePageHeader title="تعديل الملف الشخصي">
         <User className="h-5 w-5 text-primary" />
       </MobilePageHeader>
@@ -48,6 +48,6 @@ export default function EditProfilePage() {
             </div>
         )}
       </div>
-    </AppLayout>
+    </>
   );
 }

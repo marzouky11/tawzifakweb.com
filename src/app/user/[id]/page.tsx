@@ -1,7 +1,6 @@
 
 
 import { notFound } from 'next/navigation';
-import { AppLayout } from '@/components/layout/app-layout';
 import { getUserById, getJobsByUserId } from '@/lib/data';
 import { JobCard } from '@/components/job-card';
 import { UserAvatar } from '@/components/user-avatar';
@@ -29,7 +28,7 @@ export default async function UserAdsPage({ params }: UserAdsPageProps) {
     }
 
     return (
-        <AppLayout>
+        <>
             <MobilePageHeader title={`إعلانات ${user.name}`}>
                 <UserIcon className="h-5 w-5 text-primary" />
             </MobilePageHeader>
@@ -51,6 +50,6 @@ export default async function UserAdsPage({ params }: UserAdsPageProps) {
                 
                 <UserAdsClient initialJobs={jobs} />
             </div>
-        </AppLayout>
+        </>
     );
 }

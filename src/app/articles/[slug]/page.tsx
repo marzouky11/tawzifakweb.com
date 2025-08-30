@@ -3,7 +3,6 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { getArticleBySlug, getArticles } from '@/lib/articles';
-import { AppLayout } from '@/components/layout/app-layout';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Card, CardContent } from '@/components/ui/card';
 import { User, Newspaper } from 'lucide-react';
@@ -108,7 +107,7 @@ export default function ArticlePage({ params }: Props) {
   const contentBlocks = article.content.split('\n').map(paragraph => paragraph.trim()).filter(p => p.length > 0);
 
   return (
-    <AppLayout>
+    <>
       <MobilePageHeader title="مقالات">
         <Newspaper className="h-5 w-5 text-primary" />
       </MobilePageHeader>
@@ -185,7 +184,7 @@ export default function ArticlePage({ params }: Props) {
           </section>
         )}
       </div>
-    </AppLayout>
+    </>
   );
 }
 

@@ -1,5 +1,5 @@
 
-import { AppLayout } from '@/components/layout/app-layout';
+
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { getTestimonials } from '@/lib/data';
 import { MessageSquare } from 'lucide-react';
@@ -18,7 +18,7 @@ export default async function TestimonialsPage() {
   const testimonials = await getTestimonials();
 
   return (
-    <AppLayout>
+    <>
       <MobilePageHeader title="آراء المستخدمين">
         <MessageSquare className="h-5 w-5 text-primary" />
       </MobilePageHeader>
@@ -36,6 +36,6 @@ export default async function TestimonialsPage() {
           ))}
         </div>
       </div>
-    </AppLayout>
+    </>
   );
 }

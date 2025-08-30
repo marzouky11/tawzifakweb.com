@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { AppLayout } from '@/components/layout/app-layout';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { PlusCircle, Users, Briefcase, LogIn, Landmark, MessageCircleWarning, Newspaper } from 'lucide-react';
@@ -62,17 +61,15 @@ export default function SelectPostTypePage() {
 
   if (loading) {
     return (
-      <AppLayout>
         <div className="flex h-full items-center justify-center p-8 min-h-[50vh]">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
-      </AppLayout>
     );
   }
 
 
   return (
-    <AppLayout>
+    <>
       <MobilePageHeader title="نشر إعلان جديد">
         <PlusCircle className="h-5 w-5 text-primary" />
       </MobilePageHeader>
@@ -144,6 +141,6 @@ export default function SelectPostTypePage() {
            )}
         </div>
       </div>
-    </AppLayout>
+    </>
   );
 }

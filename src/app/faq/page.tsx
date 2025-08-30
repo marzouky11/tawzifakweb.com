@@ -1,4 +1,3 @@
-import { AppLayout } from '@/components/layout/app-layout';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {
@@ -41,7 +40,7 @@ const faqs = [
 
 export default function FaqPage() {
   return (
-    <AppLayout>
+    <>
       <MobilePageHeader title="الأسئلة الشائعة">
         <HelpCircle className="h-5 w-5 text-primary" />
       </MobilePageHeader>
@@ -72,6 +71,6 @@ export default function FaqPage() {
           </CardContent>
         </Card>
       </div>
-    </AppLayout>
+    </>
   );
 }

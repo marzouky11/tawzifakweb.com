@@ -1,10 +1,8 @@
-import { AppLayout } from '@/components/layout/app-layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Bell } from 'lucide-react';
 
 export default function NotificationsPage() {
   return (
-    <AppLayout>
       <div className="container py-6">
         <Card>
             <CardHeader>
@@ -21,6 +19,5 @@ export default function NotificationsPage() {
             </CardContent>
         </Card>
       </div>
-    </AppLayout>
   );
 }

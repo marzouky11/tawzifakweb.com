@@ -4,7 +4,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
-import { AppLayout } from '@/components/layout/app-layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { PostCompetitionForm } from './post-competition-form';
 import { Loader2, Landmark } from 'lucide-react';
@@ -29,16 +28,14 @@ export default function PostCompetitionPage() {
   
   if (loading || !userData?.isAdmin) {
     return (
-      <AppLayout>
         <div className="flex h-full items-center justify-center p-8 min-h-[50vh]">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
-      </AppLayout>
     );
   }
 
   return (
-    <AppLayout>
+    <>
       <MobilePageHeader title="نشر مباراة عمومية">
         <Landmark className="h-5 w-5 text-primary" />
       </MobilePageHeader>
@@ -54,6 +51,6 @@ export default function PostCompetitionPage() {
           </CardContent>
         </Card>
       </div>
-    </AppLayout>
+    </>
   );
 }

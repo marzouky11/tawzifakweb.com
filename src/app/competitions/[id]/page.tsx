@@ -2,7 +2,6 @@
 
 import { notFound } from 'next/navigation';
 import { getCompetitionById, getOrganizerByName, getCompetitions } from '@/lib/data';
-import { AppLayout } from '@/components/layout/app-layout';
 import type { Metadata } from 'next';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -196,7 +195,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
     const organizerColor = organizer?.color || sectionColor;
 
     return (
-        <AppLayout>
+        <>
             <MobilePageHeader title="تفاصيل المباراة">
                 <Landmark className="h-5 w-5 text-primary" />
             </MobilePageHeader>
@@ -337,6 +336,6 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                     </div>
                 )}
             </div>
-        </AppLayout>
+        </>
     );
 }

@@ -1,7 +1,6 @@
 
 'use client';
 
-import { AppLayout } from '@/components/layout/app-layout';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Shield } from 'lucide-react';
@@ -10,7 +9,7 @@ import Link from 'next/link';
 
 export default function PrivacyPolicyPage() {
   return (
-    <AppLayout>
+    <>
       <MobilePageHeader title="سياسة الخصوصية">
         <Shield className="h-5 w-5 text-primary" />
       </MobilePageHeader>
@@ -134,6 +133,6 @@ export default function PrivacyPolicyPage() {
           </CardContent>
         </Card>
       </div>
-    </AppLayout>
+    </>
   );
 }

@@ -1,6 +1,6 @@
 
+
 import type { Metadata } from 'next';
-import { AppLayout } from '@/components/layout/app-layout';
 import { LogIn } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { LoginForm } from './login-form';
@@ -22,7 +22,7 @@ function LoginFormFallback() {
 
 export default function LoginPage() {
   return (
-    <AppLayout>
+    <>
       <DesktopPageHeader
         icon={LogIn}
         title="أهلاً بك مجدداً!"
@@ -31,6 +31,6 @@ export default function LoginPage() {
       <Suspense fallback={<LoginFormFallback />}>
         <LoginForm />
       </Suspense>
-    </AppLayout>
+    </>
   );
 }

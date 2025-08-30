@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
-import { AppLayout } from '@/components/layout/app-layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { PostJobForm } from '@/app/post-job/post-job-form';
 import { getCategories, getJobById } from '@/lib/data';
@@ -52,16 +51,14 @@ export default function EditJobPage() {
 
   if (authLoading || loading || !job) {
     return (
-      <AppLayout>
         <div className="flex h-full items-center justify-center p-8 min-h-[50vh]">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
-      </AppLayout>
     );
   }
 
   return (
-    <AppLayout>
+    <>
       <MobilePageHeader title="تعديل الإعلان">
         <Edit className="h-5 w-5 text-primary" />
       </MobilePageHeader>
@@ -90,6 +87,6 @@ export default function EditJobPage() {
           </Card>
         </div>
       </div>
-    </AppLayout>
+    </>
   );
 }

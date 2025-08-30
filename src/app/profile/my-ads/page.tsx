@@ -5,7 +5,6 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/context/auth-context';
-import { AppLayout } from '@/components/layout/app-layout';
 import { Button } from '@/components/ui/button';
 import {
   AlertDialog,
@@ -284,7 +283,7 @@ export default function MyAdsPage() {
   }
 
   return (
-    <AppLayout>
+    <>
       <MobilePageHeader title="إعلاناتي">
         <FileText className="h-5 w-5 text-primary" />
       </MobilePageHeader>
@@ -316,7 +315,6 @@ export default function MyAdsPage() {
             </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </AppLayout>
+    </>
   );
 }
-

@@ -1,7 +1,6 @@
 
 
 import type { Metadata } from 'next';
-import { AppLayout } from '@/components/layout/app-layout';
 import { getCompetitions } from '@/lib/data';
 import { Landmark } from 'lucide-react';
 import { Suspense } from 'react';
@@ -36,7 +35,7 @@ export default async function CompetitionsPage({
   });
 
   return (
-    <AppLayout>
+    <>
       <MobilePageHeader title="المباريات العمومية">
         <Landmark className="h-5 w-5 text-primary" />
       </MobilePageHeader>
@@ -59,6 +58,6 @@ export default async function CompetitionsPage({
         )}
 
       </div>
-    </AppLayout>
+    </>
   );
 }

@@ -4,7 +4,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
-import { AppLayout } from '@/components/layout/app-layout';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -93,16 +92,14 @@ export default function AdminUsersPage() {
 
   if (authLoading || loading) {
     return (
-      <AppLayout>
         <div className="flex h-full items-center justify-center p-8 min-h-[50vh]">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
-      </AppLayout>
     );
   }
 
   return (
-    <AppLayout>
+    <>
       <MobilePageHeader title="إدارة المستخدمين">
         <Users className="h-5 w-5 text-primary" />
       </MobilePageHeader>
@@ -184,6 +181,6 @@ export default function AdminUsersPage() {
             </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </AppLayout>
+    </>
   );
 }

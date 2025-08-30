@@ -1,6 +1,6 @@
 
+
 import type { Metadata } from 'next';
-import { AppLayout } from '@/components/layout/app-layout';
 import { UserPlus } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { SignupForm } from './signup-form';
@@ -23,7 +23,7 @@ function SignupFormFallback() {
 
 export default function SignupPage() {
   return (
-    <AppLayout>
+    <>
       <DesktopPageHeader
         icon={UserPlus}
         title="👋 أهلاً بك في توظيفك!"
@@ -32,6 +32,6 @@ export default function SignupPage() {
       <Suspense fallback={<SignupFormFallback />}>
         <SignupForm />
       </Suspense>
-    </AppLayout>
+    </>
   );
 }

@@ -7,6 +7,7 @@ import './globals.css';
 import { AuthProvider } from '@/context/auth-context';
 import { ThemeProvider } from '@/components/theme-provider';
 import { cn } from '@/lib/utils';
+import { AppLayout } from '@/components/layout/app-layout';
 
 const tajawal = Tajawal({
   subsets: ['arabic'],
@@ -127,7 +128,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            {children}
+            <AppLayout>{children}</AppLayout>
             <Toaster />
           </AuthProvider>
         </ThemeProvider>
@@ -135,4 +136,3 @@ export default function RootLayout({
     </html>
   );
 }
-

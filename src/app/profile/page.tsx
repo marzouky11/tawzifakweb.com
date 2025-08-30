@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useAuth } from '@/context/auth-context';
-import { AppLayout } from '@/components/layout/app-layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { User, LogOut, ChevronLeft, Loader2, Settings as SettingsIcon, Newspaper, HelpCircle, Info, Mail, Shield, FileText, Facebook, UserPlus, LogIn as LogInIcon, MessageSquare, Bookmark, Flag } from 'lucide-react';
@@ -217,7 +216,7 @@ export default function SettingsPage() {
   };
   
   return (
-    <AppLayout>
+    <>
       <MobilePageHeader title="الإعدادات">
         <SettingsIcon className="h-5 w-5 text-primary" />
       </MobilePageHeader>
@@ -239,6 +238,6 @@ export default function SettingsPage() {
             )}
           </div>
       </div>
-    </AppLayout>
+    </>
   );
 }
