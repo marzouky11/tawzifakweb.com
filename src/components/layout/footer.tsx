@@ -49,8 +49,9 @@ const platformLinks = [
 { label: 'الأسئلة الشائعة', href: '/faq', icon: HelpCircle },
 ];
 
-const FooterLinkItem = ({ href, icon: Icon, label }: { href: string; icon: React.ElementType; label: string; }) => (
+const FooterLinkItem = ({ href, icon: Icon, label }: { href: string; icon: React.ElementType; label: string; }) => {
 
+return (
 <Link href={href} className="flex items-center justify-between p-3 rounded-lg hover:bg-muted transition-colors">  
 <div className="flex items-center gap-3">  
 <Icon className="h-5 w-5 text-primary" />  
@@ -59,47 +60,48 @@ const FooterLinkItem = ({ href, icon: Icon, label }: { href: string; icon: React
 <ArrowLeft className="h-4 w-4 text-muted-foreground" />  
 </Link>  
 );
+}
   
 const MobileFooter = () => {
-const { user } = useAuth();
-const pathname = usePathname();
-const filteredImportantLinks = importantLinks.filter(link => !link.guestOnly || !user);
+  const pathname = usePathname();
 
-if (pathname !== '/') {
-return null;
-}
+  // The footer content is now static and does not depend on auth state
+  // to prevent hydration errors. The links will lead to login/signup
+  // if necessary, which is handled by those pages.
+  if (pathname !== '/') {
+    return null;
+  }
 
-return (
-
-<footer className="md:hidden bg-card border-t py-6 mt-0">  
-<div className="container mx-auto px-4 space-y-6 pb-24">  
-<div>  
-<h3 className="font-bold text-lg mb-3 px-2">روابط مهمة</h3>  
-<div className="space-y-1">  
-{filteredImportantLinks.map((link) => <FooterLinkItem key={link.href} {...link} />)}  
-</div>  
-</div>  <Separator />    <div>    
-      <h3 className="font-bold text-lg mb-3 px-2">معلومات المنصة</h3>    
-       <div className="space-y-1">    
-          {platformLinks.map((link) => <FooterLinkItem key={link.href} {...link} />)}    
-          <a href="https://www.facebook.com/profile.php?id=61578748771269" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 rounded-lg hover:bg-muted transition-colors">    
+  return (
+    <footer className="md:hidden bg-card border-t py-6 mt-0">  
+      <div className="container mx-auto px-4 space-y-6 pb-24">  
+        <div>  
+          <h3 className="font-bold text-lg mb-3 px-2">روابط مهمة</h3>  
+          <div className="space-y-1">  
+            {importantLinks.map((link) => <FooterLinkItem key={link.href} {...link} />)}  
+          </div>  
+        </div>
+        <Separator />
+        <div>    
+          <h3 className="font-bold text-lg mb-3 px-2">معلومات المنصة</h3>    
+          <div className="space-y-1">    
+            {platformLinks.map((link) => <FooterLinkItem key={link.href} {...link} />)}    
+            <a href="https://www.facebook.com/profile.php?id=61578748771269" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 rounded-lg hover:bg-muted transition-colors">    
               <div className="flex items-center gap-3">    
-                  <Facebook className="h-5 w-5 text-primary" />    
-                  <span className="font-medium text-sm">صفحتنا على فيسبوك</span>    
+                <Facebook className="h-5 w-5 text-primary" />    
+                <span className="font-medium text-sm">صفحتنا على فيسبوك</span>    
               </div>    
               <ArrowLeft className="h-4 w-4 text-muted-foreground" />    
-          </a>    
+            </a>    
+          </div>    
+        </div>    
+        <Separator />    
+        <div className="text-center text-muted-foreground text-xs pt-4">    
+          &copy; {new Date().getFullYear()} توظيفك. جميع الحقوق محفوظة.    
+        </div>
       </div>    
-  </div>    
-
-  <Separator />    
-      
-  <div className="text-center text-muted-foreground text-xs pt-4">    
-      &copy; {new Date().getFullYear()} توظيفك. جميع الحقوق محفوظة.    
-  </div>
-
-  </div>    
-</footer>  );
+    </footer>
+  );
 };
 
 const DesktopFooter = () => {
