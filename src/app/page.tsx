@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { getJobs, getTestimonials, getCompetitions, getImmigrationPosts } from '@/lib/data';
 import React, { Suspense } from 'react';
-import { unstable_noStore as noStore } from 'next/cache';
 import { Newspaper, Briefcase, Users, ArrowLeft, FileText, User as UserIcon, Landmark, Plane } from 'lucide-react';
 import { HomePageFilters } from './home-page-filters';
 import { HomeCarousel } from './home-carousel';
@@ -142,7 +141,6 @@ async function JobSeekersSection() {
 }
 
 async function ExtraSections() {
-    noStore();
     const testimonials = await getTestimonials();
     const jobOffersCount = (await getJobs({ postType: 'seeking_worker', count: 9999 })).length;
     const competitionsCount = (await getCompetitions({ count: 9999 })).length;
@@ -217,7 +215,6 @@ function CVBuilderSection() {
 }
 
 export default function HomePage() {
-  noStore();
   return (
     <>
       <HomeHeaderMobile />
