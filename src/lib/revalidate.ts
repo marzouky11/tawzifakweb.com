@@ -2,7 +2,7 @@
 
 import { revalidatePath as nextRevalidatePath } from 'next/cache';
 
-export function revalidatePath(path: string) {
+export async function revalidatePath(path: string) {
   try {
     nextRevalidatePath(path, 'layout');
     console.log(`Revalidated: ${path}`);
