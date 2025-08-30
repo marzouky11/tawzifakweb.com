@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -21,9 +22,6 @@ export function HomeHeaderMobile() {
   }, []);
 
   const renderAuthButton = () => {
-    if (!isMounted || loading) {
-      return <Skeleton className="h-10 w-24 rounded-full" />;
-    }
     if (user && userData) {
       return (
         <Button asChild variant="outline" className="h-10 w-auto px-3 rounded-full border-primary/50 text-primary bg-primary/10">
@@ -45,11 +43,29 @@ export function HomeHeaderMobile() {
   };
 
   const renderThemeToggle = () => {
-    if (!isMounted) {
-      return <Skeleton className="h-10 w-10 rounded-full" />;
-    }
     return <ThemeToggleButton className="text-primary bg-background/50 hover:bg-background/70 h-10 w-10 rounded-full border border-primary/20" />;
   };
+
+  if (!isMounted) {
+    return (
+      <div 
+        className="md:hidden bg-card text-card-foreground p-4 rounded-b-3xl shadow-md border-b-4 border-primary"
+      >
+        <div className="container mx-auto px-0">
+          <div className="flex justify-between items-center">
+            <Link href="/">
+              <Image src="/LOGO2.png" alt="شعار توظيفك" width={130} height={32} priority />
+            </Link>
+            <div className="flex items-center gap-2">
+                <Skeleton className="h-10 w-10 rounded-full" />
+                <Separator orientation="vertical" className="h-6" />
+                <Skeleton className="h-10 w-24 rounded-full" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
       <div 
@@ -63,7 +79,7 @@ export function HomeHeaderMobile() {
             <div className="flex items-center gap-2">
                 {renderThemeToggle()}
                 <Separator orientation="vertical" className="h-6" />
-                {renderAuthButton()}
+                {loading ? <Skeleton className="h-10 w-24 rounded-full" /> : renderAuthButton()}
             </div>
           </div>
         </div>
