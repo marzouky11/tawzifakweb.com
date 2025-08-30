@@ -1,4 +1,5 @@
 
+
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { AppLayout } from '@/components/layout/app-layout';
@@ -20,7 +21,7 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 
 
-export const revalidate = 60; // Revalidate every 60 seconds
+export const revalidate = 3600;
 
 const appName = 'توظيفك';
 const appDescription = "توظيفك - منصتك الأولى للعثور على فرص عمل موثوقة في العالم العربي. وظائف يومية في السعودية، المغرب، مصر، الإمارات، الجزائر، تونس وغيرها. سجل مجانًا وابدأ العمل الآن.";
@@ -31,6 +32,7 @@ export const metadata: Metadata = {
     template: `%s | ${appName}`
   },
   description: appDescription,
+  robots: 'index, follow',
   alternates: {
     canonical: '/',
   },

@@ -12,9 +12,12 @@ import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Briefcase } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: 'وظائف شاغرة في الوطن العربي - فرص عمل جديدة يوميًا',
   description: 'استعرض أحدث عروض الشغل في المغرب، السعودية، مصر، الإمارات وغيرها. وظائف حقيقية في جميع القطاعات.',
+  robots: 'index, follow',
 };
 
 function JobFiltersSkeleton() {

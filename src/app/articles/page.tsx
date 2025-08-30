@@ -1,4 +1,5 @@
 
+
 import { AppLayout } from '@/components/layout/app-layout';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { getArticles } from '@/lib/articles';
@@ -11,6 +12,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
     title: 'مقالات ونصائح للعمل والتوظيف في الوطن العربي – تحسين فرصك الآن',
     description: 'نصائح للتوظيف، كتابة السيرة الذاتية، العمل عن بعد، وفرص الربح من الإنترنت. محتوى موجه للعرب الباحثين عن الاستقرار المهني أو الحرية المالية.',
+    robots: 'index, follow',
 };
 
 export default function ArticlesPage() {

@@ -1,4 +1,5 @@
 
+
 import type { Metadata } from 'next';
 import { AppLayout } from '@/components/layout/app-layout';
 import { getCompetitions } from '@/lib/data';
@@ -11,15 +12,17 @@ import { CompetitionCard } from '@/components/competition-card';
 import { CompetitionFilters } from '@/components/competition-filters';
 
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: 'المباريات العمومية - آخر إعلانات التوظيف الحكومي',
   description: 'تصفح آخر مباريات التوظيف في القطاع العام في المغرب والدول العربية. فرص عمل حكومية محدثة يوميًا.',
+  robots: 'index, follow',
   alternates: {
     canonical: '/competitions',
   },
 };
 
-export const revalidate = 0; // Force dynamic rendering to fetch latest data
 
 function CompetitionFiltersSkeleton() {
     return <div className="h-14 bg-muted rounded-xl w-full animate-pulse" />;

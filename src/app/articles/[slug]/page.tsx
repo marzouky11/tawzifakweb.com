@@ -1,4 +1,5 @@
 
+
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { getArticleBySlug, getArticles } from '@/lib/articles';
@@ -61,6 +62,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     alternates: {
         canonical: `/articles/${article.slug}`,
     },
+    robots: 'index, follow',
     openGraph: {
         title: article.title,
         description: article.summary,
