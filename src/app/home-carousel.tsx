@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -121,8 +122,7 @@ export function HomeCarousel() {
                     alt={slide.alt}
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    priority={index === 0}
-                    loading={index === 0 ? "eager" : "lazy"}
+                    priority
                     className="absolute inset-0 w-full h-full object-cover"
                     data-ai-hint={slide.hint}
                   />
@@ -144,8 +144,7 @@ export function HomeCarousel() {
                     alt={slide.alt}
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    priority={index === 0}
-                    loading={index === 0 ? "eager" : "lazy"}
+                    priority
                     className="absolute inset-0 w-full h-full object-cover"
                     data-ai-hint={slide.hint}
                   />

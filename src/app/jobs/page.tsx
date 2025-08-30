@@ -1,4 +1,5 @@
 
+
 import type { Metadata } from 'next';
 import { JobCard } from '@/components/job-card';
 import { getJobs } from '@/lib/data';
@@ -10,6 +11,7 @@ import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Briefcase } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 
+export const dynamic = 'force-dynamic';
 export const revalidate = 3600; // Revalidate every hour
 
 export const metadata: Metadata = {
