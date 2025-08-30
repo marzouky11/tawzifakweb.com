@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation';
 import { getImmigrationPostById, getImmigrationPosts } from '@/lib/data';
-import { AppLayout } from '@/components/layout/app-layout';
 import type { Metadata } from 'next';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import Link from 'next/link';
@@ -29,8 +28,6 @@ import { useAuth } from '@/context/auth-context';
 import { getArticles } from '@/lib/articles';
 
 const importantLinks = [
-{ label: 'تسجيل الدخول', href: '/login', icon: LogIn, guestOnly: true },
-{ label: 'إنشاء حساب', href: '/signup', icon: UserPlus, guestOnly: true },
 { label: 'الوظائف', href: '/jobs', icon: Briefcase },
 { label: 'فرص الهجرة', href: '/immigration', icon: Plane },
 { label: 'المباريات العمومية', href: '/competitions', icon: Landmark },
@@ -38,6 +35,11 @@ const importantLinks = [
 { label: 'نشر إعلان', href: '/post-job/select-type', icon: PlusCircle },
 { label: 'إنشاء سيرة ذاتية', href: '/cv-builder', icon: FileText },
 { label: 'الإعدادات', href: '/profile', icon: Settings },
+];
+
+const guestLinks = [
+  { label: 'تسجيل الدخول', href: '/login', icon: LogIn },
+  { label: 'إنشاء حساب', href: '/signup', icon: UserPlus },
 ];
 
 const platformLinks = [
@@ -64,10 +66,8 @@ return (
   
 const MobileFooter = () => {
   const pathname = usePathname();
+  const { user } = useAuth();
 
-  // The footer content is now static and does not depend on auth state
-  // to prevent hydration errors. The links will lead to login/signup
-  // if necessary, which is handled by those pages.
   if (pathname !== '/') {
     return null;
   }
@@ -78,6 +78,7 @@ const MobileFooter = () => {
         <div>  
           <h3 className="font-bold text-lg mb-3 px-2">روابط مهمة</h3>  
           <div className="space-y-1">  
+            {!user && guestLinks.map((link) => <FooterLinkItem key={link.href} {...link} />)}
             {importantLinks.map((link) => <FooterLinkItem key={link.href} {...link} />)}  
           </div>  
         </div>

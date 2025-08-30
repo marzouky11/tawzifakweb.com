@@ -14,6 +14,7 @@ import { CompetitionFilters } from '@/components/competition-filters';
 export const metadata: Metadata = {
   title: 'المباريات العمومية - آخر إعلانات التوظيف الحكومي',
   description: 'تصفح آخر مباريات التوظيف في القطاع العام في المغرب والدول العربية. فرص عمل حكومية محدثة يوميًا.',
+  robots: 'index, follow',
   alternates: {
     canonical: '/competitions',
   },

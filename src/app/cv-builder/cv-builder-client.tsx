@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
 import { CVForm } from './cv-form';
@@ -9,19 +9,17 @@ import { Loader2 } from 'lucide-react';
 
 export default function CVBuilderClient() {
   const { user, loading } = useAuth();
-  const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login?redirect=/cv-builder');
-    }
-  }, [user, loading, router]);
+    setIsMounted(true);
+  }, []);
 
-  if (loading || !user) {
+  if (!isMounted) {
     return (
-        <div className="flex h-full items-center justify-center p-8 min-h-[50vh]">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
+      <div className="flex h-full items-center justify-center p-8 min-h-[50vh]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
     );
   }
   

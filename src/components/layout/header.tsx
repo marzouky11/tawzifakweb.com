@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import React, { useState, useEffect, memo } from 'react';
@@ -126,6 +125,12 @@ const MemoizedAuthSection = memo(AuthSection);
 
 export function Header() {
   const pathname = usePathname();
+  const { user, loading } = useAuth();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
     <header className="hidden md:block bg-card border-b sticky top-0 z-50">
@@ -161,12 +166,16 @@ export function Header() {
               <span className="hidden sm:inline">إنشاء سيرة ذاتية</span>
             </Link>
           </Button>
-          <Button asChild>
-            <Link href="/post-job/select-type">
-              <Plus className="ml-2 h-4 w-4" />
-              <span className="hidden sm:inline">نشر إعلان</span>
-            </Link>
-          </Button>
+          
+          {isMounted && !loading && user && (
+            <Button asChild>
+              <Link href="/post-job/select-type">
+                <Plus className="ml-2 h-4 w-4" />
+                <span className="hidden sm:inline">نشر إعلان</span>
+              </Link>
+            </Button>
+          )}
+
           <MemoizedAuthSection />
         </div>
       </nav>
