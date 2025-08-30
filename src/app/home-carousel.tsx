@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -80,11 +79,16 @@ const slidesData = [
 
 export function HomeCarousel() {
   const { user, loading: authLoading } = useAuth();
+  const [isMounted, setIsMounted] = React.useState(false);
   const plugin = React.useRef(
     Autoplay({ delay: 5000, stopOnInteraction: true, playOnInit: true })
   );
+  
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
-  if (authLoading) {
+  if (!isMounted || authLoading) {
     return <Skeleton className="w-full h-64 md:h-80 rounded-2xl" />;
   }
 

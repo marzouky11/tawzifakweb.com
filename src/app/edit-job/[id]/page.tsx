@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -51,7 +50,7 @@ export default function EditJobPage() {
 
   const categories = getCategories();
 
-  if (authLoading || loading) {
+  if (authLoading || loading || !job) {
     return (
       <AppLayout>
         <div className="flex h-full items-center justify-center p-8 min-h-[50vh]">

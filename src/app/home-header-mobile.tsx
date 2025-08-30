@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -15,14 +14,14 @@ import { useTheme } from 'next-themes';
 
 export function HomeHeaderMobile() {
   const { user, userData, loading } = useAuth();
-  const [isClient, setIsClient] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
+    setIsMounted(true);
   }, []);
 
   const renderAuthButton = () => {
-    if (!isClient || loading) {
+    if (!isMounted || loading) {
       return <Skeleton className="h-10 w-24 rounded-full" />;
     }
     if (user && userData) {
@@ -46,7 +45,7 @@ export function HomeHeaderMobile() {
   };
 
   const renderThemeToggle = () => {
-    if (!isClient) {
+    if (!isMounted) {
       return <Skeleton className="h-10 w-10 rounded-full" />;
     }
     return <ThemeToggleButton className="text-primary bg-background/50 hover:bg-background/70 h-10 w-10 rounded-full border border-primary/20" />;
