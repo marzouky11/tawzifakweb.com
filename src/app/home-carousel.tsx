@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -81,6 +80,7 @@ const slidesData = [
 export function HomeCarousel() {
   const { user, loading: authLoading } = useAuth();
   const [isMounted, setIsMounted] = React.useState(false);
+  const [loadedImages, setLoadedImages] = React.useState<Set<string>>(new Set());
   const plugin = React.useRef(
     Autoplay({ delay: 5000, stopOnInteraction: true, playOnInit: true })
   );
@@ -88,6 +88,10 @@ export function HomeCarousel() {
   React.useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  const handleImageLoad = (imageKey: string) => {
+    setLoadedImages(prev => new Set(prev).add(imageKey));
+  };
 
   if (!isMounted || authLoading) {
     return <Skeleton className="w-full h-64 md:h-80 rounded-2xl" />;
@@ -103,6 +107,7 @@ export function HomeCarousel() {
         loop: true,
         direction: 'rtl',
       }}
+      key="static-carousel"
     >
       <CarouselContent>
         {slidesData.map((slide, index) => {
@@ -112,48 +117,52 @@ export function HomeCarousel() {
           const buttonText = isFirstSlideAuth ? (user ? slide.authButtonText : slide.guestButtonText) : slide.buttonText;
           const buttonLink = isFirstSlideAuth ? (user ? slide.authButtonLink : slide.guestButtonLink) : slide.buttonLink;
 
+          const shouldLoad = index === 0 || loadedImages.has(slidesData[index - 1].key);
+
           return (
             <CarouselItem key={slide.key}>
               <div className="relative h-64 md:h-80">
-                {/* Desktop View */}
                 <div className="hidden md:block w-full h-full">
                   <Image
-                    src={slide.desktopSrc!}
+                    src={slide.desktopSrc}
                     alt={slide.alt}
                     fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    priority
+                    sizes="100vw"
+                    priority={index === 0}
+                    loading={index === 0 ? 'eager' : 'lazy'}
                     className="absolute inset-0 w-full h-full object-cover"
                     data-ai-hint={slide.hint}
+                    onLoad={() => handleImageLoad(slide.key)}
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent flex items-center p-12">
                     <div className="w-[45%] text-white space-y-4">
                       <h2 className="text-5xl font-bold leading-tight drop-shadow-md">{title}</h2>
                       <p className="text-lg text-white/90 drop-shadow-sm">{description}</p>
                       <Button asChild size="lg" className={cn("text-white font-semibold transition-transform hover:scale-105", slide.buttonClass)}>
-                        <Link href={buttonLink!}>{buttonText}</Link>
+                        <Link href={buttonLink}>{buttonText}</Link>
                       </Button>
                     </div>
                   </div>
                 </div>
 
-                {/* Mobile View */}
                 <div className="md:hidden w-full h-full">
                   <Image
-                    src={slide.mobileSrc!}
+                    src={slide.mobileSrc}
                     alt={slide.alt}
                     fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    priority
+                    sizes="100vw"
+                    priority={index === 0}
+                    loading={index === 0 ? 'eager' : 'lazy'}
                     className="absolute inset-0 w-full h-full object-cover"
                     data-ai-hint={slide.hint}
+                    onLoad={() => handleImageLoad(slide.key)}
                   />
                   <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center p-4">
                     <div className="text-white space-y-2">
                       <h2 className="text-2xl font-bold leading-tight drop-shadow-md">{title}</h2>
                       <p className="text-sm text-white/90 drop-shadow-sm">{description}</p>
                       <Button asChild size="sm" className={cn("text-white font-semibold mt-2", slide.buttonClass)}>
-                        <Link href={buttonLink!}>{buttonText}</Link>
+                        <Link href={buttonLink}>{buttonText}</Link>
                       </Button>
                     </div>
                   </div>
