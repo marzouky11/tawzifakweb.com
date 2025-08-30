@@ -136,7 +136,7 @@ export function Header() {
     <header className="hidden md:block bg-card border-b sticky top-0 z-50">
       <nav className="container relative flex items-center justify-between h-20">
         <div className="flex items-center gap-8">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2 flex-shrink-0">
             <Image src="/LOGO2.png" alt="شعار توظيفك" width={150} height={40} priority />
           </Link>
           <div className="flex items-center gap-6">
