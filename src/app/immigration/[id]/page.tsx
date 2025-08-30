@@ -124,13 +124,19 @@ const FormattedText = ({ text }: { text?: string }) => {
             {contentBlocks.map((block, index) => {
                 if (block.startsWith('- ') || block.startsWith('* ')) {
                     const listItems = block.split('\n').filter(i => i.trim()).map(item => item.trim().replace(/^[-*]\s*/, ''));
-                    return <ul key={index} className="list-disc pr-5 space-y-2 mb-4">{listItems.map((item, i) => <li key={i}>{item}</li>)}</ul>;
+                    return (
+                        <ul key={index} className="list-disc pr-5 space-y-2 mb-4">
+                            {listItems.map((item, i) => (
+                                <li key={i}>{item}</li>
+                            ))}
+                        </ul>
+                    );
                 }
                 return <p key={index} className="mb-4 last:mb-0">{block}</p>;
-            });
+            })}
         </div>
     );
-}
+};
 
 export default async function ImmigrationDetailPage({ params }: ImmigrationDetailPageProps) {
     const post = await getImmigrationPostById(params.id);
@@ -275,4 +281,4 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
             </div>
         </AppLayout>
     );
-      }                            
+                          }   
