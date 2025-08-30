@@ -160,7 +160,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
     ].filter(Boolean);
 
     return (
-        <AppLayout>
+        <>
             <MobilePageHeader title="فرصة هجرة">
                 <Plane className="h-5 w-5 text-primary" />
             </MobilePageHeader>
@@ -279,6 +279,6 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                     </div>
                 )}
             </div>
-        </AppLayout>
+        </>
     );
                           }   
