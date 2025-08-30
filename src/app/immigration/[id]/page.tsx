@@ -1,4 +1,4 @@
-
+'use client';
 
 import { notFound } from 'next/navigation';
 import { getImmigrationPostById, getImmigrationPosts } from '@/lib/data';
@@ -54,7 +54,12 @@ export async function generateMetadata({ params }: ImmigrationDetailPageProps): 
     return {
       title: 'فرصة هجرة غير موجودة',
       description: 'لم نتمكن من العثور على فرصة الهجرة التي تبحث عنها.',
-      openGraph: { images: [{ url: siteThumbnail }] },
+      robots: 'noindex, nofollow',
+      openGraph: { 
+        images: [{ url: siteThumbnail }],
+        title: 'فرصة هجرة غير موجودة',
+        description: 'لم نتمكن من العثور على فرصة الهجرة التي تبحث عنها.',
+      },
     };
   }
 
@@ -66,6 +71,7 @@ export async function generateMetadata({ params }: ImmigrationDetailPageProps): 
   return {
     title: metaTitle,
     description: metaDescription,
+    robots: 'index, follow',
     alternates: {
         canonical: canonicalUrl,
     },
@@ -75,6 +81,7 @@ export async function generateMetadata({ params }: ImmigrationDetailPageProps): 
         url: canonicalUrl,
         siteName: 'توظيفك',
         type: 'article',
+        publishedTime: post.postedAt,
         images: [ { url: siteThumbnail, width: 1200, height: 630, alt: metaTitle } ],
     },
     twitter: {
@@ -138,7 +145,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
     const similarPosts = await getImmigrationPosts({ count: 2, excludeId: post.id });
     
     const programDetails = getProgramTypeDetails(post.programType);
-    const sectionColor = '#0ea5e9'; // Main section color remains sky-500
+    const sectionColor = '#0ea5e9';
     const iconName = programDetails.icon;
     const iconColor = programDetails.color;
     
