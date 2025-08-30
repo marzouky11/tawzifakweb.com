@@ -1,7 +1,3 @@
-
-
-
-
 import type { Metadata } from 'next';
 import { JobCard } from '@/components/job-card';
 import { getJobs } from '@/lib/data';
@@ -35,16 +31,7 @@ function JobListSkeleton() {
   );
 }
 
-async function JobList({ searchParams }: { searchParams?: { [key: string]: string | string[] | undefined } }) {
-  const jobs = await getJobs({
-      postType: 'seeking_worker',
-      searchQuery: typeof searchParams?.q === 'string' ? searchParams.q : undefined,
-      country: typeof searchParams?.country === 'string' ? searchParams.country : undefined,
-      city: typeof searchParams?.city === 'string' ? searchParams.city : undefined,
-      categoryId: typeof searchParams?.category === 'string' ? searchParams.category : undefined,
-      workType: typeof searchParams?.workType === 'string' ? searchParams.workType as WorkType : undefined,
-  });
-
+function JobList({ jobs }: { jobs: any[] }) {
   if (jobs.length > 0) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -55,11 +42,19 @@ async function JobList({ searchParams }: { searchParams?: { [key: string]: strin
   return <p className="col-span-full text-center text-muted-foreground py-10">لا توجد عروض عمل تطابق بحثك.</p>;
 }
 
-export default function JobsPage({
+export default async function JobsPage({
   searchParams,
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
+  const jobs = await getJobs({
+      postType: 'seeking_worker',
+      searchQuery: typeof searchParams?.q === 'string' ? searchParams.q : undefined,
+      country: typeof searchParams?.country === 'string' ? searchParams.country : undefined,
+      city: typeof searchParams?.city === 'string' ? searchParams.city : undefined,
+      categoryId: typeof searchParams?.category === 'string' ? searchParams.category : undefined,
+      workType: typeof searchParams?.workType === 'string' ? searchParams.workType as WorkType : undefined,
+  });
 
   return (
     <>
@@ -79,9 +74,8 @@ export default function JobsPage({
         </div>
         
         <Suspense fallback={<JobListSkeleton />}>
-          <JobList searchParams={searchParams} />
+          <JobList jobs={jobs} />
         </Suspense>
-
       </div>
     </>
   );
