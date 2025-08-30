@@ -1,3 +1,4 @@
+
 import { getJobs } from '@/lib/data';
 
 const baseUrl = 'https://www.tawzifak.com';
@@ -22,8 +23,6 @@ function generateSitemap(jobs: any[]) {
    </urlset>
  `;
 }
-
-export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {

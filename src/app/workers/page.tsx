@@ -12,12 +12,9 @@ import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Users } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 
-export const revalidate = 3600;
-
 export const metadata: Metadata = {
   title: 'باحثون عن عمل من جميع الدول العربية – سِيَر ذاتية جاهزة للتوظيف',
   description: 'تصفح ملفات الباحثين عن العمل في مجالات متنوعة من السعودية، المغرب، مصر، الجزائر، العراق، وأكثر. تواصل مباشرة مع أصحاب الكفاءات.',
-  robots: 'index, follow',
 };
 
 

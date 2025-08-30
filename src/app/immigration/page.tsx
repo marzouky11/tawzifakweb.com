@@ -11,12 +11,9 @@ import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { ImmigrationCard } from '@/components/immigration-card';
 import { ImmigrationFilters } from '@/components/immigration-filters';
 
-export const revalidate = 3600;
-
 export const metadata: Metadata = {
   title: 'فرص الهجرة - آخر إعلانات الهجرة للعمل، الدراسة والتدريب',
   description: 'تصفح أحدث فرص الهجرة والعمل بالخارج في كندا، أوروبا، وأستراليا وغيرها. معلومات محدثة حول برامج الهجرة الموسمية والدائمة للعرب.',
-  robots: 'index, follow',
 };
 
 

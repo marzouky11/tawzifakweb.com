@@ -5,7 +5,7 @@ import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc,
 import type { Job, Category, PostType, User, WorkType, Testimonial, Competition, Organizer, Article, Report, ContactMessage, ImmigrationPost } from './types';
 import Fuse from 'fuse.js';
 import { getProgramTypeDetails, slugify } from './utils';
-import { revalidatePath } from './revalidate';
+
 
 const categories: Category[] = [
   { id: 'it', name: 'تكنولوجيا المعلومات', iconName: 'Code', color: '#1E88E5' }, // Blue
@@ -321,15 +321,6 @@ export async function postJob(jobData: Omit<Job, 'id' | 'createdAt' | 'likes' | 
 
         const newDocRef = await addDoc(adsCollection, newJob);
         
-        revalidatePath('/');
-        if (newJob.postType === 'seeking_worker') {
-            revalidatePath('/jobs');
-            revalidatePath(`/jobs/${newDocRef.id}`);
-        } else {
-            revalidatePath('/workers');
-            revalidatePath(`/workers/${newDocRef.id}`);
-        }
-
         return { id: newDocRef.id };
     } catch (e) {
         console.error("Error adding document: ", e);
@@ -346,22 +337,13 @@ export async function updateAd(adId: string, adData: Partial<Job>) {
             updatedAt: serverTimestamp()
         };
         
-        for (const key in dataToUpdate) {
+        Object.keys(dataToUpdate).forEach(key => {
             if (dataToUpdate[key] === undefined) {
-                delete dataToUpdate[key];
+                 delete dataToUpdate[key];
             }
-        }
+        });
 
         await updateDoc(adRef, dataToUpdate);
-
-        revalidatePath('/');
-        if (adData.postType === 'seeking_worker') {
-            revalidatePath('/jobs');
-            revalidatePath(`/jobs/${adId}`);
-        } else {
-            revalidatePath('/workers');
-            revalidatePath(`/workers/${adId}`);
-        }
 
     } catch (e) {
         console.error("Error updating ad: ", e);
@@ -372,21 +354,7 @@ export async function updateAd(adId: string, adData: Partial<Job>) {
 export async function deleteAd(adId: string) {
     try {
         const adRef = doc(db, 'ads', adId);
-        const adDoc = await getDoc(adRef);
-        if (!adDoc.exists()) return;
-        const postType = adDoc.data()?.postType;
-
         await deleteDoc(adRef);
-
-        revalidatePath('/');
-        if (postType === 'seeking_worker') {
-            revalidatePath('/jobs');
-            revalidatePath(`/jobs/${adId}`);
-        } else {
-            revalidatePath('/workers');
-            revalidatePath(`/workers/${adId}`);
-        }
-
     } catch (e) {
         console.error("Error deleting ad: ", e);
         throw new Error("Failed to delete ad");
@@ -414,8 +382,6 @@ export async function addTestimonial(testimonialData: Omit<Testimonial, 'id' | '
             createdAt: serverTimestamp(),
         };
         const newDocRef = await addDoc(reviewsCollection, dataToSave);
-        revalidatePath('/testimonials');
-        revalidatePath('/');
         return { id: newDocRef.id };
     } catch (e) {
         console.error("Error adding testimonial: ", e);
@@ -445,9 +411,6 @@ export async function getTestimonials(): Promise<Testimonial[]> {
 export async function deleteTestimonial(testimonialId: string) {
     try {
         await deleteDoc(doc(db, 'reviews', testimonialId));
-        revalidatePath('/testimonials');
-        revalidatePath('/');
-        revalidatePath('/admin/testimonials');
     } catch (e) {
         console.error("Error deleting testimonial: ", e);
         throw new Error("Failed to delete testimonial");
@@ -473,9 +436,6 @@ export async function postCompetition(competitionData: Omit<Competition, 'id' | 
     });
 
     const newDocRef = await addDoc(competitionsCollection, newCompetition);
-    revalidatePath('/');
-    revalidatePath('/competitions');
-    revalidatePath(`/competitions/${newDocRef.id}`);
     return { id: newDocRef.id };
   } catch (e) {
     console.error("Error adding competition: ", e);
@@ -575,20 +535,17 @@ export async function updateCompetition(id: string, competitionData: Partial<Com
             updatedAt: serverTimestamp()
         };
         
-        for (const key in dataToUpdate) {
+        Object.keys(dataToUpdate).forEach(key => {
             if (dataToUpdate[key] === undefined) {
-                delete dataToUpdate[key];
+                 delete dataToUpdate[key];
             }
-        }
+        });
         
         if (dataToUpdate.positionsAvailable === undefined) {
             dataToUpdate.positionsAvailable = null;
         }
 
         await updateDoc(competitionRef, dataToUpdate);
-        revalidatePath('/');
-        revalidatePath('/competitions');
-        revalidatePath(`/competitions/${id}`);
     } catch (e) {
         console.error("Error updating competition: ", e);
         throw new Error("Failed to update competition");
@@ -598,9 +555,6 @@ export async function updateCompetition(id: string, competitionData: Partial<Com
 export async function deleteCompetition(competitionId: string) {
     try {
         await deleteDoc(doc(db, 'competitions', competitionId));
-        revalidatePath('/');
-        revalidatePath('/competitions');
-        revalidatePath(`/competitions/${competitionId}`);
     } catch (e) {
         console.error("Error deleting competition: ", e);
         throw new Error("Failed to delete competition");
@@ -715,9 +669,6 @@ export async function postImmigration(postData: Omit<ImmigrationPost, 'id' | 'cr
     });
 
     const newDocRef = await addDoc(postsCollection, newPost);
-    revalidatePath('/');
-    revalidatePath('/immigration');
-    revalidatePath(`/immigration/${newDocRef.id}`);
     return { id: newDocRef.id };
   } catch (e) {
     console.error("Error adding immigration post: ", e);
@@ -733,16 +684,13 @@ export async function updateImmigrationPost(id: string, postData: Partial<Immigr
             updatedAt: serverTimestamp()
         };
         
-        for (const key in dataToUpdate) {
+        Object.keys(dataToUpdate).forEach(key => {
             if (dataToUpdate[key] === undefined) {
-                delete dataToUpdate[key];
+                 delete dataToUpdate[key];
             }
-        }
+        });
         
         await updateDoc(postRef, dataToUpdate);
-        revalidatePath('/');
-        revalidatePath('/immigration');
-        revalidatePath(`/immigration/${id}`);
     } catch (e) {
         console.error("Error updating immigration post: ", e);
         throw new Error("Failed to update immigration post");
@@ -752,9 +700,6 @@ export async function updateImmigrationPost(id: string, postData: Partial<Immigr
 export async function deleteImmigrationPost(postId: string) {
     try {
         await deleteDoc(doc(db, 'immigration', postId));
-        revalidatePath('/');
-        revalidatePath('/immigration');
-        revalidatePath(`/immigration/${postId}`);
     } catch (e) {
         console.error("Error deleting immigration post: ", e);
         throw new Error("Failed to delete immigration post");
@@ -826,8 +771,6 @@ export async function addArticle(articleData: Omit<Article, 'id' | 'createdAt' |
             slug: slugify(articleData.title),
             createdAt: serverTimestamp()
         });
-        revalidatePath('/articles');
-        revalidatePath(`/articles/${articleData.slug}`);
         return { id: docRef.id };
     } catch (e) {
         console.error("Error adding article: ", e);
@@ -850,10 +793,6 @@ export async function updateArticle(articleId: string, articleData: Partial<Arti
             }
         });
         await updateDoc(doc(db, 'articles', articleId), dataToUpdate);
-        revalidatePath('/articles');
-        if (dataToUpdate.slug) {
-            revalidatePath(`/articles/${dataToUpdate.slug}`);
-        }
     } catch (e) {
         console.error("Error updating article: ", e);
         throw new Error("Failed to update article");
@@ -862,16 +801,7 @@ export async function updateArticle(articleId: string, articleData: Partial<Arti
 
 export async function deleteArticle(articleId: string): Promise<void> {
     try {
-        const docRef = doc(db, 'articles', articleId);
-        const docSnap = await getDoc(docRef);
-        if (!docSnap.exists()) return;
-        const slug = docSnap.data()?.slug;
-
-        await deleteDoc(docRef);
-        revalidatePath('/articles');
-        if (slug) {
-            revalidatePath(`/articles/${slug}`);
-        }
+        await deleteDoc(doc(db, 'articles', articleId));
     } catch (e) {
         console.error("Error deleting article: ", e);
         throw new Error("Failed to delete article");
@@ -897,7 +827,6 @@ export async function getAllUsers(): Promise<User[]> {
 export async function deleteUser(userId: string) {
     try {
         await deleteDoc(doc(db, 'users', userId));
-        revalidatePath('/admin/users');
     } catch (e) {
         console.error("Error deleting user document: ", e);
         throw new Error("Failed to delete user document");
@@ -947,14 +876,12 @@ export async function toggleSaveAd(userId: string, adId: string, adType: 'job' |
         const docSnap = await getDoc(savedAdRef);
         if (docSnap.exists()) {
             await deleteDoc(savedAdRef);
-            revalidatePath(`/profile/saved-ads`);
             return false; // Ad was unsaved
         } else {
             await setDoc(savedAdRef, {
                 savedAt: serverTimestamp(),
                 type: adType,
             });
-            revalidatePath(`/profile/saved-ads`);
             return true; // Ad was saved
         }
     } catch (error) {
@@ -969,7 +896,6 @@ export async function addReport(reportData: Omit<Report, 'id' | 'createdAt'>): P
     ...reportData,
     createdAt: serverTimestamp(),
   });
-  revalidatePath('/admin/reports');
 }
 
 export async function getReports(): Promise<Report[]> {
@@ -980,7 +906,6 @@ export async function getReports(): Promise<Report[]> {
 
 export async function deleteReport(reportId: string): Promise<void> {
   await deleteDoc(doc(db, 'reports', reportId));
-  revalidatePath('/admin/reports');
 }
 
 export async function addContactMessage(messageData: Omit<ContactMessage, 'id' | 'createdAt'>): Promise<void> {
@@ -988,7 +913,6 @@ export async function addContactMessage(messageData: Omit<ContactMessage, 'id' |
     ...messageData,
     createdAt: serverTimestamp(),
   });
-  revalidatePath('/admin/contacts');
 }
 
 export async function getContactMessages(): Promise<ContactMessage[]> {
@@ -999,5 +923,4 @@ export async function getContactMessages(): Promise<ContactMessage[]> {
 
 export async function deleteContactMessage(messageId: string): Promise<void> {
   await deleteDoc(doc(db, 'contacts', messageId));
-  revalidatePath('/admin/contacts');
 }

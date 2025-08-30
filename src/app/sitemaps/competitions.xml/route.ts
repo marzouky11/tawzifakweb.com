@@ -23,8 +23,6 @@ function generateSitemap(competitions: any[]) {
  `;
 }
 
-export const dynamic = 'force-dynamic'
-
 export async function GET() {
   try {
     const competitions = await getCompetitions({ count: 9999 }); // Fetch all competitions
