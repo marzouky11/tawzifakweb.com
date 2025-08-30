@@ -14,7 +14,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
-      <main className={cn("flex-1 md:pb-0", showMobileFooter ? 'pb-0' : 'pb-28')}>
+      <main className={cn("flex-1 md:pb-0", showMobileFooter ? 'pb-0' : 'pb-24')}>
         {children}
       </main>
       <Footer />
