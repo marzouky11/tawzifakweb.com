@@ -1,5 +1,4 @@
 
-
 'use client';
 import { Header } from '@/components/layout/header';
 import { BottomNav } from '@/components/layout/bottom-nav';
@@ -14,7 +13,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
-      <main className={cn("flex-1 md:pb-0", showMobileFooter ? 'pb-0' : 'pb-24')}>
+      <main className={cn("flex-1 md:pb-0", showMobileFooter ? 'pb-0' : 'pb-28')}>
         {children}
       </main>
       <Footer />
