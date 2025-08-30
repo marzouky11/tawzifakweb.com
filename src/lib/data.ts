@@ -791,7 +791,7 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
     return {
       id: docSnap.id,
       ...data,
-      postedAt: formatTimeAgo(doc.data().createdAt),
+ postedAt: formatTimeAgo(data.createdAt),
     } as Article;
   } catch (error) {
     console.error("Error fetching article by slug:", error);
