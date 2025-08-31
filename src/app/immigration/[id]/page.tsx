@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: ImmigrationDetailPageProps): 
     return {
       title: 'فرصة هجرة غير موجودة',
       description: 'لم نتمكن من العثور على فرصة الهجرة التي تبحث عنها.',
-      robots: 'noindex, nofollow',
+      robots: 'index, follow',
       openGraph: { 
         images: [{ url: siteThumbnail }],
         title: 'فرصة هجرة غير موجودة',
