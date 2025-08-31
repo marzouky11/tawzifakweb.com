@@ -161,7 +161,6 @@ const DetailSection = ({ icon: Icon, title, color, children }: { icon: React.Ele
 const FormattedText = ({ text }: { text?: string }) => {
     if (!text || text.trim() === '') return <p className="italic text-muted-foreground">غير محدد</p>;
 
-    // Split by one or more newlines to handle paragraphs
     const paragraphs = text.split(/\n{2,}/);
 
     return (
