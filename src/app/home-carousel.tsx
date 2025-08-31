@@ -59,12 +59,17 @@ export function HomeCarousel() {
   const { user, loading: authLoading } = useAuth();
   const [isMounted, setIsMounted] = React.useState(false);
   const [currentSlide, setCurrentSlide] = React.useState(0);
+  const [isTransitioning, setIsTransitioning] = React.useState(false);
   
   React.useEffect(() => {
     setIsMounted(true);
 
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slidesData.length);
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentSlide((prev) => (prev + 1) % slidesData.length);
+        setIsTransitioning(false);
+      }, 500);
     }, 5000);
     
     return () => clearInterval(timer);
@@ -85,9 +90,15 @@ export function HomeCarousel() {
           fill
           sizes="100vw"
           priority
-          className="absolute inset-0 w-full h-full object-cover"
+          className={cn(
+            "absolute inset-0 w-full h-full object-cover transition-opacity duration-500",
+            isTransitioning ? "opacity-0" : "opacity-100"
+          )}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent flex items-center p-12">
+        <div className={cn(
+          "absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent flex items-center p-12 transition-opacity duration-500",
+          isTransitioning ? "opacity-0" : "opacity-100"
+        )}>
           <div className="w-[45%] text-white space-y-4">
             <h2 className="text-5xl font-bold leading-tight drop-shadow-md">{slide.title}</h2>
             <p className="text-lg text-white/90 drop-shadow-sm">{slide.description}</p>
@@ -105,9 +116,15 @@ export function HomeCarousel() {
           fill
           sizes="100vw"
           priority
-          className="absolute inset-0 w-full h-full object-cover"
+          className={cn(
+            "absolute inset-0 w-full h-full object-cover transition-opacity duration-500",
+            isTransitioning ? "opacity-0" : "opacity-100"
+          )}
         />
-        <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center p-4">
+        <div className={cn(
+          "absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center p-4 transition-opacity duration-500",
+          isTransitioning ? "opacity-0" : "opacity-100"
+        )}>
           <div className="text-white space-y-2">
             <h2 className="text-2xl font-bold leading-tight drop-shadow-md">{slide.title}</h2>
             <p className="text-sm text-white/90 drop-shadow-sm">{slide.description}</p>
