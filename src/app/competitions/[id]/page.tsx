@@ -1,5 +1,6 @@
 
 
+import React from 'react';
 import { notFound } from 'next/navigation';
 import { getCompetitionById, getOrganizerByName, getCompetitions } from '@/lib/data';
 import type { Metadata } from 'next';
@@ -160,20 +161,29 @@ const DetailSection = ({ icon: Icon, title, color, children }: { icon: React.Ele
 const FormattedText = ({ text }: { text?: string }) => {
     if (!text || text.trim() === '') return <p className="italic text-muted-foreground">غير محدد</p>;
 
-    const contentBlocks = text.split('\n').map(paragraph => paragraph.trim()).filter(p => p.length > 0);
+    // Split by one or more newlines to handle paragraphs
+    const paragraphs = text.split(/\n{2,}/);
 
     return (
         <div className="prose prose-lg dark:prose-invert max-w-none text-foreground">
-            {contentBlocks.map((block, index) => {
-                if (block.startsWith('- ') || block.startsWith('* ')) {
-                    const listItems = block.split('\n').filter(i => i.trim()).map(item => item.trim().replace(/^[-*]\s*/, ''));
+            {paragraphs.map((paragraph, pIndex) => {
+                const lines = paragraph.split('\n').map((line, lIndex) => (
+                    <React.Fragment key={lIndex}>
+                        {line}
+                        {lIndex < paragraph.split('\n').length - 1 && <br />}
+                    </React.Fragment>
+                ));
+
+                if (paragraph.trim().startsWith('- ') || paragraph.trim().startsWith('* ')) {
+                    const listItems = paragraph.split('\n').filter(i => i.trim()).map(item => item.trim().replace(/^[-*]\s*/, ''));
                     return (
-                        <ul key={index} className="list-disc pr-5 space-y-2 mb-4">
+                        <ul key={pIndex} className="list-disc pr-5 space-y-2 mb-4">
                             {listItems.map((item, i) => <li key={i}>{item}</li>)}
                         </ul>
                     );
                 }
-                return <p key={index} className="mb-4 last:mb-0">{block}</p>;
+
+                return <p key={pIndex} className="mb-4 last:mb-0">{lines}</p>;
             })}
         </div>
     );
