@@ -28,7 +28,7 @@ export function slugify(text: string): string {
 export const programTypes = [
     { value: 'work', label: 'عقد عمل', icon: 'FileSignature', color: '#00897B' },
     { value: 'study', label: 'دراسة', icon: 'BookOpen', color: '#8E24AA' },
-    { value: 'seasonal', label: 'موسمي', icon: 'Leaf', color: '#43A047' },
+    { value: 'seasonal', label: 'عمل موسمي', icon: 'Leaf', color: '#43A047' },
     { value: 'training', label: 'تدريب', icon: 'Award', color: '#FB8C00' },
     { value: 'volunteer', label: 'تطوع', icon: 'Handshake', color: '#d946ef' },
     { value: 'crafts', label: 'المهن اليدوية والحرفية', icon: 'Hammer', color: '#6D4C41' },
