@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const noMobilePadding = ['/', '/post-job'].includes(pathname);
+  const noMobilePadding = ['/'].includes(pathname);
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
