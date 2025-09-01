@@ -217,14 +217,18 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                            <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
                                {post.requirements && <DetailSection icon={ClipboardList} title="الشروط العامة" color={sectionColor}><FormattedText text={post.requirements} /></DetailSection>}
                                {post.qualifications && <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={post.qualifications} /></DetailSection>}
+                           </div>
 
-                               {(post.requirements && post.qualifications) && <Separator className="md:hidden" />}
-
+                           { (post.requirements || post.qualifications) && (post.experience || post.tasks) && <Separator className="my-6" /> }
+                           
+                           <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
                                {post.experience && <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={post.experience} /></DetailSection>}
                                {post.tasks && <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={post.tasks} /></DetailSection>}
+                            </div>
 
-                               {(post.experience && post.tasks) && <Separator className="md:hidden" />}
+                            { (post.experience || post.tasks) && (post.featuresAndOpportunities || post.howToApply) && <Separator className="my-6" /> }
 
+                            <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
                                {post.featuresAndOpportunities && <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={post.featuresAndOpportunities} /></DetailSection>}
                                {post.howToApply && <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={post.howToApply} /></DetailSection>}
                            </div>

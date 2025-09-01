@@ -260,14 +260,16 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                            <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
                                {competition.competitionStages && <DetailSection icon={ListOrdered} title="مراحل المباراة" color={sectionColor}><FormattedText text={competition.competitionStages} /></DetailSection>}
                                {competition.documentsNeeded && <DetailSection icon={FileText} title="الوثائق المطلوبة" color={sectionColor}><FormattedText text={competition.documentsNeeded} /></DetailSection>}
-                               
-                               {(competition.competitionStages && competition.documentsNeeded) && <Separator className="md:hidden" />}
+                           </div>
 
+                            {(competition.competitionStages || competition.documentsNeeded) && (competition.trainingFeatures || competition.jobProspects) && <Separator className="my-6" />}
+
+                           <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
                                {competition.trainingFeatures && <DetailSection icon={Award} title="مميزات التكوين والفرص" color={sectionColor}><FormattedText text={competition.trainingFeatures} /></DetailSection>}
                                {competition.jobProspects && <DetailSection icon={Target} title="أفق العمل بعد المباراة" color={sectionColor}><FormattedText text={competition.jobProspects} /></DetailSection>}
                            </div>
 
-                            {(competition.competitionStages || competition.documentsNeeded || competition.trainingFeatures || competition.jobProspects) && <Separator />}
+                            {(competition.trainingFeatures || competition.jobProspects) && competition.howToApply && <Separator className="my-6" />}
 
                            {competition.howToApply && (<>
                                <DetailSection icon={HelpCircle} title="طريقة التسجيل" color={sectionColor}><FormattedText text={competition.howToApply} /></DetailSection>
