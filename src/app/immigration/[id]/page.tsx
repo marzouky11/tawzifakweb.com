@@ -208,20 +208,19 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                             {post.deadline && <InfoItem icon={CalendarDays} label="آخر أجل" value={post.deadline} color={iconColor} />}
                         </div>
                         <Separator />
-                        <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
-                           {post.description && <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor} className="md:col-span-2"><FormattedText text={post.description} /></DetailSection>}
+                        <div className="space-y-6">
+                           {post.description && <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={post.description} /></DetailSection>}
                            
-                           {post.requirements && <DetailSection icon={ClipboardList} title="الشروط العامة" color={sectionColor}><FormattedText text={post.requirements} /></DetailSection>}
-                           
-                           {post.qualifications && <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={post.qualifications} /></DetailSection>}
+                           <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
+                               {post.requirements && <DetailSection icon={ClipboardList} title="الشروط العامة" color={sectionColor}><FormattedText text={post.requirements} /></DetailSection>}
+                               {post.qualifications && <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={post.qualifications} /></DetailSection>}
+                               {post.experience && <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={post.experience} /></DetailSection>}
+                               {post.howToApply && <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={post.howToApply} /></DetailSection>}
+                           </div>
 
-                           {post.experience && <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={post.experience} /></DetailSection>}
+                           {post.tasks && <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={post.tasks} /></DetailSection>}
                            
-                           {post.howToApply && <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={post.howToApply} /></DetailSection>}
-
-                           {post.tasks && <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor} className="md:col-span-2"><FormattedText text={post.tasks} /></DetailSection>}
-                           
-                           {post.featuresAndOpportunities && <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor} className="md:col-span-2"><FormattedText text={post.featuresAndOpportunities} /></DetailSection>}
+                           {post.featuresAndOpportunities && <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={post.featuresAndOpportunities} /></DetailSection>}
                         </div>
                     </CardContent>
                 </Card>
