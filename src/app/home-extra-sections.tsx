@@ -41,7 +41,7 @@ const CountUp = ({ end, duration = 2 }: { end: number, duration?: number }) => {
 
   }, [end, duration, isInView]);
 
-  return <span ref={ref}>{count.toLocaleString('ar-EG')}</span>;
+  return <span ref={ref}>{count.toLocaleString()}</span>;
 };
 
 // Stats Section Component
