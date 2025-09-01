@@ -211,6 +211,8 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                         <div className="space-y-6">
                            {post.description && <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={post.description} /></DetailSection>}
                            
+                           {post.description && (post.requirements || post.qualifications || post.experience || post.tasks || post.featuresAndOpportunities || post.howToApply) && <Separator />}
+
                            <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
                                {post.requirements && <DetailSection icon={ClipboardList} title="الشروط العامة" color={sectionColor}><FormattedText text={post.requirements} /></DetailSection>}
                                {post.qualifications && <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={post.qualifications} /></DetailSection>}

@@ -249,7 +249,11 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                         <div className="space-y-6">
                            {competition.description && <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={competition.description} /></DetailSection>}
                            
+                           {competition.description && (competition.requirements || competition.competitionStages || competition.documentsNeeded || competition.trainingFeatures || competition.jobProspects || competition.howToApply || competition.registrationStartDate || competition.deadline || competition.competitionDate) && <Separator />}
+                           
                            {competition.requirements && <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor}><FormattedText text={competition.requirements} /></DetailSection>}
+                           
+                           {competition.requirements && (competition.competitionStages || competition.documentsNeeded || competition.trainingFeatures || competition.jobProspects || competition.howToApply || competition.registrationStartDate || competition.deadline || competition.competitionDate) && <Separator />}
                            
                            <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
                                {competition.competitionStages && <DetailSection icon={ListOrdered} title="مراحل المباراة" color={sectionColor}><FormattedText text={competition.competitionStages} /></DetailSection>}
@@ -258,8 +262,12 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                                {competition.jobProspects && <DetailSection icon={Target} title="أفق العمل بعد المباراة" color={sectionColor}><FormattedText text={competition.jobProspects} /></DetailSection>}
                            </div>
 
+                            {(competition.competitionStages || competition.documentsNeeded || competition.trainingFeatures || competition.jobProspects) && (competition.howToApply || competition.registrationStartDate || competition.deadline || competition.competitionDate) && <Separator />}
+
                            {competition.howToApply && <DetailSection icon={HelpCircle} title="طريقة التسجيل" color={sectionColor}><FormattedText text={competition.howToApply} /></DetailSection>}
                            
+                           {competition.howToApply && (competition.registrationStartDate || competition.deadline || competition.competitionDate) && <Separator />}
+
                            {(competition.registrationStartDate || competition.deadline || competition.competitionDate) && (
                             <DetailSection icon={CalendarDays} title="التواريخ المهمة" color={sectionColor}>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 not-prose">

@@ -211,6 +211,9 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                             
                             <div className="space-y-6">
                                 {job.description && <DetailSection icon={FileText} title="وصف المهارات والخبرة" color={sectionColor}><FormattedText text={job.description} /></DetailSection>}
+                                
+                                <Separator />
+                                
                                 <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
                                   {job.qualifications && <DetailSection icon={GraduationCap} title="الشهادات والمؤهلات" color={sectionColor}><FormattedText text={job.qualifications} /></DetailSection>}
                                   {job.experience && <DetailSection icon={Award} title="الخبرة" color={sectionColor}><FormattedText text={job.experience} /></DetailSection>}
