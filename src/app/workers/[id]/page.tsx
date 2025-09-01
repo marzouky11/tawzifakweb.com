@@ -149,7 +149,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
     const translatedWorkType = job.workType ? workTypeTranslations[job.workType] : undefined;
     const sectionColor = '#424242';
     const categoryColor = category?.color || sectionColor;
-    const finalIconName = category?.iconName || 'Users';
+    const finalIconName = category?.iconName || 'Briefcase';
 
     const jobTitle = job.title || 'هذا الإعلان';
     
