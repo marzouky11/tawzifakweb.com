@@ -14,7 +14,7 @@ import { useRouter } from 'next/navigation';
 import { 
     Loader2, Plane, FileText, Globe, MapPin, Users, Calendar, Award, Wallet, Link as LinkIcon, 
     GraduationCap, ClipboardList, Info, Briefcase, Check, ArrowRight, ArrowLeft, Mail, MessageSquare, Instagram,
-    Phone, HelpCircle, Target, CheckSquare,
+    Phone, HelpCircle, Target, CheckSquare, LayoutGrid,
 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { slugify, cn, getProgramTypeDetails, programTypes } from '@/lib/utils';
@@ -22,13 +22,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Separator } from '@/components/ui/separator';
 import { CategoryIcon } from '@/components/icons';
 
+const programTypeValues = programTypes.map(p => p.value) as [string, ...string[]];
 
 const formSchema = z.object({
   title: z.string().min(5, 'العنوان يجب أن يكون 5 أحرف على الأقل.'),
   targetCountry: z.string().min(2, 'الدولة المستهدفة مطلوبة.'),
   city: z.string().optional(),
   positionsAvailable: z.string().optional(),
-  programType: z.enum(['work', 'study', 'seasonal', 'training', 'volunteer', 'crafts', 'health', 'tech', 'transport', 'hospitality', 'education', 'agriculture'], { required_error: "نوع البرنامج مطلوب." }),
+  programType: z.enum(programTypeValues, { required_error: "نوع البرنامج مطلوب." }),
   
   salary: z.string().optional(),
   targetAudience: z.string().min(2, "الفئة المستهدفة مطلوبة."),
@@ -187,7 +188,7 @@ export function PostImmigrationForm() {
         <FormField control={form.control} name="city" render={({ field }) => (<FormItem><FormLabelIcon icon={MapPin} label="المدينة (اختياري)" /><FormControl><Input placeholder="مثال: مونتريال" {...field} /></FormControl><FormMessage /></FormItem>)} />
       </div>
       <FormField control={form.control} name="positionsAvailable" render={({ field }) => (<FormItem><FormLabelIcon icon={Users} label="عدد المناصب (اختياري)" /><FormControl><Input placeholder="مثال: 10 مناصب" {...field} /></FormControl><FormMessage /></FormItem>)} />
-       <FormField control={form.control} name="programType" render={({ field }) => (<FormItem><FormLabelIcon icon={Briefcase} label="نوع البرنامج" /><Select onValueChange={field.onChange} value={field.value}><FormControl><SelectTrigger><SelectValue placeholder="اختر نوع البرنامج" /></SelectTrigger></FormControl><SelectContent>{programTypes.map(p => (<SelectItem key={p.value} value={p.value}><div className="flex items-center gap-2"><CategoryIcon name={p.icon} className="w-5 h-5" style={{ color: p.color }} /> {p.label}</div></SelectItem>))}</SelectContent></Select><FormMessage /></FormItem>)} />
+       <FormField control={form.control} name="programType" render={({ field }) => (<FormItem><FormLabelIcon icon={LayoutGrid} label="نوع البرنامج" /><Select onValueChange={field.onChange} value={field.value}><FormControl><SelectTrigger><SelectValue placeholder="اختر نوع البرنامج" /></SelectTrigger></FormControl><SelectContent>{programTypes.map(p => (<SelectItem key={p.value} value={p.value}><div className="flex items-center gap-2"><CategoryIcon name={p.icon} className="w-5 h-5" style={{ color: p.color }} /> {p.label}</div></SelectItem>))}</SelectContent></Select><FormMessage /></FormItem>)} />
        <FormField control={form.control} name="salary" render={({ field }) => (<FormItem><FormLabelIcon icon={Wallet} label="الأجر (اختياري)" /><FormControl><Input placeholder="مثال: 3000 دولار شهريا" {...field} /></FormControl><FormMessage /></FormItem>)} />
        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField control={form.control} name="targetAudience" render={({ field }) => (<FormItem><FormLabelIcon icon={Users} label="الفئة المستهدفة" /><FormControl><Input placeholder="طلاب، عمال، مهنيين..." {...field} /></FormControl><FormMessage /></FormItem>)} />
@@ -247,5 +248,3 @@ export function PostImmigrationForm() {
     </Form>
   );
    }
-
-    
