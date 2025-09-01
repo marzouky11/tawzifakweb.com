@@ -60,7 +60,8 @@ export function JobCard({ job }: JobCardProps) {
   const sectionColor = sectionColors[job.postType];
   const categoryColor = category?.color || sectionColor;
 
-  const categoryIcon = category?.iconName || 'Briefcase';
+  const defaultIcon = isSeekingJob ? 'Users' : 'Briefcase';
+  const categoryIcon = category?.iconName || defaultIcon;
 
   const salaryText = !isSeekingJob ? (job.salary || 'عند الطلب') : undefined;
   
