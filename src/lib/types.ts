@@ -94,7 +94,8 @@ export type ImmigrationProgramType =
   | 'transport'
   | 'hospitality'
   | 'education'
-  | 'agriculture';
+  | 'agriculture'
+  | 'finance';
 
 export interface ImmigrationPost {
   id: string;

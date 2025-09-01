@@ -65,6 +65,7 @@ import {
   Globe,
   FileSignature,
   School,
+  Wallet,
 } from 'lucide-react';
 import type { CSSProperties } from 'react';
 
@@ -134,6 +135,7 @@ const iconMap: { [key: string]: LucideIcon } = {
   Globe,
   FileSignature,
   School,
+  Wallet,
   Default: Briefcase,
 };
 
