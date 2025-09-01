@@ -116,9 +116,6 @@ const DesktopFooter = () => {
             </div>
             <p className="text-muted-foreground text-sm"> منصة توظيفك هي وجهتك الأولى للبحث عن فرص العمل في المغرب والدول العربية. توفر المنصة وظائف متنوعة، إمكانية إنشاء سيرة ذاتية احترافية، ونشر الإعلانات الوظيفية بسهولة. تهدف إلى ربط الشركات بالمواهب بكفاءة، وتقديم تجربة توظيف مهنية وآمنة لجميع المستخدمين.
             </p>
-             <p className="text-muted-foreground text-xs mt-4">
-                &copy; {new Date().getFullYear()} توظيفك. جميع الحقوق محفوظة.
-            </p>
           </div>
           
           <div className="space-y-4">
@@ -157,6 +154,10 @@ const DesktopFooter = () => {
             </ul>
           </div>
         </div>
+        <Separator className="my-8" />
+        <p className="text-center text-muted-foreground text-sm">
+            &copy; {new Date().getFullYear()} توظيفك. جميع الحقوق محفوظة.
+        </p>
       </div>
     </footer>
   )
