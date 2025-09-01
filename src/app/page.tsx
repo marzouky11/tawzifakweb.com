@@ -225,7 +225,7 @@ export default function HomePage() {
         </Suspense>
       </div>
       
-      <div className="container space-y-12 mt-6 md:mt-8">
+      <div className="container space-y-12 mt-6 md:mt-8 mb-12">
           <HomeCarousel />
 
           <section>
@@ -272,8 +272,6 @@ export default function HomePage() {
 
           <CVBuilderSection />
           
-          <Separator />
-
           <Suspense>
             <ExtraSections />
           </Suspense>

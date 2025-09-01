@@ -208,6 +208,7 @@ export function HomeExtraSections({ testimonials, jobOffersCount, competitionsCo
 
   return (  
     <div className="space-y-12">  
+      <Separator />
       <StatsSection stats={stats} />  
       <Separator />
       <TestimonialsSection initialTestimonials={testimonials} />  
