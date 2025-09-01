@@ -138,7 +138,7 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
   const displayedTestimonials = initialTestimonials.slice(0, INITIAL_DISPLAY_COUNT_DESKTOP);
 
   return (
-    <section ref={ref} className="py-6">
+    <section ref={ref} className="py-12">
       <div className="container mx-auto px-1">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -206,7 +206,7 @@ export function HomeExtraSections({ testimonials, jobOffersCount, competitionsCo
   const stats = { jobs: jobOffersCount, competitions: competitionsCount, immigration: immigrationCount, seekers: jobSeekersCount };
 
   return (  
-    <div className="space-y-6">  
+    <div className="space-y-12">  
       <StatsSection stats={stats} />  
       <TestimonialsSection initialTestimonials={testimonials} />  
     </div>  
