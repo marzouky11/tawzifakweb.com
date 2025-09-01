@@ -26,7 +26,7 @@ export function slugify(text: string): string {
 }
 
 export const programTypes = [
-    { value: 'work', label: 'عمل', icon: 'Briefcase', color: '#0D47A1' }, // Dark Blue
+    { value: 'work', label: 'عمل', icon: 'FileSignature', color: '#00897B' }, // Teal for "Work Contract"
     { value: 'study', label: 'دراسة', icon: 'BookOpen', color: '#8E24AA' }, // Purple
     { value: 'seasonal', label: 'موسمي', icon: 'Leaf', color: '#43A047' }, // Green
     { value: 'training', label: 'تدريب', icon: 'Award', color: '#FB8C00' }, // Orange
