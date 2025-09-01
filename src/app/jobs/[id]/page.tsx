@@ -277,7 +277,19 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                             
                             <Separator />
                             
-                            <div className="space-y-6">
+                            {/* Mobile View */}
+                            <div className="space-y-6 md:hidden">
+                                {job.description && (<> <DetailSection icon={FileText} title="وصف الوظيفة" color={sectionColor}><FormattedText text={job.description} /></DetailSection> <Separator /> </>)}
+                                {job.conditions && (<> <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor}><FormattedText text={job.conditions} /></DetailSection> <Separator /> </>)}
+                                {job.qualifications && (<> <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={job.qualifications} /></DetailSection> <Separator /> </>)}
+                                {job.experience && (<> <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={job.experience} /></DetailSection> <Separator /> </>)}
+                                {job.tasks && (<> <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={job.tasks} /></DetailSection> <Separator /> </>)}
+                                {job.featuresAndOpportunities && (<> <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={job.featuresAndOpportunities} /></DetailSection> <Separator /> </>)}
+                                {job.howToApply && (<> <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={job.howToApply} /></DetailSection> </>)}
+                            </div>
+
+                            {/* Desktop View */}
+                            <div className="hidden md:block space-y-6">
                                 {job.description && (
                                     <>
                                         <DetailSection icon={FileText} title="وصف الوظيفة" color={sectionColor}><FormattedText text={job.description} /></DetailSection>
@@ -304,6 +316,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                     {job.howToApply && <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={job.howToApply} /></DetailSection>}
                                 </div>
                             </div>
+
                         </CardContent>
                     </Card>
 

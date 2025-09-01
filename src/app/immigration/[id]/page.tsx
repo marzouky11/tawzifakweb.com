@@ -208,7 +208,20 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                             {post.deadline && <InfoItem icon={CalendarDays} label="آخر أجل" value={post.deadline} color={iconColor} />}
                         </div>
                         <Separator />
-                        <div className="space-y-6">
+                        
+                        {/* Mobile view */}
+                        <div className="space-y-6 md:hidden">
+                           {post.description && (<> <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={post.description} /></DetailSection> <Separator /> </>)}
+                           {post.requirements && (<> <DetailSection icon={ClipboardList} title="الشروط العامة" color={sectionColor}><FormattedText text={post.requirements} /></DetailSection> <Separator /> </>)}
+                           {post.qualifications && (<> <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={post.qualifications} /></DetailSection> <Separator /> </>)}
+                           {post.experience && (<> <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={post.experience} /></DetailSection> <Separator /> </>)}
+                           {post.tasks && (<> <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={post.tasks} /></DetailSection> <Separator /> </>)}
+                           {post.featuresAndOpportunities && (<> <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={post.featuresAndOpportunities} /></DetailSection> <Separator /> </>)}
+                           {post.howToApply && (<> <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={post.howToApply} /></DetailSection> </>)}
+                        </div>
+
+                        {/* Desktop view */}
+                        <div className="hidden md:block space-y-6">
                            {post.description && (
                             <>
                                <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={post.description} /></DetailSection>
@@ -300,5 +313,3 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
         </>
     );
                           }   
-
-    

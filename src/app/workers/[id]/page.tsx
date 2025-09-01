@@ -209,17 +209,24 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
 
                             <Separator/>
                             
-                            <div className="space-y-6">
+                             {/* Mobile view */}
+                            <div className="space-y-6 md:hidden">
+                                {job.description && (<> <DetailSection icon={FileText} title="وصف المهارات والخبرة" color={sectionColor}><FormattedText text={job.description} /></DetailSection> <Separator /> </>)}
+                                {job.qualifications && (<> <DetailSection icon={GraduationCap} title="الشهادات والمؤهلات" color={sectionColor}><FormattedText text={job.qualifications} /></DetailSection> <Separator /> </>)}
+                                {job.experience && (<> <DetailSection icon={Award} title="الخبرة" color={sectionColor}><FormattedText text={job.experience} /></DetailSection> </>)}
+                            </div>
+
+                            {/* Desktop view */}
+                            <div className="hidden md:block space-y-6">
                                 {job.description && (
                                     <>
                                         <DetailSection icon={FileText} title="وصف المهارات والخبرة" color={sectionColor}><FormattedText text={job.description} /></DetailSection>
-                                        <Separator className="my-6"/>
+                                        <Separator className="my-6" />
                                     </>
                                 )}
-                                
-                                <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
-                                  {job.qualifications && <DetailSection icon={GraduationCap} title="الشهادات والمؤهلات" color={sectionColor}><FormattedText text={job.qualifications} /></DetailSection>}
-                                  {job.experience && <DetailSection icon={Award} title="الخبرة" color={sectionColor}><FormattedText text={job.experience} /></DetailSection>}
+                                <div className="grid grid-cols-2 gap-x-8 gap-y-6">
+                                    {job.qualifications && <DetailSection icon={GraduationCap} title="الشهادات والمؤهلات" color={sectionColor}><FormattedText text={job.qualifications} /></DetailSection>}
+                                    {job.experience && <DetailSection icon={Award} title="الخبرة" color={sectionColor}><FormattedText text={job.experience} /></DetailSection>}
                                 </div>
                             </div>
                         </CardContent>
