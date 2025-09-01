@@ -209,15 +209,22 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                         </div>
                         <Separator />
                         <div className="space-y-6">
-                           {post.description && <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={post.description} /></DetailSection>}
-                           
-                           {post.description && (post.requirements || post.qualifications || post.experience || post.tasks || post.featuresAndOpportunities || post.howToApply) && <Separator />}
+                           {post.description && (<>
+                               <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={post.description} /></DetailSection>
+                               <Separator />
+                           </>)}
 
                            <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
                                {post.requirements && <DetailSection icon={ClipboardList} title="الشروط العامة" color={sectionColor}><FormattedText text={post.requirements} /></DetailSection>}
                                {post.qualifications && <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={post.qualifications} /></DetailSection>}
+
+                               {(post.requirements && post.qualifications) && <Separator className="md:hidden" />}
+
                                {post.experience && <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={post.experience} /></DetailSection>}
                                {post.tasks && <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={post.tasks} /></DetailSection>}
+
+                               {(post.experience && post.tasks) && <Separator className="md:hidden" />}
+
                                {post.featuresAndOpportunities && <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={post.featuresAndOpportunities} /></DetailSection>}
                                {post.howToApply && <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={post.howToApply} /></DetailSection>}
                            </div>
