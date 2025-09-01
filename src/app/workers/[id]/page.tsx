@@ -203,7 +203,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                         <CardContent className="p-4 sm:p-6 space-y-6">
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                                 <SeekerInfoItem icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} color={categoryColor} />
-                                <SeekerInfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={categoryColor} />
+                                {categoryName && <SeekerInfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={categoryColor} />}
                                 {job.workType && <SeekerInfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={categoryColor} />}
                             </div>
 

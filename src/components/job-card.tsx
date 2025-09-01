@@ -84,9 +84,11 @@ export function JobCard({ job }: JobCardProps) {
                         {job.title}
                     </Link>
                 </h3>
-                <p className="text-xs text-muted-foreground truncate">
-                    {categoryName}
-                </p>
+                {categoryName && (
+                  <p className="text-xs text-muted-foreground truncate">
+                      {categoryName}
+                  </p>
+                )}
              </div>
           </div>
         </div>
