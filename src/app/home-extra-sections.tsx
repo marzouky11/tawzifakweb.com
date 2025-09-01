@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { TestimonialCard } from '@/app/testimonials/testimonial-card';
+import { Separator } from '@/components/ui/separator';
 
 // CountUp component for animating numbers
 const CountUp = ({ end, duration = 2 }: { end: number, duration?: number }) => {
@@ -208,6 +209,7 @@ export function HomeExtraSections({ testimonials, jobOffersCount, competitionsCo
   return (  
     <div className="space-y-12">  
       <StatsSection stats={stats} />  
+      <Separator />
       <TestimonialsSection initialTestimonials={testimonials} />  
     </div>  
   );
