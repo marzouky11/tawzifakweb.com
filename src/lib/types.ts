@@ -82,13 +82,27 @@ export interface Competition {
   isNew?: boolean;
 }
 
+export type ImmigrationProgramType = 
+  | 'work' 
+  | 'study' 
+  | 'seasonal' 
+  | 'training' 
+  | 'volunteer'
+  | 'crafts'
+  | 'health'
+  | 'tech'
+  | 'transport'
+  | 'hospitality'
+  | 'education'
+  | 'agriculture';
+
 export interface ImmigrationPost {
   id: string;
   title: string;
   slug: string;
   targetCountry: string;
   city?: string;
-  programType: 'work' | 'study' | 'seasonal' | 'training' | 'volunteer';
+  programType: ImmigrationProgramType;
   iconName: string;
   targetAudience: string;
   salary?: string;

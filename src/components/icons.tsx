@@ -62,7 +62,9 @@ import {
   FileText,
   Plane,
   Award,
-  Globe
+  Globe,
+  FileSignature,
+  School,
 } from 'lucide-react';
 import type { CSSProperties } from 'react';
 
@@ -130,6 +132,8 @@ const iconMap: { [key: string]: LucideIcon } = {
   Briefcase,
   Award,
   Globe,
+  FileSignature,
+  School,
   Default: Briefcase,
 };
 
