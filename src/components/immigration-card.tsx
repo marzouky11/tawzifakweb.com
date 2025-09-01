@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Plane, Calendar, MapPin, ArrowRight, Wallet, Briefcase } from 'lucide-react';
+import { Plane, Calendar, MapPin, ArrowRight, Wallet, Briefcase, Users } from 'lucide-react';
 import type { ImmigrationPost } from '@/lib/types';
 import { cn, getProgramTypeDetails } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -79,6 +79,7 @@ export function ImmigrationCard({ post }: ImmigrationCardProps) {
       <CardContent className="p-4 pt-3 flex-grow">
         <div className="flex flex-wrap gap-2">
           <InfoBadge icon={MapPin} text={`${post.targetCountry}${post.city ? ', ' + post.city : ''}`} className="bg-sky-100/60 dark:bg-sky-900/40 text-sky-700/80 dark:text-sky-300/80 border-sky-200/50 dark:border-sky-800/50"/>
+          {post.positionsAvailable && <InfoBadge icon={Users} text={`${post.positionsAvailable} منصب`} className="bg-orange-100/60 dark:bg-orange-900/40 text-orange-800/80 dark:text-orange-200/80 border-orange-200/50 dark:border-orange-800/50" />}
           {post.salary && <InfoBadge icon={Wallet} text={post.salary} className="bg-green-100/60 dark:bg-green-900/40 text-green-800/80 dark:text-green-200/80 border-green-200/50 dark:border-green-800/50" />}
         </div>
       </CardContent>
@@ -94,3 +95,5 @@ export function ImmigrationCard({ post }: ImmigrationCardProps) {
     </Card>
   );
 }
+
+    

@@ -27,6 +27,7 @@ const formSchema = z.object({
   title: z.string().min(5, 'العنوان يجب أن يكون 5 أحرف على الأقل.'),
   targetCountry: z.string().min(2, 'الدولة المستهدفة مطلوبة.'),
   city: z.string().optional(),
+  positionsAvailable: z.string().optional(),
   programType: z.enum(['work', 'study', 'seasonal', 'training', 'volunteer', 'crafts', 'health', 'tech', 'transport', 'hospitality', 'education', 'agriculture'], { required_error: "نوع البرنامج مطلوب." }),
   
   salary: z.string().optional(),
@@ -52,7 +53,7 @@ const formSchema = z.object({
 
 
 const stepFields: FieldPath<z.infer<typeof formSchema>>[][] = [
-  ['title', 'targetCountry', 'city', 'programType', 'salary', 'targetAudience', 'deadline'],
+  ['title', 'targetCountry', 'city', 'programType', 'salary', 'targetAudience', 'deadline', 'positionsAvailable'],
   ['description', 'requirements', 'qualifications', 'experience', 'tasks', 'featuresAndOpportunities', 'howToApply'],
   ['applyUrl', 'phone', 'whatsapp', 'email', 'instagram'],
 ];
@@ -111,6 +112,7 @@ export function PostImmigrationForm() {
       title: '',
       targetCountry: '',
       city: '',
+      positionsAvailable: '',
       programType: undefined,
       targetAudience: '',
       deadline: '',
@@ -184,6 +186,7 @@ export function PostImmigrationForm() {
         <FormField control={form.control} name="targetCountry" render={({ field }) => (<FormItem><FormLabelIcon icon={Globe} label="الدولة المستهدفة" /><FormControl><Input placeholder="مثال: كندا" {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="city" render={({ field }) => (<FormItem><FormLabelIcon icon={MapPin} label="المدينة (اختياري)" /><FormControl><Input placeholder="مثال: مونتريال" {...field} /></FormControl><FormMessage /></FormItem>)} />
       </div>
+      <FormField control={form.control} name="positionsAvailable" render={({ field }) => (<FormItem><FormLabelIcon icon={Users} label="عدد المناصب (اختياري)" /><FormControl><Input placeholder="مثال: 10 مناصب" {...field} /></FormControl><FormMessage /></FormItem>)} />
        <FormField control={form.control} name="programType" render={({ field }) => (<FormItem><FormLabelIcon icon={Briefcase} label="نوع البرنامج" /><Select onValueChange={field.onChange} value={field.value}><FormControl><SelectTrigger><SelectValue placeholder="اختر نوع البرنامج" /></SelectTrigger></FormControl><SelectContent>{programTypes.map(p => (<SelectItem key={p.value} value={p.value}><div className="flex items-center gap-2"><CategoryIcon name={p.icon} className="w-5 h-5" style={{ color: p.color }} /> {p.label}</div></SelectItem>))}</SelectContent></Select><FormMessage /></FormItem>)} />
        <FormField control={form.control} name="salary" render={({ field }) => (<FormItem><FormLabelIcon icon={Wallet} label="الأجر (اختياري)" /><FormControl><Input placeholder="مثال: 3000 دولار شهريا" {...field} /></FormControl><FormMessage /></FormItem>)} />
        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -244,3 +247,5 @@ export function PostImmigrationForm() {
     </Form>
   );
    }
+
+    

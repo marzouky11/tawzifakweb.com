@@ -201,6 +201,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                             <InfoItem icon={Briefcase} label="نوع البرنامج" value={programDetails.label} color={iconColor} />
                             <InfoItem icon={MapPin} label="الموقع" value={`${post.targetCountry}${post.city ? ', ' + post.city : ''}`} color={iconColor} />
+                            {post.positionsAvailable && <InfoItem icon={Users} label="عدد المناصب" value={post.positionsAvailable} color={iconColor} />}
                             <InfoItem icon={Users} label="الفئة المستهدفة" value={post.targetAudience} color={iconColor} />
                              {post.salary && <InfoItem icon={Wallet} label="الأجر" value={post.salary} color={iconColor} />}
                             {post.deadline && <InfoItem icon={CalendarDays} label="آخر أجل" value={post.deadline} color={iconColor} />}
@@ -292,3 +293,5 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
         </>
     );
                           }   
+
+    

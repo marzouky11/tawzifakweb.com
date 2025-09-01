@@ -102,6 +102,7 @@ export interface ImmigrationPost {
   slug: string;
   targetCountry: string;
   city?: string;
+  positionsAvailable?: string;
   programType: ImmigrationProgramType;
   iconName: string;
   targetAudience: string;
@@ -194,3 +195,5 @@ export interface Country {
   name: string;
   cities: string[];
 }
+
+    
