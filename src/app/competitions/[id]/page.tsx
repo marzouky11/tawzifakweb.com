@@ -143,10 +143,10 @@ const InfoItem = ({ icon: Icon, label, value, color, href, isDate }: { icon: Rea
 };
 
 
-const DetailSection = ({ icon: Icon, title, color, children }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode }) => {
+const DetailSection = ({ icon: Icon, title, color, children, className }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode, className?: string }) => {
     if (!children) return null;
     return (
-        <div>
+        <div className={className}>
             <h3 className="text-xl font-bold flex items-center gap-2 mb-3" style={{color}}>
                 <Icon className="h-5 w-5" />
                 {title}
@@ -246,31 +246,23 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                             {competition.positionsAvailable && <InfoItem icon={Users2} label="عدد المناصب" value={competition.positionsAvailable} color={organizerColor} />}
                         </div>
                         <Separator />
-                        <div className="space-y-6">
-                           {competition.description && <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={competition.description} /></DetailSection>}
-                           {competition.description && <Separator />}
-
-                           {competition.requirements && <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor}><FormattedText text={competition.requirements} /></DetailSection>}
-                           {competition.requirements && <Separator />}
-
+                        <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
+                           {competition.description && <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor} className="md:col-span-2"><FormattedText text={competition.description} /></DetailSection>}
+                           
+                           {competition.requirements && <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor} className="md:col-span-2"><FormattedText text={competition.requirements} /></DetailSection>}
+                           
                            {competition.competitionStages && <DetailSection icon={ListOrdered} title="مراحل المباراة" color={sectionColor}><FormattedText text={competition.competitionStages} /></DetailSection>}
-                           {competition.competitionStages && <Separator />}
                            
                            {competition.documentsNeeded && <DetailSection icon={FileText} title="الوثائق المطلوبة" color={sectionColor}><FormattedText text={competition.documentsNeeded} /></DetailSection>}
-                           {competition.documentsNeeded && <Separator />}
-
+                           
                            {competition.trainingFeatures && <DetailSection icon={Award} title="مميزات التكوين والفرص" color={sectionColor}><FormattedText text={competition.trainingFeatures} /></DetailSection>}
-                           {competition.trainingFeatures && <Separator />}
 
                            {competition.jobProspects && <DetailSection icon={Target} title="أفق العمل بعد المباراة" color={sectionColor}><FormattedText text={competition.jobProspects} /></DetailSection>}
-                           {competition.jobProspects && <Separator />}
                            
-                           {competition.howToApply && <DetailSection icon={HelpCircle} title="طريقة التسجيل" color={sectionColor}><FormattedText text={competition.howToApply} /></DetailSection>}
+                           {competition.howToApply && <DetailSection icon={HelpCircle} title="طريقة التسجيل" color={sectionColor} className="md:col-span-2"><FormattedText text={competition.howToApply} /></DetailSection>}
                            
-                           {(competition.registrationStartDate || competition.deadline || competition.competitionDate) && <Separator />}
-
                            {(competition.registrationStartDate || competition.deadline || competition.competitionDate) && (
-                            <DetailSection icon={CalendarDays} title="التواريخ المهمة" color={sectionColor}>
+                            <DetailSection icon={CalendarDays} title="التواريخ المهمة" color={sectionColor} className="md:col-span-2">
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 not-prose">
                                     <InfoItem icon={CalendarDays} label="بداية التسجيل" value={competition.registrationStartDate} color={sectionColor} />
                                     <InfoItem icon={CalendarDays} label="آخر أجل للتسجيل" value={competition.deadline} color={sectionColor} isDate />

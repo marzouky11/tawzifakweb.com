@@ -190,8 +190,8 @@ const FormattedText = ({ text }: { text?: string }) => {
     );
 }
 
-const DetailSection = ({ icon: Icon, title, color, children }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode }) => (
-    <div>
+const DetailSection = ({ icon: Icon, title, color, children, className }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode, className?: string }) => (
+    <div className={className}>
         <h3 className="text-xl font-bold flex items-center gap-2 mb-3" style={{color}}>
             <Icon className="h-5 w-5" />
             {title}
@@ -277,60 +277,15 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                             
                             <Separator />
                             
-                            {job.description && (
-                               <DetailSection icon={FileText} title="وصف الوظيفة" color={sectionColor}>
-                                    <FormattedText text={job.description} />
-                               </DetailSection>
-                            )}
-
-                            {job.description && (job.conditions || job.qualifications || job.experience || job.tasks || job.featuresAndOpportunities || job.howToApply) && <Separator />}
-
-                            {job.conditions && (
-                               <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor}>
-                                    <FormattedText text={job.conditions} />
-                               </DetailSection>
-                            )}
-
-                             {job.conditions && (job.qualifications || job.experience || job.tasks || job.featuresAndOpportunities || job.howToApply) && <Separator />}
-
-                            {job.qualifications && (
-                               <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}>
-                                    <FormattedText text={job.qualifications} />
-                               </DetailSection>
-                            )}
-
-                            {job.qualifications && (job.experience || job.tasks || job.featuresAndOpportunities || job.howToApply) && <Separator />}
-                            
-                            {job.experience && (
-                               <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}>
-                                    <FormattedText text={job.experience} />
-                               </DetailSection>
-                            )}
-
-                            {job.experience && (job.tasks || job.featuresAndOpportunities || job.howToApply) && <Separator />}
-
-                            {job.tasks && (
-                               <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}>
-                                    <FormattedText text={job.tasks} />
-                               </DetailSection>
-                            )}
-
-                            {job.tasks && (job.featuresAndOpportunities || job.howToApply) && <Separator />}
-                            
-                            {job.featuresAndOpportunities && (
-                               <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}>
-                                    <FormattedText text={job.featuresAndOpportunities} />
-                               </DetailSection>
-                            )}
-
-                            {job.featuresAndOpportunities && job.howToApply && <Separator />}
-
-                            {job.howToApply && (
-                               <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}>
-                                    <FormattedText text={job.howToApply} />
-                               </DetailSection>
-                            )}
-
+                             <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
+                                {job.description && <DetailSection icon={FileText} title="وصف الوظيفة" color={sectionColor} className="md:col-span-2"><FormattedText text={job.description} /></DetailSection>}
+                                {job.conditions && <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor}><FormattedText text={job.conditions} /></DetailSection>}
+                                {job.qualifications && <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={job.qualifications} /></DetailSection>}
+                                {job.experience && <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={job.experience} /></DetailSection>}
+                                {job.howToApply && <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={job.howToApply} /></DetailSection>}
+                                {job.tasks && <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor} className="md:col-span-2"><FormattedText text={job.tasks} /></DetailSection>}
+                                {job.featuresAndOpportunities && <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor} className="md:col-span-2"><FormattedText text={job.featuresAndOpportunities} /></DetailSection>}
+                            </div>
                         </CardContent>
                     </Card>
 

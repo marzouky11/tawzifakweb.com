@@ -104,10 +104,10 @@ const InfoItem = ({ icon: Icon, label, value, color }: { icon: React.ElementType
     );
 };
 
-const DetailSection = ({ icon: Icon, title, color, children }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode }) => {
+const DetailSection = ({ icon: Icon, title, color, children, className }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode, className?: string }) => {
     if (!children) return null;
     return (
-        <div>
+        <div className={className}>
             <h3 className="text-xl font-bold flex items-center gap-2 mb-3" style={{color}}>
                 <Icon className="h-5 w-5" />
                 {title}
@@ -208,26 +208,20 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                             {post.deadline && <InfoItem icon={CalendarDays} label="آخر أجل" value={post.deadline} color={iconColor} />}
                         </div>
                         <Separator />
-                        <div className="space-y-6">
-                           {post.description && <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={post.description} /></DetailSection>}
-                           {post.description && <Separator />}
-
+                        <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
+                           {post.description && <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor} className="md:col-span-2"><FormattedText text={post.description} /></DetailSection>}
+                           
                            {post.requirements && <DetailSection icon={ClipboardList} title="الشروط العامة" color={sectionColor}><FormattedText text={post.requirements} /></DetailSection>}
-                           {post.requirements && <Separator />}
                            
                            {post.qualifications && <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={post.qualifications} /></DetailSection>}
-                           {post.qualifications && <Separator />}
 
                            {post.experience && <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={post.experience} /></DetailSection>}
-                           {post.experience && <Separator />}
-                           
-                           {post.tasks && <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={post.tasks} /></DetailSection>}
-                           {post.tasks && <Separator />}
-                           
-                           {post.featuresAndOpportunities && <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={post.featuresAndOpportunities} /></DetailSection>}
-                           {post.featuresAndOpportunities && <Separator />}
                            
                            {post.howToApply && <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={post.howToApply} /></DetailSection>}
+
+                           {post.tasks && <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor} className="md:col-span-2"><FormattedText text={post.tasks} /></DetailSection>}
+                           
+                           {post.featuresAndOpportunities && <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor} className="md:col-span-2"><FormattedText text={post.featuresAndOpportunities} /></DetailSection>}
                         </div>
                     </CardContent>
                 </Card>
