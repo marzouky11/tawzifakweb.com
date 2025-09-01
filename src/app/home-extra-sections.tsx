@@ -41,7 +41,7 @@ const CountUp = ({ end, duration = 2 }: { end: number, duration?: number }) => {
 
   }, [end, duration, isInView]);
 
-  return <span ref={ref}>{count.toLocaleString()}</span>;
+  return <span ref={ref}>{count.toLocaleString()}+</span>;
 };
 
 // Stats Section Component
@@ -208,7 +208,6 @@ export function HomeExtraSections({ testimonials, jobOffersCount, competitionsCo
 
   return (  
     <div className="space-y-12">  
-      <Separator />
       <StatsSection stats={stats} />  
       <Separator />
       <TestimonialsSection initialTestimonials={testimonials} />  
