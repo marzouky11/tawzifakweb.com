@@ -8,12 +8,12 @@ import { cn } from '@/lib/utils';
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const showMobileFooter = pathname === '/';
+  const noMobilePadding = ['/', '/post-job'].includes(pathname);
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
-      <main className={cn("flex-1 md:pb-0", showMobileFooter ? 'pb-0' : 'pb-28')}>
+      <main className={cn("flex-1 md:pb-0", noMobilePadding ? 'pb-0' : 'pb-28')}>
         {children}
       </main>
       <Footer />
