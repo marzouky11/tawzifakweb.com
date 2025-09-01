@@ -74,12 +74,12 @@ function StatsSection({ stats }: { stats: { jobs: number, competitions: number, 
   ];
 
   return (
-    <section className="relative overflow-hidden py-8 bg-muted/50 rounded-2xl">
+    <section className="relative overflow-hidden bg-muted/50 rounded-2xl">
       <div  
         aria-hidden="true"  
         className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5"  
       ></div>
-      <div className="container relative mx-auto px-4">
+      <div className="container relative mx-auto px-4 py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -139,7 +139,7 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
   const displayedTestimonials = initialTestimonials.slice(0, INITIAL_DISPLAY_COUNT_DESKTOP);
 
   return (
-    <section ref={ref} className="py-8">
+    <section ref={ref}>
       <div className="container mx-auto px-1">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
