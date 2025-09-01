@@ -135,11 +135,11 @@ export function Header() {
   return (
     <header className="hidden md:block bg-card border-b sticky top-0 z-50">
       <nav className="container relative flex items-center justify-between h-20">
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-4 lg:gap-8">
           <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-            <Image src="/LOGO2.png" alt="شعار توظيفك" width={150} height={40} priority />
+            <Image src="/LOGO2.png" alt="شعار توظيفك" width={140} height={38} priority />
           </Link>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-1 xl:gap-6">
             {navLinks.map((link) => {
               const isActive = link.href === '/' ? pathname === link.href : pathname.startsWith(link.href);
               return (
@@ -147,7 +147,7 @@ export function Header() {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    'text-lg font-medium transition-colors hover:text-primary',
+                    'text-base lg:text-lg font-medium transition-colors hover:text-primary px-2 py-1 lg:px-0 lg:py-0 rounded-md',
                     isActive ? 'text-primary' : 'text-muted-foreground'
                   )}
                 >
@@ -160,18 +160,20 @@ export function Header() {
 
         <div className="flex items-center gap-2 sm:gap-4">
           <ThemeToggleButton />
-          <Button asChild variant="outline" className="border-yellow-500/50 text-yellow-600 dark:text-yellow-400 hover:bg-yellow-500/10 hover:text-yellow-600 dark:hover:text-yellow-400">
+          <Button asChild variant="outline" className="border-yellow-500/50 text-yellow-600 dark:text-yellow-400 hover:bg-yellow-500/10 hover:text-yellow-600 dark:hover:text-yellow-400 shrink-0">
             <Link href="/cv-builder">
               <FileText className="ml-2 h-4 w-4" />
-              <span className="hidden sm:inline">إنشاء سيرة ذاتية</span>
+              <span className="hidden lg:inline">إنشاء سيرة ذاتية</span>
+              <span className="lg:hidden">CV</span>
             </Link>
           </Button>
           
           {isMounted && !loading && user && (
-            <Button asChild>
+            <Button asChild className="shrink-0">
               <Link href="/post-job/select-type">
                 <Plus className="ml-2 h-4 w-4" />
-                <span className="hidden sm:inline">نشر إعلان</span>
+                <span className="hidden lg:inline">نشر إعلان</span>
+                 <span className="lg:hidden">إعلان</span>
               </Link>
             </Button>
           )}
