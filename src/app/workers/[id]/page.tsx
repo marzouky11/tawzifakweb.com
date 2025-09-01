@@ -213,7 +213,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                                 {job.description && (
                                     <>
                                         <DetailSection icon={FileText} title="وصف المهارات والخبرة" color={sectionColor}><FormattedText text={job.description} /></DetailSection>
-                                        <Separator className="md:hidden" />
+                                        <Separator/>
                                     </>
                                 )}
                                 
