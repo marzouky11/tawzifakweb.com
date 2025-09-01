@@ -4,7 +4,6 @@
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
-import { AppLayout } from '@/components/layout/app-layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { PostJobForm } from './post-job-form';
 import { Loader2, PlusCircle } from 'lucide-react';
@@ -54,7 +53,7 @@ export default function PostJobClientPage({ categories }: PostJobClientPageProps
     : "املأ الحقول التالية لنشر فرصة عمل جديدة في المنصة.";
 
   return (
-    <AppLayout>
+    <>
       <MobilePageHeader title={pageTitle}>
         <PlusCircle className="h-5 w-5 text-primary" />
       </MobilePageHeader>
@@ -80,6 +79,6 @@ export default function PostJobClientPage({ categories }: PostJobClientPageProps
             </div>
         )}
       </div>
-    </AppLayout>
+    </>
   );
 }
