@@ -121,11 +121,11 @@ const DesktopFooter = () => {
           <div className="space-y-4">
             <h4 className="font-bold text-lg">روابط مهمة</h4>
             <ul className="space-y-2">
+              <li><Link href="/articles" className="text-sm text-muted-foreground hover:text-primary">مقالات</Link></li>
               <li><Link href="/jobs" className="text-sm text-muted-foreground hover:text-primary">الوظائف</Link></li>
               <li><Link href="/immigration" className="text-sm text-muted-foreground hover:text-primary">فرص الهجرة</Link></li>
               <li><Link href="/competitions" className="text-sm text-muted-foreground hover:text-primary">المباريات العمومية</Link></li>
               <li><Link href="/workers" className="text-sm text-muted-foreground hover:text-primary">العمال</Link></li>
-              <li><Link href="/articles" className="text-sm text-muted-foreground hover:text-primary">مقالات</Link></li>
               <li><Link href="/post-job/select-type" className="text-sm text-muted-foreground hover:text-primary">نشر إعلان</Link></li>
               <li><Link href="/cv-builder" className="text-sm text-muted-foreground hover:text-primary">إنشاء سيرة ذاتية</Link></li>
             </ul>
