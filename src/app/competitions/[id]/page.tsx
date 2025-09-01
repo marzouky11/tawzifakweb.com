@@ -250,14 +250,14 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                            {competition.description && (
                             <>
                                <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={competition.description} /></DetailSection>
-                               <Separator />
+                               <Separator className="my-6" />
                             </>
                            )}
                            
                            {competition.requirements && (
                             <>
                                <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor}><FormattedText text={competition.requirements} /></DetailSection>
-                               <Separator />
+                               <Separator className="my-6" />
                             </>
                            )}
                            
@@ -266,19 +266,19 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                                {competition.documentsNeeded && <DetailSection icon={FileText} title="الوثائق المطلوبة" color={sectionColor}><FormattedText text={competition.documentsNeeded} /></DetailSection>}
                            </div>
 
-                            {(competition.competitionStages || competition.documentsNeeded) && <Separator />}
+                            {(competition.competitionStages || competition.documentsNeeded) && <Separator className="my-6" />}
 
                            <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
                                {competition.trainingFeatures && <DetailSection icon={Award} title="مميزات التكوين والفرص" color={sectionColor}><FormattedText text={competition.trainingFeatures} /></DetailSection>}
                                {competition.jobProspects && <DetailSection icon={Target} title="أفق العمل بعد المباراة" color={sectionColor}><FormattedText text={competition.jobProspects} /></DetailSection>}
                            </div>
 
-                            {(competition.trainingFeatures || competition.jobProspects) && <Separator />}
+                            {(competition.trainingFeatures || competition.jobProspects) && <Separator className="my-6" />}
 
                            {competition.howToApply && (
                             <>
                                <DetailSection icon={HelpCircle} title="طريقة التسجيل" color={sectionColor}><FormattedText text={competition.howToApply} /></DetailSection>
-                               <Separator />
+                               <Separator className="my-6" />
                             </>
                            )}
                            

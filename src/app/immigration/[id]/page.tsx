@@ -212,7 +212,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                            {post.description && (
                             <>
                                <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={post.description} /></DetailSection>
-                               <Separator />
+                               <Separator className="my-6" />
                             </>
                            )}
 
@@ -221,14 +221,14 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                                {post.qualifications && <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={post.qualifications} /></DetailSection>}
                            </div>
 
-                           { (post.requirements || post.qualifications) && <Separator />}
+                           { (post.requirements || post.qualifications) && <Separator className="my-6" />}
                            
                            <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
                                {post.experience && <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={post.experience} /></DetailSection>}
                                {post.tasks && <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={post.tasks} /></DetailSection>}
                             </div>
 
-                            { (post.experience || post.tasks) && <Separator /> }
+                            { (post.experience || post.tasks) && <Separator className="my-6" /> }
 
                             <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
                                {post.featuresAndOpportunities && <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={post.featuresAndOpportunities} /></DetailSection>}
