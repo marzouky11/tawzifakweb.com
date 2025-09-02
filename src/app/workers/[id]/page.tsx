@@ -237,26 +237,28 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                            {remainingSections.length > 0 && <Separator className="hidden md:block" />}
                             <div className="hidden md:block space-y-6">
                                 {remainingSections.map((section, index) => {
-                                    if (index % 2 !== 0) return null; // Skip odd-indexed items as they are handled with the previous item
                                     const nextSection = remainingSections[index + 1];
-                                    if (nextSection) {
-                                        return (
-                                            <React.Fragment key={section.id}>
-                                                <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
-                                                    <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
-                                                    <Separator orientation="vertical" className="h-auto" />
-                                                    <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>{nextSection.content}</DetailSection>
-                                                </div>
-                                                {index < remainingSections.length - 2 && <Separator className="my-6" />}
-                                            </React.Fragment>
-                                        );
-                                    } else {
-                                        return (
-                                            <DetailSection key={section.id} icon={section.icon} title={section.title} color={sectionColor}>
-                                                {section.content}
-                                            </DetailSection>
-                                        );
+                                    if (index % 2 === 0) {
+                                        if (nextSection) {
+                                            return (
+                                                <React.Fragment key={section.id}>
+                                                    <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                                        <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
+                                                        <Separator orientation="vertical" className="h-auto" />
+                                                        <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>{nextSection.content}</DetailSection>
+                                                    </div>
+                                                    {index < remainingSections.length - 2 && <Separator className="my-6" />}
+                                                </React.Fragment>
+                                            );
+                                        } else {
+                                            return (
+                                                <DetailSection key={section.id} icon={section.icon} title={section.title} color={sectionColor}>
+                                                    {section.content}
+                                                </DetailSection>
+                                            );
+                                        }
                                     }
+                                    return null;
                                 })}
                             </div>
                         </CardContent>
@@ -265,8 +267,8 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                     <div className="grid md:grid-cols-2 gap-6">
                         <Card>
                             <CardHeader>
-                                <CardTitle className="flex items-center gap-2 text-xl font-bold" style={{ color: sectionColor }}>
-                                    <Phone className="h-5 w-5"/>
+                                <CardTitle className="flex items-center gap-2 text-xl font-bold">
+                                    <Phone className="h-5 w-5 text-foreground"/>
                                     تواصل مع الباحث عن عمل
                                 </CardTitle>
                             </CardHeader>
@@ -292,8 +294,8 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
 
                         <Card>
                             <CardHeader>
-                                <CardTitle className="flex items-center gap-2 text-xl font-bold" style={{ color: sectionColor }}>
-                                    <Bookmark className="h-5 w-5"/>
+                                <CardTitle className="flex items-center gap-2 text-xl font-bold">
+                                    <Bookmark className="h-5 w-5 text-foreground"/>
                                     احفظ الإعلان وشارك مع الآخرين
                                 </CardTitle>
                             </CardHeader>
