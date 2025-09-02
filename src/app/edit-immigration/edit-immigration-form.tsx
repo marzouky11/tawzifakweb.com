@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState } from 'react';
@@ -29,7 +28,7 @@ const formSchema = z.object({
   targetCountry: z.string().min(2, 'الدولة المستهدفة مطلوبة.'),
   city: z.string().optional(),
   positionsAvailable: z.string().optional(),
-  programType: z.enum(['work', 'study', 'seasonal', 'training', 'volunteer', 'crafts', 'health', 'tech', 'transport', 'hospitality', 'education', 'agriculture'], { required_error: "نوع البرنامج مطلوب." }),
+  programType: z.enum(['work', 'study', 'seasonal', 'training', 'volunteer', 'crafts', 'health', 'tech', 'transport', 'hospitality', 'education', 'agriculture', 'livestock'], { required_error: "نوع البرنامج مطلوب." }),
   
   salary: z.string().optional(),
   targetAudience: z.string().min(2, "الفئة المستهدفة مطلوبة."),
@@ -179,5 +178,4 @@ export function EditImmigrationForm({ post }: EditImmigrationFormProps) {
     </Form>
   );
 }
-
     
