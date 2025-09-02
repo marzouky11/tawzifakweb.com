@@ -39,6 +39,7 @@ const formSchema = z.object({
   companyName: z.string().optional(),
   experience: z.string().optional(),
   description: z.string().optional(),
+  availablePositions: z.string().optional(),
   qualifications: z.string().optional(),
   salary: z.string().optional(),
   openPositions: z.coerce.number().int().positive().optional(),
@@ -61,7 +62,7 @@ const formSchema = z.object({
 
 const stepFields = [
   ['postType', 'title', 'categoryId', 'customCategory', 'workType', 'country', 'city'],
-  ['companyName', 'experience', 'description', 'qualifications', 'salary', 'openPositions', 'conditions', 'tasks', 'featuresAndOpportunities'],
+  ['companyName', 'experience', 'description', 'availablePositions', 'qualifications', 'salary', 'openPositions', 'conditions', 'tasks', 'featuresAndOpportunities'],
   ['phone', 'whatsapp', 'email', 'instagram', 'applyUrl', 'howToApply'],
 ];
 
@@ -141,6 +142,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
       salary: job?.salary || '',
       experience: job?.experience || '',
       description: job?.description || '',
+      availablePositions: job?.availablePositions || '',
       qualifications: job?.qualifications || '',
       companyName: job?.companyName || '',
       openPositions: job?.openPositions || undefined,
@@ -265,6 +267,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
           salary: values.salary,
           experience: values.experience,
           description: values.description,
+          availablePositions: values.availablePositions,
           qualifications: values.qualifications,
           conditions: values.conditions,
           tasks: values.tasks,
@@ -412,9 +415,10 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                 <FormField control={form.control} name="companyName" render={({ field }) => (<FormItem><FormLabelIcon icon={Building2} label="اسم الشركة (اختياري)" /><FormControl><Input placeholder="اسم الشركة أو الجهة" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField control={form.control} name="salary" render={({ field }) => (<FormItem><FormLabelIcon icon={Wallet} label="الأجر (اختياري)" /><FormControl><Input placeholder="مثال: 5000 درهم / شهري" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
-                    <FormField control={form.control} name="openPositions" render={({ field }) => (<FormItem><FormLabelIcon icon={Users2} label="الوظائف المتاحة (اختياري)" /><FormControl><Input type="number" placeholder="مثال: 3" {...field} value={field.value ?? ''} onChange={e => field.onChange(e.target.value === '' ? undefined : +e.target.value)} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="openPositions" render={({ field }) => (<FormItem><FormLabelIcon icon={Users2} label="الوظائف الشاغرة (اختياري)" /><FormControl><Input type="number" placeholder="مثال: 3" {...field} value={field.value ?? ''} onChange={e => field.onChange(e.target.value === '' ? undefined : +e.target.value)} /></FormControl><FormMessage /></FormItem>)} />
                 </div>
                 <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabelIcon icon={FileSignature} label="وصف الوظيفة (اختياري)"/><FormControl><Textarea placeholder="اكتب تفاصيل إضافية عن الوظيفة..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
+                <FormField control={form.control} name="availablePositions" render={({ field }) => (<FormItem><FormLabelIcon icon={Briefcase} label="الوظائف المتاحة (اختياري)" /><FormControl><Textarea placeholder="قائمة بالوظائف أو المناصب المتاحة..." rows={3} {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
                 <FormField control={form.control} name="conditions" render={({ field }) => (<FormItem><FormLabelIcon icon={ClipboardList} label="الشروط المطلوبة (اختياري)" /><FormControl><Textarea placeholder="اكتب الشروط الإضافية هنا، مثل: العمر، توفر وسيلة نقل، أوقات العمل..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
                 <FormField control={form.control} name="qualifications" render={({ field }) => (<FormItem><FormLabelIcon icon={GraduationCap} label='المؤهلات المطلوبة (اختياري)' /><FormControl><Textarea placeholder="مثال: بكالوريوس هندسة، دبلوم تقني..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
                 <FormField control={form.control} name="experience" render={({ field }) => (<FormItem><FormLabelIcon icon={Award} label='الخبرة المطلوبة' /><FormControl><Textarea placeholder="مثال: 5 سنوات في مجال التسويق، أو حديث التخرج بخبرة تدريبية في شركة..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />

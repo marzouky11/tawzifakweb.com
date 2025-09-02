@@ -34,6 +34,7 @@ const formSchema = z.object({
   targetAudience: z.string().min(2, "الفئة المستهدفة مطلوبة."),
   deadline: z.string().optional(),
   description: z.string().optional(),
+  availablePositions: z.string().optional(),
   requirements: z.string().optional(),
   qualifications: z.string().optional(),
   experience: z.string().optional(),
@@ -81,6 +82,7 @@ export function EditImmigrationForm({ post }: EditImmigrationFormProps) {
       targetAudience: post?.targetAudience || '',
       deadline: post?.deadline || '',
       description: post?.description || '',
+      availablePositions: post?.availablePositions || '',
       requirements: post?.requirements || '',
       qualifications: post?.qualifications || '',
       experience: post?.experience || '',
@@ -134,6 +136,7 @@ export function EditImmigrationForm({ post }: EditImmigrationFormProps) {
   const step2Content = (
      <div className="space-y-6">
         <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabelIcon icon={Info} label="وصف تفصيلي للبرنامج" /><FormControl><Textarea placeholder="تفاصيل حول فرصة الهجرة، مهام العمل، مدة البرنامج..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
+        <FormField control={form.control} name="availablePositions" render={({ field }) => (<FormItem><FormLabelIcon icon={Briefcase} label="الوظائف المتاحة (اختياري)" /><FormControl><Textarea placeholder="قائمة بالوظائف أو المناصب المتاحة..." rows={3} {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="requirements" render={({ field }) => (<FormItem><FormLabelIcon icon={ClipboardList} label="الشروط العامة" /><FormControl><Textarea placeholder="شروط العمر، اللغة، الحالة الصحية..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="qualifications" render={({ field }) => (<FormItem><FormLabelIcon icon={GraduationCap} label="المؤهلات المطلوبة" /><FormControl><Textarea placeholder="الشهادات التعليمية المطلوبة..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="experience" render={({ field }) => (<FormItem><FormLabelIcon icon={Award} label="الخبرة المطلوبة" /><FormControl><Textarea placeholder="سنوات الخبرة أو نوعها..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />

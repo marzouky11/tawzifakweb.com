@@ -27,6 +27,7 @@ export interface Job {
   salary?: string;
   companyName?: string;
   openPositions?: number;
+  availablePositions?: string;
   phone?: string;
   whatsapp?: string;
   email?: string;
@@ -53,6 +54,7 @@ export interface Competition {
   title: string;
   organizer: string;
   positionsAvailable: string | number | null;
+  availablePositions?: string;
   deadline: string; // last day for registration
   officialLink: string;
   email?: string;
@@ -103,6 +105,7 @@ export interface ImmigrationPost {
   targetCountry: string;
   city?: string;
   positionsAvailable?: string;
+  availablePositions?: string;
   programType: ImmigrationProgramType;
   iconName: string;
   targetAudience: string;
@@ -197,3 +200,4 @@ export interface Country {
 }
 
     
+

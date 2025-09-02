@@ -279,12 +279,13 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                             
                              {/* Mobile View */}
                             <div className="md:hidden space-y-6">
-                                {job.description && (<> <DetailSection icon={FileText} title="وصف الوظيفة" color={sectionColor}><FormattedText text={job.description} /></DetailSection> <Separator /> </>)}
-                                {job.conditions && (<> <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor}><FormattedText text={job.conditions} /></DetailSection> <Separator /> </>)}
-                                {job.qualifications && (<> <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={job.qualifications} /></DetailSection> <Separator /> </>)}
-                                {job.experience && (<> <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={job.experience} /></DetailSection> <Separator /> </>)}
-                                {job.tasks && (<> <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={job.tasks} /></DetailSection> <Separator /> </>)}
-                                {job.featuresAndOpportunities && (<> <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={job.featuresAndOpportunities} /></DetailSection> <Separator /> </>)}
+                                {job.description && (<> <DetailSection icon={FileText} title="وصف الوظيفة" color={sectionColor}><FormattedText text={job.description} /></DetailSection> <Separator className="my-4" /> </>)}
+                                {job.availablePositions && (<> <DetailSection icon={Briefcase} title="الوظائف المتاحة" color={sectionColor}><FormattedText text={job.availablePositions} /></DetailSection> <Separator className="my-4" /> </>)}
+                                {job.conditions && (<> <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor}><FormattedText text={job.conditions} /></DetailSection> <Separator className="my-4" /> </>)}
+                                {job.qualifications && (<> <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={job.qualifications} /></DetailSection> <Separator className="my-4" /> </>)}
+                                {job.experience && (<> <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={job.experience} /></DetailSection> <Separator className="my-4" /> </>)}
+                                {job.tasks && (<> <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={job.tasks} /></DetailSection> <Separator className="my-4" /> </>)}
+                                {job.featuresAndOpportunities && (<> <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={job.featuresAndOpportunities} /></DetailSection> <Separator className="my-4" /> </>)}
                                 {job.howToApply && (<DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={job.howToApply} /></DetailSection>)}
                             </div>
 
@@ -297,35 +298,32 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                     </>
                                 )}
                                 
-                                {(job.conditions || job.qualifications) && (
+                                {job.availablePositions && (
                                     <>
-                                        <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
-                                            {job.conditions ? <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor}><FormattedText text={job.conditions} /></DetailSection> : <div />}
-                                            {job.conditions && job.qualifications && <Separator orientation="vertical" className="h-auto" />}
-                                            {job.qualifications ? <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={job.qualifications} /></DetailSection> : <div />}
-                                        </div>
-                                        <Separator className="my-6" />
+                                        <DetailSection icon={Briefcase} title="الوظائف المتاحة" color={sectionColor}><FormattedText text={job.availablePositions} /></DetailSection>
+                                        <Separator className="my-6"/>
                                     </>
                                 )}
+                                
+                                <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                    {job.conditions && <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor}><FormattedText text={job.conditions} /></DetailSection>}
+                                    {job.conditions && job.qualifications && <Separator orientation="vertical" className="h-auto" />}
+                                    {job.qualifications && <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={job.qualifications} /></DetailSection>}
+                                </div>
+                                {(job.conditions || job.qualifications) && <Separator className="my-6" />}
+                                
+                                <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                    {job.experience && <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={job.experience} /></DetailSection>}
+                                    {job.experience && job.tasks && <Separator orientation="vertical" className="h-auto" />}
+                                    {job.tasks && <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={job.tasks} /></DetailSection>}
+                                </div>
+                                {(job.experience || job.tasks) && <Separator className="my-6" />}
 
-                                {(job.experience || job.tasks) && (
-                                    <>
-                                        <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
-                                            {job.experience ? <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={job.experience} /></DetailSection> : <div />}
-                                            {job.experience && job.tasks && <Separator orientation="vertical" className="h-auto" />}
-                                            {job.tasks ? <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={job.tasks} /></DetailSection> : <div />}
-                                        </div>
-                                        <Separator className="my-6" />
-                                    </>
-                                )}
-
-                                {(job.featuresAndOpportunities || job.howToApply) && (
-                                    <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
-                                        {job.featuresAndOpportunities ? <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={job.featuresAndOpportunities} /></DetailSection> : <div />}
-                                        {job.featuresAndOpportunities && job.howToApply && <Separator orientation="vertical" className="h-auto" />}
-                                        {job.howToApply ? <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={job.howToApply} /></DetailSection> : <div />}
-                                    </div>
-                                )}
+                                <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                    {job.featuresAndOpportunities && <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={job.featuresAndOpportunities} /></DetailSection>}
+                                    {job.featuresAndOpportunities && job.howToApply && <Separator orientation="vertical" className="h-auto" />}
+                                    {job.howToApply && <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={job.howToApply} /></DetailSection>}
+                                </div>
                             </div>
                         </CardContent>
                     </Card>

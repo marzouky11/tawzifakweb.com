@@ -211,12 +211,13 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                         
                         {/* Mobile view */}
                         <div className="md:hidden space-y-6">
-                           {post.description && (<> <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={post.description} /></DetailSection> <Separator /> </>)}
-                           {post.requirements && (<> <DetailSection icon={ClipboardList} title="الشروط العامة" color={sectionColor}><FormattedText text={post.requirements} /></DetailSection> <Separator /> </>)}
-                           {post.qualifications && (<> <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={post.qualifications} /></DetailSection> <Separator /> </>)}
-                           {post.experience && (<> <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={post.experience} /></DetailSection> <Separator /> </>)}
-                           {post.tasks && (<> <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={post.tasks} /></DetailSection> <Separator /> </>)}
-                           {post.featuresAndOpportunities && (<> <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={post.featuresAndOpportunities} /></DetailSection> <Separator /> </>)}
+                           {post.description && (<> <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={post.description} /></DetailSection> <Separator className="my-4" /> </>)}
+                           {post.availablePositions && (<> <DetailSection icon={Briefcase} title="الوظائف المتاحة" color={sectionColor}><FormattedText text={post.availablePositions} /></DetailSection> <Separator className="my-4" /> </>)}
+                           {post.requirements && (<> <DetailSection icon={ClipboardList} title="الشروط العامة" color={sectionColor}><FormattedText text={post.requirements} /></DetailSection> <Separator className="my-4" /> </>)}
+                           {post.qualifications && (<> <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={post.qualifications} /></DetailSection> <Separator className="my-4" /> </>)}
+                           {post.experience && (<> <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={post.experience} /></DetailSection> <Separator className="my-4" /> </>)}
+                           {post.tasks && (<> <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={post.tasks} /></DetailSection> <Separator className="my-4" /> </>)}
+                           {post.featuresAndOpportunities && (<> <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={post.featuresAndOpportunities} /></DetailSection> <Separator className="my-4" /> </>)}
                            {post.howToApply && (<DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={post.howToApply} /></DetailSection>)}
                         </div>
 
@@ -229,37 +230,33 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                             </>
                            )}
 
-                           {(post.requirements || post.qualifications) && (
+                            {post.availablePositions && (
                                 <>
-                                    <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
-                                        {post.requirements ? <DetailSection icon={ClipboardList} title="الشروط العامة" color={sectionColor}><FormattedText text={post.requirements} /></DetailSection> : <div />}
-                                        {post.requirements && post.qualifications && <Separator orientation="vertical" className="h-auto" />}
-                                        {post.qualifications ? <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={post.qualifications} /></DetailSection> : <div />}
-                                    </div>
+                                    <DetailSection icon={Briefcase} title="الوظائف المتاحة" color={sectionColor}><FormattedText text={post.availablePositions} /></DetailSection>
                                     <Separator className="my-6" />
-                                </>
-                           )}
-                           
-                           {(post.experience || post.tasks) && (
-                                <>
-                                    <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
-                                        {post.experience ? <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={post.experience} /></DetailSection> : <div />}
-                                        {post.experience && post.tasks && <Separator orientation="vertical" className="h-auto" />}
-                                        {post.tasks ? <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={post.tasks} /></DetailSection> : <div />}
-                                    </div>
-                                    <Separator className="my-6" />
-                                </>
-                           )}
-
-                            {(post.featuresAndOpportunities || post.howToApply) && (
-                                <>
-                                <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
-                                    {post.featuresAndOpportunities ? <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={post.featuresAndOpportunities} /></DetailSection> : <div />}
-                                    {post.featuresAndOpportunities && post.howToApply && <Separator orientation="vertical" className="h-auto" />}
-                                    {post.howToApply ? <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={post.howToApply} /></DetailSection> : <div />}
-                                </div>
                                 </>
                             )}
+                            
+                            <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                {post.requirements && <DetailSection icon={ClipboardList} title="الشروط العامة" color={sectionColor}><FormattedText text={post.requirements} /></DetailSection>}
+                                {post.requirements && post.qualifications && <Separator orientation="vertical" className="h-auto" />}
+                                {post.qualifications && <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={post.qualifications} /></DetailSection>}
+                            </div>
+                            {(post.requirements || post.qualifications) && <Separator className="my-6" />}
+                           
+                           
+                            <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                {post.experience && <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={post.experience} /></DetailSection>}
+                                {post.experience && post.tasks && <Separator orientation="vertical" className="h-auto" />}
+                                {post.tasks && <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={post.tasks} /></DetailSection>}
+                            </div>
+                            {(post.experience || post.tasks) && <Separator className="my-6" />}
+
+                            <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                {post.featuresAndOpportunities && <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={post.featuresAndOpportunities} /></DetailSection>}
+                                {post.featuresAndOpportunities && post.howToApply && <Separator orientation="vertical" className="h-auto" />}
+                                {post.howToApply && <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={post.howToApply} /></DetailSection>}
+                            </div>
                         </div>
                     </CardContent>
                 </Card>

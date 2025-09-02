@@ -29,6 +29,7 @@ const formSchema = z.object({
   location: z.string().optional(),
   
   description: z.string().optional(),
+  availablePositions: z.string().optional(),
   requirements: z.string().min(10, 'الشروط مطلوبة.'),
   competitionStages: z.string().optional(),
   documentsNeeded: z.string().min(10, 'الوثائق المطلوبة.'),
@@ -75,6 +76,7 @@ export function EditCompetitionForm({ competition }: EditCompetitionFormProps) {
       documentsNeeded: competition?.documentsNeeded || '',
       officialLink: competition?.officialLink || '',
       description: competition?.description || '',
+      availablePositions: competition?.availablePositions || '',
       trainingFeatures: competition?.trainingFeatures || '',
       fileUrl: competition?.fileUrl || '',
       location: competition?.location || '',
@@ -135,6 +137,7 @@ export function EditCompetitionForm({ competition }: EditCompetitionFormProps) {
         <h2 className="text-xl font-bold border-b pb-2">الوصف والمتطلبات</h2>
         <div className="space-y-6">
            <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabelIcon icon={Info} label="وصف تفصيلي (اختياري)" /><FormControl><Textarea placeholder="معلومات إضافية حول المباراة..." rows={3} {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
+           <FormField control={form.control} name="availablePositions" render={({ field }) => (<FormItem><FormLabelIcon icon={Briefcase} label="الوظائف المتاحة (اختياري)" /><FormControl><Textarea placeholder="قائمة بالوظائف أو المناصب المتاحة..." rows={3} {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
            <FormField control={form.control} name="requirements" render={({ field }) => (<FormItem><FormLabelIcon icon={FileSignature} label="الشروط المطلوبة" /><FormControl><Textarea placeholder="المؤهلات، السن، الطول، حدة البصر..." rows={4} {...field} /></FormControl><FormMessage /></FormItem>)} />
            <FormField control={form.control} name="competitionStages" render={({ field }) => (<FormItem><FormLabelIcon icon={ListOrdered} label="مراحل المباراة (اختياري)" /><FormControl><Textarea placeholder="الاختبارات الأولية، البدنية، الكتابية، المقابلة..." rows={3} {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
            <FormField control={form.control} name="documentsNeeded" render={({ field }) => (<FormItem><FormLabelIcon icon={FileText} label="الوثائق المطلوبة" /><FormControl><Textarea placeholder="قائمة بالوثائق المطلوبة من المترشحين" rows={4} {...field} /></FormControl><FormMessage /></FormItem>)} />
