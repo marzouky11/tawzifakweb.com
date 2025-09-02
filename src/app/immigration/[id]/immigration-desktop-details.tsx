@@ -130,24 +130,26 @@ export function ImmigrationDesktopDetails({ post, similarPosts }: ImmigrationDes
                         {post.deadline && <InfoItem icon={CalendarDays} label="آخر أجل" value={post.deadline} color={iconColor} />}
                     </div>
                     
-                    {hasDetails && <Separator />}
-
-                    <div className="grid md:grid-cols-2 gap-x-12 gap-y-8">
-                        {descriptionSection && (
-                            <div className={cn(allOtherSections.length > 0 ? "md:col-span-2" : "md:col-span-2")}>
-                                <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
-                                    {descriptionSection.content}
-                                </DetailSection>
-                                {allOtherSections.length > 0 && <Separator className="my-8" />}
+                    {hasDetails && (
+                        <>
+                            <Separator />
+                            <div className="grid md:grid-cols-2 gap-x-12 gap-y-8">
+                                {descriptionSection && (
+                                    <div className={cn(allOtherSections.length === 0 ? "md:col-span-2" : "md:col-span-1")}>
+                                        <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
+                                            {descriptionSection.content}
+                                        </DetailSection>
+                                    </div>
+                                )}
+                                
+                                {allOtherSections.map((section, index) => (
+                                    <React.Fragment key={section.id}>
+                                        <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
+                                    </React.Fragment>
+                                ))}
                             </div>
-                        )}
-                        
-                        {allOtherSections.map((section, index) => (
-                             <div key={section.id} className={cn('space-y-3', allOtherSections.length % 2 !== 0 && index === allOtherSections.length - 1 && 'md:col-span-2')}>
-                                <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
-                            </div>
-                        ))}
-                    </div>
+                        </>
+                    )}
                 </CardContent>
             </Card>
             
@@ -212,4 +214,3 @@ export function ImmigrationDesktopDetails({ post, similarPosts }: ImmigrationDes
         </div>
     );
 }
-

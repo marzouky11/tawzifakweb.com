@@ -138,25 +138,28 @@ export function JobDesktopDetails({ job, similarJobs }: JobDesktopDetailsProps) 
                             {job.openPositions && <InfoItem icon={Users2} label="عدد المناصب" value={job.openPositions} color={categoryColor} />}
                         </div>
                         
-                        {hasDetails && <Separator className="my-6" />}
+                        {hasDetails && (
+                            <>
+                                <Separator />
+                                <div className="grid md:grid-cols-2 gap-x-12 gap-y-8">
+                                    {descriptionSection && (
+                                        <div className={cn(allOtherSections.length === 0 ? "md:col-span-2" : "md:col-span-1")}>
+                                            <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
+                                                {descriptionSection.content}
+                                            </DetailSection>
+                                        </div>
+                                    )}
 
-                         <div className="grid md:grid-cols-2 gap-x-12 gap-y-8">
-                            {descriptionSection && (
-                                <div className={cn(allOtherSections.length % 2 !== 0 ? "md:col-span-2" : "md:col-span-1")}>
-                                     <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
-                                        {descriptionSection.content}
-                                    </DetailSection>
+                                    {allOtherSections.map((section, index) => (
+                                        <React.Fragment key={section.id}>
+                                            <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
+                                                {section.content}
+                                            </DetailSection>
+                                        </React.Fragment>
+                                    ))}
                                 </div>
-                            )}
-
-                            {allOtherSections.map((section, index) => (
-                                <React.Fragment key={section.id}>
-                                    <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
-                                        {section.content}
-                                    </DetailSection>
-                                </React.Fragment>
-                            ))}
-                        </div>
+                            </>
+                        )}
                     </CardContent>
                 </Card>
 
@@ -220,4 +223,3 @@ export function JobDesktopDetails({ job, similarJobs }: JobDesktopDetailsProps) 
         </div>
     );
 }
-

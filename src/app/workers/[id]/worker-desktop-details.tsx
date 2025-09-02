@@ -141,10 +141,10 @@ export function WorkerDesktopDetails({ job, similarJobs }: WorkerDesktopDetailsP
 
                         {hasDetails && (
                             <>
-                                <Separator className="my-6" />
+                                <Separator />
                                 <div className="grid md:grid-cols-2 gap-x-12 gap-y-8">
                                     {descriptionSection && (
-                                        <div className={cn(allOtherSections.length % 2 !== 0 ? "md:col-span-2" : "md:col-span-1")}>
+                                        <div className={cn(allOtherSections.length === 0 ? "md:col-span-2" : "md:col-span-1")}>
                                             <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
                                                 {descriptionSection.content}
                                             </DetailSection>
