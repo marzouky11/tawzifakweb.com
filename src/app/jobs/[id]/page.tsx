@@ -257,7 +257,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                 title="تفاصيل عرض العمل"
                 description="هنا تجد جميع المعلومات المتعلقة بفرصة العمل هذه."
             />
-            <div className="container mx-auto max-w-7xl px-4 pb-8">
+            <div className="container mx-auto max-w-5xl px-4 pb-8">
                 <div className="space-y-6">
                     <Card className="overflow-hidden shadow-lg border-t-4" style={{ borderColor: sectionColor }}>
                         <CardHeader className="bg-muted/30 p-4 sm:p-6">
@@ -288,23 +288,23 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                             
                             {hasDetails && <Separator />}
 
-                            <div className="pt-0 space-y-8">
+                            <div className="space-y-8">
                                 {descriptionSection && (
                                     <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
                                         {descriptionSection.content}
                                     </DetailSection>
                                 )}
-                                
-                                {descriptionSection && allOtherSections.length > 0 && <Separator className="my-8" />}
 
-                                <div className="md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-6">
+                                {descriptionSection && allOtherSections.length > 0 && <Separator className="my-8" />}
+                                
+                                <div className="md:grid md:grid-cols-2 md:gap-x-12 md:gap-y-8">
                                     {allOtherSections.map((section, index) => (
                                         <React.Fragment key={section.id}>
-                                                {(index > 0 && index % 2 === 0) && <Separator className="my-8 md:col-span-2 hidden md:block" />}
+                                            {(index > 0 && index % 2 === 0) && <Separator className="md:col-span-2" />}
                                             <div className="md:hidden">
                                                 {index > 0 && <Separator className="my-8" />}
                                             </div>
-                                            <div className={cn(allOtherSections.length > 1 && allOtherSections.length % 2 !== 0 && index === allOtherSections.length - 1 && 'md:col-span-2')}>
+                                            <div className={cn('space-y-3', allOtherSections.length > 1 && allOtherSections.length % 2 !== 0 && index === allOtherSections.length - 1 && 'md:col-span-2')}>
                                                 <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
                                             </div>
                                         </React.Fragment>
