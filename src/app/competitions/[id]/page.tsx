@@ -253,7 +253,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                         </div>
                     </CardHeader>
                     <CardContent className="p-4 sm:p-6 space-y-8">
-                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                             <InfoItem icon={Building} label="الجهة المنظمة" value={competition.organizer} color={organizerColor} />
                             {competition.competitionType && <InfoItem icon={Briefcase} label="نوع المباراة" value={competition.competitionType} color={organizerColor} />}
                             {competition.location && <InfoItem icon={MapPin} label="الموقع" value={competition.location} color={organizerColor} />}
@@ -265,48 +265,61 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                         <Separator />
                         
                         {descriptionSection && (
-                            <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
+                            <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor} className="md:col-span-full">
                                 {descriptionSection.content}
                             </DetailSection>
                         )}
                         
                         {/* Mobile View */}
                         <div className="md:hidden space-y-4">
+                             {remainingSections.length > 0 && <Separator />}
                             {remainingSections.map((section, index) => (
                                 <React.Fragment key={section.id}>
-                                    <Separator />
                                     <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
                                         {section.content}
                                     </DetailSection>
+                                    {index < remainingSections.length - 1 && <Separator />}
                                 </React.Fragment>
                             ))}
                         </div>
 
                         {/* Desktop View */}
-                        {remainingSections.length > 0 && <Separator className='hidden md:block'/>}
-                        <div className="hidden md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-6">
-                            {remainingSections.map((section, index) => (
-                                <div
-                                    key={section.id}
-                                    className={cn(
-                                        'space-y-4',
-                                        remainingSections.length % 2 !== 0 && index === remainingSections.length - 1 && 'md:col-span-2'
-                                    )}
-                                >
-                                    <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
-                                        {section.content}
-                                    </DetailSection>
-                                </div>
-                            ))}
-                        </div>
+                        {remainingSections.length > 0 && <Separator className="hidden md:block my-6" />}
+                        <div className="hidden md:block space-y-6">
+                            {remainingSections.reduce<React.ReactNode[]>((acc, section, index) => {
+                                if (index % 2 === 0) {
+                                    const nextSection = remainingSections[index + 1];
+                                    acc.push(
+                                        <React.Fragment key={section.id}>
+                                            <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] md:gap-x-8 items-start">
+                                                <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
+                                                    {section.content}
+                                                </DetailSection>
+                                                
+                                                {nextSection && <Separator orientation="vertical" className="h-auto" />}
 
+                                                {nextSection ? (
+                                                    <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>
+                                                        {nextSection.content}
+                                                    </DetailSection>
+                                                ) : (
+                                                    <div className="col-span-1 md:col-span-1"></div>
+                                                )}
+                                            </div>
+                                            {index < remainingSections.length - (nextSection ? 2 : 1) && <Separator className="my-6" />}
+                                        </React.Fragment>
+                                    );
+                                }
+                                return acc;
+                            }, [])}
+                        </div>
                     </CardContent>
                 </Card>
                 
                 <div className="grid md:grid-cols-2 gap-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
+                            <CardTitle className="flex items-center gap-2 text-foreground">
                                 <LinkIcon className="h-5 w-5" />
                                 التقديم على المباراة
                             </CardTitle>

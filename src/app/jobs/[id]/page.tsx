@@ -306,22 +306,44 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                 ))}
                             </div>
 
-                            {/* Desktop View */}
-                            {remainingSections.length > 0 && <Separator className='hidden md:block'/>}
-                            <div className="hidden md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-6">
-                                {remainingSections.map((section, index) => (
-                                    <div
-                                        key={section.id}
-                                        className={cn(
-                                            'space-y-4',
-                                            remainingSections.length % 2 !== 0 && index === remainingSections.length - 1 && 'md:col-span-2'
-                                        )}
-                                    >
-                                        <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
-                                            {section.content}
+                           {/* Desktop View */}
+                            {remainingSections.length > 0 && <Separator className="hidden md:block" />}
+                            <div className="hidden md:block">
+                                {remainingSections.map((section, index) => {
+                                    const isPairStart = index % 2 === 0;
+                                    if (isPairStart) {
+                                        const nextSection = remainingSections[index + 1];
+                                        return (
+                                            <React.Fragment key={section.id}>
+                                                <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                                    <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
+                                                        {section.content}
+                                                    </DetailSection>
+                                                    <Separator orientation="vertical" className="h-auto" />
+                                                    {nextSection ? (
+                                                        <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>
+                                                            {nextSection.content}
+                                                        </DetailSection>
+                                                    ) : (
+                                                        <div /> // Placeholder for the grid
+                                                    )}
+                                                </div>
+                                                {index < remainingSections.length - 2 && <Separator className="my-6" />}
+                                            </React.Fragment>
+                                        );
+                                    } else if (index === remainingSections.length - 1 && !isPairStart) {
+                                       // This case is handled by the placeholder in the pair
+                                    }
+                                    return null;
+                                })}
+                                 {remainingSections.length % 2 !== 0 && (
+                                     <React.Fragment>
+                                        <Separator className="my-6" />
+                                        <DetailSection icon={remainingSections[remainingSections.length - 1].icon} title={remainingSections[remainingSections.length - 1].title} color={sectionColor} className="col-span-1">
+                                            {remainingSections[remainingSections.length - 1].content}
                                         </DetailSection>
-                                    </div>
-                                ))}
+                                     </React.Fragment>
+                                 )}
                             </div>
                         </CardContent>
                     </Card>
@@ -330,7 +352,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                         <Card>
                              <CardHeader>
                                 <CardTitle className="flex items-center gap-2 text-lg">
-                                    <Phone className="h-5 w-5" style={{color: sectionColor}} />
+                                    <LinkIcon className="h-5 w-5" style={{color: sectionColor}} />
                                     التقديم على الوظيفة
                                 </CardTitle>
                             </CardHeader>
