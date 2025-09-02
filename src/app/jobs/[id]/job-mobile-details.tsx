@@ -150,7 +150,7 @@ export function JobMobileDetails({ job, similarJobs }: JobMobileDetailsProps) {
 
                                     {allOtherSections.map((section, index) => (
                                         <React.Fragment key={section.id}>
-                                            {index > 0 && <Separator />}
+                                            {(index > 0 || !!descriptionSection) && <Separator />}
                                             <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
                                         </React.Fragment>
                                     ))}

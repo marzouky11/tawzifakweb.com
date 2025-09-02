@@ -141,7 +141,7 @@ export function ImmigrationMobileDetails({ post, similarPosts }: ImmigrationMobi
                                 )}
                                 {allOtherSections.map((section, index) => (
                                     <React.Fragment key={section.id}>
-                                        {(index > 0 || descriptionSection) && <Separator />}
+                                        {(index > 0 || !!descriptionSection) && <Separator />}
                                         <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
                                     </React.Fragment>
                                 ))}
