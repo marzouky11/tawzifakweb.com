@@ -308,12 +308,11 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
 
                            {/* Desktop View */}
                             {remainingSections.length > 0 && <Separator className="hidden md:block" />}
-                            <div className="hidden md:block">
-                                {remainingSections.map((section, index) => {
-                                    const isPairStart = index % 2 === 0;
-                                    if (isPairStart) {
+                            <div className="hidden md:block space-y-6">
+                                {remainingSections.reduce((acc, section, index) => {
+                                    if (index % 2 === 0) {
                                         const nextSection = remainingSections[index + 1];
-                                        return (
+                                        acc.push(
                                             <React.Fragment key={section.id}>
                                                 <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
                                                     <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
@@ -331,17 +330,17 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                                 {index < remainingSections.length - 2 && <Separator className="my-6" />}
                                             </React.Fragment>
                                         );
-                                    } else if (index === remainingSections.length - 1 && !isPairStart) {
-                                       // This case is handled by the placeholder in the pair
                                     }
-                                    return null;
-                                })}
-                                 {remainingSections.length % 2 !== 0 && (
+                                    return acc;
+                                }, [])}
+                                 {remainingSections.length > 0 && remainingSections.length % 2 !== 0 && (
                                      <React.Fragment>
                                         <Separator className="my-6" />
-                                        <DetailSection icon={remainingSections[remainingSections.length - 1].icon} title={remainingSections[remainingSections.length - 1].title} color={sectionColor} className="col-span-1">
-                                            {remainingSections[remainingSections.length - 1].content}
-                                        </DetailSection>
+                                        <div className="grid grid-cols-1">
+                                            <DetailSection icon={remainingSections[remainingSections.length - 1].icon} title={remainingSections[remainingSections.length - 1].title} color={sectionColor}>
+                                                {remainingSections[remainingSections.length - 1].content}
+                                            </DetailSection>
+                                        </div>
                                      </React.Fragment>
                                  )}
                             </div>
