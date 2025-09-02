@@ -216,8 +216,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
         competition.howToApply && { id: 'howToApply', icon: HelpCircle, title: "طريقة التسجيل", content: <FormattedText text={competition.howToApply} /> }
     ].filter(Boolean) as { id: string; icon: React.ElementType; title: string; content: React.ReactNode; }[];
     
-    const remainingSections = allOtherSections.filter(section => !!section.content);
-    const hasAnyDetails = !!descriptionSection || remainingSections.length > 0;
+    const hasDetails = !!descriptionSection || allOtherSections.length > 0;
 
     return (
         <>
@@ -264,21 +263,21 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                             <InfoItem icon={CalendarDays} label="تاريخ المباراة" value={competition.competitionDate} color={sectionColor} />
                         </div>
                         
-                        {hasAnyDetails && (
+                        {hasDetails && (
                              <>
                                 <Separator />
                                 <div className="space-y-6 pt-6">
                                     {descriptionSection && (
-                                        <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor} className="md:pb-6">
+                                        <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
                                             {descriptionSection.content}
                                         </DetailSection>
                                     )}
                                     
-                                    {descriptionSection && remainingSections.length > 0 && <Separator className="md:hidden" />}
+                                    {descriptionSection && allOtherSections.length > 0 && <Separator />}
 
                                     {/* Mobile View */}
                                     <div className="md:hidden space-y-6">
-                                        {remainingSections.map((section, index) => (
+                                        {allOtherSections.map((section, index) => (
                                             <React.Fragment key={section.id}>
                                                 {index > 0 && <Separator />}
                                                 <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
@@ -289,18 +288,13 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                                     </div>
 
                                     {/* Desktop View */}
-                                    <div className="hidden md:block">
-                                        {remainingSections.map((section, index) => {
-                                            if (index % 2 !== 0) return null;
-                                            const nextSection = remainingSections[index + 1];
-                                            return (
-                                                <div key={section.id} className={cn("grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-start gap-x-6 pt-6 border-t")}>
-                                                    <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
-                                                    {nextSection && <Separator orientation="vertical" className="h-auto" />}
-                                                    {nextSection && <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>{nextSection.content}</DetailSection>}
-                                                </div>
-                                            );
-                                        })}
+                                    <div className="hidden md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-6">
+                                        {allOtherSections.map((section, index) => (
+                                            <div key={section.id} className={cn(allOtherSections.length % 2 !== 0 && index === allOtherSections.length - 1 && 'md:col-span-2')}>
+                                                <Separator className="mb-6 md:hidden" />
+                                                <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             </>
