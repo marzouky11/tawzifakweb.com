@@ -24,7 +24,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 
 const formSchema = z.object({
@@ -317,7 +317,9 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
   ];
   
   const step1Content = (
-    <div className="space-y-6">
+    <Card>
+      <CardHeader><CardTitle>المعلومات الأساسية</CardTitle></CardHeader>
+      <CardContent className="space-y-6">
         <FormField control={form.control} name="title" render={({ field }) => (
             <FormItem><FormLabelIcon icon={FileText} label="عنوان الإعلان" /><FormControl><Input placeholder={postType === 'seeking_job' ? "مثال: مصمم جرافيك يبحث عن فرصة..." : "مثال: مطلوب مهندس مدني..."} {...field} /></FormControl><FormMessage /></FormItem>
         )} />
@@ -399,11 +401,14 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                 <FormItem><FormLabelIcon icon={MapPin} label="المدينة"/><FormControl><Input placeholder="مثال: الدار البيضاء" {...field} /></FormControl><FormMessage /></FormItem>
             )} />
         </div>
-    </div>
+    </CardContent>
+    </Card>
   );
   
   const step2Content = (
-     <div className="space-y-6">
+    <Card>
+      <CardHeader><CardTitle>التفاصيل</CardTitle></CardHeader>
+      <CardContent className="space-y-6">
         {postType === 'seeking_job' ? (
           <>
             <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabelIcon icon={FileSignature} label="وصف المهارات والخبرة" /><FormControl><Textarea placeholder="اكتب تفاصيل عن مهاراتك وخبراتك..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
@@ -413,10 +418,8 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
         ) : (
            <>
                 <FormField control={form.control} name="companyName" render={({ field }) => (<FormItem><FormLabelIcon icon={Building2} label="اسم الشركة (اختياري)" /><FormControl><Input placeholder="اسم الشركة أو الجهة" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <FormField control={form.control} name="salary" render={({ field }) => (<FormItem><FormLabelIcon icon={Wallet} label="الأجر (اختياري)" /><FormControl><Input placeholder="مثال: 5000 درهم / شهري" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
-                    <FormField control={form.control} name="openPositions" render={({ field }) => (<FormItem><FormLabelIcon icon={Users2} label="الوظائف الشاغرة (اختياري)" /><FormControl><Input type="number" placeholder="مثال: 3" {...field} value={field.value ?? ''} onChange={e => field.onChange(e.target.value === '' ? undefined : +e.target.value)} /></FormControl><FormMessage /></FormItem>)} />
-                </div>
+                <FormField control={form.control} name="salary" render={({ field }) => (<FormItem><FormLabelIcon icon={Wallet} label="الأجر (اختياري)" /><FormControl><Input placeholder="مثال: 5000 درهم / شهري" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
+                <FormField control={form.control} name="openPositions" render={({ field }) => (<FormItem><FormLabelIcon icon={Users2} label="عدد المناصب (اختياري)" /><FormControl><Input type="number" placeholder="مثال: 3" {...field} value={field.value ?? ''} onChange={e => field.onChange(e.target.value === '' ? undefined : +e.target.value)} /></FormControl><FormMessage /></FormItem>)} />
                 <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabelIcon icon={FileSignature} label="وصف الوظيفة (اختياري)"/><FormControl><Textarea placeholder="اكتب تفاصيل إضافية عن الوظيفة..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
                 <FormField control={form.control} name="availablePositions" render={({ field }) => (<FormItem><FormLabelIcon icon={Briefcase} label="الوظائف المتاحة (اختياري)" /><FormControl><Textarea placeholder="قائمة بالوظائف أو المناصب المتاحة..." rows={3} {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
                 <FormField control={form.control} name="conditions" render={({ field }) => (<FormItem><FormLabelIcon icon={ClipboardList} label="الشروط المطلوبة (اختياري)" /><FormControl><Textarea placeholder="اكتب الشروط الإضافية هنا، مثل: العمر، توفر وسيلة نقل، أوقات العمل..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
@@ -427,14 +430,16 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                 <FormField control={form.control} name="howToApply" render={({ field }) => (<FormItem><FormLabelIcon icon={HelpCircle} label="كيفية التقديم (اختياري)" /><FormControl><Textarea placeholder="اشرح هنا خطوات التقديم. مثلاً: أرسل سيرتك الذاتية إلى البريد الإلكتروني المذكور أعلاه." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
             </>
         )}
-    </div>
+    </CardContent>
+    </Card>
   );
 
   const step3Content = (
-      <div className="space-y-6">
-        <div className="space-y-4">
+      <Card>
+        <CardHeader><CardTitle>التواصل والتقديم</CardTitle></CardHeader>
+        <CardContent className="space-y-6">
             <h3 className="font-semibold flex items-center gap-2 text-base md:text-lg"><Info className="h-5 w-5" style={{color: getThemeColor()}} />طرق التواصل</h3>
-            <p className="text-sm text-muted-foreground -mt-2">
+            <p className="text-sm text-muted-foreground -mt-4">
                 أدخل وسيلة تواصل واحدة على الأقل. كلما أضفت طرقًا أكثر، زادت فرصة تواصل المهتمين معك.
             </p>
             <FormField control={form.control} name="phone" render={({ field }) => (
@@ -450,13 +455,17 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                 <FormItem><FormLabelIcon icon={Instagram} label="حساب إنستغرام (اختياري)" /><FormControl><Input placeholder="username" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
             )} />
              {postType === 'seeking_worker' && (
-                <FormField control={form.control} name="applyUrl" render={({ field }) => (
-                    <FormItem><FormLabelIcon icon={LinkIcon} label="رابط التقديم (اختياري)" /><FormControl><Input type="url" placeholder="https://example.com/apply" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
+                 <FormField control={form.control} name="applyUrl" render={({ field }) => (
+                    <FormItem>
+                        <FormLabelIcon icon={LinkIcon} label="رابط التقديم (اختياري)" />
+                        <FormControl><Input type="url" placeholder="https://example.com/apply" {...field} value={field.value ?? ''} /></FormControl>
+                        <FormMessage />
+                    </FormItem>
                 )} />
              )}
               <FormMessage>{form.formState.errors.phone?.message}</FormMessage>
-        </div>
-    </div>
+        </CardContent>
+      </Card>
   );
 
   const stepsContent = [step1Content, step2Content, step3Content];
@@ -466,14 +475,18 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full">
             {isEditing ? (
                  <div className="p-6 md:p-8 space-y-8">
-                     <h2 className="text-xl font-bold border-b pb-2">المعلومات الأساسية</h2>
-                     {step1Content}
-                     <Separator />
-                     <h2 className="text-xl font-bold border-b pb-2">التفاصيل</h2>
-                     {step2Content}
-                     <Separator />
-                     <h2 className="text-xl font-bold border-b pb-2">التواصل</h2>
-                     {step3Content}
+                     <Card>
+                        <CardHeader><CardTitle>المعلومات الأساسية</CardTitle></CardHeader>
+                        <CardContent className="space-y-6 pt-6">{step1Content}</CardContent>
+                     </Card>
+                     <Card>
+                        <CardHeader><CardTitle>التفاصيل</CardTitle></CardHeader>
+                        <CardContent className="space-y-6 pt-6">{step2Content}</CardContent>
+                    </Card>
+                     <Card>
+                        <CardHeader><CardTitle>التواصل والتقديم</CardTitle></CardHeader>
+                        <CardContent className="space-y-6 pt-6">{step3Content}</CardContent>
+                    </Card>
                      <Button
                         type="submit"
                         disabled={isSubmitting}
@@ -501,6 +514,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                                 animate={{ y: 0, opacity: 1 }}
                                 exit={{ y: -10, opacity: 0 }}
                                 transition={{ duration: 0.2 }}
+                                className="space-y-8"
                             >
                                 {stepsContent[currentStep]}
                             </motion.div>

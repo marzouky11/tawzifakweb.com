@@ -181,6 +181,8 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
         post.featuresAndOpportunities && { id: 'featuresAndOpportunities', icon: Target, title: "المميزات والفرص", content: <FormattedText text={post.featuresAndOpportunities} /> },
         post.howToApply && { id: 'howToApply', icon: HelpCircle, title: "كيفية التقديم", content: <FormattedText text={post.howToApply} /> }
     ].filter(Boolean) as { id: string; icon: React.ElementType; title: string; content: React.ReactNode; }[];
+    
+    const remainingSections = allOtherSections.filter(section => section.id !== 'description');
 
     return (
         <>
@@ -231,12 +233,12 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                                     <Separator />
                                 </>
                             )}
-                            {allOtherSections.map((section, index) => (
+                            {remainingSections.map((section, index) => (
                                 <React.Fragment key={section.id}>
                                     <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
                                         {section.content}
                                     </DetailSection>
-                                    {index < allOtherSections.length - 1 && <Separator />}
+                                    {index < remainingSections.length - 1 && <Separator />}
                                 </React.Fragment>
                             ))}
                         </div>
@@ -248,12 +250,12 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                                     <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
                                         {descriptionSection.content}
                                     </DetailSection>
-                                    {allOtherSections.length > 0 && <Separator className="my-6" />}
+                                    {remainingSections.length > 0 && <Separator className="my-6" />}
                                 </>
                             )}
-                            {allOtherSections.map((section, index) => {
+                            {remainingSections.map((section, index) => {
                                 if (index % 2 === 0) {
-                                    const nextSection = allOtherSections[index + 1];
+                                    const nextSection = remainingSections[index + 1];
                                     return (
                                         <React.Fragment key={section.id}>
                                             <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
@@ -269,7 +271,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                                                     </DetailSection>
                                                 ) : <div></div>}
                                             </div>
-                                             {(index + 1 < allOtherSections.length) && (index + 2 < allOtherSections.length) && <Separator className="my-6" />}
+                                             {(index + 1 < remainingSections.length) && (index + 2 < remainingSections.length) && <Separator className="my-6" />}
                                         </React.Fragment>
                                     );
                                 }
@@ -282,7 +284,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                 <div className="grid md:grid-cols-2 gap-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2" style={{color: sectionColor}}>
+                            <CardTitle className="flex items-center gap-2">
                                 <LinkIcon className="h-5 w-5" />
                                 التقديم على الفرصة
                             </CardTitle>
