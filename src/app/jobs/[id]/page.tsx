@@ -342,7 +342,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                         <Card>
                              <CardHeader>
                                 <CardTitle className="flex items-center gap-2 text-xl font-bold">
-                                    <LinkIcon className="h-5 w-5 text-foreground" />
+                                    <LinkIcon className="h-5 w-5" style={{ color: sectionColor }}/>
                                     التقديم على الوظيفة
                                 </CardTitle>
                             </CardHeader>
@@ -369,7 +369,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                         <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2 text-xl font-bold">
-                                    <Bookmark className="h-5 w-5 text-foreground" />
+                                    <Bookmark className="h-5 w-5" style={{ color: sectionColor }}/>
                                     احفظ الإعلان وشارك مع الآخرين
                                 </CardTitle>
                             </CardHeader>
