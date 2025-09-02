@@ -286,34 +286,31 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                 {job.openPositions && <InfoItem icon={Users2} label="عدد المناصب" value={job.openPositions} color={categoryColor} />}
                             </div>
                             
-                            {hasDetails && (
-                                <>
-                                    <Separator />
-                                    <div className="space-y-6 pt-6">
-                                        {descriptionSection && (
-                                            <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
-                                                {descriptionSection.content}
-                                            </DetailSection>
-                                        )}
-                                        
-                                        {descriptionSection && allOtherSections.length > 0 && <Separator className="my-6"/>}
+                            {hasDetails && <Separator />}
 
-                                        <div className="md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-6">
-                                            {allOtherSections.map((section, index) => (
-                                                <React.Fragment key={section.id}>
-                                                     {(index > 0 && index % 2 === 0) && <Separator className="my-6 md:col-span-2 hidden md:block" />}
-                                                    <div className="md:hidden">
-                                                        {index > 0 && <Separator className="my-6" />}
-                                                    </div>
-                                                    <div className={cn(allOtherSections.length % 2 !== 0 && index === allOtherSections.length - 1 && 'md:col-span-2')}>
-                                                        <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
-                                                    </div>
-                                                </React.Fragment>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </>
-                            )}
+                            <div className="pt-0 space-y-8">
+                                {descriptionSection && (
+                                    <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
+                                        {descriptionSection.content}
+                                    </DetailSection>
+                                )}
+                                
+                                {descriptionSection && allOtherSections.length > 0 && <Separator className="my-8" />}
+
+                                <div className="md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-6">
+                                    {allOtherSections.map((section, index) => (
+                                        <React.Fragment key={section.id}>
+                                                {(index > 0 && index % 2 === 0) && <Separator className="my-8 md:col-span-2 hidden md:block" />}
+                                            <div className="md:hidden">
+                                                {index > 0 && <Separator className="my-8" />}
+                                            </div>
+                                            <div className={cn(allOtherSections.length > 1 && allOtherSections.length % 2 !== 0 && index === allOtherSections.length - 1 && 'md:col-span-2')}>
+                                                <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
+                                            </div>
+                                        </React.Fragment>
+                                    ))}
+                                </div>
+                            </div>
                         </CardContent>
                     </Card>
 
