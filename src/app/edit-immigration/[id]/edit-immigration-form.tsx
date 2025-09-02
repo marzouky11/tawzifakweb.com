@@ -17,7 +17,7 @@ import {
     Phone, HelpCircle, Target, CheckSquare, LayoutGrid,
 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import type { ImmigrationPost } from '@/lib/types';
+import type { ImmigrationPost, ImmigrationProgramType } from '@/lib/types';
 import { slugify, getProgramTypeDetails, programTypes } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
 import { CategoryIcon } from '@/components/icons';
@@ -102,7 +102,11 @@ export function EditImmigrationForm({ post }: EditImmigrationFormProps) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     try {
-      const dataToSave = { ...values, slug: slugify(values.title) };
+      const dataToSave: Partial<ImmigrationPost> = { 
+        ...values, 
+        slug: slugify(values.title),
+        programType: values.programType as ImmigrationProgramType,
+      };
 
       await updateImmigrationPost(post.id, dataToSave);
       toast({ title: "تم تحديث الإعلان بنجاح!" });
