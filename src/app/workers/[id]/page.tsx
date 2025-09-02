@@ -166,6 +166,10 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
     
     const remainingSections = allOtherSections.filter(section => !!section.content);
     const hasAnyDetails = !!descriptionSection || remainingSections.length > 0;
+    
+    let allSections = [];
+    if(descriptionSection) allSections.push(descriptionSection);
+    allSections.push(...remainingSections);
 
     return (
         <>
@@ -214,60 +218,57 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                                 {job.workType && <SeekerInfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={categoryColor} />}
                             </div>
 
-                             {hasAnyDetails && <Separator />}
-                            
-                             {descriptionSection && (
-                                <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
-                                    {descriptionSection.content}
-                                </DetailSection>
-                            )}
-
-                            {/* Mobile View */}
-                            <div className="md:hidden space-y-4">
-                                {remainingSections.map((section, index) => (
-                                    <React.Fragment key={section.id}>
-                                        <Separator />
-                                        <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
-                                            {section.content}
-                                        </DetailSection>
-                                    </React.Fragment>
-                                ))}
-                            </div>
-                            
-                            {/* Desktop View */}
-                           {remainingSections.length > 0 && <Separator className="hidden md:block" />}
-                            <div className="hidden md:block space-y-6">
-                                {remainingSections.map((section, index) => {
-                                    const nextSection = remainingSections[index + 1];
-                                    if (index % 2 === 0) {
-                                        if (nextSection) {
-                                            return (
-                                                <React.Fragment key={section.id}>
-                                                    <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
-                                                        <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
-                                                        <Separator orientation="vertical" className="h-auto" />
-                                                        <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>{nextSection.content}</DetailSection>
-                                                    </div>
-                                                    {index < remainingSections.length - 2 && <Separator className="my-6" />}
-                                                </React.Fragment>
-                                            );
-                                        } else {
-                                            return (
-                                                <DetailSection key={section.id} icon={section.icon} title={section.title} color={sectionColor} className="md:col-span-full">
+                             {hasAnyDetails && (
+                                <>
+                                    <Separator />
+                                    {/* Mobile View */}
+                                    <div className="md:hidden space-y-4">
+                                        {allSections.map((section, index) => (
+                                            <React.Fragment key={section.id}>
+                                                <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
                                                     {section.content}
                                                 </DetailSection>
-                                            );
-                                        }
-                                    }
-                                    return null;
-                                })}
-                            </div>
+                                                {index < allSections.length - 1 && <Separator />}
+                                            </React.Fragment>
+                                        ))}
+                                    </div>
+
+                                    {/* Desktop View */}
+                                    <div className="hidden md:block space-y-6">
+                                        {allSections.map((section, index) => {
+                                            const nextSection = allSections[index + 1];
+                                            if (index % 2 === 0) {
+                                                if (nextSection) {
+                                                    return (
+                                                        <React.Fragment key={section.id}>
+                                                            <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                                                <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
+                                                                <Separator orientation="vertical" className="h-auto" />
+                                                                <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>{nextSection.content}</DetailSection>
+                                                            </div>
+                                                            {index < allSections.length - 2 && <Separator className="my-6" />}
+                                                        </React.Fragment>
+                                                    );
+                                                } else {
+                                                    // Render the last single item full width
+                                                    return (
+                                                        <DetailSection key={section.id} icon={section.icon} title={section.title} color={sectionColor} className="md:col-span-full">
+                                                            {section.content}
+                                                        </DetailSection>
+                                                    );
+                                                }
+                                            }
+                                            return null;
+                                        })}
+                                    </div>
+                                </>
+                            )}
                         </CardContent>
                     </Card>
 
                     <div className="grid md:grid-cols-2 gap-6">
                         <Card>
-                            <CardHeader>
+                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2 text-xl font-bold">
                                     <Phone className="h-5 w-5" style={{ color: sectionColor }}/>
                                     <span className="text-foreground">تواصل مع الباحث عن عمل</span>
@@ -294,7 +295,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                         </Card>
 
                         <Card>
-                            <CardHeader>
+                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2 text-xl font-bold">
                                     <Bookmark className="h-5 w-5" style={{ color: sectionColor }}/>
                                     <span className="text-foreground">احفظ الإعلان وشارك مع الآخرين</span>
