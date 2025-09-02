@@ -269,8 +269,8 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                     <div className="grid md:grid-cols-2 gap-6">
                         <Card>
                             <CardHeader>
-                                <CardTitle className="flex items-center gap-2 text-lg">
-                                    <Phone className="h-5 w-5" style={{color: sectionColor}}/>
+                                <CardTitle className="flex items-center gap-2 text-xl font-bold" style={{ color: sectionColor }}>
+                                    <Phone className="h-5 w-5"/>
                                     تواصل مع الباحث عن عمل
                                 </CardTitle>
                             </CardHeader>
@@ -296,8 +296,8 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
 
                         <Card>
                             <CardHeader>
-                                <CardTitle className="flex items-center gap-2 text-lg">
-                                    <Bookmark className="h-5 w-5" style={{color: sectionColor}}/>
+                                <CardTitle className="flex items-center gap-2 text-xl font-bold" style={{ color: sectionColor }}>
+                                    <Bookmark className="h-5 w-5"/>
                                     احفظ الإعلان وشارك مع الآخرين
                                 </CardTitle>
                             </CardHeader>

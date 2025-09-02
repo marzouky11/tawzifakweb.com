@@ -303,7 +303,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                                                         {nextSection.content}
                                                     </DetailSection>
                                                 ) : (
-                                                    <div className="col-span-1 md:col-span-1"></div>
+                                                    <div className="col-span-1 md:col-span-2"></div>
                                                 )}
                                             </div>
                                             {index < remainingSections.length - (nextSection ? 2 : 1) && <Separator className="my-6" />}
@@ -319,7 +319,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                 <div className="grid md:grid-cols-2 gap-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2 text-foreground">
+                            <CardTitle className="flex items-center gap-2 text-xl font-bold" style={{ color: sectionColor }}>
                                 <LinkIcon className="h-5 w-5" />
                                 التقديم على المباراة
                             </CardTitle>
@@ -354,8 +354,8 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                 
                      <Card>
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2 text-lg">
-                                <Bookmark className="h-5 w-5" style={{color: sectionColor}}/>
+                            <CardTitle className="flex items-center gap-2 text-xl font-bold" style={{ color: sectionColor }}>
+                                <Bookmark className="h-5 w-5"/>
                                 احفظ الإعلان وشارك مع الآخرين
                             </CardTitle>
                         </CardHeader>

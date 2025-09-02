@@ -309,7 +309,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                            {/* Desktop View */}
                             {remainingSections.length > 0 && <Separator className="hidden md:block" />}
                             <div className="hidden md:block space-y-6">
-                                {remainingSections.reduce((acc, section, index) => {
+                                {remainingSections.reduce<React.ReactNode[]>((acc, section, index) => {
                                     if (index % 2 === 0) {
                                         const nextSection = remainingSections[index + 1];
                                         acc.push(
@@ -350,8 +350,8 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                     <div className="grid md:grid-cols-2 gap-6">
                         <Card>
                              <CardHeader>
-                                <CardTitle className="flex items-center gap-2 text-lg">
-                                    <LinkIcon className="h-5 w-5" style={{color: sectionColor}} />
+                                <CardTitle className="flex items-center gap-2 text-xl font-bold" style={{ color: sectionColor }}>
+                                    <LinkIcon className="h-5 w-5" />
                                     التقديم على الوظيفة
                                 </CardTitle>
                             </CardHeader>
@@ -377,8 +377,8 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                         
                         <Card>
                             <CardHeader>
-                                <CardTitle className="flex items-center gap-2 text-lg">
-                                    <Bookmark className="h-5 w-5" style={{color: sectionColor}}/>
+                                <CardTitle className="flex items-center gap-2 text-xl font-bold" style={{ color: sectionColor }}>
+                                    <Bookmark className="h-5 w-5" />
                                     احفظ الإعلان وشارك مع الآخرين
                                 </CardTitle>
                             </CardHeader>
