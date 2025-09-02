@@ -257,7 +257,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                 title="تفاصيل عرض العمل"
                 description="هنا تجد جميع المعلومات المتعلقة بفرصة العمل هذه."
             />
-            <div className="container mx-auto max-w-4xl px-4 pb-8">
+            <div className="container mx-auto max-w-7xl px-4 pb-8">
                 <div className="space-y-6">
                     <Card className="overflow-hidden shadow-lg border-t-4" style={{ borderColor: sectionColor }}>
                         <CardHeader className="bg-muted/30 p-4 sm:p-6">
@@ -301,6 +301,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                         <div className="md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-6">
                                             {allOtherSections.map((section, index) => (
                                                 <React.Fragment key={section.id}>
+                                                     {(index > 0 && index % 2 === 0) && <Separator className="my-6 md:col-span-2 hidden md:block" />}
                                                     <div className="md:hidden">
                                                         {index > 0 && <Separator className="my-6" />}
                                                     </div>

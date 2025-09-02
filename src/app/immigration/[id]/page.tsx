@@ -194,7 +194,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                 title="تفاصيل فرصة الهجرة"
                 description={`استكشف جميع المعلومات المتعلقة بفرصة الهجرة إلى ${post.targetCountry}.`}
             />
-            <div className="container mx-auto max-w-4xl px-4 pb-8 space-y-6">
+            <div className="container mx-auto max-w-7xl px-4 pb-8 space-y-6">
                 <Card className="overflow-hidden shadow-lg border-2" style={{ borderColor: sectionColor }}>
                      <CardHeader className="p-4 sm:p-6" style={{ backgroundColor: `${sectionColor}1A`}}>
                         <div className="flex items-center gap-4 mb-2">
@@ -237,6 +237,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                                     <div className="md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-6">
                                         {allOtherSections.map((section, index) => (
                                             <React.Fragment key={section.id}>
+                                                {(index > 0 && index % 2 === 0) && <Separator className="my-6 md:col-span-2 hidden md:block" />}
                                                 <div className="md:hidden">
                                                     {index > 0 && <Separator className="my-6" />}
                                                 </div>

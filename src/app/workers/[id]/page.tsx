@@ -176,7 +176,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                 title="ملف باحث عن عمل"
                 description="استعرض مهارات وخبرات هذا المرشح وتواصل معه مباشرة."
             />
-            <div className="container mx-auto max-w-4xl px-4 pb-8">
+            <div className="container mx-auto max-w-7xl px-4 pb-8">
                 <div className="space-y-6">
                     <Card 
                         className="overflow-hidden shadow-lg border-2 border-dashed"
@@ -222,12 +222,13 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                                                 {descriptionSection.content}
                                             </DetailSection>
                                         )}
-                                        
-                                        {descriptionSection && allOtherSections.length > 0 && <Separator className="my-6"/>}
+
+                                        {descriptionSection && allOtherSections.length > 0 && <Separator className="my-6" />}
 
                                         <div className="md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-6">
                                             {allOtherSections.map((section, index) => (
                                                 <React.Fragment key={section.id}>
+                                                     {(index > 0 && index % 2 === 0) && <Separator className="my-6 md:col-span-2 hidden md:block" />}
                                                     <div className="md:hidden">
                                                         {index > 0 && <Separator className="my-6" />}
                                                     </div>
