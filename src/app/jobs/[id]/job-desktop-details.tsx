@@ -17,6 +17,7 @@ import { JobCard } from '@/components/job-card';
 import { SaveAdButton } from './save-ad-button';
 import { cn } from '@/lib/utils';
 import { getCategoryById } from '@/lib/data';
+import { Separator } from '@/components/ui/separator';
 
 const workTypeTranslations: { [key in WorkType]: string } = {
   full_time: 'دوام كامل',
@@ -62,10 +63,10 @@ const FormattedText = ({ text }: { text?: string }) => {
     );
 }
 
-const DetailSectionCard = ({ icon: Icon, title, color, children }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode }) => {
+const DetailSectionCard = ({ icon: Icon, title, color, children, className }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode, className?: string }) => {
     if (!children) return null;
     return (
-        <Card>
+        <Card className={className}>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-xl" style={{color}}>
                     <Icon className="h-5 w-5" />
@@ -100,8 +101,9 @@ export function JobDesktopDetails({ job, similarJobs }: JobDesktopDetailsProps) 
         job.applyUrl && { type: 'applyUrl', href: job.applyUrl, label: 'تسجيل عبر الموقع', icon: LinkIcon, color: '#FFFFFF', className: 'bg-blue-600 hover:bg-blue-700' },
     ].filter(Boolean);
 
-    const allSections = [
-        job.description && { id: 'description', icon: FileText, title: "وصف الوظيفة", content: <FormattedText text={job.description} /> },
+    const descriptionSection = job.description ? { id: 'description', icon: FileText, title: "وصف الوظيفة", content: <FormattedText text={job.description} /> } : null;
+
+    const allOtherSections = [
         job.availablePositions && { id: 'availablePositions', icon: Briefcase, title: "الوظائف المتاحة", content: <FormattedText text={job.availablePositions} /> },
         job.conditions && { id: 'conditions', icon: ClipboardList, title: "الشروط المطلوبة", content: <FormattedText text={job.conditions} /> },
         job.qualifications && { id: 'qualifications', icon: GraduationCap, title: "المؤهلات المطلوبة", content: <FormattedText text={job.qualifications} /> },
@@ -113,103 +115,125 @@ export function JobDesktopDetails({ job, similarJobs }: JobDesktopDetailsProps) 
     
 
     return (
-        <div className="container mx-auto max-w-7xl px-4 pb-8">
-            <div className="space-y-6">
-                <Card className="overflow-hidden shadow-lg border-t-4" style={{ borderColor: sectionColor }}>
-                    <CardHeader className="bg-muted/30 p-6">
-                        <div className="flex items-center gap-4 mb-2">
-                            <div className="p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${categoryColor}1A` }}>
-                                <CategoryIcon name={finalIconName} className="h-8 w-8" style={{ color: categoryColor }} />
-                            </div>
-                            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">
-                                {job.title || 'عنوان غير متوفر'}
-                            </h1>
+        <div className="container mx-auto max-w-7xl px-4 pb-8 space-y-6">
+            <Card className="overflow-hidden shadow-lg border-t-4" style={{ borderColor: sectionColor }}>
+                <CardHeader className="bg-muted/30 p-6">
+                    <div className="flex items-center gap-4 mb-2">
+                        <div className="p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${categoryColor}1A` }}>
+                            <CategoryIcon name={finalIconName} className="h-8 w-8" style={{ color: categoryColor }} />
                         </div>
-                         <div className="flex items-center gap-x-4 text-muted-foreground text-sm">
-                            <div className="flex items-center gap-1.5">
-                                <CalendarDays className="h-4 w-4" />
-                                <span>نُشر: {job.postedAt}</span>
-                            </div>
-                        </div>
-                    </CardHeader>
-                    <CardContent className="p-6 space-y-8">
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
-                            <InfoItem icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} color={categoryColor} />
-                            <InfoItem icon={Wallet} label="الأجر" value={job.salary ? job.salary : 'عند الطلب'} color={categoryColor} />
-                            {categoryName && <InfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={categoryColor} />}
-                            {translatedWorkType && <InfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={categoryColor} />}
-                            {job.companyName && <InfoItem icon={Building2} label="الشركة" value={job.companyName} color={categoryColor} />}
-                            {job.openPositions && <InfoItem icon={Users2} label="عدد المناصب" value={job.openPositions} color={categoryColor} />}
-                        </div>
-                    </CardContent>
-                </Card>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {allSections.map(section => (
-                        <DetailSectionCard key={section.id} icon={section.icon} title={section.title} color={sectionColor}>
-                            {section.content}
-                        </DetailSectionCard>
-                    ))}
-                </div>
-
-
-                <div className="grid md:grid-cols-2 gap-6">
-                    <Card>
-                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2 text-xl font-bold">
-                                <LinkIcon className="h-5 w-5" style={{ color: sectionColor }}/>
-                                <span className="text-foreground">التقديم على الوظيفة</span>
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="pt-0 grid grid-cols-1 gap-3">
-                            {contactButtons.map(button => {
-                                if (!button) return null;
-                                return (
-                                    <Button
-                                        key={button.type}
-                                        asChild
-                                        size="lg"
-                                        className={cn("text-primary-foreground font-semibold text-base py-6", button.className)}
-                                    >
-                                        <a href={button.href} target={button.type !== 'phone' ? '_blank' : undefined} rel="noopener noreferrer">
-                                            <button.icon className="ml-2 h-5 w-5" />
-                                            {button.label}
-                                        </a>
-                                    </Button>
-                                )
-                            })}
-                        </CardContent>
-                    </Card>
-                    
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2 text-xl font-bold">
-                                <Bookmark className="h-5 w-5" style={{ color: sectionColor }}/>
-                                <span className="text-foreground">احفظ الإعلان وشارك مع الآخرين</span>
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="flex flex-col gap-3 pt-0">
-                            <SaveAdButton adId={job.id} adType="job" />
-                            <ShareButton title={job.title || ''} text={job.description || ''} />
-                        </CardContent>
-                    </Card>
-               </div>
-
-                <div className="text-center pt-4">
-                    <ReportAdDialog adId={job.id} />
-                </div>
-                
-                 {similarJobs.length > 0 && (
-                    <div className="space-y-4 pt-6 mt-6 border-t">
-                        <h2 className="text-2xl font-bold">إعلانات مشابهة</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {similarJobs.map((similarJob) => (
-                                <JobCard key={similarJob.id} job={similarJob} />
-                            ))}
+                        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">
+                            {job.title || 'عنوان غير متوفر'}
+                        </h1>
+                    </div>
+                     <div className="flex items-center gap-x-4 text-muted-foreground text-sm">
+                        <div className="flex items-center gap-1.5">
+                            <CalendarDays className="h-4 w-4" />
+                            <span>نُشر: {job.postedAt}</span>
                         </div>
                     </div>
-                )}
+                </CardHeader>
+                <CardContent className="p-6 space-y-8">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+                        <InfoItem icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} color={categoryColor} />
+                        <InfoItem icon={Wallet} label="الأجر" value={job.salary ? job.salary : 'عند الطلب'} color={categoryColor} />
+                        {categoryName && <InfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={categoryColor} />}
+                        {translatedWorkType && <InfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={categoryColor} />}
+                        {job.companyName && <InfoItem icon={Building2} label="الشركة" value={job.companyName} color={categoryColor} />}
+                        {job.openPositions && <InfoItem icon={Users2} label="عدد المناصب" value={job.openPositions} color={categoryColor} />}
+                    </div>
+
+                    {descriptionSection && (
+                        <>
+                            <Separator className="my-6" />
+                            <DetailSectionCard 
+                                icon={descriptionSection.icon} 
+                                title={descriptionSection.title} 
+                                color={sectionColor}
+                                className="col-span-full"
+                            >
+                                {descriptionSection.content}
+                            </DetailSectionCard>
+                        </>
+                    )}
+                    
+                    {allOtherSections.length > 0 && (
+                        <>
+                            <Separator className="my-6" />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {allOtherSections.map((section, index) => (
+                                    <DetailSectionCard 
+                                        key={section.id} 
+                                        icon={section.icon} 
+                                        title={section.title} 
+                                        color={sectionColor}
+                                        className={cn(allOtherSections.length % 2 !== 0 && index === allOtherSections.length - 1 && 'md:col-span-2')}
+                                    >
+                                        {section.content}
+                                    </DetailSectionCard>
+                                ))}
+                            </div>
+                        </>
+                    )}
+                </CardContent>
+            </Card>
+
+            <div className="grid md:grid-cols-2 gap-6">
+                <Card>
+                     <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-xl font-bold">
+                            <LinkIcon className="h-5 w-5" style={{ color: sectionColor }}/>
+                            <span className="text-foreground">التقديم على الوظيفة</span>
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="pt-0 grid grid-cols-1 gap-3">
+                        {contactButtons.map(button => {
+                            if (!button) return null;
+                            return (
+                                <Button
+                                    key={button.type}
+                                    asChild
+                                    size="lg"
+                                    className={cn("text-primary-foreground font-semibold text-base py-6", button.className)}
+                                >
+                                    <a href={button.href} target={button.type !== 'phone' ? '_blank' : undefined} rel="noopener noreferrer">
+                                        <button.icon className="ml-2 h-5 w-5" />
+                                        {button.label}
+                                    </a>
+                                </Button>
+                            )
+                        })}
+                    </CardContent>
+                </Card>
+                
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-xl font-bold">
+                            <Bookmark className="h-5 w-5" style={{ color: sectionColor }}/>
+                            <span className="text-foreground">احفظ الإعلان وشارك مع الآخرين</span>
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex flex-col gap-3 pt-0">
+                        <SaveAdButton adId={job.id} adType="job" />
+                        <ShareButton title={job.title || ''} text={job.description || ''} />
+                    </CardContent>
+                </Card>
+           </div>
+
+            <div className="text-center pt-4">
+                <ReportAdDialog adId={job.id} />
             </div>
+            
+             {similarJobs.length > 0 && (
+                <div className="space-y-4 pt-6 mt-6 border-t">
+                    <h2 className="text-2xl font-bold">إعلانات مشابهة</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {similarJobs.map((similarJob) => (
+                            <JobCard key={similarJob.id} job={similarJob} />
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

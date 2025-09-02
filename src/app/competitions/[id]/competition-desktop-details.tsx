@@ -14,6 +14,8 @@ import { SaveAdButton } from '@/app/jobs/[id]/save-ad-button';
 import { CompetitionCard } from '@/components/competition-card';
 import { ShareButton } from '@/app/jobs/[id]/share-button';
 import { getOrganizerByName } from '@/lib/data';
+import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
 
 const InfoItem = ({ icon: Icon, label, value, color, href, isDate }: { icon: React.ElementType; label: string; value: string | number | undefined | null; color?: string; href?: string; isDate?: boolean }) => {
     if (!value) return null;
@@ -32,10 +34,10 @@ const InfoItem = ({ icon: Icon, label, value, color, href, isDate }: { icon: Rea
     return content;
 };
 
-const DetailSectionCard = ({ icon: Icon, title, color, children }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode }) => {
+const DetailSectionCard = ({ icon: Icon, title, color, children, className }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode, className?: string }) => {
     if (!children) return null;
     return (
-        <Card>
+        <Card className={className}>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-xl" style={{color}}>
                     <Icon className="h-5 w-5" />
@@ -86,8 +88,9 @@ export function CompetitionDesktopDetails({ competition, similarCompetitions }: 
     const organizerIcon = organizer?.icon || 'Landmark';
     const organizerColor = organizer?.color || sectionColor;
 
-    const allSections = [
-        competition.description && { id: 'description', icon: Info, title: "وصف تفصيلي", content: <FormattedText text={competition.description} /> },
+    const descriptionSection = competition.description ? { id: 'description', icon: Info, title: "وصف تفصيلي", content: <FormattedText text={competition.description} /> } : null;
+
+    const allOtherSections = [
         competition.availablePositions && { id: 'availablePositions', icon: Briefcase, title: "الوظائف المتاحة", content: <FormattedText text={competition.availablePositions} /> },
         competition.requirements && { id: 'requirements', icon: ClipboardList, title: "الشروط المطلوبة", content: <FormattedText text={competition.requirements} /> },
         competition.competitionStages && { id: 'competitionStages', icon: ListOrdered, title: "مراحل المباراة", content: <FormattedText text={competition.competitionStages} /> },
@@ -132,17 +135,42 @@ export function CompetitionDesktopDetails({ competition, similarCompetitions }: 
                         <InfoItem icon={CalendarDays} label="آخر أجل للتسجيل" value={competition.deadline} color={sectionColor} isDate />
                         <InfoItem icon={CalendarDays} label="تاريخ المباراة" value={competition.competitionDate} color={sectionColor} />
                     </div>
+
+                    {descriptionSection && (
+                        <>
+                            <Separator className="my-6" />
+                            <DetailSectionCard 
+                                icon={descriptionSection.icon} 
+                                title={descriptionSection.title} 
+                                color={sectionColor}
+                                className="col-span-full"
+                            >
+                                {descriptionSection.content}
+                            </DetailSectionCard>
+                        </>
+                    )}
+
+                    {allOtherSections.length > 0 && (
+                        <>
+                             <Separator className="my-6" />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {allOtherSections.map((section, index) => (
+                                    <DetailSectionCard 
+                                        key={section.id} 
+                                        icon={section.icon} 
+                                        title={section.title} 
+                                        color={sectionColor}
+                                        className={cn(allOtherSections.length % 2 !== 0 && index === allOtherSections.length - 1 && 'md:col-span-2')}
+                                    >
+                                        {section.content}
+                                    </DetailSectionCard>
+                                ))}
+                            </div>
+                        </>
+                    )}
                 </CardContent>
             </Card>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {allSections.map(section => (
-                    <DetailSectionCard key={section.id} icon={section.icon} title={section.title} color={sectionColor}>
-                        {section.content}
-                    </DetailSectionCard>
-                ))}
-            </div>
-            
             <div className="grid md:grid-cols-2 gap-6">
                 <Card>
                     <CardHeader>

@@ -15,6 +15,7 @@ import { ImmigrationCard } from '@/components/immigration-card';
 import { CategoryIcon } from '@/components/icons';
 import { getProgramTypeDetails, cn } from '@/lib/utils';
 import { ShareButton } from '@/app/jobs/[id]/share-button';
+import { Separator } from '@/components/ui/separator';
 
 const InfoItem = ({ icon: Icon, label, value, color }: { icon: React.ElementType; label: string; value: string | number | undefined; color?: string }) => {
     if (!value) return null;
@@ -27,10 +28,10 @@ const InfoItem = ({ icon: Icon, label, value, color }: { icon: React.ElementType
     );
 };
 
-const DetailSectionCard = ({ icon: Icon, title, color, children }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode }) => {
+const DetailSectionCard = ({ icon: Icon, title, color, children, className }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode, className?: string }) => {
     if (!children) return null;
     return (
-        <Card>
+        <Card className={className}>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-xl" style={{color}}>
                     <Icon className="h-5 w-5" />
@@ -88,8 +89,9 @@ export function ImmigrationDesktopDetails({ post, similarPosts }: ImmigrationDes
         post.instagram && { type: 'instagram', href: `https://instagram.com/${post.instagram.replace(/@/g, '')}`, label: 'إنستغرام', icon: Instagram, className: 'bg-gradient-to-r from-pink-500 to-orange-500 hover:opacity-90' },
     ].filter(Boolean);
 
-    const allSections = [
-        post.description && { id: 'description', icon: Info, title: "وصف تفصيلي", content: <FormattedText text={post.description} /> },
+    const descriptionSection = post.description ? { id: 'description', icon: Info, title: "وصف تفصيلي", content: <FormattedText text={post.description} /> } : null;
+
+    const allOtherSections = [
         post.availablePositions && { id: 'availablePositions', icon: Briefcase, title: "الوظائف المتاحة", content: <FormattedText text={post.availablePositions} /> },
         post.requirements && { id: 'requirements', icon: ClipboardList, title: "الشروط العامة", content: <FormattedText text={post.requirements} /> },
         post.qualifications && { id: 'qualifications', icon: GraduationCap, title: "المؤهلات المطلوبة", content: <FormattedText text={post.qualifications} /> },
@@ -128,16 +130,41 @@ export function ImmigrationDesktopDetails({ post, similarPosts }: ImmigrationDes
                          {post.salary && <InfoItem icon={Wallet} label="الأجر" value={post.salary} color={iconColor} />}
                         {post.deadline && <InfoItem icon={CalendarDays} label="آخر أجل" value={post.deadline} color={iconColor} />}
                     </div>
+
+                    {descriptionSection && (
+                        <>
+                            <Separator className="my-6" />
+                            <DetailSectionCard
+                                icon={descriptionSection.icon}
+                                title={descriptionSection.title}
+                                color={sectionColor}
+                                className="col-span-full"
+                            >
+                                {descriptionSection.content}
+                            </DetailSectionCard>
+                        </>
+                    )}
+
+                    {allOtherSections.length > 0 && (
+                         <>
+                            <Separator className="my-6" />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {allOtherSections.map((section, index) => (
+                                    <DetailSectionCard 
+                                        key={section.id} 
+                                        icon={section.icon} 
+                                        title={section.title} 
+                                        color={sectionColor}
+                                        className={cn(allOtherSections.length % 2 !== 0 && index === allOtherSections.length - 1 && 'md:col-span-2')}
+                                    >
+                                        {section.content}
+                                    </DetailSectionCard>
+                                ))}
+                            </div>
+                        </>
+                    )}
                 </CardContent>
             </Card>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                 {allSections.map(section => (
-                    <DetailSectionCard key={section.id} icon={section.icon} title={section.title} color={sectionColor}>
-                        {section.content}
-                    </DetailSectionCard>
-                ))}
-            </div>
             
             <div className="grid md:grid-cols-2 gap-6">
                 <Card>
