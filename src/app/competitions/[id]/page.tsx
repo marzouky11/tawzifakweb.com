@@ -228,7 +228,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                 title="تفاصيل المباراة العمومية"
                 description="هنا تجد جميع المعلومات المتعلقة بهذه المباراة."
             />
-            <div className="container mx-auto max-w-7xl px-4 pb-8 space-y-6">
+            <div className="container mx-auto max-w-4xl px-4 pb-8 space-y-6">
                 <Card className="overflow-hidden shadow-lg border-t-4" style={{borderColor: sectionColor}}>
                      <CardHeader className="bg-muted/30 p-4 sm:p-6">
                          <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
@@ -273,27 +273,18 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                                         </DetailSection>
                                     )}
                                     
-                                    {descriptionSection && allOtherSections.length > 0 && <Separator />}
+                                    {descriptionSection && allOtherSections.length > 0 && <Separator className="my-6"/>}
 
-                                    {/* Mobile View */}
-                                    <div className="md:hidden space-y-6">
+                                    <div className="md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-6">
                                         {allOtherSections.map((section, index) => (
                                             <React.Fragment key={section.id}>
-                                                {index > 0 && <Separator />}
-                                                <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
-                                                    {section.content}
-                                                </DetailSection>
+                                                <div className="md:hidden">
+                                                    {index > 0 && <Separator className="my-6" />}
+                                                </div>
+                                                <div className={cn(allOtherSections.length % 2 !== 0 && index === allOtherSections.length - 1 && 'md:col-span-2')}>
+                                                    <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
+                                                </div>
                                             </React.Fragment>
-                                        ))}
-                                    </div>
-
-                                    {/* Desktop View */}
-                                    <div className="hidden md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-6">
-                                        {allOtherSections.map((section, index) => (
-                                            <div key={section.id} className={cn(allOtherSections.length % 2 !== 0 && index === allOtherSections.length - 1 && 'md:col-span-2')}>
-                                                <Separator className="mb-6 md:hidden" />
-                                                <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
-                                            </div>
                                         ))}
                                     </div>
                                 </div>

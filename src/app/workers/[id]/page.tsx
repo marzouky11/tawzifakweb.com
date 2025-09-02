@@ -176,7 +176,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                 title="ملف باحث عن عمل"
                 description="استعرض مهارات وخبرات هذا المرشح وتواصل معه مباشرة."
             />
-            <div className="container mx-auto max-w-7xl px-4 pb-8">
+            <div className="container mx-auto max-w-4xl px-4 pb-8">
                 <div className="space-y-6">
                     <Card 
                         className="overflow-hidden shadow-lg border-2 border-dashed"
@@ -213,7 +213,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                                 {job.workType && <SeekerInfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={categoryColor} />}
                             </div>
 
-                             {hasDetails && (
+                            {hasDetails && (
                                 <>
                                     <Separator />
                                     <div className="space-y-6 pt-6">
@@ -222,28 +222,19 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                                                 {descriptionSection.content}
                                             </DetailSection>
                                         )}
+                                        
+                                        {descriptionSection && allOtherSections.length > 0 && <Separator className="my-6"/>}
 
-                                        {descriptionSection && allOtherSections.length > 0 && <Separator />}
-
-                                        {/* Mobile View */}
-                                        <div className="md:hidden space-y-6">
+                                        <div className="md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-6">
                                             {allOtherSections.map((section, index) => (
                                                 <React.Fragment key={section.id}>
-                                                    {index > 0 && <Separator />}
-                                                    <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
-                                                        {section.content}
-                                                    </DetailSection>
+                                                    <div className="md:hidden">
+                                                        {index > 0 && <Separator className="my-6" />}
+                                                    </div>
+                                                    <div className={cn(allOtherSections.length % 2 !== 0 && index === allOtherSections.length - 1 && 'md:col-span-2')}>
+                                                        <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
+                                                    </div>
                                                 </React.Fragment>
-                                            ))}
-                                        </div>
-
-                                        {/* Desktop View */}
-                                        <div className="hidden md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-6">
-                                            {allOtherSections.map((section, index) => (
-                                                <div key={section.id} className={cn(allOtherSections.length % 2 !== 0 && index === allOtherSections.length - 1 && 'md:col-span-2')}>
-                                                    <Separator className="mb-6 md:hidden" />
-                                                    <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
-                                                </div>
                                             ))}
                                         </div>
                                     </div>
