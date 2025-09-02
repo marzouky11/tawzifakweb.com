@@ -170,8 +170,9 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
         post.instagram && { type: 'instagram', href: `https://instagram.com/${post.instagram.replace(/@/g, '')}`, label: 'إنستغرام', icon: Instagram, className: 'bg-gradient-to-r from-pink-500 to-orange-500 hover:opacity-90' },
     ].filter(Boolean);
 
-    const allSections = [
-        post.description && { id: 'description', icon: Info, title: "وصف تفصيلي", content: <FormattedText text={post.description} /> },
+    const descriptionSection = post.description ? { id: 'description', icon: Info, title: "وصف تفصيلي", content: <FormattedText text={post.description} /> } : null;
+
+    const allOtherSections = [
         post.availablePositions && { id: 'availablePositions', icon: Briefcase, title: "الوظائف المتاحة", content: <FormattedText text={post.availablePositions} /> },
         post.requirements && { id: 'requirements', icon: ClipboardList, title: "الشروط العامة", content: <FormattedText text={post.requirements} /> },
         post.qualifications && { id: 'qualifications', icon: GraduationCap, title: "المؤهلات المطلوبة", content: <FormattedText text={post.qualifications} /> },
@@ -179,7 +180,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
         post.tasks && { id: 'tasks', icon: CheckSquare, title: "المهام المطلوبة", content: <FormattedText text={post.tasks} /> },
         post.featuresAndOpportunities && { id: 'featuresAndOpportunities', icon: Target, title: "المميزات والفرص", content: <FormattedText text={post.featuresAndOpportunities} /> },
         post.howToApply && { id: 'howToApply', icon: HelpCircle, title: "كيفية التقديم", content: <FormattedText text={post.howToApply} /> }
-    ].filter(Boolean);
+    ].filter(Boolean) as { id: string; icon: React.ElementType; title: string; content: React.ReactNode; }[];
 
     return (
         <>
@@ -220,23 +221,39 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                         </div>
                         <Separator />
                         
-                        {/* Mobile view */}
+                        {/* Mobile View */}
                         <div className="md:hidden space-y-4">
-                            {allSections.map((section, index) => section && (
+                             {descriptionSection && (
+                                <>
+                                    <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
+                                        {descriptionSection.content}
+                                    </DetailSection>
+                                    <Separator />
+                                </>
+                            )}
+                            {allOtherSections.map((section, index) => (
                                 <React.Fragment key={section.id}>
                                     <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
                                         {section.content}
                                     </DetailSection>
-                                    {index < allSections.length - 1 && <Separator />}
+                                    {index < allOtherSections.length - 1 && <Separator />}
                                 </React.Fragment>
                             ))}
                         </div>
 
-                        {/* Desktop view */}
+                        {/* Desktop View */}
                         <div className="hidden md:block space-y-6">
-                            {allSections.map((section, index) => {
+                            {descriptionSection && (
+                                <>
+                                    <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
+                                        {descriptionSection.content}
+                                    </DetailSection>
+                                    {allOtherSections.length > 0 && <Separator className="my-6" />}
+                                </>
+                            )}
+                            {allOtherSections.map((section, index) => {
                                 if (index % 2 === 0) {
-                                    const nextSection = allSections[index + 1];
+                                    const nextSection = allOtherSections[index + 1];
                                     return (
                                         <React.Fragment key={section.id}>
                                             <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
@@ -252,7 +269,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                                                     </DetailSection>
                                                 ) : <div></div>}
                                             </div>
-                                             {(index + 2 < allSections.length) && <Separator className="my-6" />}
+                                             {(index + 1 < allOtherSections.length) && (index + 2 < allOtherSections.length) && <Separator className="my-6" />}
                                         </React.Fragment>
                                     );
                                 }

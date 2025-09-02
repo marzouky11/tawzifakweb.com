@@ -204,8 +204,9 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
     const organizerIcon = organizer?.icon || 'Landmark';
     const organizerColor = organizer?.color || sectionColor;
 
-    const allSections = [
-        competition.description && { id: 'description', icon: Info, title: "وصف تفصيلي", content: <FormattedText text={competition.description} /> },
+    const descriptionSection = competition.description ? { id: 'description', icon: Info, title: "وصف تفصيلي", content: <FormattedText text={competition.description} /> } : null;
+
+    const allOtherSections = [
         competition.availablePositions && { id: 'availablePositions', icon: Briefcase, title: "الوظائف المتاحة", content: <FormattedText text={competition.availablePositions} /> },
         competition.requirements && { id: 'requirements', icon: ClipboardList, title: "الشروط المطلوبة", content: <FormattedText text={competition.requirements} /> },
         competition.competitionStages && { id: 'competitionStages', icon: ListOrdered, title: "مراحل المباراة", content: <FormattedText text={competition.competitionStages} /> },
@@ -213,7 +214,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
         competition.trainingFeatures && { id: 'trainingFeatures', icon: Award, title: "مميزات التكوين والفرص", content: <FormattedText text={competition.trainingFeatures} /> },
         competition.jobProspects && { id: 'jobProspects', icon: Target, title: "أفق العمل بعد المباراة", content: <FormattedText text={competition.jobProspects} /> },
         competition.howToApply && { id: 'howToApply', icon: HelpCircle, title: "طريقة التسجيل", content: <FormattedText text={competition.howToApply} /> }
-    ].filter(Boolean);
+    ].filter(Boolean) as { id: string; icon: React.ElementType; title: string; content: React.ReactNode; }[];
 
     return (
         <>
@@ -261,23 +262,39 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                         </div>
                         <Separator />
                         
-                        {/* Mobile view */}
+                        {/* Mobile View */}
                         <div className="md:hidden space-y-4">
-                            {allSections.map((section, index) => section && (
+                            {descriptionSection && (
+                                <>
+                                    <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
+                                        {descriptionSection.content}
+                                    </DetailSection>
+                                    <Separator />
+                                </>
+                            )}
+                            {allOtherSections.map((section, index) => (
                                 <React.Fragment key={section.id}>
                                     <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
                                         {section.content}
                                     </DetailSection>
-                                    {index < allSections.length - 1 && <Separator />}
+                                    {index < allOtherSections.length - 1 && <Separator />}
                                 </React.Fragment>
                             ))}
                         </div>
                         
-                        {/* Desktop view */}
+                        {/* Desktop View */}
                         <div className="hidden md:block space-y-6">
-                           {allSections.map((section, index) => {
+                           {descriptionSection && (
+                                <>
+                                    <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
+                                        {descriptionSection.content}
+                                    </DetailSection>
+                                    {allOtherSections.length > 0 && <Separator className="my-6" />}
+                                </>
+                            )}
+                           {allOtherSections.map((section, index) => {
                                 if (index % 2 === 0) {
-                                    const nextSection = allSections[index + 1];
+                                    const nextSection = allOtherSections[index + 1];
                                     return (
                                         <React.Fragment key={section.id}>
                                             <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
@@ -293,7 +310,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                                                     </DetailSection>
                                                 ) : <div></div>}
                                             </div>
-                                             {(index + 2 < allSections.length) && <Separator className="my-6" />}
+                                             {(index + 1 < allOtherSections.length) && (index + 2 < allOtherSections.length) && <Separator className="my-6" />}
                                         </React.Fragment>
                                     );
                                 }

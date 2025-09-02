@@ -233,8 +233,9 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
         job.applyUrl && { type: 'applyUrl', href: job.applyUrl, label: 'تسجيل عبر الموقع', icon: LinkIcon, color: '#FFFFFF', className: 'bg-blue-600 hover:bg-blue-700' },
     ].filter(Boolean);
 
-    const allSections = [
-        job.description && { id: 'description', icon: FileText, title: "وصف الوظيفة", content: <FormattedText text={job.description} /> },
+    const descriptionSection = job.description ? { id: 'description', icon: FileText, title: "وصف الوظيفة", content: <FormattedText text={job.description} /> } : null;
+    
+    const allOtherSections = [
         job.availablePositions && { id: 'availablePositions', icon: Briefcase, title: "الوظائف المتاحة", content: <FormattedText text={job.availablePositions} /> },
         job.conditions && { id: 'conditions', icon: ClipboardList, title: "الشروط المطلوبة", content: <FormattedText text={job.conditions} /> },
         job.qualifications && { id: 'qualifications', icon: GraduationCap, title: "المؤهلات المطلوبة", content: <FormattedText text={job.qualifications} /> },
@@ -242,7 +243,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
         job.tasks && { id: 'tasks', icon: CheckSquare, title: "المهام المطلوبة", content: <FormattedText text={job.tasks} /> },
         job.featuresAndOpportunities && { id: 'featuresAndOpportunities', icon: Target, title: "المميزات والفرص", content: <FormattedText text={job.featuresAndOpportunities} /> },
         job.howToApply && { id: 'howToApply', icon: HelpCircle, title: "كيفية التقديم", content: <FormattedText text={job.howToApply} /> }
-    ].filter(Boolean);
+    ].filter(Boolean) as { id: string; icon: React.ElementType; title: string; content: React.ReactNode; }[];
 
 
     return (
@@ -286,23 +287,40 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                             
                             <Separator />
                             
-                             {/* Mobile View */}
+                            {/* Mobile View */}
                             <div className="md:hidden space-y-4">
-                                {allSections.map((section, index) => section && (
+                                {descriptionSection && (
+                                    <>
+                                        <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
+                                            {descriptionSection.content}
+                                        </DetailSection>
+                                        <Separator />
+                                    </>
+                                )}
+                                {allOtherSections.map((section, index) => (
                                     <React.Fragment key={section.id}>
                                         <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
                                             {section.content}
                                         </DetailSection>
-                                        {index < allSections.length - 1 && <Separator />}
+                                        {index < allOtherSections.length - 1 && <Separator />}
                                     </React.Fragment>
                                 ))}
                             </div>
 
+
                             {/* Desktop View */}
                             <div className="hidden md:block space-y-6">
-                                {allSections.map((section, index) => {
+                                {descriptionSection && (
+                                    <>
+                                        <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
+                                            {descriptionSection.content}
+                                        </DetailSection>
+                                        {allOtherSections.length > 0 && <Separator className="my-6" />}
+                                    </>
+                                )}
+                                {allOtherSections.map((section, index) => {
                                     if (index % 2 === 0) {
-                                        const nextSection = allSections[index + 1];
+                                        const nextSection = allOtherSections[index + 1];
                                         return (
                                             <React.Fragment key={section.id}>
                                                 <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
@@ -318,7 +336,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                                         </DetailSection>
                                                     ) : <div></div>}
                                                 </div>
-                                                 {(index + 2 < allSections.length) && <Separator className="my-6" />}
+                                                 {(index + 1 < allOtherSections.length) && (index + 2 < allOtherSections.length) && <Separator className="my-6" />}
                                             </React.Fragment>
                                         );
                                     }
