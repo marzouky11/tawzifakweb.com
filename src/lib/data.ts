@@ -644,6 +644,10 @@ export async function updateImmigrationPost(id: string, postData: Partial<Immigr
             ...postData,
             updatedAt: serverTimestamp()
         };
+
+        if (postData.programType) {
+            dataToUpdate.programType = postData.programType;
+        }
         
         Object.keys(dataToUpdate).forEach(key => {
             if (dataToUpdate[key] === undefined) {
