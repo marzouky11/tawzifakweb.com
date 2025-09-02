@@ -115,8 +115,8 @@ const FormattedText = ({ text }: { text?: string }) => {
     );
 }
 
-const DetailSection = ({ icon: Icon, title, color, children, className }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode, className?: string }) => (
-    <div className={className}>
+const DetailSection = ({ icon: Icon, title, color, children }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode }) => (
+    <div>
         <h3 className="text-xl font-bold flex items-center gap-2 mb-3" style={{color}}>
             <Icon className="h-5 w-5" />
             {title}
@@ -176,7 +176,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                 title="ملف باحث عن عمل"
                 description="استعرض مهارات وخبرات هذا المرشح وتواصل معه مباشرة."
             />
-            <div className="container mx-auto max-w-5xl px-4 pb-8">
+            <div className="container mx-auto max-w-7xl px-4 pb-8">
                 <div className="space-y-6">
                     <Card 
                         className="overflow-hidden shadow-lg border-2 border-dashed"
@@ -206,14 +206,14 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                                 </div>
                            </div>
                         </CardHeader>
-                        <CardContent className="p-4 sm:p-6 space-y-6">
+                        <CardContent className="p-4 sm:p-6 space-y-8">
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                                 <SeekerInfoItem icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} color={categoryColor} />
                                 {categoryName && <SeekerInfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={categoryColor} />}
                                 {job.workType && <SeekerInfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={categoryColor} />}
                             </div>
 
-                            {hasDetails && <Separator />}
+                            {hasDetails && <Separator className="my-6" />}
                             
                              <div className="space-y-8">
                                 {descriptionSection && (
@@ -227,7 +227,6 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                                 <div className="md:grid md:grid-cols-2 md:gap-x-12 md:gap-y-8">
                                     {allOtherSections.map((section, index) => (
                                         <React.Fragment key={section.id}>
-                                            {(index > 0 && index % 2 === 0) && <Separator className="md:col-span-2" />}
                                             <div className="md:hidden">
                                                 {index > 0 && <Separator className="my-8" />}
                                             </div>

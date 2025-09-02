@@ -143,10 +143,10 @@ const InfoItem = ({ icon: Icon, label, value, color, href, isDate }: { icon: Rea
 };
 
 
-const DetailSection = ({ icon: Icon, title, color, children, className }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode, className?: string }) => {
+const DetailSection = ({ icon: Icon, title, color, children }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode }) => {
     if (!children) return null;
     return (
-        <div className={className}>
+        <div>
             <h3 className="text-xl font-bold flex items-center gap-2 mb-3" style={{color}}>
                 <Icon className="h-5 w-5" />
                 {title}
@@ -228,7 +228,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                 title="تفاصيل المباراة العمومية"
                 description="هنا تجد جميع المعلومات المتعلقة بهذه المباراة."
             />
-            <div className="container mx-auto max-w-5xl px-4 pb-8 space-y-6">
+            <div className="container mx-auto max-w-7xl px-4 pb-8 space-y-6">
                 <Card className="overflow-hidden shadow-lg border-t-4" style={{borderColor: sectionColor}}>
                      <CardHeader className="bg-muted/30 p-4 sm:p-6">
                          <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
@@ -263,7 +263,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                             <InfoItem icon={CalendarDays} label="تاريخ المباراة" value={competition.competitionDate} color={sectionColor} />
                         </div>
                         
-                        {hasDetails && <Separator />}
+                        {hasDetails && <Separator className="my-6" />}
 
                         <div className="space-y-8">
                             {descriptionSection && (
@@ -277,7 +277,6 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                             <div className="md:grid md:grid-cols-2 md:gap-x-12 md:gap-y-8">
                                 {allOtherSections.map((section, index) => (
                                     <React.Fragment key={section.id}>
-                                        {(index > 0 && index % 2 === 0) && <Separator className="md:col-span-2" />}
                                         <div className="md:hidden">
                                             {index > 0 && <Separator className="my-8" />}
                                         </div>

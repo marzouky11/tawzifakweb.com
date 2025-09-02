@@ -190,8 +190,8 @@ const FormattedText = ({ text }: { text?: string }) => {
     );
 }
 
-const DetailSection = ({ icon: Icon, title, color, children, className }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode, className?: string }) => (
-    <div className={className}>
+const DetailSection = ({ icon: Icon, title, color, children }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode }) => (
+    <div>
         <h3 className="text-xl font-bold flex items-center gap-2 mb-3" style={{color}}>
             <Icon className="h-5 w-5" />
             {title}
@@ -257,7 +257,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                 title="تفاصيل عرض العمل"
                 description="هنا تجد جميع المعلومات المتعلقة بفرصة العمل هذه."
             />
-            <div className="container mx-auto max-w-5xl px-4 pb-8">
+            <div className="container mx-auto max-w-7xl px-4 pb-8">
                 <div className="space-y-6">
                     <Card className="overflow-hidden shadow-lg border-t-4" style={{ borderColor: sectionColor }}>
                         <CardHeader className="bg-muted/30 p-4 sm:p-6">
@@ -276,7 +276,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                 </div>
                             </div>
                         </CardHeader>
-                        <CardContent className="p-4 sm:p-6 space-y-6">
+                        <CardContent className="p-4 sm:p-6 space-y-8">
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                                 <InfoItem icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} color={categoryColor} />
                                 <InfoItem icon={Wallet} label="الأجر" value={job.salary ? job.salary : 'عند الطلب'} color={categoryColor} />
@@ -286,7 +286,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                 {job.openPositions && <InfoItem icon={Users2} label="عدد المناصب" value={job.openPositions} color={categoryColor} />}
                             </div>
                             
-                            {hasDetails && <Separator />}
+                            {hasDetails && <Separator className="my-6" />}
 
                             <div className="space-y-8">
                                 {descriptionSection && (
@@ -300,7 +300,6 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                 <div className="md:grid md:grid-cols-2 md:gap-x-12 md:gap-y-8">
                                     {allOtherSections.map((section, index) => (
                                         <React.Fragment key={section.id}>
-                                            {(index > 0 && index % 2 === 0) && <Separator className="md:col-span-2" />}
                                             <div className="md:hidden">
                                                 {index > 0 && <Separator className="my-8" />}
                                             </div>

@@ -104,10 +104,10 @@ const InfoItem = ({ icon: Icon, label, value, color }: { icon: React.ElementType
     );
 };
 
-const DetailSection = ({ icon: Icon, title, color, children, className }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode, className?: string }) => {
+const DetailSection = ({ icon: Icon, title, color, children }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode }) => {
     if (!children) return null;
     return (
-        <div className={className}>
+        <div>
             <h3 className="text-xl font-bold flex items-center gap-2 mb-3" style={{color}}>
                 <Icon className="h-5 w-5" />
                 {title}
@@ -194,7 +194,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                 title="تفاصيل فرصة الهجرة"
                 description={`استكشف جميع المعلومات المتعلقة بفرصة الهجرة إلى ${post.targetCountry}.`}
             />
-            <div className="container mx-auto max-w-5xl px-4 pb-8 space-y-6">
+            <div className="container mx-auto max-w-7xl px-4 pb-8 space-y-6">
                 <Card className="overflow-hidden shadow-lg border-2" style={{ borderColor: sectionColor }}>
                      <CardHeader className="p-4 sm:p-6" style={{ backgroundColor: `${sectionColor}1A`}}>
                         <div className="flex items-center gap-4 mb-2">
@@ -222,7 +222,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                             {post.deadline && <InfoItem icon={CalendarDays} label="آخر أجل" value={post.deadline} color={iconColor} />}
                         </div>
                         
-                        {hasDetails && <Separator />}
+                        {hasDetails && <Separator className="my-6" />}
 
                         <div className="space-y-8">
                             {descriptionSection && (
@@ -236,7 +236,6 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                             <div className="md:grid md:grid-cols-2 md:gap-x-12 md:gap-y-8">
                                 {allOtherSections.map((section, index) => (
                                     <React.Fragment key={section.id}>
-                                        {(index > 0 && index % 2 === 0) && <Separator className="md:col-span-2" />}
                                         <div className="md:hidden">
                                             {index > 0 && <Separator className="my-8" />}
                                         </div>
