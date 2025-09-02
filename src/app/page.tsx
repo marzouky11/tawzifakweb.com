@@ -231,7 +231,7 @@ export default function HomePage() {
           <section>
             <SectionHeader 
               icon={Briefcase}
-              title="أحدث عروض العمل"
+              title="عروض العمل"
               description="اكتشف آخر فرص الشغل التي أضافها أصحاب العمل في مختلف المجالات."
               href="/jobs"
               iconColor="#0D47A1"
