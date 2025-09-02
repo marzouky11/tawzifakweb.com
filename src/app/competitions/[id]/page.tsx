@@ -285,10 +285,10 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                            
                            {(competition.competitionStages || competition.documentsNeeded) && (
                             <>
-                                <div className="grid md:grid-cols-2 gap-x-6">
-                                    {competition.competitionStages && <DetailSection icon={ListOrdered} title="مراحل المباراة" color={sectionColor}><FormattedText text={competition.competitionStages} /></DetailSection>}
+                                <div className="grid md:grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                    {competition.competitionStages ? <DetailSection icon={ListOrdered} title="مراحل المباراة" color={sectionColor}><FormattedText text={competition.competitionStages} /></DetailSection> : <div />}
                                     {competition.competitionStages && competition.documentsNeeded && <Separator orientation="vertical" className="h-auto" />}
-                                    {competition.documentsNeeded && <DetailSection icon={FileText} title="الوثائق المطلوبة" color={sectionColor}><FormattedText text={competition.documentsNeeded} /></DetailSection>}
+                                    {competition.documentsNeeded ? <DetailSection icon={FileText} title="الوثائق المطلوبة" color={sectionColor}><FormattedText text={competition.documentsNeeded} /></DetailSection> : <div />}
                                 </div>
                                 <Separator className="my-6" />
                             </>
@@ -296,10 +296,10 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
 
                            {(competition.trainingFeatures || competition.jobProspects) && (
                                 <>
-                                    <div className="grid md:grid-cols-2 gap-x-6">
-                                        {competition.trainingFeatures && <DetailSection icon={Award} title="مميزات التكوين والفرص" color={sectionColor}><FormattedText text={competition.trainingFeatures} /></DetailSection>}
+                                    <div className="grid md:grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                        {competition.trainingFeatures ? <DetailSection icon={Award} title="مميزات التكوين والفرص" color={sectionColor}><FormattedText text={competition.trainingFeatures} /></DetailSection> : <div />}
                                         {competition.trainingFeatures && competition.jobProspects && <Separator orientation="vertical" className="h-auto" />}
-                                        {competition.jobProspects && <DetailSection icon={Target} title="أفق العمل بعد المباراة" color={sectionColor}><FormattedText text={competition.jobProspects} /></DetailSection>}
+                                        {competition.jobProspects ? <DetailSection icon={Target} title="أفق العمل بعد المباراة" color={sectionColor}><FormattedText text={competition.jobProspects} /></DetailSection> : <div />}
                                     </div>
                                     <Separator className="my-6" />
                                 </>
