@@ -221,46 +221,43 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                              {hasAnyDetails && (
                                 <>
                                     <Separator />
-                                     {/* Desktop View */}
-                                    <div className="hidden md:block space-y-6">
+                                    <div className="space-y-6 pt-6">
                                         {descriptionSection && (
-                                            <div className={!remainingSections.length ? '' : 'pb-6 border-b'}>
+                                            <div className="md:pb-6">
                                                 <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
                                                     {descriptionSection.content}
                                                 </DetailSection>
                                             </div>
                                         )}
-                                        {remainingSections.map((section, index) => {
-                                            const nextSection = remainingSections[index + 1];
-                                            if (index % 2 === 0) {
+
+                                        {descriptionSection && remainingSections.length > 0 && <Separator className="md:hidden" />}
+
+                                        {/* Mobile View */}
+                                        <div className="md:hidden space-y-6">
+                                            {remainingSections.map((section, index) => (
+                                                <React.Fragment key={section.id}>
+                                                    {index > 0 && <Separator />}
+                                                    <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
+                                                        {section.content}
+                                                    </DetailSection>
+                                                </React.Fragment>
+                                            ))}
+                                        </div>
+
+                                        {/* Desktop View */}
+                                        <div className="hidden md:block">
+                                            {remainingSections.map((section, index) => {
+                                                if (index % 2 !== 0) return null;
+                                                const nextSection = remainingSections[index + 1];
                                                 return (
-                                                     <div key={section.id} className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6 pt-6">
+                                                    <div key={section.id} className={cn("grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-start gap-x-6", index > 0 || descriptionSection ? "pt-6 border-t" : "")}>
                                                         <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
                                                         {nextSection && <Separator orientation="vertical" className="h-auto" />}
                                                         {nextSection && <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>{nextSection.content}</DetailSection>}
                                                     </div>
                                                 );
-                                            }
-                                            return null;
-                                        })}
-                                    </div>
-
-                                    {/* Mobile View */}
-                                    <div className="md:hidden space-y-6">
-                                        {descriptionSection && (
-                                             <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
-                                                {descriptionSection.content}
-                                            </DetailSection>
-                                        )}
-                                        {descriptionSection && remainingSections.length > 0 && <Separator />}
-                                        {remainingSections.map((section, index) => (
-                                            <React.Fragment key={section.id}>
-                                                 <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
-                                                    {section.content}
-                                                </DetailSection>
-                                                {index < remainingSections.length - 1 && <Separator />}
-                                            </React.Fragment>
-                                        ))}
+                                            })}
+                                        </div>
                                     </div>
                                 </>
                             )}

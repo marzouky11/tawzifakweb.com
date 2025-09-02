@@ -287,62 +287,46 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                 {job.openPositions && <InfoItem icon={Users2} label="عدد المناصب" value={job.openPositions} color={categoryColor} />}
                             </div>
                             
-                            {hasAnyDetails && <Separator />}
-                            
-                            {descriptionSection && (
-                                <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
-                                    {descriptionSection.content}
-                                </DetailSection>
-                            )}
-
-                            {descriptionSection && remainingSections.length > 0 && <Separator className="md:hidden" />}
-
-                            {remainingSections.length > 0 && (
+                            {hasAnyDetails && (
                                 <>
-                                    {/* Mobile View */}
-                                    <div className="md:hidden space-y-4">
-                                        {remainingSections.map((section, index) => (
-                                            <React.Fragment key={section.id}>
-                                                <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
-                                                    {section.content}
+                                    <Separator />
+                                    <div className="space-y-6 pt-6">
+                                        {descriptionSection && (
+                                            <div className="md:pb-6">
+                                                <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
+                                                    {descriptionSection.content}
                                                 </DetailSection>
-                                                {index < remainingSections.length - 1 && <Separator />}
-                                            </React.Fragment>
-                                        ))}
-                                    </div>
+                                            </div>
+                                        )}
+                                        
+                                        {descriptionSection && remainingSections.length > 0 && <Separator className="md:hidden" />}
 
-                                    {/* Desktop View */}
-                                    <div className="hidden md:block space-y-6">
-                                        {remainingSections.map((section, index) => {
-                                            const nextSection = remainingSections[index + 1];
-                                            if (index % 2 === 0) {
-                                                if (nextSection) {
-                                                    return (
-                                                        <React.Fragment key={section.id}>
-                                                             {index > 0 && <Separator />}
-                                                            <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6 pt-6">
-                                                                <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
-                                                                <Separator orientation="vertical" className="h-auto" />
-                                                                <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>{nextSection.content}</DetailSection>
-                                                            </div>
-                                                        </React.Fragment>
-                                                    );
-                                                } else {
-                                                    // Render the last single item full width
-                                                    return (
-                                                        <React.Fragment key={section.id}>
-                                                             <Separator />
-                                                            <div className="pt-6">
-                                                                <DetailSection icon={section.icon} title={section.title} color={sectionColor} className="md:col-span-full">
-                                                                    {section.content}
-                                                                </DetailSection>
-                                                            </div>
-                                                        </React.Fragment>
-                                                    );
-                                                }
-                                            }
-                                            return null;
-                                        })}
+                                        {/* Mobile View */}
+                                        <div className="md:hidden space-y-6">
+                                            {remainingSections.map((section, index) => (
+                                                <React.Fragment key={section.id}>
+                                                    {index > 0 && <Separator />}
+                                                    <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
+                                                        {section.content}
+                                                    </DetailSection>
+                                                </React.Fragment>
+                                            ))}
+                                        </div>
+
+                                        {/* Desktop View */}
+                                        <div className="hidden md:block">
+                                            {remainingSections.map((section, index) => {
+                                                if (index % 2 !== 0) return null;
+                                                const nextSection = remainingSections[index + 1];
+                                                return (
+                                                    <div key={section.id} className={cn("grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-start gap-x-6", index > 0 || descriptionSection ? "pt-6 border-t" : "")}>
+                                                        <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
+                                                        {nextSection && <Separator orientation="vertical" className="h-auto" />}
+                                                        {nextSection && <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>{nextSection.content}</DetailSection>}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
                                     </div>
                                 </>
                             )}
