@@ -38,7 +38,7 @@ export const programTypes = [
     { value: 'hospitality', label: 'الضيافة والتجارة', icon: 'ShoppingCart', color: '#546E7A' },
     { value: 'education', label: 'التعليم', icon: 'School', color: '#3949AB' },
     { value: 'agriculture', label: 'الفلاحة والزراعة', icon: 'Sprout', color: '#7CB342' },
-    { value: 'livestock', label: 'تربية المواشي', icon: 'Factory', color: '#8d6e63' },
+    { value: 'livestock', label: 'تربية المواشي', icon: 'Leaf', color: '#8d6e63' },
 ];
 
 export function getProgramTypeDetails(programType: string) {
