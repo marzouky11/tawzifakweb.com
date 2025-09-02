@@ -292,11 +292,9 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                     <Separator />
                                     <div className="space-y-6 pt-6">
                                         {descriptionSection && (
-                                            <div className="md:pb-6">
-                                                <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
-                                                    {descriptionSection.content}
-                                                </DetailSection>
-                                            </div>
+                                            <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor} className="md:pb-6">
+                                                {descriptionSection.content}
+                                            </DetailSection>
                                         )}
                                         
                                         {descriptionSection && remainingSections.length > 0 && <Separator className="md:hidden" />}
@@ -319,7 +317,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                                 if (index % 2 !== 0) return null;
                                                 const nextSection = remainingSections[index + 1];
                                                 return (
-                                                    <div key={section.id} className={cn("grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-start gap-x-6", index > 0 || descriptionSection ? "pt-6 border-t" : "")}>
+                                                    <div key={section.id} className={cn("grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-start gap-x-6 pt-6 border-t")}>
                                                         <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
                                                         {nextSection && <Separator orientation="vertical" className="h-auto" />}
                                                         {nextSection && <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>{nextSection.content}</DetailSection>}

@@ -196,7 +196,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                 description={`استكشف جميع المعلومات المتعلقة بفرصة الهجرة إلى ${post.targetCountry}.`}
             />
             <div className="container mx-auto max-w-7xl px-4 pb-8 space-y-6">
-                <Card className="overflow-hidden shadow-lg border-2" style={{borderColor: sectionColor}}>
+                <Card className="overflow-hidden shadow-lg border-2" style={{ borderColor: sectionColor }}>
                      <CardHeader className="p-4 sm:p-6" style={{ backgroundColor: `${sectionColor}1A`}}>
                         <div className="flex items-center gap-4 mb-2">
                            <div className="p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${iconColor}2A` }}>
@@ -228,11 +228,9 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                                 <Separator />
                                 <div className="space-y-6 pt-6">
                                     {descriptionSection && (
-                                        <div className="md:pb-6">
-                                            <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
-                                                {descriptionSection.content}
-                                            </DetailSection>
-                                        </div>
+                                        <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor} className="md:pb-6">
+                                            {descriptionSection.content}
+                                        </DetailSection>
                                     )}
                                     
                                     {descriptionSection && remainingSections.length > 0 && <Separator className="md:hidden" />}
@@ -255,7 +253,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                                             if (index % 2 !== 0) return null;
                                             const nextSection = remainingSections[index + 1];
                                             return (
-                                                <div key={section.id} className={cn("grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-start gap-x-6", index > 0 || descriptionSection ? "pt-6 border-t" : "")}>
+                                                <div key={section.id} className={cn("grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-start gap-x-6 pt-6 border-t")}>
                                                     <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
                                                     {nextSection && <Separator orientation="vertical" className="h-auto" />}
                                                     {nextSection && <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>{nextSection.content}</DetailSection>}
