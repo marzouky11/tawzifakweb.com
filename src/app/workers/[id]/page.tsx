@@ -165,6 +165,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
     ].filter(Boolean) as { id: string; icon: React.ElementType; title: string; content: React.ReactNode; }[];
     
     const remainingSections = allOtherSections.filter(section => !!section.content);
+    const hasAnyDetails = !!descriptionSection || remainingSections.length > 0;
 
     return (
         <>
@@ -176,7 +177,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                 title="ملف باحث عن عمل"
                 description="استعرض مهارات وخبرات هذا المرشح وتواصل معه مباشرة."
             />
-            <div className="container mx-auto max-w-5xl px-4 pb-8">
+            <div className="container mx-auto max-w-7xl px-4 pb-8">
                 <div className="space-y-6">
                     <Card 
                         className="overflow-hidden shadow-lg border-2 border-dashed"
@@ -213,7 +214,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                                 {job.workType && <SeekerInfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={categoryColor} />}
                             </div>
 
-                            <Separator/>
+                             {hasAnyDetails && <Separator />}
                             
                              {descriptionSection && (
                                 <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
