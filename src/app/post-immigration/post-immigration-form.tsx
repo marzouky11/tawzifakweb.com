@@ -22,6 +22,8 @@ import { slugify, cn, getProgramTypeDetails, programTypes } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Separator } from '@/components/ui/separator';
 import { CategoryIcon } from '@/components/icons';
+import type { ImmigrationProgramType } from '@/lib/types';
+
 
 const programTypeValues = programTypes.map(p => p.value) as [string, ...string[]];
 
@@ -168,7 +170,11 @@ export function PostImmigrationForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     try {
-      const dataToSave = { ...values, slug: slugify(values.title) };
+      const dataToSave = { 
+        ...values,
+        programType: values.programType as ImmigrationProgramType,
+        slug: slugify(values.title)
+      };
 
       const { id } = await postImmigration(dataToSave);
       toast({ title: "تم نشر الإعلان بنجاح!" });
