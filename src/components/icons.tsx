@@ -66,6 +66,7 @@ import {
   FileSignature,
   School,
   Wallet,
+  Barn,
 } from 'lucide-react';
 import type { CSSProperties } from 'react';
 
@@ -136,6 +137,7 @@ const iconMap: { [key: string]: LucideIcon } = {
   FileSignature,
   School,
   Wallet,
+  Barn,
   Default: Briefcase,
 };
 
