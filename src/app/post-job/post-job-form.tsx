@@ -24,7 +24,6 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 
 const formSchema = z.object({
@@ -182,6 +181,8 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
     if (isValid) {
         if (currentStep < stepsContent.length - 1) {
             setCurrentStep(prev => prev + 1);
+        } else {
+            form.handleSubmit(onSubmit)();
         }
     } else {
         toast({
@@ -193,22 +194,8 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
   };
   
   const handleStepClick = async (stepIndex: number) => {
-    if (stepIndex < currentStep) {
-        setCurrentStep(stepIndex);
-        return;
-    }
-    const fieldsToValidate = stepFields.slice(0, stepIndex + 1).flat() as (keyof z.infer<typeof formSchema>)[];
-    const isValid = await form.trigger(fieldsToValidate);
-
-    if(isValid) {
-        setCurrentStep(stepIndex);
-    } else {
-         toast({
-            variant: "destructive",
-            title: "حقول ناقصة",
-            description: "الرجاء تعبئة جميع الحقول في المراحل السابقة أولاً.",
-        });
-    }
+    if (stepIndex >= currentStep) return;
+    setCurrentStep(stepIndex);
   }
 
   const prevStep = () => {
@@ -317,9 +304,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
   ];
   
   const step1Content = (
-    <Card>
-      <CardHeader><CardTitle>المعلومات الأساسية</CardTitle></CardHeader>
-      <CardContent className="space-y-6">
+    <div className="space-y-6">
         <FormField control={form.control} name="title" render={({ field }) => (
             <FormItem><FormLabelIcon icon={FileText} label="عنوان الإعلان" /><FormControl><Input placeholder={postType === 'seeking_job' ? "مثال: مصمم جرافيك يبحث عن فرصة..." : "مثال: مطلوب مهندس مدني..."} {...field} /></FormControl><FormMessage /></FormItem>
         )} />
@@ -401,14 +386,11 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                 <FormItem><FormLabelIcon icon={MapPin} label="المدينة"/><FormControl><Input placeholder="مثال: الدار البيضاء" {...field} /></FormControl><FormMessage /></FormItem>
             )} />
         </div>
-    </CardContent>
-    </Card>
+    </div>
   );
   
   const step2Content = (
-    <Card>
-      <CardHeader><CardTitle>التفاصيل</CardTitle></CardHeader>
-      <CardContent className="space-y-6">
+    <div className="space-y-6">
         {postType === 'seeking_job' ? (
           <>
             <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabelIcon icon={FileSignature} label="وصف المهارات والخبرة" /><FormControl><Textarea placeholder="اكتب تفاصيل عن مهاراتك وخبراتك..." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
@@ -430,14 +412,11 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                 <FormField control={form.control} name="howToApply" render={({ field }) => (<FormItem><FormLabelIcon icon={HelpCircle} label="كيفية التقديم (اختياري)" /><FormControl><Textarea placeholder="اشرح هنا خطوات التقديم. مثلاً: أرسل سيرتك الذاتية إلى البريد الإلكتروني المذكور أعلاه." {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
             </>
         )}
-    </CardContent>
-    </Card>
+    </div>
   );
 
   const step3Content = (
-      <Card>
-        <CardHeader><CardTitle>التواصل والتقديم</CardTitle></CardHeader>
-        <CardContent className="space-y-6">
+      <div className="space-y-6">
             <h3 className="font-semibold flex items-center gap-2 text-base md:text-lg"><Info className="h-5 w-5" style={{color: getThemeColor()}} />طرق التواصل</h3>
             <p className="text-sm text-muted-foreground -mt-4">
                 أدخل وسيلة تواصل واحدة على الأقل. كلما أضفت طرقًا أكثر، زادت فرصة تواصل المهتمين معك.
@@ -464,8 +443,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                 )} />
              )}
               <FormMessage>{form.formState.errors.phone?.message}</FormMessage>
-        </CardContent>
-      </Card>
+        </div>
   );
 
   const stepsContent = [step1Content, step2Content, step3Content];
@@ -475,18 +453,11 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full">
             {isEditing ? (
                  <div className="p-6 md:p-8 space-y-8">
-                     <Card>
-                        <CardHeader><CardTitle>المعلومات الأساسية</CardTitle></CardHeader>
-                        <CardContent className="space-y-6 pt-6">{step1Content}</CardContent>
-                     </Card>
-                     <Card>
-                        <CardHeader><CardTitle>التفاصيل</CardTitle></CardHeader>
-                        <CardContent className="space-y-6 pt-6">{step2Content}</CardContent>
-                    </Card>
-                     <Card>
-                        <CardHeader><CardTitle>التواصل والتقديم</CardTitle></CardHeader>
-                        <CardContent className="space-y-6 pt-6">{step3Content}</CardContent>
-                    </Card>
+                     {step1Content}
+                     <Separator />
+                     {step2Content}
+                     <Separator />
+                     {step3Content}
                      <Button
                         type="submit"
                         disabled={isSubmitting}
