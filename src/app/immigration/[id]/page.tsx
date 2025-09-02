@@ -252,11 +252,13 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                            )}
 
                             {(post.featuresAndOpportunities || post.howToApply) && (
+                                <>
                                 <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
                                     {post.featuresAndOpportunities ? <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={post.featuresAndOpportunities} /></DetailSection> : <div />}
                                     {post.featuresAndOpportunities && post.howToApply && <Separator orientation="vertical" className="h-auto" />}
                                     {post.howToApply ? <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={post.howToApply} /></DetailSection> : <div />}
                                 </div>
+                                </>
                             )}
                         </div>
                     </CardContent>

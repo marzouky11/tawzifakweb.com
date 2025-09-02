@@ -278,7 +278,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                             <Separator />
                             
                              {/* Mobile View */}
-                             <div className="md:hidden space-y-6">
+                            <div className="md:hidden space-y-6">
                                 {job.description && (<> <DetailSection icon={FileText} title="وصف الوظيفة" color={sectionColor}><FormattedText text={job.description} /></DetailSection> <Separator /> </>)}
                                 {job.conditions && (<> <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor}><FormattedText text={job.conditions} /></DetailSection> <Separator /> </>)}
                                 {job.qualifications && (<> <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={job.qualifications} /></DetailSection> <Separator /> </>)}
