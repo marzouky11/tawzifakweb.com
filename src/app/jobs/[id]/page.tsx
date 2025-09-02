@@ -309,40 +309,34 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                            {/* Desktop View */}
                             {remainingSections.length > 0 && <Separator className="hidden md:block" />}
                             <div className="hidden md:block space-y-6">
-                                {remainingSections.reduce<React.ReactNode[]>((acc, section, index) => {
+                                {remainingSections.reduce((acc, section, index) => {
                                     if (index % 2 === 0) {
-                                        const nextSection = remainingSections[index + 1];
-                                        acc.push(
-                                            <React.Fragment key={section.id}>
-                                                <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
-                                                    <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
-                                                        {section.content}
-                                                    </DetailSection>
+                                    const nextSection = remainingSections[index + 1];
+                                    acc.push(
+                                        <React.Fragment key={section.id}>
+                                        <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                            <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
+                                            {section.content}
+                                            </DetailSection>
+                                            {nextSection ? (
+                                                <>
                                                     <Separator orientation="vertical" className="h-auto" />
-                                                    {nextSection ? (
-                                                        <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>
-                                                            {nextSection.content}
-                                                        </DetailSection>
-                                                    ) : (
-                                                        <div /> // Placeholder for the grid
-                                                    )}
-                                                </div>
-                                                {index < remainingSections.length - 2 && <Separator className="my-6" />}
-                                            </React.Fragment>
-                                        );
+                                                    <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>
+                                                        {nextSection.content}
+                                                    </DetailSection>
+                                                </>
+                                            ) : (
+                                                <div className="md:col-span-2"></div>
+                                            )}
+                                        </div>
+                                        {index < remainingSections.length - (nextSection ? 2 : 1) && (
+                                            <Separator className="my-6" />
+                                        )}
+                                        </React.Fragment>
+                                    );
                                     }
                                     return acc;
-                                }, [])}
-                                 {remainingSections.length > 0 && remainingSections.length % 2 !== 0 && (
-                                     <React.Fragment>
-                                        <Separator className="my-6" />
-                                        <div className="grid grid-cols-1">
-                                            <DetailSection icon={remainingSections[remainingSections.length - 1].icon} title={remainingSections[remainingSections.length - 1].title} color={sectionColor}>
-                                                {remainingSections[remainingSections.length - 1].content}
-                                            </DetailSection>
-                                        </div>
-                                     </React.Fragment>
-                                 )}
+                                }, [] as React.ReactNode[])}
                             </div>
                         </CardContent>
                     </Card>
