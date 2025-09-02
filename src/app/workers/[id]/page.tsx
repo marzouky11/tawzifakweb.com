@@ -237,29 +237,26 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                            {remainingSections.length > 0 && <Separator className="hidden md:block" />}
                             <div className="hidden md:block space-y-6">
                                 {remainingSections.map((section, index) => {
+                                    if (index % 2 !== 0) return null; // Skip odd-indexed items as they are handled with the previous item
                                     const nextSection = remainingSections[index + 1];
-                                    if (index % 2 === 0) {
-                                        if (nextSection) {
-                                            return (
-                                                <React.Fragment key={section.id}>
-                                                    <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
-                                                        <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
-                                                        <Separator orientation="vertical" className="h-auto" />
-                                                        <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>{nextSection.content}</DetailSection>
-                                                    </div>
-                                                    {index < remainingSections.length - 2 && <Separator className="my-6" />}
-                                                </React.Fragment>
-                                            );
-                                        } else {
-                                            // Render the last single item full width
-                                            return (
-                                                <React.Fragment key={section.id}>
-                                                     <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
-                                                </React.Fragment>
-                                            );
-                                        }
+                                    if (nextSection) {
+                                        return (
+                                            <React.Fragment key={section.id}>
+                                                <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                                    <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
+                                                    <Separator orientation="vertical" className="h-auto" />
+                                                    <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>{nextSection.content}</DetailSection>
+                                                </div>
+                                                {index < remainingSections.length - 2 && <Separator className="my-6" />}
+                                            </React.Fragment>
+                                        );
+                                    } else {
+                                        return (
+                                            <DetailSection key={section.id} icon={section.icon} title={section.title} color={sectionColor}>
+                                                {section.content}
+                                            </DetailSection>
+                                        );
                                     }
-                                    return null;
                                 })}
                             </div>
                         </CardContent>
