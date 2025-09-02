@@ -244,6 +244,9 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                             {competition.competitionType && <InfoItem icon={Briefcase} label="نوع المباراة" value={competition.competitionType} color={organizerColor} />}
                             {competition.location && <InfoItem icon={MapPin} label="الموقع" value={competition.location} color={organizerColor} />}
                             {competition.positionsAvailable && <InfoItem icon={Users2} label="عدد المناصب" value={competition.positionsAvailable} color={organizerColor} />}
+                            <InfoItem icon={CalendarDays} label="بداية التسجيل" value={competition.registrationStartDate} color={sectionColor} />
+                            <InfoItem icon={CalendarDays} label="آخر أجل للتسجيل" value={competition.deadline} color={sectionColor} isDate />
+                            <InfoItem icon={CalendarDays} label="تاريخ المباراة" value={competition.competitionDate} color={sectionColor} />
                         </div>
                         <Separator />
                         
@@ -256,17 +259,6 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                            {competition.trainingFeatures && (<> <DetailSection icon={Award} title="مميزات التكوين والفرص" color={sectionColor}><FormattedText text={competition.trainingFeatures} /></DetailSection> <Separator /> </>)}
                            {competition.jobProspects && (<> <DetailSection icon={Target} title="أفق العمل بعد المباراة" color={sectionColor}><FormattedText text={competition.jobProspects} /></DetailSection> <Separator /> </>)}
                            {competition.howToApply && (<> <DetailSection icon={HelpCircle} title="طريقة التسجيل" color={sectionColor}><FormattedText text={competition.howToApply} /></DetailSection> <Separator /> </>)}
-                           {(competition.registrationStartDate || competition.deadline || competition.competitionDate) && (
-                                <>
-                                <DetailSection icon={CalendarDays} title="التواريخ المهمة" color={sectionColor}>
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 not-prose">
-                                        <InfoItem icon={CalendarDays} label="بداية التسجيل" value={competition.registrationStartDate} color={sectionColor} />
-                                        <InfoItem icon={CalendarDays} label="آخر أجل للتسجيل" value={competition.deadline} color={sectionColor} isDate />
-                                        <InfoItem icon={CalendarDays} label="تاريخ المباراة" value={competition.competitionDate} color={sectionColor} />
-                                    </div>
-                                </DetailSection>
-                                </>
-                           )}
                         </div>
                         
                         {/* Desktop view */}
@@ -307,18 +299,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                                         {competition.jobProspects && competition.howToApply && <Separator orientation="vertical" className="h-auto" />}
                                         {competition.howToApply ? <DetailSection icon={HelpCircle} title="طريقة التسجيل" color={sectionColor}><FormattedText text={competition.howToApply} /></DetailSection> : <div />}
                                     </div>
-                                    <Separator className="my-6" />
                                 </>
-                           )}
-                           
-                           {(competition.registrationStartDate || competition.deadline || competition.competitionDate) && (
-                            <DetailSection icon={CalendarDays} title="التواريخ المهمة" color={sectionColor}>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 not-prose">
-                                    <InfoItem icon={CalendarDays} label="بداية التسجيل" value={competition.registrationStartDate} color={sectionColor} />
-                                    <InfoItem icon={CalendarDays} label="آخر أجل للتسجيل" value={competition.deadline} color={sectionColor} isDate />
-                                    <InfoItem icon={CalendarDays} label="تاريخ المباراة" value={competition.competitionDate} color={sectionColor} />
-                                </div>
-                            </DetailSection>
                            )}
                         </div>
                     </CardContent>
