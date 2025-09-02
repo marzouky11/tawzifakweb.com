@@ -176,7 +176,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                 title="ملف باحث عن عمل"
                 description="استعرض مهارات وخبرات هذا المرشح وتواصل معه مباشرة."
             />
-            <div className="container mx-auto max-w-4xl px-4 pb-8">
+            <div className="container mx-auto max-w-5xl px-4 pb-8">
                 <div className="space-y-6">
                     <Card 
                         className="overflow-hidden shadow-lg border-2 border-dashed"
@@ -252,7 +252,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                                             );
                                         } else {
                                             return (
-                                                <DetailSection key={section.id} icon={section.icon} title={section.title} color={sectionColor}>
+                                                <DetailSection key={section.id} icon={section.icon} title={section.title} color={sectionColor} className="md:col-span-full">
                                                     {section.content}
                                                 </DetailSection>
                                             );
@@ -269,7 +269,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2 text-xl font-bold">
                                     <Phone className="h-5 w-5" style={{ color: sectionColor }}/>
-                                    تواصل مع الباحث عن عمل
+                                    <span className="text-foreground">تواصل مع الباحث عن عمل</span>
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="pt-0 grid grid-cols-1 gap-3">
@@ -296,7 +296,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2 text-xl font-bold">
                                     <Bookmark className="h-5 w-5" style={{ color: sectionColor }}/>
-                                    احفظ الإعلان وشارك مع الآخرين
+                                    <span className="text-foreground">احفظ الإعلان وشارك مع الآخرين</span>
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="flex flex-col gap-3 pt-0">

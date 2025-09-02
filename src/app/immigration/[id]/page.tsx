@@ -194,7 +194,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                 title="تفاصيل فرصة الهجرة"
                 description={`استكشف جميع المعلومات المتعلقة بفرصة الهجرة إلى ${post.targetCountry}.`}
             />
-            <div className="container mx-auto max-w-4xl px-4 pb-8 space-y-6">
+            <div className="container mx-auto max-w-5xl px-4 pb-8 space-y-6">
                 <Card className="overflow-hidden shadow-lg border-2" style={{borderColor: sectionColor}}>
                      <CardHeader className="p-4 sm:p-6" style={{ backgroundColor: `${sectionColor}1A`}}>
                         <div className="flex items-center gap-4 mb-2">
@@ -261,7 +261,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                                     );
                                 } else {
                                     return (
-                                        <DetailSection key={section.id} icon={section.icon} title={section.title} color={sectionColor}>
+                                        <DetailSection key={section.id} icon={section.icon} title={section.title} color={sectionColor} className="md:col-span-full">
                                             {section.content}
                                         </DetailSection>
                                     );

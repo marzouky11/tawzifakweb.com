@@ -37,7 +37,7 @@ export default async function UserAdsPage({ params }: UserAdsPageProps) {
                 title={`إعلانات ${user.name}`}
                 description={`تصفح جميع الإعلانات التي قام بنشرها ${user.name}.`}
             />
-            <div className="container mx-auto max-w-4xl px-4 pb-8 space-y-6">
+            <div className="container mx-auto max-w-5xl px-4 pb-8 space-y-6">
                 <Card>
                     <CardHeader className="flex flex-row items-center gap-4">
                         <UserAvatar name={user.name} color={user.avatarColor} className="h-20 w-20 text-3xl" />

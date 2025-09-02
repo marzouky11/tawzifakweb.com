@@ -257,7 +257,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                 title="تفاصيل عرض العمل"
                 description="هنا تجد جميع المعلومات المتعلقة بفرصة العمل هذه."
             />
-            <div className="container mx-auto max-w-4xl px-4 pb-8">
+            <div className="container mx-auto max-w-5xl px-4 pb-8">
                 <div className="space-y-6">
                     <Card className="overflow-hidden shadow-lg border-t-4" style={{ borderColor: sectionColor }}>
                         <CardHeader className="bg-muted/30 p-4 sm:p-6">
@@ -327,7 +327,9 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                             // Render the last single item full width
                                             return (
                                                 <React.Fragment key={section.id}>
-                                                    <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
+                                                    <DetailSection icon={section.icon} title={section.title} color={sectionColor} className="md:col-span-full">
+                                                        {section.content}
+                                                    </DetailSection>
                                                 </React.Fragment>
                                             );
                                         }
@@ -343,7 +345,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                              <CardHeader>
                                 <CardTitle className="flex items-center gap-2 text-xl font-bold">
                                     <LinkIcon className="h-5 w-5" style={{ color: sectionColor }}/>
-                                    التقديم على الوظيفة
+                                    <span className="text-foreground">التقديم على الوظيفة</span>
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="pt-0 grid grid-cols-1 gap-3">
@@ -370,7 +372,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2 text-xl font-bold">
                                     <Bookmark className="h-5 w-5" style={{ color: sectionColor }}/>
-                                    احفظ الإعلان وشارك مع الآخرين
+                                    <span className="text-foreground">احفظ الإعلان وشارك مع الآخرين</span>
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="flex flex-col gap-3 pt-0">
