@@ -248,7 +248,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                         <Separator />
                         
                         {/* Mobile view */}
-                        <div className="space-y-6 md:hidden">
+                        <div className="md:hidden space-y-6">
                            {competition.description && (<> <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={competition.description} /></DetailSection> <Separator /> </>)}
                            {competition.requirements && (<> <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor}><FormattedText text={competition.requirements} /></DetailSection> <Separator /> </>)}
                            {competition.competitionStages && (<> <DetailSection icon={ListOrdered} title="مراحل المباراة" color={sectionColor}><FormattedText text={competition.competitionStages} /></DetailSection> <Separator /> </>)}
@@ -283,19 +283,27 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                             </>
                            )}
                            
-                           <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
-                               {competition.competitionStages && <DetailSection icon={ListOrdered} title="مراحل المباراة" color={sectionColor}><FormattedText text={competition.competitionStages} /></DetailSection>}
-                               {competition.documentsNeeded && <DetailSection icon={FileText} title="الوثائق المطلوبة" color={sectionColor}><FormattedText text={competition.documentsNeeded} /></DetailSection>}
-                           </div>
+                           {(competition.competitionStages || competition.documentsNeeded) && (
+                            <>
+                                <div className="grid md:grid-cols-2 gap-x-6">
+                                    {competition.competitionStages && <DetailSection icon={ListOrdered} title="مراحل المباراة" color={sectionColor}><FormattedText text={competition.competitionStages} /></DetailSection>}
+                                    {competition.competitionStages && competition.documentsNeeded && <Separator orientation="vertical" className="h-auto" />}
+                                    {competition.documentsNeeded && <DetailSection icon={FileText} title="الوثائق المطلوبة" color={sectionColor}><FormattedText text={competition.documentsNeeded} /></DetailSection>}
+                                </div>
+                                <Separator className="my-6" />
+                            </>
+                           )}
 
-                            {(competition.competitionStages || competition.documentsNeeded) && <Separator className="my-6" />}
-
-                           <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
-                               {competition.trainingFeatures && <DetailSection icon={Award} title="مميزات التكوين والفرص" color={sectionColor}><FormattedText text={competition.trainingFeatures} /></DetailSection>}
-                               {competition.jobProspects && <DetailSection icon={Target} title="أفق العمل بعد المباراة" color={sectionColor}><FormattedText text={competition.jobProspects} /></DetailSection>}
-                           </div>
-
-                            {(competition.trainingFeatures || competition.jobProspects) && <Separator className="my-6" />}
+                           {(competition.trainingFeatures || competition.jobProspects) && (
+                                <>
+                                    <div className="grid md:grid-cols-2 gap-x-6">
+                                        {competition.trainingFeatures && <DetailSection icon={Award} title="مميزات التكوين والفرص" color={sectionColor}><FormattedText text={competition.trainingFeatures} /></DetailSection>}
+                                        {competition.trainingFeatures && competition.jobProspects && <Separator orientation="vertical" className="h-auto" />}
+                                        {competition.jobProspects && <DetailSection icon={Target} title="أفق العمل بعد المباراة" color={sectionColor}><FormattedText text={competition.jobProspects} /></DetailSection>}
+                                    </div>
+                                    <Separator className="my-6" />
+                                </>
+                           )}
 
                            {competition.howToApply && (
                             <>
