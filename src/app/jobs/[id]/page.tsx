@@ -299,7 +299,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                 
                                 {(job.conditions || job.qualifications) && (
                                     <>
-                                        <div className="grid md:grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                        <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
                                             {job.conditions ? <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor}><FormattedText text={job.conditions} /></DetailSection> : <div />}
                                             {job.conditions && job.qualifications && <Separator orientation="vertical" className="h-auto" />}
                                             {job.qualifications ? <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={job.qualifications} /></DetailSection> : <div />}
@@ -310,7 +310,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
 
                                 {(job.experience || job.tasks) && (
                                     <>
-                                        <div className="grid md:grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                        <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
                                             {job.experience ? <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={job.experience} /></DetailSection> : <div />}
                                             {job.experience && job.tasks && <Separator orientation="vertical" className="h-auto" />}
                                             {job.tasks ? <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={job.tasks} /></DetailSection> : <div />}
@@ -320,7 +320,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                 )}
 
                                 {(job.featuresAndOpportunities || job.howToApply) && (
-                                    <div className="grid md:grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                    <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
                                         {job.featuresAndOpportunities ? <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={job.featuresAndOpportunities} /></DetailSection> : <div />}
                                         {job.featuresAndOpportunities && job.howToApply && <Separator orientation="vertical" className="h-auto" />}
                                         {job.howToApply ? <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={job.howToApply} /></DetailSection> : <div />}

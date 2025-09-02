@@ -217,7 +217,7 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                             </div>
 
 
-                            {/* Desktop view */}
+                            {/* Desktop View */}
                            <div className="hidden md:block space-y-6">
                                 {job.description && (
                                     <>

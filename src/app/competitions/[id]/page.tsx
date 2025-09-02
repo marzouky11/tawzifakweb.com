@@ -257,6 +257,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                            {competition.jobProspects && (<> <DetailSection icon={Target} title="أفق العمل بعد المباراة" color={sectionColor}><FormattedText text={competition.jobProspects} /></DetailSection> <Separator /> </>)}
                            {competition.howToApply && (<> <DetailSection icon={HelpCircle} title="طريقة التسجيل" color={sectionColor}><FormattedText text={competition.howToApply} /></DetailSection> <Separator /> </>)}
                            {(competition.registrationStartDate || competition.deadline || competition.competitionDate) && (
+                                <>
                                 <DetailSection icon={CalendarDays} title="التواريخ المهمة" color={sectionColor}>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 not-prose">
                                         <InfoItem icon={CalendarDays} label="بداية التسجيل" value={competition.registrationStartDate} color={sectionColor} />
@@ -264,6 +265,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                                         <InfoItem icon={CalendarDays} label="تاريخ المباراة" value={competition.competitionDate} color={sectionColor} />
                                     </div>
                                 </DetailSection>
+                                </>
                            )}
                         </div>
                         
@@ -285,7 +287,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                            
                            {(competition.competitionStages || competition.documentsNeeded) && (
                             <>
-                                <div className="grid md:grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
                                     {competition.competitionStages ? <DetailSection icon={ListOrdered} title="مراحل المباراة" color={sectionColor}><FormattedText text={competition.competitionStages} /></DetailSection> : <div />}
                                     {competition.competitionStages && competition.documentsNeeded && <Separator orientation="vertical" className="h-auto" />}
                                     {competition.documentsNeeded ? <DetailSection icon={FileText} title="الوثائق المطلوبة" color={sectionColor}><FormattedText text={competition.documentsNeeded} /></DetailSection> : <div />}
@@ -296,7 +298,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
 
                            {(competition.trainingFeatures || competition.jobProspects) && (
                                 <>
-                                    <div className="grid md:grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                    <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
                                         {competition.trainingFeatures ? <DetailSection icon={Award} title="مميزات التكوين والفرص" color={sectionColor}><FormattedText text={competition.trainingFeatures} /></DetailSection> : <div />}
                                         {competition.trainingFeatures && competition.jobProspects && <Separator orientation="vertical" className="h-auto" />}
                                         {competition.jobProspects ? <DetailSection icon={Target} title="أفق العمل بعد المباراة" color={sectionColor}><FormattedText text={competition.jobProspects} /></DetailSection> : <div />}

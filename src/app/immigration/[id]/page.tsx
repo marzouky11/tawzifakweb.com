@@ -231,7 +231,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
 
                            {(post.requirements || post.qualifications) && (
                                 <>
-                                    <div className="grid md:grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                    <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
                                         {post.requirements ? <DetailSection icon={ClipboardList} title="الشروط العامة" color={sectionColor}><FormattedText text={post.requirements} /></DetailSection> : <div />}
                                         {post.requirements && post.qualifications && <Separator orientation="vertical" className="h-auto" />}
                                         {post.qualifications ? <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={post.qualifications} /></DetailSection> : <div />}
@@ -242,7 +242,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                            
                            {(post.experience || post.tasks) && (
                                 <>
-                                    <div className="grid md:grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                    <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
                                         {post.experience ? <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={post.experience} /></DetailSection> : <div />}
                                         {post.experience && post.tasks && <Separator orientation="vertical" className="h-auto" />}
                                         {post.tasks ? <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={post.tasks} /></DetailSection> : <div />}
@@ -252,7 +252,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                            )}
 
                             {(post.featuresAndOpportunities || post.howToApply) && (
-                                <div className="grid md:grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
                                     {post.featuresAndOpportunities ? <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={post.featuresAndOpportunities} /></DetailSection> : <div />}
                                     {post.featuresAndOpportunities && post.howToApply && <Separator orientation="vertical" className="h-auto" />}
                                     {post.howToApply ? <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={post.howToApply} /></DetailSection> : <div />}
