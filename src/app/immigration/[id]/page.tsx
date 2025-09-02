@@ -182,7 +182,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
         post.howToApply && { id: 'howToApply', icon: HelpCircle, title: "كيفية التقديم", content: <FormattedText text={post.howToApply} /> }
     ].filter(Boolean) as { id: string; icon: React.ElementType; title: string; content: React.ReactNode; }[];
     
-    const remainingSections = allOtherSections.filter(section => section.id !== 'description');
+    const remainingSections = allOtherSections.filter(section => !!section.content);
 
     return (
         <>
@@ -223,60 +223,40 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                         </div>
                         <Separator />
                         
+                        {descriptionSection && (
+                            <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
+                                {descriptionSection.content}
+                            </DetailSection>
+                        )}
+                        
                         {/* Mobile View */}
                         <div className="md:hidden space-y-4">
-                             {descriptionSection && (
-                                <>
-                                    <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
-                                        {descriptionSection.content}
-                                    </DetailSection>
-                                    <Separator />
-                                </>
-                            )}
                             {remainingSections.map((section, index) => (
                                 <React.Fragment key={section.id}>
+                                    <Separator />
                                     <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
                                         {section.content}
                                     </DetailSection>
-                                    {index < remainingSections.length - 1 && <Separator />}
                                 </React.Fragment>
                             ))}
                         </div>
 
                         {/* Desktop View */}
-                        <div className="hidden md:block space-y-6">
-                            {descriptionSection && (
-                                <>
-                                    <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
-                                        {descriptionSection.content}
+                        {remainingSections.length > 0 && <Separator className='hidden md:block'/>}
+                        <div className="hidden md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-6">
+                            {remainingSections.map((section, index) => (
+                                <div
+                                    key={section.id}
+                                    className={cn(
+                                        'space-y-4',
+                                        remainingSections.length % 2 !== 0 && index === remainingSections.length - 1 && 'md:col-span-2'
+                                    )}
+                                >
+                                    <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
+                                        {section.content}
                                     </DetailSection>
-                                    {remainingSections.length > 0 && <Separator className="my-6" />}
-                                </>
-                            )}
-                            {remainingSections.map((section, index) => {
-                                if (index % 2 === 0) {
-                                    const nextSection = remainingSections[index + 1];
-                                    return (
-                                        <React.Fragment key={section.id}>
-                                            <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
-                                                <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
-                                                    {section.content}
-                                                </DetailSection>
-                                                
-                                                {nextSection && <Separator orientation="vertical" className="h-auto" />}
-
-                                                {nextSection ? (
-                                                    <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>
-                                                        {nextSection.content}
-                                                    </DetailSection>
-                                                ) : <div></div>}
-                                            </div>
-                                             {(index + 1 < remainingSections.length) && (index + 2 < remainingSections.length) && <Separator className="my-6" />}
-                                        </React.Fragment>
-                                    );
-                                }
-                                return null;
-                            })}
+                                </div>
+                            ))}
                         </div>
                     </CardContent>
                 </Card>

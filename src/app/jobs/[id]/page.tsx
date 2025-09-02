@@ -244,7 +244,8 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
         job.featuresAndOpportunities && { id: 'featuresAndOpportunities', icon: Target, title: "المميزات والفرص", content: <FormattedText text={job.featuresAndOpportunities} /> },
         job.howToApply && { id: 'howToApply', icon: HelpCircle, title: "كيفية التقديم", content: <FormattedText text={job.howToApply} /> }
     ].filter(Boolean) as { id: string; icon: React.ElementType; title: string; content: React.ReactNode; }[];
-
+    
+    const remainingSections = allOtherSections.filter(section => !!section.content);
 
     return (
         <>
@@ -282,73 +283,52 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                 {categoryName && <InfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={categoryColor} />}
                                 {translatedWorkType && <InfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={categoryColor} />}
                                 {job.companyName && <InfoItem icon={Building2} label="الشركة" value={job.companyName} color={categoryColor} />}
-                                {job.openPositions && <InfoItem icon={Users2} label="شواغر" value={job.openPositions} color={categoryColor} />}
+                                {job.openPositions && <InfoItem icon={Users2} label="عدد المناصب" value={job.openPositions} color={categoryColor} />}
                             </div>
                             
                             <Separator />
                             
+                            {descriptionSection && (
+                                <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
+                                    {descriptionSection.content}
+                                </DetailSection>
+                            )}
+
                             {/* Mobile View */}
                             <div className="md:hidden space-y-4">
-                                {descriptionSection && (
-                                    <>
-                                        <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
-                                            {descriptionSection.content}
-                                        </DetailSection>
-                                        <Separator />
-                                    </>
-                                )}
-                                {allOtherSections.map((section, index) => (
+                                {remainingSections.map((section, index) => (
                                     <React.Fragment key={section.id}>
+                                        <Separator />
                                         <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
                                             {section.content}
                                         </DetailSection>
-                                        {index < allOtherSections.length - 1 && <Separator />}
                                     </React.Fragment>
                                 ))}
                             </div>
 
-
                             {/* Desktop View */}
-                            <div className="hidden md:block space-y-6">
-                                {descriptionSection && (
-                                    <>
-                                        <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
-                                            {descriptionSection.content}
+                            {remainingSections.length > 0 && <Separator className='hidden md:block'/>}
+                            <div className="hidden md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-6">
+                                {remainingSections.map((section, index) => (
+                                    <div
+                                        key={section.id}
+                                        className={cn(
+                                            'space-y-4',
+                                            remainingSections.length % 2 !== 0 && index === remainingSections.length - 1 && 'md:col-span-2'
+                                        )}
+                                    >
+                                        <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
+                                            {section.content}
                                         </DetailSection>
-                                        {allOtherSections.length > 0 && <Separator className="my-6" />}
-                                    </>
-                                )}
-                                {allOtherSections.map((section, index) => {
-                                    if (index % 2 === 0) {
-                                        const nextSection = allOtherSections[index + 1];
-                                        return (
-                                            <React.Fragment key={section.id}>
-                                                <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
-                                                    <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
-                                                        {section.content}
-                                                    </DetailSection>
-                                                    
-                                                    {nextSection && <Separator orientation="vertical" className="h-auto" />}
-
-                                                    {nextSection ? (
-                                                        <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>
-                                                            {nextSection.content}
-                                                        </DetailSection>
-                                                    ) : <div></div>}
-                                                </div>
-                                                 {(index + 1 < allOtherSections.length) && (index + 2 < allOtherSections.length) && <Separator className="my-6" />}
-                                            </React.Fragment>
-                                        );
-                                    }
-                                    return null;
-                                })}
+                                    </div>
+                                ))}
                             </div>
                         </CardContent>
                     </Card>
 
                     <div className="grid md:grid-cols-2 gap-6">
                         <Card>
-                            <CardHeader>
+                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2 text-lg">
                                     <Phone className="h-5 w-5" style={{color: sectionColor}} />
                                     التقديم على الوظيفة
