@@ -306,37 +306,34 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                 ))}
                             </div>
 
-                           {/* Desktop View */}
+                            {/* Desktop View */}
                             {remainingSections.length > 0 && <Separator className="hidden md:block" />}
                             <div className="hidden md:block space-y-6">
-                                {remainingSections.reduce((acc, section, index) => {
-                                    if (index % 2 === 0) {
+                                {remainingSections.map((section, index) => {
                                     const nextSection = remainingSections[index + 1];
-                                    acc.push(
-                                        <React.Fragment key={section.id}>
-                                        <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
-                                            <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
-                                            {section.content}
-                                            </DetailSection>
-                                            {nextSection ? (
-                                                <>
-                                                    <Separator orientation="vertical" className="h-auto" />
-                                                    <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>
-                                                        {nextSection.content}
-                                                    </DetailSection>
-                                                </>
-                                            ) : (
-                                                <div className="md:col-span-2"></div>
-                                            )}
-                                        </div>
-                                        {index < remainingSections.length - (nextSection ? 2 : 1) && (
-                                            <Separator className="my-6" />
-                                        )}
-                                        </React.Fragment>
-                                    );
+                                    if (index % 2 === 0) {
+                                        if (nextSection) {
+                                            return (
+                                                <React.Fragment key={section.id}>
+                                                    <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                                        <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
+                                                        <Separator orientation="vertical" className="h-auto" />
+                                                        <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>{nextSection.content}</DetailSection>
+                                                    </div>
+                                                    {index < remainingSections.length - 2 && <Separator className="my-6" />}
+                                                </React.Fragment>
+                                            );
+                                        } else {
+                                            // Render the last single item full width
+                                            return (
+                                                <React.Fragment key={section.id}>
+                                                    <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
+                                                </React.Fragment>
+                                            );
+                                        }
                                     }
-                                    return acc;
-                                }, [] as React.ReactNode[])}
+                                    return null;
+                                })}
                             </div>
                         </CardContent>
                     </Card>

@@ -286,32 +286,31 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                         {/* Desktop View */}
                         {remainingSections.length > 0 && <Separator className="hidden md:block my-6" />}
                         <div className="hidden md:block space-y-6">
-                            {remainingSections.reduce<React.ReactNode[]>((acc, section, index) => {
+                            {remainingSections.map((section, index) => {
+                                const nextSection = remainingSections[index + 1];
                                 if (index % 2 === 0) {
-                                    const nextSection = remainingSections[index + 1];
-                                    acc.push(
-                                        <React.Fragment key={section.id}>
-                                            <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] md:gap-x-8 items-start">
-                                                <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
-                                                    {section.content}
-                                                </DetailSection>
-                                                
-                                                {nextSection && <Separator orientation="vertical" className="h-auto" />}
-
-                                                {nextSection ? (
-                                                    <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>
-                                                        {nextSection.content}
-                                                    </DetailSection>
-                                                ) : (
-                                                    <div className="col-span-1 md:col-span-2"></div>
-                                                )}
-                                            </div>
-                                            {index < remainingSections.length - (nextSection ? 2 : 1) && <Separator className="my-6" />}
-                                        </React.Fragment>
-                                    );
+                                    if (nextSection) {
+                                        return (
+                                            <React.Fragment key={section.id}>
+                                                <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                                    <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
+                                                    <Separator orientation="vertical" className="h-auto" />
+                                                    <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>{nextSection.content}</DetailSection>
+                                                </div>
+                                                {index < remainingSections.length - 2 && <Separator className="my-6" />}
+                                            </React.Fragment>
+                                        );
+                                    } else {
+                                        // Render the last single item full width
+                                        return (
+                                            <React.Fragment key={section.id}>
+                                                <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
+                                            </React.Fragment>
+                                        );
+                                    }
                                 }
-                                return acc;
-                            }, [])}
+                                return null;
+                            })}
                         </div>
                     </CardContent>
                 </Card>
@@ -319,8 +318,8 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                 <div className="grid md:grid-cols-2 gap-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2 text-xl font-bold" style={{ color: sectionColor }}>
-                                <LinkIcon className="h-5 w-5" />
+                             <CardTitle className="flex items-center gap-2 text-xl font-bold">
+                                <LinkIcon className="h-5 w-5" style={{ color: sectionColor }}/>
                                 التقديم على المباراة
                             </CardTitle>
                         </CardHeader>
@@ -354,8 +353,8 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                 
                      <Card>
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2 text-xl font-bold" style={{ color: sectionColor }}>
-                                <Bookmark className="h-5 w-5"/>
+                             <CardTitle className="flex items-center gap-2 text-xl font-bold">
+                                <Bookmark className="h-5 w-5" style={{ color: sectionColor }}/>
                                 احفظ الإعلان وشارك مع الآخرين
                             </CardTitle>
                         </CardHeader>
