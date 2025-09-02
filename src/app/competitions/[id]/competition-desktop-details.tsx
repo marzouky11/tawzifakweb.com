@@ -9,11 +9,9 @@ import {
 } from 'lucide-react';
 import type { Competition } from '@/lib/types';
 import { CategoryIcon } from '@/components/icons';
-import { Separator } from '@/components/ui/separator';
 import { ReportAdDialog } from '@/app/jobs/[id]/report-ad-dialog';
 import { SaveAdButton } from '@/app/jobs/[id]/save-ad-button';
 import { CompetitionCard } from '@/components/competition-card';
-import { cn } from '@/lib/utils';
 import { ShareButton } from '@/app/jobs/[id]/share-button';
 import { getOrganizerByName } from '@/lib/data';
 
@@ -34,18 +32,20 @@ const InfoItem = ({ icon: Icon, label, value, color, href, isDate }: { icon: Rea
     return content;
 };
 
-const DetailSection = ({ icon: Icon, title, color, children }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode }) => {
+const DetailSectionCard = ({ icon: Icon, title, color, children }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode }) => {
     if (!children) return null;
     return (
-        <div>
-            <h3 className="text-xl font-bold flex items-center gap-2 mb-3" style={{color}}>
-                <Icon className="h-5 w-5" />
-                {title}
-            </h3>
-            <div className="prose prose-lg dark:prose-invert max-w-none text-foreground">
+        <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-xl" style={{color}}>
+                    <Icon className="h-5 w-5" />
+                    {title}
+                </CardTitle>
+            </CardHeader>
+            <CardContent>
                 {children}
-            </div>
-        </div>
+            </CardContent>
+        </Card>
     );
 };
 
@@ -86,9 +86,8 @@ export function CompetitionDesktopDetails({ competition, similarCompetitions }: 
     const organizerIcon = organizer?.icon || 'Landmark';
     const organizerColor = organizer?.color || sectionColor;
 
-    const descriptionSection = competition.description ? { id: 'description', icon: Info, title: "وصف تفصيلي", content: <FormattedText text={competition.description} /> } : null;
-
-    const allOtherSections = [
+    const allSections = [
+        competition.description && { id: 'description', icon: Info, title: "وصف تفصيلي", content: <FormattedText text={competition.description} /> },
         competition.availablePositions && { id: 'availablePositions', icon: Briefcase, title: "الوظائف المتاحة", content: <FormattedText text={competition.availablePositions} /> },
         competition.requirements && { id: 'requirements', icon: ClipboardList, title: "الشروط المطلوبة", content: <FormattedText text={competition.requirements} /> },
         competition.competitionStages && { id: 'competitionStages', icon: ListOrdered, title: "مراحل المباراة", content: <FormattedText text={competition.competitionStages} /> },
@@ -97,8 +96,6 @@ export function CompetitionDesktopDetails({ competition, similarCompetitions }: 
         competition.jobProspects && { id: 'jobProspects', icon: Target, title: "أفق العمل بعد المباراة", content: <FormattedText text={competition.jobProspects} /> },
         competition.howToApply && { id: 'howToApply', icon: HelpCircle, title: "طريقة التسجيل", content: <FormattedText text={competition.howToApply} /> }
     ].filter(Boolean) as { id: string; icon: React.ElementType; title: string; content: React.ReactNode; }[];
-    
-    const hasDetails = !!descriptionSection || allOtherSections.length > 0;
     
     return (
         <div className="container mx-auto max-w-7xl px-4 pb-8 space-y-6">
@@ -135,29 +132,16 @@ export function CompetitionDesktopDetails({ competition, similarCompetitions }: 
                         <InfoItem icon={CalendarDays} label="آخر أجل للتسجيل" value={competition.deadline} color={sectionColor} isDate />
                         <InfoItem icon={CalendarDays} label="تاريخ المباراة" value={competition.competitionDate} color={sectionColor} />
                     </div>
-                    
-                    {hasDetails && (
-                        <>
-                            <Separator />
-                            <div className="grid md:grid-cols-2 gap-x-12 gap-y-8">
-                                {descriptionSection && (
-                                    <div className={cn(allOtherSections.length === 0 ? "md:col-span-2" : "md:col-span-1")}>
-                                        <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
-                                            {descriptionSection.content}
-                                        </DetailSection>
-                                    </div>
-                                )}
-                                
-                                {allOtherSections.map((section, index) => (
-                                    <React.Fragment key={section.id}>
-                                        <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
-                                    </React.Fragment>
-                                ))}
-                            </div>
-                        </>
-                    )}
                 </CardContent>
             </Card>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {allSections.map(section => (
+                    <DetailSectionCard key={section.id} icon={section.icon} title={section.title} color={sectionColor}>
+                        {section.content}
+                    </DetailSectionCard>
+                ))}
+            </div>
             
             <div className="grid md:grid-cols-2 gap-6">
                 <Card>

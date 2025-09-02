@@ -12,7 +12,6 @@ import {
 import type { Job, WorkType } from '@/lib/types';
 import { CategoryIcon } from '@/components/icons';
 import { ShareButton } from './share-button';
-import { Separator } from '@/components/ui/separator';
 import { ReportAdDialog } from './report-ad-dialog';
 import { JobCard } from '@/components/job-card';
 import { SaveAdButton } from './save-ad-button';
@@ -63,15 +62,22 @@ const FormattedText = ({ text }: { text?: string }) => {
     );
 }
 
-const DetailSection = ({ icon: Icon, title, color, children }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode }) => (
-    <div>
-        <h3 className="text-xl font-bold flex items-center gap-2 mb-3" style={{color}}>
-            <Icon className="h-5 w-5" />
-            {title}
-        </h3>
-        {children}
-    </div>
-);
+const DetailSectionCard = ({ icon: Icon, title, color, children }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode }) => {
+    if (!children) return null;
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-xl" style={{color}}>
+                    <Icon className="h-5 w-5" />
+                    {title}
+                </CardTitle>
+            </CardHeader>
+            <CardContent>
+                {children}
+            </CardContent>
+        </Card>
+    );
+};
 
 interface JobDesktopDetailsProps {
     job: Job;
@@ -94,9 +100,8 @@ export function JobDesktopDetails({ job, similarJobs }: JobDesktopDetailsProps) 
         job.applyUrl && { type: 'applyUrl', href: job.applyUrl, label: 'تسجيل عبر الموقع', icon: LinkIcon, color: '#FFFFFF', className: 'bg-blue-600 hover:bg-blue-700' },
     ].filter(Boolean);
 
-    const descriptionSection = job.description ? { id: 'description', icon: FileText, title: "وصف الوظيفة", content: <FormattedText text={job.description} /> } : null;
-    
-    const allOtherSections = [
+    const allSections = [
+        job.description && { id: 'description', icon: FileText, title: "وصف الوظيفة", content: <FormattedText text={job.description} /> },
         job.availablePositions && { id: 'availablePositions', icon: Briefcase, title: "الوظائف المتاحة", content: <FormattedText text={job.availablePositions} /> },
         job.conditions && { id: 'conditions', icon: ClipboardList, title: "الشروط المطلوبة", content: <FormattedText text={job.conditions} /> },
         job.qualifications && { id: 'qualifications', icon: GraduationCap, title: "المؤهلات المطلوبة", content: <FormattedText text={job.qualifications} /> },
@@ -106,7 +111,6 @@ export function JobDesktopDetails({ job, similarJobs }: JobDesktopDetailsProps) 
         job.howToApply && { id: 'howToApply', icon: HelpCircle, title: "كيفية التقديم", content: <FormattedText text={job.howToApply} /> }
     ].filter(Boolean) as { id: string; icon: React.ElementType; title: string; content: React.ReactNode; }[];
     
-    const hasDetails = !!descriptionSection || allOtherSections.length > 0;
 
     return (
         <div className="container mx-auto max-w-7xl px-4 pb-8">
@@ -137,31 +141,17 @@ export function JobDesktopDetails({ job, similarJobs }: JobDesktopDetailsProps) 
                             {job.companyName && <InfoItem icon={Building2} label="الشركة" value={job.companyName} color={categoryColor} />}
                             {job.openPositions && <InfoItem icon={Users2} label="عدد المناصب" value={job.openPositions} color={categoryColor} />}
                         </div>
-                        
-                        {hasDetails && (
-                            <>
-                                <Separator />
-                                <div className="grid md:grid-cols-2 gap-x-12 gap-y-8">
-                                    {descriptionSection && (
-                                        <div className={cn(allOtherSections.length === 0 ? "md:col-span-2" : "md:col-span-1")}>
-                                            <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
-                                                {descriptionSection.content}
-                                            </DetailSection>
-                                        </div>
-                                    )}
-
-                                    {allOtherSections.map((section, index) => (
-                                        <React.Fragment key={section.id}>
-                                            <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
-                                                {section.content}
-                                            </DetailSection>
-                                        </React.Fragment>
-                                    ))}
-                                </div>
-                            </>
-                        )}
                     </CardContent>
                 </Card>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {allSections.map(section => (
+                        <DetailSectionCard key={section.id} icon={section.icon} title={section.title} color={sectionColor}>
+                            {section.content}
+                        </DetailSectionCard>
+                    ))}
+                </div>
+
 
                 <div className="grid md:grid-cols-2 gap-6">
                     <Card>
