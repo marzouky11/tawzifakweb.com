@@ -20,7 +20,6 @@ import {
   Mail,
   LayoutGrid,
   FileText,
-  Search,
   Bookmark,
   Share2,
 } from 'lucide-react';
@@ -150,14 +149,18 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
     const sectionColor = '#424242';
     const categoryColor = category?.color || sectionColor;
     const finalIconName = category?.iconName || 'Users';
-
-    const jobTitle = job.title || 'هذا الإعلان';
     
     const contactButtons = [
         job.phone && { type: 'phone', href: `tel:${job.phone}`, label: 'اتصال', icon: Phone, className: 'bg-[#424242] hover:bg-[#424242]/90' },
         job.whatsapp && { type: 'whatsapp', href: `https://wa.me/${job.whatsapp.replace(/\+/g, '')}`, label: 'واتساب', icon: MessageSquare, className: 'bg-green-600 hover:bg-green-700' },
         job.email && { type: 'email', href: `mailto:${job.email}`, label: 'البريد الإلكتروني', icon: Mail, className: 'bg-gray-600 hover:bg-gray-700' },
         job.instagram && { type: 'instagram', href: `https://instagram.com/${job.instagram.replace(/@/g, '')}`, label: 'إنستغرام', icon: Instagram, className: 'bg-gradient-to-r from-pink-500 to-orange-500 hover:opacity-90' },
+    ].filter(Boolean);
+
+    const allSections = [
+        job.description && { id: 'description', icon: FileText, title: "وصف المهارات والخبرة", content: <FormattedText text={job.description} /> },
+        job.qualifications && { id: 'qualifications', icon: GraduationCap, title: "الشهادات والمؤهلات", content: <FormattedText text={job.qualifications} /> },
+        job.experience && { id: 'experience', icon: Award, title: "الخبرة", content: <FormattedText text={job.experience} /> }
     ].filter(Boolean);
 
     return (
@@ -210,28 +213,44 @@ export default async function WorkerDetailPage({ params }: JobDetailPageProps) {
                             <Separator/>
                             
                             {/* Mobile view */}
-                             <div className="md:hidden space-y-6">
-                                {job.description && (<> <DetailSection icon={FileText} title="وصف المهارات والخبرة" color={sectionColor}><FormattedText text={job.description} /></DetailSection> <Separator /> </>)}
-                                {job.qualifications && (<> <DetailSection icon={GraduationCap} title="الشهادات والمؤهلات" color={sectionColor}><FormattedText text={job.qualifications} /></DetailSection> <Separator /> </>)}
-                                {job.experience && (<DetailSection icon={Award} title="الخبرة" color={sectionColor}><FormattedText text={job.experience} /></DetailSection>)}
+                            <div className="md:hidden space-y-4">
+                                {allSections.map((section, index) => section && (
+                                    <React.Fragment key={section.id}>
+                                        <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
+                                            {section.content}
+                                        </DetailSection>
+                                        {index < allSections.length - 1 && <Separator />}
+                                    </React.Fragment>
+                                ))}
                             </div>
 
 
                             {/* Desktop View */}
                            <div className="hidden md:block space-y-6">
-                                {job.description && (
-                                    <>
-                                        <DetailSection icon={FileText} title="وصف المهارات والخبرة" color={sectionColor}><FormattedText text={job.description} /></DetailSection>
-                                        <Separator className="my-6" />
-                                    </>
-                                )}
-                                {(job.qualifications || job.experience) && (
-                                    <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
-                                        {job.qualifications ? <DetailSection icon={GraduationCap} title="الشهادات والمؤهلات" color={sectionColor}><FormattedText text={job.qualifications} /></DetailSection> : <div />}
-                                        {job.qualifications && job.experience && <Separator orientation="vertical" className="h-auto" />}
-                                        {job.experience ? <DetailSection icon={Award} title="الخبرة" color={sectionColor}><FormattedText text={job.experience} /></DetailSection> : <div />}
-                                    </div>
-                                )}
+                                {allSections.map((section, index) => {
+                                     if (index % 2 === 0) {
+                                        const nextSection = allSections[index + 1];
+                                        return (
+                                            <React.Fragment key={section.id}>
+                                                <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                                    <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
+                                                        {section.content}
+                                                    </DetailSection>
+                                                    
+                                                    {nextSection && <Separator orientation="vertical" className="h-auto" />}
+
+                                                    {nextSection ? (
+                                                        <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>
+                                                            {nextSection.content}
+                                                        </DetailSection>
+                                                    ) : <div></div>}
+                                                </div>
+                                                 {(index + 2 < allSections.length) && <Separator className="my-6" />}
+                                            </React.Fragment>
+                                        );
+                                    }
+                                    return null;
+                                })}
                             </div>
                         </CardContent>
                     </Card>

@@ -170,6 +170,17 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
         post.instagram && { type: 'instagram', href: `https://instagram.com/${post.instagram.replace(/@/g, '')}`, label: 'إنستغرام', icon: Instagram, className: 'bg-gradient-to-r from-pink-500 to-orange-500 hover:opacity-90' },
     ].filter(Boolean);
 
+    const allSections = [
+        post.description && { id: 'description', icon: Info, title: "وصف تفصيلي", content: <FormattedText text={post.description} /> },
+        post.availablePositions && { id: 'availablePositions', icon: Briefcase, title: "الوظائف المتاحة", content: <FormattedText text={post.availablePositions} /> },
+        post.requirements && { id: 'requirements', icon: ClipboardList, title: "الشروط العامة", content: <FormattedText text={post.requirements} /> },
+        post.qualifications && { id: 'qualifications', icon: GraduationCap, title: "المؤهلات المطلوبة", content: <FormattedText text={post.qualifications} /> },
+        post.experience && { id: 'experience', icon: Award, title: "الخبرة المطلوبة", content: <FormattedText text={post.experience} /> },
+        post.tasks && { id: 'tasks', icon: CheckSquare, title: "المهام المطلوبة", content: <FormattedText text={post.tasks} /> },
+        post.featuresAndOpportunities && { id: 'featuresAndOpportunities', icon: Target, title: "المميزات والفرص", content: <FormattedText text={post.featuresAndOpportunities} /> },
+        post.howToApply && { id: 'howToApply', icon: HelpCircle, title: "كيفية التقديم", content: <FormattedText text={post.howToApply} /> }
+    ].filter(Boolean);
+
     return (
         <>
             <MobilePageHeader title="فرصة هجرة">
@@ -210,53 +221,43 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                         <Separator />
                         
                         {/* Mobile view */}
-                        <div className="md:hidden space-y-6">
-                           {post.description && (<> <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={post.description} /></DetailSection> <Separator className="my-4" /> </>)}
-                           {post.availablePositions && (<> <DetailSection icon={Briefcase} title="الوظائف المتاحة" color={sectionColor}><FormattedText text={post.availablePositions} /></DetailSection> <Separator className="my-4" /> </>)}
-                           {post.requirements && (<> <DetailSection icon={ClipboardList} title="الشروط العامة" color={sectionColor}><FormattedText text={post.requirements} /></DetailSection> <Separator className="my-4" /> </>)}
-                           {post.qualifications && (<> <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={post.qualifications} /></DetailSection> <Separator className="my-4" /> </>)}
-                           {post.experience && (<> <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={post.experience} /></DetailSection> <Separator className="my-4" /> </>)}
-                           {post.tasks && (<> <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={post.tasks} /></DetailSection> <Separator className="my-4" /> </>)}
-                           {post.featuresAndOpportunities && (<> <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={post.featuresAndOpportunities} /></DetailSection> <Separator className="my-4" /> </>)}
-                           {post.howToApply && (<DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={post.howToApply} /></DetailSection>)}
+                        <div className="md:hidden space-y-4">
+                            {allSections.map((section, index) => section && (
+                                <React.Fragment key={section.id}>
+                                    <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
+                                        {section.content}
+                                    </DetailSection>
+                                    {index < allSections.length - 1 && <Separator />}
+                                </React.Fragment>
+                            ))}
                         </div>
 
                         {/* Desktop view */}
                         <div className="hidden md:block space-y-6">
-                           {post.description && (
-                            <>
-                               <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={post.description} /></DetailSection>
-                               <Separator className="my-6" />
-                            </>
-                           )}
+                            {allSections.map((section, index) => {
+                                if (index % 2 === 0) {
+                                    const nextSection = allSections[index + 1];
+                                    return (
+                                        <React.Fragment key={section.id}>
+                                            <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                                <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
+                                                    {section.content}
+                                                </DetailSection>
+                                                
+                                                {nextSection && <Separator orientation="vertical" className="h-auto" />}
 
-                            {post.availablePositions && (
-                                <>
-                                    <DetailSection icon={Briefcase} title="الوظائف المتاحة" color={sectionColor}><FormattedText text={post.availablePositions} /></DetailSection>
-                                    <Separator className="my-6" />
-                                </>
-                            )}
-                            
-                            <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
-                                {post.requirements && <DetailSection icon={ClipboardList} title="الشروط العامة" color={sectionColor}><FormattedText text={post.requirements} /></DetailSection>}
-                                {post.requirements && post.qualifications && <Separator orientation="vertical" className="h-auto" />}
-                                {post.qualifications && <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={post.qualifications} /></DetailSection>}
-                            </div>
-                            {(post.requirements || post.qualifications) && <Separator className="my-6" />}
-                           
-                           
-                            <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
-                                {post.experience && <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={post.experience} /></DetailSection>}
-                                {post.experience && post.tasks && <Separator orientation="vertical" className="h-auto" />}
-                                {post.tasks && <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={post.tasks} /></DetailSection>}
-                            </div>
-                            {(post.experience || post.tasks) && <Separator className="my-6" />}
-
-                            <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
-                                {post.featuresAndOpportunities && <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={post.featuresAndOpportunities} /></DetailSection>}
-                                {post.featuresAndOpportunities && post.howToApply && <Separator orientation="vertical" className="h-auto" />}
-                                {post.howToApply && <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={post.howToApply} /></DetailSection>}
-                            </div>
+                                                {nextSection ? (
+                                                    <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>
+                                                        {nextSection.content}
+                                                    </DetailSection>
+                                                ) : <div></div>}
+                                            </div>
+                                             {(index + 2 < allSections.length) && <Separator className="my-6" />}
+                                        </React.Fragment>
+                                    );
+                                }
+                                return null;
+                            })}
                         </div>
                     </CardContent>
                 </Card>

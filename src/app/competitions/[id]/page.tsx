@@ -204,6 +204,17 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
     const organizerIcon = organizer?.icon || 'Landmark';
     const organizerColor = organizer?.color || sectionColor;
 
+    const allSections = [
+        competition.description && { id: 'description', icon: Info, title: "وصف تفصيلي", content: <FormattedText text={competition.description} /> },
+        competition.availablePositions && { id: 'availablePositions', icon: Briefcase, title: "الوظائف المتاحة", content: <FormattedText text={competition.availablePositions} /> },
+        competition.requirements && { id: 'requirements', icon: ClipboardList, title: "الشروط المطلوبة", content: <FormattedText text={competition.requirements} /> },
+        competition.competitionStages && { id: 'competitionStages', icon: ListOrdered, title: "مراحل المباراة", content: <FormattedText text={competition.competitionStages} /> },
+        competition.documentsNeeded && { id: 'documentsNeeded', icon: FileText, title: "الوثائق المطلوبة", content: <FormattedText text={competition.documentsNeeded} /> },
+        competition.trainingFeatures && { id: 'trainingFeatures', icon: Award, title: "مميزات التكوين والفرص", content: <FormattedText text={competition.trainingFeatures} /> },
+        competition.jobProspects && { id: 'jobProspects', icon: Target, title: "أفق العمل بعد المباراة", content: <FormattedText text={competition.jobProspects} /> },
+        competition.howToApply && { id: 'howToApply', icon: HelpCircle, title: "طريقة التسجيل", content: <FormattedText text={competition.howToApply} /> }
+    ].filter(Boolean);
+
     return (
         <>
             <MobilePageHeader title="تفاصيل المباراة">
@@ -251,53 +262,43 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                         <Separator />
                         
                         {/* Mobile view */}
-                        <div className="md:hidden space-y-6">
-                           {competition.description && (<> <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={competition.description} /></DetailSection> <Separator className="my-4" /> </>)}
-                           {competition.availablePositions && (<> <DetailSection icon={Briefcase} title="الوظائف المتاحة" color={sectionColor}><FormattedText text={competition.availablePositions} /></DetailSection> <Separator className="my-4" /> </>)}
-                           {competition.requirements && (<> <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor}><FormattedText text={competition.requirements} /></DetailSection> <Separator className="my-4" /> </>)}
-                           {competition.competitionStages && (<> <DetailSection icon={ListOrdered} title="مراحل المباراة" color={sectionColor}><FormattedText text={competition.competitionStages} /></DetailSection> <Separator className="my-4" /> </>)}
-                           {competition.documentsNeeded && (<> <DetailSection icon={FileText} title="الوثائق المطلوبة" color={sectionColor}><FormattedText text={competition.documentsNeeded} /></DetailSection> <Separator className="my-4" /> </>)}
-                           {competition.trainingFeatures && (<> <DetailSection icon={Award} title="مميزات التكوين والفرص" color={sectionColor}><FormattedText text={competition.trainingFeatures} /></DetailSection> <Separator className="my-4" /> </>)}
-                           {competition.jobProspects && (<> <DetailSection icon={Target} title="أفق العمل بعد المباراة" color={sectionColor}><FormattedText text={competition.jobProspects} /></DetailSection> <Separator className="my-4" /> </>)}
-                           {competition.howToApply && (<DetailSection icon={HelpCircle} title="طريقة التسجيل" color={sectionColor}><FormattedText text={competition.howToApply} /></DetailSection>)}
+                        <div className="md:hidden space-y-4">
+                            {allSections.map((section, index) => section && (
+                                <React.Fragment key={section.id}>
+                                    <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
+                                        {section.content}
+                                    </DetailSection>
+                                    {index < allSections.length - 1 && <Separator />}
+                                </React.Fragment>
+                            ))}
                         </div>
                         
                         {/* Desktop view */}
                         <div className="hidden md:block space-y-6">
-                           {competition.description && (
-                            <>
-                               <DetailSection icon={Info} title="وصف تفصيلي" color={sectionColor}><FormattedText text={competition.description} /></DetailSection>
-                               <Separator className="my-6" />
-                            </>
-                           )}
+                           {allSections.map((section, index) => {
+                                if (index % 2 === 0) {
+                                    const nextSection = allSections[index + 1];
+                                    return (
+                                        <React.Fragment key={section.id}>
+                                            <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                                <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
+                                                    {section.content}
+                                                </DetailSection>
+                                                
+                                                {nextSection && <Separator orientation="vertical" className="h-auto" />}
 
-                            {competition.availablePositions && (
-                                <>
-                                    <DetailSection icon={Briefcase} title="الوظائف المتاحة" color={sectionColor}><FormattedText text={competition.availablePositions} /></DetailSection>
-                                    <Separator className="my-6" />
-                                </>
-                            )}
-                           
-                            <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
-                                {competition.requirements && <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor}><FormattedText text={competition.requirements} /></DetailSection>}
-                                {competition.requirements && competition.competitionStages && <Separator orientation="vertical" className="h-auto" />}
-                                {competition.competitionStages && <DetailSection icon={ListOrdered} title="مراحل المباراة" color={sectionColor}><FormattedText text={competition.competitionStages} /></DetailSection>}
-                            </div>
-                            {(competition.requirements || competition.competitionStages) && <Separator className="my-6" />}
-                           
-                           
-                            <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
-                                {competition.documentsNeeded && <DetailSection icon={FileText} title="الوثائق المطلوبة" color={sectionColor}><FormattedText text={competition.documentsNeeded} /></DetailSection>}
-                                {competition.documentsNeeded && competition.trainingFeatures && <Separator orientation="vertical" className="h-auto" />}
-                                {competition.trainingFeatures && <DetailSection icon={Award} title="مميزات التكوين والفرص" color={sectionColor}><FormattedText text={competition.trainingFeatures} /></DetailSection>}
-                            </div>
-                           {(competition.documentsNeeded || competition.trainingFeatures) && <Separator className="my-6" />}
-
-                            <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
-                                {competition.jobProspects && <DetailSection icon={Target} title="أفق العمل بعد المباراة" color={sectionColor}><FormattedText text={competition.jobProspects} /></DetailSection>}
-                                {competition.jobProspects && competition.howToApply && <Separator orientation="vertical" className="h-auto" />}
-                                {competition.howToApply && <DetailSection icon={HelpCircle} title="طريقة التسجيل" color={sectionColor}><FormattedText text={competition.howToApply} /></DetailSection>}
-                            </div>
+                                                {nextSection ? (
+                                                    <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>
+                                                        {nextSection.content}
+                                                    </DetailSection>
+                                                ) : <div></div>}
+                                            </div>
+                                             {(index + 2 < allSections.length) && <Separator className="my-6" />}
+                                        </React.Fragment>
+                                    );
+                                }
+                                return null;
+                            })}
                         </div>
                     </CardContent>
                 </Card>

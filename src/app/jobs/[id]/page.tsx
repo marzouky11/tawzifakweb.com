@@ -225,8 +225,6 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
     const categoryColor = category?.color || sectionColor;
     const finalIconName = category?.iconName || 'Briefcase';
     
-    const jobTitle = job.title || 'هذا الإعلان';
-    
     const contactButtons = [
         job.phone && { type: 'phone', href: `tel:${job.phone}`, label: 'اتصال', icon: Phone, color: '#FFFFFF', className: 'bg-[#0D47A1] hover:bg-[#0D47A1]/90' },
         job.whatsapp && { type: 'whatsapp', href: `https://wa.me/${job.whatsapp.replace(/\+/g, '')}`, label: 'واتساب', icon: MessageSquare, color: '#FFFFFF', className: 'bg-green-600 hover:bg-green-700' },
@@ -235,7 +233,18 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
         job.applyUrl && { type: 'applyUrl', href: job.applyUrl, label: 'تسجيل عبر الموقع', icon: LinkIcon, color: '#FFFFFF', className: 'bg-blue-600 hover:bg-blue-700' },
     ].filter(Boolean);
 
-    
+    const allSections = [
+        job.description && { id: 'description', icon: FileText, title: "وصف الوظيفة", content: <FormattedText text={job.description} /> },
+        job.availablePositions && { id: 'availablePositions', icon: Briefcase, title: "الوظائف المتاحة", content: <FormattedText text={job.availablePositions} /> },
+        job.conditions && { id: 'conditions', icon: ClipboardList, title: "الشروط المطلوبة", content: <FormattedText text={job.conditions} /> },
+        job.qualifications && { id: 'qualifications', icon: GraduationCap, title: "المؤهلات المطلوبة", content: <FormattedText text={job.qualifications} /> },
+        job.experience && { id: 'experience', icon: Award, title: "الخبرة المطلوبة", content: <FormattedText text={job.experience} /> },
+        job.tasks && { id: 'tasks', icon: CheckSquare, title: "المهام المطلوبة", content: <FormattedText text={job.tasks} /> },
+        job.featuresAndOpportunities && { id: 'featuresAndOpportunities', icon: Target, title: "المميزات والفرص", content: <FormattedText text={job.featuresAndOpportunities} /> },
+        job.howToApply && { id: 'howToApply', icon: HelpCircle, title: "كيفية التقديم", content: <FormattedText text={job.howToApply} /> }
+    ].filter(Boolean);
+
+
     return (
         <>
             <MobilePageHeader title="تفاصيل عرض العمل">
@@ -278,52 +287,43 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                             <Separator />
                             
                              {/* Mobile View */}
-                            <div className="md:hidden space-y-6">
-                                {job.description && (<> <DetailSection icon={FileText} title="وصف الوظيفة" color={sectionColor}><FormattedText text={job.description} /></DetailSection> <Separator className="my-4" /> </>)}
-                                {job.availablePositions && (<> <DetailSection icon={Briefcase} title="الوظائف المتاحة" color={sectionColor}><FormattedText text={job.availablePositions} /></DetailSection> <Separator className="my-4" /> </>)}
-                                {job.conditions && (<> <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor}><FormattedText text={job.conditions} /></DetailSection> <Separator className="my-4" /> </>)}
-                                {job.qualifications && (<> <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={job.qualifications} /></DetailSection> <Separator className="my-4" /> </>)}
-                                {job.experience && (<> <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={job.experience} /></DetailSection> <Separator className="my-4" /> </>)}
-                                {job.tasks && (<> <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={job.tasks} /></DetailSection> <Separator className="my-4" /> </>)}
-                                {job.featuresAndOpportunities && (<> <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={job.featuresAndOpportunities} /></DetailSection> <Separator className="my-4" /> </>)}
-                                {job.howToApply && (<DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={job.howToApply} /></DetailSection>)}
+                            <div className="md:hidden space-y-4">
+                                {allSections.map((section, index) => section && (
+                                    <React.Fragment key={section.id}>
+                                        <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
+                                            {section.content}
+                                        </DetailSection>
+                                        {index < allSections.length - 1 && <Separator />}
+                                    </React.Fragment>
+                                ))}
                             </div>
 
                             {/* Desktop View */}
                             <div className="hidden md:block space-y-6">
-                                {job.description && (
-                                    <>
-                                        <DetailSection icon={FileText} title="وصف الوظيفة" color={sectionColor}><FormattedText text={job.description} /></DetailSection>
-                                        <Separator className="my-6"/>
-                                    </>
-                                )}
-                                
-                                {job.availablePositions && (
-                                    <>
-                                        <DetailSection icon={Briefcase} title="الوظائف المتاحة" color={sectionColor}><FormattedText text={job.availablePositions} /></DetailSection>
-                                        <Separator className="my-6"/>
-                                    </>
-                                )}
-                                
-                                <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
-                                    {job.conditions && <DetailSection icon={ClipboardList} title="الشروط المطلوبة" color={sectionColor}><FormattedText text={job.conditions} /></DetailSection>}
-                                    {job.conditions && job.qualifications && <Separator orientation="vertical" className="h-auto" />}
-                                    {job.qualifications && <DetailSection icon={GraduationCap} title="المؤهلات المطلوبة" color={sectionColor}><FormattedText text={job.qualifications} /></DetailSection>}
-                                </div>
-                                {(job.conditions || job.qualifications) && <Separator className="my-6" />}
-                                
-                                <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
-                                    {job.experience && <DetailSection icon={Award} title="الخبرة المطلوبة" color={sectionColor}><FormattedText text={job.experience} /></DetailSection>}
-                                    {job.experience && job.tasks && <Separator orientation="vertical" className="h-auto" />}
-                                    {job.tasks && <DetailSection icon={CheckSquare} title="المهام المطلوبة" color={sectionColor}><FormattedText text={job.tasks} /></DetailSection>}
-                                </div>
-                                {(job.experience || job.tasks) && <Separator className="my-6" />}
+                                {allSections.map((section, index) => {
+                                    if (index % 2 === 0) {
+                                        const nextSection = allSections[index + 1];
+                                        return (
+                                            <React.Fragment key={section.id}>
+                                                <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
+                                                    <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
+                                                        {section.content}
+                                                    </DetailSection>
+                                                    
+                                                    {nextSection && <Separator orientation="vertical" className="h-auto" />}
 
-                                <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
-                                    {job.featuresAndOpportunities && <DetailSection icon={Target} title="المميزات والفرص" color={sectionColor}><FormattedText text={job.featuresAndOpportunities} /></DetailSection>}
-                                    {job.featuresAndOpportunities && job.howToApply && <Separator orientation="vertical" className="h-auto" />}
-                                    {job.howToApply && <DetailSection icon={HelpCircle} title="كيفية التقديم" color={sectionColor}><FormattedText text={job.howToApply} /></DetailSection>}
-                                </div>
+                                                    {nextSection ? (
+                                                        <DetailSection icon={nextSection.icon} title={nextSection.title} color={sectionColor}>
+                                                            {nextSection.content}
+                                                        </DetailSection>
+                                                    ) : <div></div>}
+                                                </div>
+                                                 {(index + 2 < allSections.length) && <Separator className="my-6" />}
+                                            </React.Fragment>
+                                        );
+                                    }
+                                    return null;
+                                })}
                             </div>
                         </CardContent>
                     </Card>
