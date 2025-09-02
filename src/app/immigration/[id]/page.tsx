@@ -183,6 +183,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
     ].filter(Boolean) as { id: string; icon: React.ElementType; title: string; content: React.ReactNode; }[];
     
     const remainingSections = allOtherSections.filter(section => !!section.content);
+    const hasAnyDetails = !!descriptionSection || remainingSections.length > 0;
 
     return (
         <>
@@ -194,7 +195,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                 title="تفاصيل فرصة الهجرة"
                 description={`استكشف جميع المعلومات المتعلقة بفرصة الهجرة إلى ${post.targetCountry}.`}
             />
-            <div className="container mx-auto max-w-5xl px-4 pb-8 space-y-6">
+            <div className="container mx-auto max-w-7xl px-4 pb-8 space-y-6">
                 <Card className="overflow-hidden shadow-lg border-2" style={{borderColor: sectionColor}}>
                      <CardHeader className="p-4 sm:p-6" style={{ backgroundColor: `${sectionColor}1A`}}>
                         <div className="flex items-center gap-4 mb-2">
@@ -221,7 +222,8 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                              {post.salary && <InfoItem icon={Wallet} label="الأجر" value={post.salary} color={iconColor} />}
                             {post.deadline && <InfoItem icon={CalendarDays} label="آخر أجل" value={post.deadline} color={iconColor} />}
                         </div>
-                        <Separator />
+                        
+                        {hasAnyDetails && <Separator />}
                         
                         {descriptionSection && (
                             <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor} className="md:col-span-full">
@@ -231,13 +233,12 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
                         
                         {/* Mobile View */}
                         <div className="md:hidden space-y-4">
-                             {remainingSections.length > 0 && <Separator />}
                             {remainingSections.map((section, index) => (
                                 <React.Fragment key={section.id}>
+                                    <Separator />
                                     <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
                                         {section.content}
                                     </DetailSection>
-                                    {index < remainingSections.length - 1 && <Separator />}
                                 </React.Fragment>
                             ))}
                         </div>

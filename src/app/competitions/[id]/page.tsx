@@ -217,6 +217,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
     ].filter(Boolean) as { id: string; icon: React.ElementType; title: string; content: React.ReactNode; }[];
     
     const remainingSections = allOtherSections.filter(section => !!section.content);
+    const hasAnyDetails = !!descriptionSection || remainingSections.length > 0;
 
     return (
         <>
@@ -228,7 +229,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                 title="تفاصيل المباراة العمومية"
                 description="هنا تجد جميع المعلومات المتعلقة بهذه المباراة."
             />
-            <div className="container mx-auto max-w-5xl px-4 pb-8 space-y-6">
+            <div className="container mx-auto max-w-7xl px-4 pb-8 space-y-6">
                 <Card className="overflow-hidden shadow-lg border-t-4" style={{borderColor: sectionColor}}>
                      <CardHeader className="bg-muted/30 p-4 sm:p-6">
                          <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
@@ -262,7 +263,8 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                             <InfoItem icon={CalendarDays} label="آخر أجل للتسجيل" value={competition.deadline} color={sectionColor} isDate />
                             <InfoItem icon={CalendarDays} label="تاريخ المباراة" value={competition.competitionDate} color={sectionColor} />
                         </div>
-                        <Separator />
+                        
+                        {hasAnyDetails && <Separator />}
                         
                         {descriptionSection && (
                             <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor} className="md:col-span-full">
@@ -272,13 +274,12 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
                         
                         {/* Mobile View */}
                         <div className="md:hidden space-y-4">
-                             {remainingSections.length > 0 && <Separator />}
                             {remainingSections.map((section, index) => (
                                 <React.Fragment key={section.id}>
+                                    <Separator />
                                     <DetailSection icon={section.icon} title={section.title} color={sectionColor}>
                                         {section.content}
                                     </DetailSection>
-                                    {index < remainingSections.length - 1 && <Separator />}
                                 </React.Fragment>
                             ))}
                         </div>

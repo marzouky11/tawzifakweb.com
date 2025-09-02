@@ -246,6 +246,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
     ].filter(Boolean) as { id: string; icon: React.ElementType; title: string; content: React.ReactNode; }[];
     
     const remainingSections = allOtherSections.filter(section => !!section.content);
+    const hasAnyDetails = !!descriptionSection || remainingSections.length > 0;
 
     return (
         <>
@@ -257,7 +258,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                 title="تفاصيل عرض العمل"
                 description="هنا تجد جميع المعلومات المتعلقة بفرصة العمل هذه."
             />
-            <div className="container mx-auto max-w-5xl px-4 pb-8">
+            <div className="container mx-auto max-w-7xl px-4 pb-8">
                 <div className="space-y-6">
                     <Card className="overflow-hidden shadow-lg border-t-4" style={{ borderColor: sectionColor }}>
                         <CardHeader className="bg-muted/30 p-4 sm:p-6">
@@ -286,7 +287,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                                 {job.openPositions && <InfoItem icon={Users2} label="عدد المناصب" value={job.openPositions} color={categoryColor} />}
                             </div>
                             
-                            <Separator />
+                            {hasAnyDetails && <Separator />}
                             
                             {descriptionSection && (
                                 <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
