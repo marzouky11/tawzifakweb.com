@@ -42,6 +42,7 @@ export async function generateMetadata({ params }: CompetitionDetailPageProps): 
 
   // Construct structured data description from specific fields
   const structuredDataParts = [];
+  if (competition.location) structuredDataParts.push(`الموقع: ${competition.location}`);
   if (competition.requirements) structuredDataParts.push(`الشروط: ${competition.requirements}`);
   if (competition.documentsNeeded) structuredDataParts.push(`الوثائق المطلوبة: ${competition.documentsNeeded}`);
   const structuredDataDescription = structuredDataParts.length > 0 ? structuredDataParts.join('\n') : (competition.description || `مباراة منظمة من طرف ${competition.organizer} لـ ${competition.positionsAvailable || 'مناصب متعددة'}.`);

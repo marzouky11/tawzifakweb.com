@@ -41,6 +41,8 @@ export async function generateMetadata({ params }: ImmigrationDetailPageProps): 
 
   // Construct structured data description from specific fields
   const structuredDataParts = [];
+  if (post.targetCountry) structuredDataParts.push(`الموقع: ${post.city ? `${post.city}, ` : ''}${post.targetCountry}`);
+  if (post.salary) structuredDataParts.push(`الراتب: ${post.salary}`);
   if (post.requirements) structuredDataParts.push(`الشروط: ${post.requirements}`);
   if (post.qualifications) structuredDataParts.push(`المؤهلات: ${post.qualifications}`);
   if (post.experience) structuredDataParts.push(`الخبرة: ${post.experience}`);
@@ -76,7 +78,6 @@ export async function generateMetadata({ params }: ImmigrationDetailPageProps): 
                 unitText: 'MONTH'
             }
         },
-        description: `الراتب: ${post.salary}`
     }),
     ...(post.deadline && { validThrough: post.deadline }),
   };

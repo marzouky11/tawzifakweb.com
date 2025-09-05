@@ -48,9 +48,11 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
 
   // Construct structured data description from specific fields
   const structuredDataParts = [];
+  if (job.city && job.country) structuredDataParts.push(`الموقع: ${job.city}, ${job.country}`);
+  if (job.salary) structuredDataParts.push(`الراتب: ${job.salary}`);
+  if (job.conditions) structuredDataParts.push(`الشروط: ${job.conditions}`);
   if (job.qualifications) structuredDataParts.push(`المؤهلات: ${job.qualifications}`);
   if (job.experience) structuredDataParts.push(`الخبرة: ${job.experience}`);
-  if (job.conditions) structuredDataParts.push(`الشروط: ${job.conditions}`);
   const structuredDataDescription = structuredDataParts.length > 0 ? structuredDataParts.join('\n') : (job.description || `${jobTitle} في ${jobCity}, ${jobCountry}.`);
 
 
@@ -76,8 +78,6 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
         },
       },
       ...(job.workType === 'remote' && { jobLocationType: 'TELECOMMUTE' }),
-      ...(job.qualifications && { qualifications: job.qualifications }),
-      ...(job.experience && { experienceRequirements: job.experience }),
       ...(job.salary && { 
         baseSalary: {
             '@type': 'MonetaryAmount',
@@ -88,7 +88,6 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
                 unitText: 'MONTH' // Assuming monthly salary
             }
         },
-        description: `الراتب: ${job.salary}`
       }),
   };
 
