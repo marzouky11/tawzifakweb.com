@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: CompetitionDetailPageProps): 
     ? competition.createdAt.toDate() 
     : new Date();
 
-  const deadlineDate = competition.deadline ? new Date(competition.deadline) : null;
+  const deadlineDate = competition.deadline ? new Date(competition.deadline.split(' ')[0]) : null;
   const validDeadline = deadlineDate && !isNaN(deadlineDate.getTime());
 
   const jobPostingJsonLd: any = {
@@ -130,4 +130,3 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
         </>
     );
 }
-

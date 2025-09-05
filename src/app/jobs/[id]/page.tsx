@@ -70,6 +70,19 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
       },
       ...(job.workType === 'remote' && { jobLocationType: 'TELECOMMUTE' }),
       ...(job.qualifications && { qualifications: job.qualifications }),
+      ...(job.experience && { experienceRequirements: job.experience }),
+      ...(job.salary && { 
+        baseSalary: {
+            '@type': 'MonetaryAmount',
+            currency: 'SAR', // Assuming SAR, can be adapted based on country
+            value: {
+                '@type': 'QuantitativeValue',
+                value: parseFloat(job.salary.replace(/[^0-9.]/g, '')) || 0,
+                unitText: 'MONTH' // Assuming monthly salary
+            }
+        },
+        description: `الراتب: ${job.salary}`
+      }),
   };
 
   const canonicalUrl = `${baseUrl}/jobs/${job.id}`;
@@ -146,4 +159,3 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
         </>
     );
 }
-
