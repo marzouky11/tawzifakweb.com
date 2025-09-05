@@ -1,5 +1,4 @@
 
-
 import type { Metadata } from 'next';
 import { JobCard } from '@/components/job-card';
 import { getJobs } from '@/lib/data';
@@ -14,9 +13,11 @@ import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 export const revalidate = 3600; // Revalidate every hour
 
 export const metadata: Metadata = {
-  title: 'باحثون عن عمل من جميع الدول العربية – سِيَر ذاتية جاهزة للتوظيف',
-  description: 'تصفح ملفات الباحثين عن العمل في مجالات متنوعة من السعودية، المغرب، مصر، الجزائر، العراق، وأكثر. تواصل مباشرة مع أصحاب الكفاءات.',
-  robots: 'index, follow',
+  title: 'باحثون عن عمل',
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 
