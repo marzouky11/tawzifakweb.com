@@ -9,6 +9,7 @@ import { User, Newspaper } from 'lucide-react';
 import type { Metadata } from 'next';
 import { ArticleCard } from '../article-card';
 import { Separator } from '@/components/ui/separator';
+import Link from 'next/link';
 
 interface Props {
   params: { slug: string };
@@ -92,6 +93,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 
+const urlRegex = /(https?:\/\/[^\s]+)/g;
+
 export default function ArticlePage({ params }: Props) {
   const article = getArticleBySlug(params.slug);
 
@@ -105,6 +108,47 @@ export default function ArticlePage({ params }: Props) {
     .slice(0, 3);
   
   const contentBlocks = article.content.split('\n').map(paragraph => paragraph.trim()).filter(p => p.length > 0);
+
+  const renderContentBlock = (block: string, index: number) => {
+    if (block.startsWith('### ')) {
+      return <h3 key={index} className="text-2xl font-bold mt-6 mb-3 text-green-600">{block.replace('### ', '')}</h3>;
+    }
+    if (block.startsWith('**') && block.endsWith('**')) {
+      return <p key={index} className="font-bold">{block.slice(2, -2)}</p>;
+    }
+    if (/^\d+\./.test(block)) {
+      const listItems = block.split('\n').filter(i => i.trim()).map(item => item.trim().replace(/^\d+\.\s*/, ''));
+      return (
+        <ol key={index} className="list-decimal pr-5 space-y-2 mb-4">
+          {listItems.map((item, i) => <li key={i}>{item}</li>)}
+        </ol>
+      );
+    }
+    if (/^-/.test(block) || /^\*/.test(block)) {
+      const listItems = block.split('\n').filter(i => i.trim()).map(item => item.trim().replace(/^[-*]\s*/, ''));
+      return (
+        <ul key={index} className="list-disc pr-5 space-y-2 mb-4">
+          {listItems.map((item, i) => <li key={i}>{item}</li>)}
+        </ul>
+      );
+    }
+    
+    const parts = block.split(urlRegex);
+    
+    return (
+      <p key={index} className="mb-4">
+        {parts.map((part, i) =>
+          urlRegex.test(part) ? (
+            <Link key={i} href={part} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline break-words">
+              {part}
+            </Link>
+          ) : (
+            part
+          )
+        )}
+      </p>
+    );
+  };
 
   return (
     <>
@@ -140,31 +184,7 @@ export default function ArticlePage({ params }: Props) {
               </div>
 
               <div className="prose prose-lg dark:prose-invert max-w-none prose-p:leading-relaxed prose-headings:text-green-600 prose-a:text-primary">
-                {contentBlocks.map((block, index) => {
-                    if (block.startsWith('### ')) {
-                        return <h3 key={index} className="text-2xl font-bold mt-6 mb-3 text-green-600">{block.replace('### ', '')}</h3>;
-                    }
-                    if (block.startsWith('**') && block.endsWith('**')) {
-                        return <p key={index} className="font-bold">{block.slice(2, -2)}</p>;
-                    }
-                     if (/^\d+\./.test(block)) {
-                        const listItems = block.split('\n').filter(i => i.trim()).map(item => item.trim().replace(/^\d+\.\s*/, ''));
-                        return (
-                          <ol key={index} className="list-decimal pr-5 space-y-2 mb-4">
-                            {listItems.map((item, i) => <li key={i}>{item}</li>)}
-                          </ol>
-                        );
-                    }
-                    if (/^-/.test(block) || /^\*/.test(block)) {
-                       const listItems = block.split('\n').filter(i => i.trim()).map(item => item.trim().replace(/^[-*]\s*/, ''));
-                        return (
-                            <ul key={index} className="list-disc pr-5 space-y-2 mb-4">
-                                {listItems.map((item, i) => <li key={i}>{item}</li>)}
-                            </ul>
-                        );
-                    }
-                    return <p key={index} className="mb-4">{block}</p>;
-                })}
+                {contentBlocks.map((block, index) => renderContentBlock(block, index))}
               </div>
             </CardContent>
           </Card>
