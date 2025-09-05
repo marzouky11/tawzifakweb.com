@@ -18,7 +18,7 @@ export default function TermsOfServicePage() {
         title="شروط الاستخدام"
         description="يرجى قراءة شروط وأحكام استخدام منصتنا بعناية قبل البدء."
       />
-      <div className="container mx-auto max-w-3xl px-4 pb-8">
+      <div className="container mx-auto max-w-5xl px-4 pb-8">
         <Card>
           <CardHeader>
             <h1 className="text-2xl font-semibold leading-none tracking-tight flex items-center gap-2 text-red-600 md:text-3xl">
