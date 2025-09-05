@@ -47,13 +47,18 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
     : new Date();
 
   // Construct structured data description from specific fields
-  const structuredDataParts = [];
-  if (job.city && job.country) structuredDataParts.push(`الموقع: ${job.city}, ${job.country}`);
-  if (job.salary) structuredDataParts.push(`الراتب: ${job.salary}`);
-  if (job.conditions) structuredDataParts.push(`الشروط: ${job.conditions}`);
-  if (job.qualifications) structuredDataParts.push(`المؤهلات: ${job.qualifications}`);
-  if (job.experience) structuredDataParts.push(`الخبرة: ${job.experience}`);
-  const structuredDataDescription = structuredDataParts.length > 0 ? structuredDataParts.join('\n') : (job.description || `${jobTitle} في ${jobCity}, ${jobCountry}.`);
+  let structuredDataDescription = '';
+  if (job.description) {
+      structuredDataDescription = job.description;
+  } else {
+      const structuredDataParts = [];
+      if (job.city && job.country) structuredDataParts.push(`الموقع: ${job.city}, ${job.country}`);
+      if (job.salary) structuredDataParts.push(`الراتب: ${job.salary}`);
+      if (job.conditions) structuredDataParts.push(`الشروط: ${job.conditions}`);
+      if (job.qualifications) structuredDataParts.push(`المؤهلات: ${job.qualifications}`);
+      if (job.experience) structuredDataParts.push(`الخبرة: ${job.experience}`);
+      structuredDataDescription = structuredDataParts.length > 0 ? structuredDataParts.join('\n') : `${jobTitle} في ${jobCity}, ${jobCountry}.`;
+  }
 
 
   const jobPostingJsonLd: any = {

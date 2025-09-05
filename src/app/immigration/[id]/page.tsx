@@ -40,13 +40,19 @@ export async function generateMetadata({ params }: ImmigrationDetailPageProps): 
   const createdAtDate = post.createdAt?.toDate ? post.createdAt.toDate() : new Date();
 
   // Construct structured data description from specific fields
-  const structuredDataParts = [];
-  if (post.targetCountry) structuredDataParts.push(`الموقع: ${post.city ? `${post.city}, ` : ''}${post.targetCountry}`);
-  if (post.salary) structuredDataParts.push(`الراتب: ${post.salary}`);
-  if (post.requirements) structuredDataParts.push(`الشروط: ${post.requirements}`);
-  if (post.qualifications) structuredDataParts.push(`المؤهلات: ${post.qualifications}`);
-  if (post.experience) structuredDataParts.push(`الخبرة: ${post.experience}`);
-  const structuredDataDescription = structuredDataParts.length > 0 ? structuredDataParts.join('\n') : (post.description || `فرصة هجرة إلى ${post.targetCountry} في مجال ${programDetails.label}`);
+  let structuredDataDescription = '';
+  if (post.description) {
+      structuredDataDescription = post.description;
+  } else {
+      const structuredDataParts = [];
+      if (post.targetCountry) structuredDataParts.push(`الموقع: ${post.city ? `${post.city}, ` : ''}${post.targetCountry}`);
+      if (post.salary) structuredDataParts.push(`الراتب: ${post.salary}`);
+      if (post.requirements) structuredDataParts.push(`الشروط: ${post.requirements}`);
+      if (post.qualifications) structuredDataParts.push(`المؤهلات: ${post.qualifications}`);
+      if (post.experience) structuredDataParts.push(`الخبرة: ${post.experience}`);
+      structuredDataDescription = structuredDataParts.length > 0 ? structuredDataParts.join('\n') : `فرصة هجرة إلى ${post.targetCountry} في مجال ${programDetails.label}`;
+  }
+
 
   const jobPostingJsonLd = {
     '@context': 'https://schema.org',
