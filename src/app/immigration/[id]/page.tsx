@@ -111,7 +111,7 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
         notFound();
     }
     
-    const similarPosts = await getImmigrationPosts({ count: 4, excludeId: post.id });
+    const similarPosts = await getImmigrationPosts({ count: 2, excludeId: post.id });
     
     return (
         <>

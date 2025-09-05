@@ -104,7 +104,7 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
         notFound();
     }
     
-    const similarCompetitions = await getCompetitions({ count: 4, excludeId: competition.id });
+    const similarCompetitions = await getCompetitions({ count: 2, excludeId: competition.id });
 
     return (
         <>
