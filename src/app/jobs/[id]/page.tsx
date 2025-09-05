@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
   const baseUrl = 'https://www.tawzifak.com';
   const siteThumbnail = 'https://i.postimg.cc/MH0BfvFB/og-image.jpg';
   
-  if (!job || job.postType !== 'seeking_worker') {
+  if (!job) {
     return {
       title: 'الإعلان غير موجود',
       description: 'لم نتمكن من العثور على الإعلان الذي تبحث عنه.',

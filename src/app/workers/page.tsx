@@ -14,6 +14,7 @@ export const revalidate = 3600; // Revalidate every hour
 
 export const metadata: Metadata = {
   title: 'باحثون عن عمل',
+  description: 'تصفح ملفات المرشحين والمهنيين المستعدين للانضمام إلى فريقك في مختلف التخصصات والمجالات.',
   robots: {
     index: false,
     follow: false,
