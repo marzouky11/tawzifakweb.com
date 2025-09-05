@@ -118,10 +118,10 @@ export function WorkerMobileDetails({ job, similarJobs }: WorkerMobileDetailsPro
                             </h1>
                         </div>
                         <div className="flex flex-wrap items-center gap-4 text-muted-foreground mt-2 text-sm">
-                            <Link href={`/user/${job.userId}`} className="flex items-center gap-1.5 hover:text-primary">
+                            <div className="flex items-center gap-1.5">
                                 <UserIcon className="h-4 w-4" />
                                 <span className="font-medium">{job.ownerName}</span>
-                            </Link>
+                            </div>
                             <div className="flex items-center gap-1.5">
                                 <CalendarDays className="h-4 w-4" />
                                 <span>نُشر: {job.postedAt}</span>
