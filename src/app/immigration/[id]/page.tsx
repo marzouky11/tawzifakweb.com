@@ -37,6 +37,43 @@ export async function generateMetadata({ params }: ImmigrationDetailPageProps): 
   const metaTitle = post.title;
   const metaDescription = (post.description || post.requirements || `فرصة هجرة إلى ${post.targetCountry} في مجال ${programDetails.label}`).substring(0, 160);
   const canonicalUrl = `${baseUrl}/immigration/${post.id}`;
+  const createdAtDate = post.createdAt?.toDate ? post.createdAt.toDate() : new Date();
+
+  const jobPostingJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'JobPosting',
+    title: metaTitle,
+    description: metaDescription,
+    datePosted: createdAtDate.toISOString(),
+    hiringOrganization: {
+      '@type': 'Organization',
+      name: 'توظيفك',
+      sameAs: baseUrl,
+    },
+    jobLocation: {
+      '@type': 'Place',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: post.city || post.targetCountry,
+        addressCountry: post.targetCountry,
+      },
+    },
+    employmentType: 'OTHER',
+    ...(post.salary && { 
+        baseSalary: {
+            '@type': 'MonetaryAmount',
+            currency: 'USD', // Assuming USD, can be adapted
+            value: {
+                '@type': 'QuantitativeValue',
+                value: parseFloat(post.salary.replace(/[^0-9.]/g, '')) || 0,
+                unitText: 'MONTH'
+            }
+        },
+        description: `الراتب: ${post.salary}`
+    }),
+    ...(post.deadline && { validThrough: post.deadline }),
+  };
+
 
   return {
     title: metaTitle,
@@ -51,7 +88,7 @@ export async function generateMetadata({ params }: ImmigrationDetailPageProps): 
         url: canonicalUrl,
         siteName: 'توظيفك',
         type: 'article',
-        publishedTime: post.postedAt,
+        publishedTime: createdAtDate.toISOString(),
         images: [ { url: siteThumbnail, width: 1200, height: 630, alt: metaTitle } ],
     },
     twitter: {
@@ -60,6 +97,9 @@ export async function generateMetadata({ params }: ImmigrationDetailPageProps): 
         description: metaDescription,
         images: [siteThumbnail],
     },
+    other: {
+        'application/ld+json': JSON.stringify(jobPostingJsonLd, null, 2)
+    }
   };
 }
 
