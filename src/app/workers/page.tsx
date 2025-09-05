@@ -1,6 +1,5 @@
 
 
-
 import type { Metadata } from 'next';
 import { JobCard } from '@/components/job-card';
 import { getJobs } from '@/lib/data';
