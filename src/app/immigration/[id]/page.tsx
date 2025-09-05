@@ -55,6 +55,10 @@ export async function generateMetadata({ params }: ImmigrationDetailPageProps): 
   if(post.programType) {
     jobPostingJsonLd.employmentType = programDetails.label;
   }
+  
+  if (post.positionsAvailable) {
+    jobPostingJsonLd.totalJobOpenings = post.positionsAvailable;
+  }
 
   if (post.salary) {
       const salaryValue = parseFloat(post.salary.replace(/[^0-9.]/g, '')) || 0;

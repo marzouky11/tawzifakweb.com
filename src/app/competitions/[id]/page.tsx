@@ -49,6 +49,10 @@ export async function generateMetadata({ params }: CompetitionDetailPageProps): 
   if (competition.competitionType) {
     jobPostingJsonLd.employmentType = competition.competitionType;
   }
+  
+  if (competition.positionsAvailable) {
+    jobPostingJsonLd.totalJobOpenings = competition.positionsAvailable;
+  }
 
   if (competition.location) {
     jobPostingJsonLd.jobLocation = {
