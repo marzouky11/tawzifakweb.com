@@ -40,8 +40,7 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
   const jobCity = job.city || 'مدينة غير محددة';
   const jobCountry = job.country || 'دولة غير محددة';
 
-  const metaDescription = (job.description || `إعلان عن ${jobTitle} في ${jobCity}, ${jobCountry}.`).substring(0, 160);
-  const jsonLdDescription = job.description || `إعلان عن ${jobTitle} في ${jobCity}, ${jobCountry}.`;
+  const metaDescription = (job.description || `${jobTitle} في ${jobCity}, ${jobCountry}.`).substring(0, 160);
 
   const createdAtDate = (job.createdAt && typeof job.createdAt.toDate === 'function') 
     ? job.createdAt.toDate() 
@@ -51,7 +50,7 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
       '@context': 'https://schema.org',
       '@type': 'JobPosting',
       title: jobTitle,
-      description: jsonLdDescription,
+      description: job.description || `${jobTitle} في ${jobCity}, ${jobCountry}.`,
       datePosted: createdAtDate.toISOString(),
       employmentType: job.workType ? employmentTypeMapping[job.workType] : 'OTHER',
       hiringOrganization: {

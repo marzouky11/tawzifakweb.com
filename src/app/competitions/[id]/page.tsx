@@ -30,8 +30,7 @@ export async function generateMetadata({ params }: CompetitionDetailPageProps): 
   }
 
   const metaTitle = competition.title || 'مباراة عمومية';
-  const metaDescription = (competition.description || `مباراة منظمة من طرف ${competition.organizer} لـ ${competition.positionsAvailable} منصب.`).substring(0, 160);
-  const jsonLdDescription = competition.description || `مباراة منظمة من طرف ${competition.organizer} لـ ${competition.positionsAvailable} منصب.`;
+  const metaDescription = (competition.description || `مباراة منظمة من طرف ${competition.organizer}.`).substring(0, 160);
   const canonicalUrl = `${baseUrl}/competitions/${competition.id}`;
 
   const createdAtDate = competition.createdAt && typeof competition.createdAt.toDate === 'function' 
@@ -45,7 +44,7 @@ export async function generateMetadata({ params }: CompetitionDetailPageProps): 
       '@context': 'https://schema.org',
       '@type': 'JobPosting',
       title: metaTitle,
-      description: jsonLdDescription,
+      description: competition.description || `مباراة منظمة من طرف ${competition.organizer} لـ ${competition.positionsAvailable || 'مناصب متعددة'}.`,
       datePosted: createdAtDate.toISOString(),
       hiringOrganization: {
         '@type': 'Organization',

@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: ImmigrationDetailPageProps): 
 
   const programDetails = getProgramTypeDetails(post.programType);
   const metaTitle = post.title;
-  const metaDescription = (post.description || post.requirements || `فرصة هجرة إلى ${post.targetCountry} في مجال ${programDetails.label}`).substring(0, 160);
+  const metaDescription = (post.description || `فرصة هجرة إلى ${post.targetCountry} في مجال ${programDetails.label}`).substring(0, 160);
   const canonicalUrl = `${baseUrl}/immigration/${post.id}`;
   const createdAtDate = post.createdAt?.toDate ? post.createdAt.toDate() : new Date();
 
@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: ImmigrationDetailPageProps): 
     '@context': 'https://schema.org',
     '@type': 'JobPosting',
     title: metaTitle,
-    description: metaDescription,
+    description: post.description || `فرصة هجرة إلى ${post.targetCountry} في مجال ${programDetails.label}`,
     datePosted: createdAtDate.toISOString(),
     hiringOrganization: {
       '@type': 'Organization',
