@@ -7,7 +7,6 @@ function generateSitemapIndex() {
         'sitemaps/home.xml',
         'sitemaps/static.xml',
         'sitemaps/jobs.xml',
-        'sitemaps/workers.xml',
         'sitemaps/articles.xml',
         'sitemaps/competitions.xml',
         'sitemaps/immigration.xml',
