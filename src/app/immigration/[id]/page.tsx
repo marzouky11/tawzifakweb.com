@@ -39,55 +39,86 @@ export async function generateMetadata({ params }: ImmigrationDetailPageProps): 
   const canonicalUrl = `${baseUrl}/immigration/${post.id}`;
   const createdAtDate = post.createdAt?.toDate ? post.createdAt.toDate() : new Date();
 
-  // Construct structured data description from specific fields
-  let structuredDataDescription = '';
-  if (post.description) {
-      structuredDataDescription = post.description;
-  } else {
-      const structuredDataParts = [];
-      if (post.targetCountry) structuredDataParts.push(`الموقع: ${post.city ? `${post.city}, ` : ''}${post.targetCountry}`);
-      if (post.salary) structuredDataParts.push(`الراتب: ${post.salary}`);
-      if (post.requirements) structuredDataParts.push(`الشروط: ${post.requirements}`);
-      if (post.qualifications) structuredDataParts.push(`المؤهلات: ${post.qualifications}`);
-      if (post.experience) structuredDataParts.push(`الخبرة: ${post.experience}`);
-      structuredDataDescription = structuredDataParts.length > 0 ? structuredDataParts.join('\n') : `فرصة هجرة إلى ${post.targetCountry} في مجال ${programDetails.label}`;
-  }
-
-
-  const jobPostingJsonLd = {
+  // Structured Data
+  const jobPostingJsonLd: any = {
     '@context': 'https://schema.org',
     '@type': 'JobPosting',
     title: metaTitle,
-    description: structuredDataDescription,
-    datePosted: createdAtDate.toISOString(),
     hiringOrganization: {
       '@type': 'Organization',
       name: 'توظيفك',
       sameAs: baseUrl,
     },
-    jobLocation: {
-      '@type': 'Place',
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: post.city || post.targetCountry,
-        addressCountry: post.targetCountry,
-      },
-    },
-    employmentType: 'OTHER',
-    ...(post.salary && { 
-        baseSalary: {
-            '@type': 'MonetaryAmount',
-            currency: 'USD', // Assuming USD, can be adapted
-            value: {
-                '@type': 'QuantitativeValue',
-                value: parseFloat(post.salary.replace(/[^0-9.]/g, '')) || 0,
-                unitText: 'MONTH'
-            }
-        },
-    }),
-    ...(post.deadline && { validThrough: post.deadline }),
+    datePosted: createdAtDate.toISOString(),
   };
 
+  if(post.programType) {
+    jobPostingJsonLd.employmentType = programDetails.label;
+  }
+
+  if (post.salary) {
+      const salaryValue = parseFloat(post.salary.replace(/[^0-9.]/g, '')) || 0;
+      jobPostingJsonLd.baseSalary = {
+          '@type': 'MonetaryAmount',
+          currency: 'USD',
+          value: {
+              '@type': 'QuantitativeValue',
+              value: salaryValue,
+              unitText: 'MONTH'
+          }
+      };
+  }
+  
+  if (post.targetCountry || post.city) {
+    jobPostingJsonLd.jobLocation = {
+        '@type': 'Place',
+        address: {
+            '@type': 'PostalAddress',
+            ...(post.targetCountry && { addressCountry: post.targetCountry }),
+            ...(post.city && { addressLocality: post.city }),
+        },
+    };
+  }
+
+  if (post.description) {
+    jobPostingJsonLd.description = post.description;
+  }
+
+  if (post.requirements) {
+    jobPostingJsonLd.qualifications = post.requirements;
+  }
+
+  if (post.qualifications) {
+    jobPostingJsonLd.educationRequirements = post.qualifications;
+  }
+
+  if (post.experience) {
+    jobPostingJsonLd.experienceRequirements = post.experience;
+  }
+  
+  if (post.tasks) {
+      jobPostingJsonLd.responsibilities = post.tasks;
+  }
+  
+  if (post.featuresAndOpportunities) {
+      jobPostingJsonLd.jobBenefits = post.featuresAndOpportunities;
+  }
+  
+  if (post.howToApply) {
+      jobPostingJsonLd.applicationInstructions = post.howToApply;
+  }
+
+  if (post.applyUrl) {
+    jobPostingJsonLd.directApply = true;
+  }
+  
+  const expiryDate = post.deadline ? new Date(post.deadline) : new Date(createdAtDate);
+  if (!post.deadline) {
+      expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+  }
+  if (!isNaN(expiryDate.getTime())) {
+      jobPostingJsonLd.validThrough = expiryDate.toISOString();
+  }
 
   return {
     title: metaTitle,

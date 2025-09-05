@@ -32,54 +32,74 @@ export async function generateMetadata({ params }: CompetitionDetailPageProps): 
   const metaTitle = competition.title || 'مباراة عمومية';
   const metaDescription = (competition.description || `مباراة منظمة من طرف ${competition.organizer}.`).substring(0, 160);
   const canonicalUrl = `${baseUrl}/competitions/${competition.id}`;
+  const createdAtDate = competition.createdAt?.toDate ? competition.createdAt.toDate() : new Date();
 
-  const createdAtDate = competition.createdAt && typeof competition.createdAt.toDate === 'function' 
-    ? competition.createdAt.toDate() 
-    : new Date();
-
-  const deadlineDate = competition.deadline ? new Date(competition.deadline.split(' ')[0]) : null;
-  const validDeadline = deadlineDate && !isNaN(deadlineDate.getTime());
-
-  // Construct structured data description from specific fields
-  let structuredDataDescription = '';
-  if (competition.description) {
-      structuredDataDescription = competition.description;
-  } else {
-      const structuredDataParts = [];
-      if (competition.location) structuredDataParts.push(`الموقع: ${competition.location}`);
-      if (competition.requirements) structuredDataParts.push(`الشروط: ${competition.requirements}`);
-      if (competition.documentsNeeded) structuredDataParts.push(`الوثائق المطلوبة: ${competition.documentsNeeded}`);
-      structuredDataDescription = structuredDataParts.length > 0 ? structuredDataParts.join('\n') : `مباراة منظمة من طرف ${competition.organizer} لـ ${competition.positionsAvailable || 'مناصب متعددة'}.`;
-  }
-
-
+  // Structured Data
   const jobPostingJsonLd: any = {
       '@context': 'https://schema.org',
       '@type': 'JobPosting',
       title: metaTitle,
-      description: structuredDataDescription,
-      datePosted: createdAtDate.toISOString(),
       hiringOrganization: {
         '@type': 'Organization',
         name: competition.organizer,
-        sameAs: baseUrl,
-        logo: siteThumbnail,
       },
-      jobLocation: {
-        '@type': 'Place',
-        address: {
-          '@type': 'PostalAddress',
-          addressLocality: competition.location || 'غير محدد',
-          addressCountry: 'MA',
-        },
-      },
+      datePosted: createdAtDate.toISOString(),
   };
 
-  if (competition.positionsAvailable) {
-      jobPostingJsonLd.totalJobOpenings = String(competition.positionsAvailable);
+  if (competition.competitionType) {
+    jobPostingJsonLd.employmentType = competition.competitionType;
   }
-  if (validDeadline) {
-      jobPostingJsonLd.validThrough = deadlineDate.toISOString();
+
+  if (competition.location) {
+    jobPostingJsonLd.jobLocation = {
+      '@type': 'Place',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: competition.location,
+        addressCountry: 'MA', // Assuming Morocco for now
+      },
+    };
+  }
+  
+  if (competition.description) {
+    jobPostingJsonLd.description = competition.description;
+  }
+  
+  if (competition.requirements) {
+    jobPostingJsonLd.qualifications = competition.requirements;
+  }
+  
+  if (competition.documentsNeeded) {
+    jobPostingJsonLd.educationRequirements = competition.documentsNeeded;
+  }
+  
+  if (competition.jobProspects) {
+      jobPostingJsonLd.experienceRequirements = competition.jobProspects;
+  }
+
+  if(competition.competitionStages) {
+      jobPostingJsonLd.responsibilities = competition.competitionStages;
+  }
+
+  if (competition.trainingFeatures) {
+      jobPostingJsonLd.jobBenefits = competition.trainingFeatures;
+  }
+
+  if (competition.howToApply) {
+    jobPostingJsonLd.applicationInstructions = competition.howToApply;
+  }
+  
+  if (competition.officialLink) {
+    jobPostingJsonLd.directApply = true;
+  }
+
+  if (competition.deadline) {
+    try {
+        const deadlineDate = new Date(competition.deadline.split(' ')[0]);
+        if (!isNaN(deadlineDate.getTime())) {
+            jobPostingJsonLd.validThrough = deadlineDate.toISOString();
+        }
+    } catch(e) { /* ignore date parsing errors */ }
   }
 
 

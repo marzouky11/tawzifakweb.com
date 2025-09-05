@@ -9,6 +9,7 @@ import { Briefcase } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { JobDesktopDetails } from './job-desktop-details';
 import { JobMobileDetails } from './job-mobile-details';
+import type { WorkType } from '@/lib/types';
 
 
 interface JobDetailPageProps {
@@ -29,7 +30,7 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
     };
   }
   
-  const employmentTypeMapping: {[key: string]: string} = {
+  const employmentTypeMapping: { [key in WorkType]: string } = {
     'full_time': 'FULL_TIME',
     'part_time': 'PART_TIME',
     'freelance': 'CONTRACTOR',
@@ -39,62 +40,92 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
   const jobTitle = job.title || 'إعلان وظيفة';
   const jobCity = job.city || 'مدينة غير محددة';
   const jobCountry = job.country || 'دولة غير محددة';
-
   const metaDescription = (job.description || `${jobTitle} في ${jobCity}, ${jobCountry}.`).substring(0, 160);
-
   const createdAtDate = (job.createdAt && typeof job.createdAt.toDate === 'function') 
     ? job.createdAt.toDate() 
     : new Date();
 
-  // Construct structured data description from specific fields
-  let structuredDataDescription = '';
-  if (job.description) {
-      structuredDataDescription = job.description;
-  } else {
-      const structuredDataParts = [];
-      if (job.city && job.country) structuredDataParts.push(`الموقع: ${job.city}, ${job.country}`);
-      if (job.salary) structuredDataParts.push(`الراتب: ${job.salary}`);
-      if (job.conditions) structuredDataParts.push(`الشروط: ${job.conditions}`);
-      if (job.qualifications) structuredDataParts.push(`المؤهلات: ${job.qualifications}`);
-      if (job.experience) structuredDataParts.push(`الخبرة: ${job.experience}`);
-      structuredDataDescription = structuredDataParts.length > 0 ? structuredDataParts.join('\n') : `${jobTitle} في ${jobCity}, ${jobCountry}.`;
-  }
+  const expiryDate = new Date(createdAtDate);
+  expiryDate.setFullYear(expiryDate.getFullYear() + 1);
 
-
+  // Construct structured data
   const jobPostingJsonLd: any = {
       '@context': 'https://schema.org',
       '@type': 'JobPosting',
       title: jobTitle,
-      description: structuredDataDescription,
       datePosted: createdAtDate.toISOString(),
-      employmentType: job.workType ? employmentTypeMapping[job.workType] : 'OTHER',
+      validThrough: expiryDate.toISOString(),
       hiringOrganization: {
         '@type': 'Organization',
-        name: job.companyName || 'توظيفك',
+        name: job.companyName || 'شركة غير محددة',
         sameAs: baseUrl,
-        logo: siteThumbnail,
       },
-      jobLocation: {
+  };
+
+  if(job.workType) {
+    jobPostingJsonLd.employmentType = employmentTypeMapping[job.workType];
+  }
+
+  if (job.salary) {
+    const salaryValue = parseFloat(job.salary.replace(/[^0-9.]/g, '')) || 0;
+    jobPostingJsonLd.baseSalary = {
+      '@type': 'MonetaryAmount',
+      currency: 'SAR', // Default currency
+      value: {
+        '@type': 'QuantitativeValue',
+        value: salaryValue,
+        unitText: 'MONTH', // Default unit
+      },
+    };
+  }
+
+  if (job.country || job.city) {
+    jobPostingJsonLd.jobLocation = {
         '@type': 'Place',
         address: {
-          '@type': 'PostalAddress',
-          addressLocality: jobCity,
-          addressCountry: jobCountry,
+            '@type': 'PostalAddress',
+            ...(job.country && { addressCountry: job.country }),
+            ...(job.city && { addressLocality: job.city }),
         },
-      },
-      ...(job.workType === 'remote' && { jobLocationType: 'TELECOMMUTE' }),
-      ...(job.salary && { 
-        baseSalary: {
-            '@type': 'MonetaryAmount',
-            currency: 'SAR', // Assuming SAR, can be adapted based on country
-            value: {
-                '@type': 'QuantitativeValue',
-                value: parseFloat(job.salary.replace(/[^0-9.]/g, '')) || 0,
-                unitText: 'MONTH' // Assuming monthly salary
-            }
-        },
-      }),
-  };
+    };
+  }
+  
+  if (job.workType === 'remote') {
+      jobPostingJsonLd.jobLocationType = 'TELECOMMUTE';
+  }
+
+  if (job.description) {
+      jobPostingJsonLd.description = job.description;
+  }
+  
+  if (job.conditions) {
+      jobPostingJsonLd.qualifications = job.conditions;
+  }
+  
+  if (job.qualifications) {
+      jobPostingJsonLd.educationRequirements = job.qualifications;
+  }
+  
+  if (job.experience) {
+      jobPostingJsonLd.experienceRequirements = job.experience;
+  }
+  
+  if (job.tasks) {
+      jobPostingJsonLd.responsibilities = job.tasks;
+  }
+
+  if (job.featuresAndOpportunities) {
+      jobPostingJsonLd.jobBenefits = job.featuresAndOpportunities;
+  }
+
+  if (job.howToApply) {
+      jobPostingJsonLd.applicationInstructions = job.howToApply;
+  }
+
+  if (job.applyUrl) {
+    jobPostingJsonLd.directApply = true;
+  }
+
 
   const canonicalUrl = `${baseUrl}/jobs/${job.id}`;
 
@@ -111,14 +142,7 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
         url: canonicalUrl,
         siteName: 'توظيفك',
         type: 'article',
-        images: [
-            {
-                url: siteThumbnail,
-                width: 1200,
-                height: 630,
-                alt: jobTitle,
-            },
-        ],
+        images: [{ url: siteThumbnail, width: 1200, height: 630, alt: jobTitle }],
     },
     twitter: {
         card: 'summary_large_image',
