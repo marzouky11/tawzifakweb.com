@@ -39,11 +39,18 @@ export async function generateMetadata({ params }: ImmigrationDetailPageProps): 
   const canonicalUrl = `${baseUrl}/immigration/${post.id}`;
   const createdAtDate = post.createdAt?.toDate ? post.createdAt.toDate() : new Date();
 
+  // Construct structured data description from specific fields
+  const structuredDataParts = [];
+  if (post.requirements) structuredDataParts.push(`الشروط: ${post.requirements}`);
+  if (post.qualifications) structuredDataParts.push(`المؤهلات: ${post.qualifications}`);
+  if (post.experience) structuredDataParts.push(`الخبرة: ${post.experience}`);
+  const structuredDataDescription = structuredDataParts.length > 0 ? structuredDataParts.join('\n') : (post.description || `فرصة هجرة إلى ${post.targetCountry} في مجال ${programDetails.label}`);
+
   const jobPostingJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'JobPosting',
     title: metaTitle,
-    description: post.description || `فرصة هجرة إلى ${post.targetCountry} في مجال ${programDetails.label}`,
+    description: structuredDataDescription,
     datePosted: createdAtDate.toISOString(),
     hiringOrganization: {
       '@type': 'Organization',

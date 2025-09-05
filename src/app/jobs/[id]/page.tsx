@@ -46,11 +46,19 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
     ? job.createdAt.toDate() 
     : new Date();
 
+  // Construct structured data description from specific fields
+  const structuredDataParts = [];
+  if (job.qualifications) structuredDataParts.push(`المؤهلات: ${job.qualifications}`);
+  if (job.experience) structuredDataParts.push(`الخبرة: ${job.experience}`);
+  if (job.conditions) structuredDataParts.push(`الشروط: ${job.conditions}`);
+  const structuredDataDescription = structuredDataParts.length > 0 ? structuredDataParts.join('\n') : (job.description || `${jobTitle} في ${jobCity}, ${jobCountry}.`);
+
+
   const jobPostingJsonLd: any = {
       '@context': 'https://schema.org',
       '@type': 'JobPosting',
       title: jobTitle,
-      description: job.description || `${jobTitle} في ${jobCity}, ${jobCountry}.`,
+      description: structuredDataDescription,
       datePosted: createdAtDate.toISOString(),
       employmentType: job.workType ? employmentTypeMapping[job.workType] : 'OTHER',
       hiringOrganization: {

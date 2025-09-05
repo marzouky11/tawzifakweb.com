@@ -40,11 +40,18 @@ export async function generateMetadata({ params }: CompetitionDetailPageProps): 
   const deadlineDate = competition.deadline ? new Date(competition.deadline.split(' ')[0]) : null;
   const validDeadline = deadlineDate && !isNaN(deadlineDate.getTime());
 
+  // Construct structured data description from specific fields
+  const structuredDataParts = [];
+  if (competition.requirements) structuredDataParts.push(`الشروط: ${competition.requirements}`);
+  if (competition.documentsNeeded) structuredDataParts.push(`الوثائق المطلوبة: ${competition.documentsNeeded}`);
+  const structuredDataDescription = structuredDataParts.length > 0 ? structuredDataParts.join('\n') : (competition.description || `مباراة منظمة من طرف ${competition.organizer} لـ ${competition.positionsAvailable || 'مناصب متعددة'}.`);
+
+
   const jobPostingJsonLd: any = {
       '@context': 'https://schema.org',
       '@type': 'JobPosting',
       title: metaTitle,
-      description: competition.description || `مباراة منظمة من طرف ${competition.organizer} لـ ${competition.positionsAvailable || 'مناصب متعددة'}.`,
+      description: structuredDataDescription,
       datePosted: createdAtDate.toISOString(),
       hiringOrganization: {
         '@type': 'Organization',
