@@ -2,7 +2,7 @@
 
 const cspHeader = `
     default-src 'self';
-    script-src 'self' https://www.googletagmanager.com https://www.google.com https://www.gstatic.com;
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google.com https://www.gstatic.com;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     img-src 'self' blob: data: https://placehold.co https://i.postimg.cc https://i.ibb.co https://lh3.googleusercontent.com https://picsum.photos;
     font-src 'self' https://fonts.gstatic.com;
@@ -38,17 +38,17 @@ const nextConfig = {
         pathname: '/**',
       },
       {
-          protocol: 'https',
-          hostname: 'lh3.googleusercontent.com',
-          port: '',
-          pathname: '/**',
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        port: '',
+        pathname: '/**',
       },
       {
-          protocol: 'https',
-          hostname: 'picsum.photos',
-          port: '',
-          pathname: '/**',
-      }
+        protocol: 'https',
+        hostname: 'picsum.photos',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
   async headers() {
@@ -68,14 +68,14 @@ const nextConfig = {
             key: 'X-XSS-Protection',
             value: '1; mode=block',
           },
-           {
+          {
             key: 'Content-Security-Policy',
-            value: cspHeader.replace(/\s{2,}/g, ' ').trim()
-          }
+            value: cspHeader.replace(/\s{2,}/g, ' ').trim(),
+          },
         ],
       },
       {
-         // Cache all static assets in the public folder for 1 year
+        // Cache all static assets in the public folder for 1 year
         source: '/:all*(svg|jpg|jpeg|png|gif|ico|webp|avif|css|js|woff2|woff|ttf|otf)',
         headers: [
           {
@@ -84,7 +84,7 @@ const nextConfig = {
           },
         ],
       },
-    ]
+    ];
   },
 };
 
