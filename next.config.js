@@ -2,9 +2,9 @@
 
 const cspHeader = `
     default-src 'self';
-    script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://www.google.com https://www.gstatic.com;
+    script-src 'self' https://www.googletagmanager.com https://www.google.com https://www.gstatic.com;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-    img-src 'self' blob: data: https://placehold.co https://i.postimg.cc https://i.ibb.co https://lh3.googleusercontent.com;
+    img-src 'self' blob: data: https://placehold.co https://i.postimg.cc https://i.ibb.co https://lh3.googleusercontent.com https://picsum.photos;
     font-src 'self' https://fonts.gstatic.com;
     object-src 'none';
     base-uri 'self';
@@ -40,6 +40,12 @@ const nextConfig = {
       {
           protocol: 'https',
           hostname: 'lh3.googleusercontent.com',
+          port: '',
+          pathname: '/**',
+      },
+      {
+          protocol: 'https',
+          hostname: 'picsum.photos',
           port: '',
           pathname: '/**',
       }
