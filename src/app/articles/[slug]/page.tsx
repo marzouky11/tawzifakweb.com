@@ -103,8 +103,10 @@ export default function ArticlePage({ params }: Props) {
   }
 
   const allArticles = getArticles();
+  // Filter out the current article, shuffle the rest, and take the first 3
   const relatedArticles = allArticles
     .filter(a => a.slug !== article.slug)
+    .sort(() => 0.5 - Math.random())
     .slice(0, 3);
   
   const contentBlocks = article.content.split('\n').map(paragraph => paragraph.trim()).filter(p => p.length > 0);
