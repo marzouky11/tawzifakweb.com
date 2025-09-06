@@ -105,14 +105,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-const renderParagraph = (block: string, key: string | number) => {
-    return (
-        <p key={`p-${key}`} className="mb-4">
-            {block}
-        </p>
-    );
-};
-
 export default async function ArticlePage({ params }: Props) {
   const article = await getArticle(params.slug);
 
@@ -144,14 +136,15 @@ export default async function ArticlePage({ params }: Props) {
                 return <h3 key={`h3-${i}`} className="text-xl font-bold mt-[-0.5rem] mb-4 text-gray-800 dark:text-gray-200">{block.replace('### ', '')}</h3>;
             }
         } else {
-            // Old static articles logic (only ### for green headlines)
+            // Old static articles logic
             if (block.startsWith('### ')) {
                 return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{block.replace('### ', '')}</h2>;
             }
+            // Check for bold text for old article subheadings
             if (block.includes('**')) {
                 const boldParts = block.split('**');
                 return (
-                    <p key={`p-${i}`} className="mb-4 text-xl font-bold text-gray-800 dark:text-gray-200">
+                    <p key={`p-${i}`} className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">
                         {boldParts.map((boldPart, boldIndex) => 
                             boldIndex % 2 !== 0 ? <strong key={boldIndex}>{boldPart}</strong> : boldPart
                         )}
@@ -159,8 +152,12 @@ export default async function ArticlePage({ params }: Props) {
                 )
             }
         }
-        // Common logic for paragraphs and links for both types
-        return renderParagraph(block, i);
+        // Common logic for paragraphs for both types
+        return (
+            <p key={`p-${i}`} className="mb-4">
+                {block}
+            </p>
+        );
     });
   };
 
