@@ -140,12 +140,12 @@ export default async function ArticlePage({ params }: Props) {
             if (block.startsWith('### ')) {
                 return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{block.replace('### ', '')}</h2>;
             }
-             // For old article subheadings
+             // For old article subheadings, make them look like new ones
             if (block.includes('**')) {
                  return (
-                    <p key={`p-${i}`} className="text-xl text-gray-800 dark:text-gray-200 mb-4">
+                    <h3 key={`h3-${i}`} className="text-xl font-bold mt-[-0.5rem] mb-4 text-gray-800 dark:text-gray-200">
                         {block.replace(/\*\*/g, '')}
-                    </p>
+                    </h3>
                 )
             }
         }
