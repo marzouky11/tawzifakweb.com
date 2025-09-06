@@ -181,11 +181,6 @@ export default function SelectPostTypePage() {
                   title="نشر مباراة عمومية"
                   description="هذه الميزة متاحة للمشرفين فقط."
               />
-               <DisabledCard 
-                  icon={Newspaper}
-                  title="نشر مقال"
-                  description="هذه الميزة متاحة للمشرفين فقط."
-              />
             </>
           )}
         </div>
