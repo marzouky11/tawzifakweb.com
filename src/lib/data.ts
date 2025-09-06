@@ -768,13 +768,16 @@ export async function getArticleById(articleId: string): Promise<Article | null>
 
 export async function addArticle(articleData: Omit<Article, 'id' | 'createdAt' | 'postedAt' | 'slug' | 'date'>): Promise<{ id: string }> {
     try {
+        const newSlug = slugify(articleData.title);
         const docRef = await addDoc(collection(db, 'articles'), {
             ...articleData,
-            slug: slugify(articleData.title),
+            slug: newSlug,
             createdAt: serverTimestamp()
         });
+        
         revalidatePath('/articles');
-        revalidatePath(`/articles/${articleData.slug}`);
+        revalidatePath(`/articles/${newSlug}`);
+
         return { id: docRef.id };
     } catch (e) {
         console.error("Error adding article: ", e);
@@ -940,5 +943,6 @@ export async function deleteContactMessage(messageId: string): Promise<void> {
     
 
     
+
 
 
