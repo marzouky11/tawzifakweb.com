@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState } from 'react';
@@ -14,11 +15,9 @@ import type { User, Category } from '@/lib/types';
 import { updateUserProfile } from '@/lib/data';
 import { useAuth } from '@/context/auth-context';
 import { Loader2 } from 'lucide-react';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 const formSchema = z.object({
   name: z.string().min(1, { message: 'الاسم مطلوب.' }),
-  gender: z.enum(['male', 'female']).optional(),
   categoryId: z.string().optional(),
   description: z.string().optional(),
   country: z.string().optional(),
@@ -42,7 +41,6 @@ export function ProfileForm({ categories, user }: ProfileFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: user?.name || '',
-      gender: user?.gender,
       categoryId: user?.categoryId || '',
       description: user?.description || '',
       country: user?.country || '',
@@ -84,41 +82,6 @@ export function ProfileForm({ categories, user }: ProfileFormProps) {
                 <FormMessage />
             </FormItem>
         )} />
-
-        <FormField
-          control={form.control}
-          name="gender"
-          render={({ field }) => (
-            <FormItem className="space-y-3">
-              <FormLabel>الجنس</FormLabel>
-              <FormControl>
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  value={field.value}
-                  className="flex gap-4"
-                >
-                  <FormItem className="flex items-center space-x-2 space-x-reverse">
-                    <FormControl>
-                      <RadioGroupItem value="male" id="male" />
-                    </FormControl>
-                    <FormLabel htmlFor="male" className="font-normal">
-                      ذكر
-                    </FormLabel>
-                  </FormItem>
-                  <FormItem className="flex items-center space-x-2 space-x-reverse">
-                    <FormControl>
-                      <RadioGroupItem value="female" id="female" />
-                    </FormControl>
-                    <FormLabel htmlFor="female" className="font-normal">
-                      أنثى
-                    </FormLabel>
-                  </FormItem>
-                </RadioGroup>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
 
         <FormField control={form.control} name="categoryId" render={({ field }) => (
           <FormItem>
