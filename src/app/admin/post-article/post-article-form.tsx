@@ -17,7 +17,6 @@ import type { Article } from '@/lib/types';
 const formSchema = z.object({
   title: z.string().min(10, 'العنوان يجب أن يكون 10 أحرف على الأقل.'),
   imageUrl: z.string().url('الرجاء إدخال رابط صورة صحيح.'),
-  imageHint: z.string().min(2, "تلميح الصورة مطلوب لوصفها."),
   content: z.string().min(50, 'المحتوى يجب أن يكون 50 حرفًا على الأقل.'),
 });
 
@@ -45,7 +44,6 @@ export function PostArticleForm({ article }: PostArticleFormProps) {
     defaultValues: {
       title: article?.title || '',
       imageUrl: article?.imageUrl || '',
-      imageHint: article?.imageHint || '',
       content: article?.content || '',
     },
   });
@@ -56,7 +54,6 @@ export function PostArticleForm({ article }: PostArticleFormProps) {
       const articleData = {
         title: values.title,
         imageUrl: values.imageUrl,
-        imageHint: values.imageHint,
         content: values.content,
         summary: values.content.substring(0, 150) + '...', // Auto-generate summary
       };
@@ -89,7 +86,6 @@ export function PostArticleForm({ article }: PostArticleFormProps) {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField control={form.control} name="title" render={({ field }) => (<FormItem><FormLabelIcon icon={FileText} label="عنوان المقال" /><FormControl><Input placeholder="اكتب عنوانًا جذابًا للمقال..." {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="imageUrl" render={({ field }) => (<FormItem><FormLabelIcon icon={ImageIcon} label="رابط الصورة الرئيسية" /><FormControl><Input type="url" placeholder="https://example.com/image.jpg" {...field} /></FormControl><FormMessage /></FormItem>)} />
-        <FormField control={form.control} name="imageHint" render={({ field }) => (<FormItem><FormLabelIcon icon={ImageIcon} label="تلميح الصورة (للبحث)" /><FormControl><Input placeholder="مثال: job search" {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="content" render={({ field }) => (
             <FormItem>
                 <FormLabelIcon icon={AlignLeft} label="المحتوى الكامل للمقال" />

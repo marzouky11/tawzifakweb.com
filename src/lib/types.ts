@@ -163,7 +163,6 @@ export interface Article {
     title: string;
     author: string;
     imageUrl: string;
-    imageHint: string;
     summary: string;
     content: string;
     createdAt?: Timestamp; // Optional for static articles
