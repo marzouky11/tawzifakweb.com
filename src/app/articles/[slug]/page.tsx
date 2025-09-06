@@ -106,7 +106,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 
-const urlRegex = /(https?:\/\/[^\s]+)/g;
+const markdownLinkRegex = /\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g;
 
 export default async function ArticlePage({ params }: Props) {
   const article = await getArticle(params.slug);
@@ -137,19 +137,26 @@ export default async function ArticlePage({ params }: Props) {
         } else if (block.startsWith('### ')) {
              renderedElements.push(<h3 key={`h3-${i}`} className="text-xl font-bold mt-[-0.5rem] mb-4 text-gray-800 dark:text-gray-200">{block.replace('### ', '')}</h3>);
         } else {
-            // Handle links within paragraphs
-            const parts = block.split(urlRegex);
+            const parts = block.split(markdownLinkRegex);
             renderedElements.push(
                 <p key={`p-${i}`} className="mb-4">
-                    {parts.map((part, partIndex) =>
-                        urlRegex.test(part) ? (
-                            <Link key={partIndex} href={part} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline break-words">
-                                {part}
-                            </Link>
-                        ) : (
-                            part
-                        )
-                    )}
+                    {parts.map((part, partIndex) => {
+                        // Check if the part is a link text (every 4th element starting from 1)
+                        if ((partIndex - 1) % 3 === 0) {
+                            const url = parts[partIndex + 1];
+                            return (
+                                <Link key={partIndex} href={url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline break-words">
+                                    {part}
+                                </Link>
+                            );
+                        }
+                        // Check if the part is a URL (every 4th element starting from 2)
+                        if ((partIndex - 2) % 3 === 0) {
+                            return null; // Skip the URL part as it's already used by the Link component
+                        }
+                        // Render regular text
+                        return part;
+                    })}
                 </p>
             );
         }
