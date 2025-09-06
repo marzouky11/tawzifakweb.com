@@ -40,7 +40,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
   
-  const articleDate = article.createdAt ? article.createdAt.toDate() : new Date(article.date);
+  const articleDate = article.createdAt 
+    ? article.createdAt.toDate() 
+    : article.date 
+      ? new Date(article.date) 
+      : new Date();
 
   const articleJsonLd = {
       '@context': 'https://schema.org',
@@ -127,28 +131,19 @@ export default async function ArticlePage({ params }: Props) {
 
   const renderContent = () => {
     return contentBlocks.map((block, i) => {
-        if (isDbArticle) {
-            // New articles logic (## and ###)
-            if (block.startsWith('## ')) {
-                return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{block.replace('## ', '')}</h2>;
-            }
-            if (block.startsWith('### ')) {
-                return <h3 key={`h3-${i}`} className="text-base font-bold mt-[-0.5rem] mb-4 text-gray-800 dark:text-gray-200">{block.replace('### ', '')}</h3>;
-            }
-        } else {
-            // Old static articles logic
-            if (block.startsWith('### ')) {
-                return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{block.replace('### ', '')}</h2>;
-            }
-            if (block.includes('**')) {
-                 return (
-                    <h3 key={`h3-${i}`} className="text-base font-bold mt-[-0.5rem] mb-4 text-gray-800 dark:text-gray-200">
-                        {block.replace(/\*\*/g, '')}
-                    </h3>
-                )
-            }
+        if (block.startsWith('## ')) {
+            return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{block.replace('## ', '')}</h2>;
         }
-        // Common logic for paragraphs for both types
+        if (block.startsWith('### ')) {
+            return <h3 key={`h3-${i}`} className="text-base font-bold mt-[-0.5rem] mb-4 text-gray-800 dark:text-gray-200">{block.replace('### ', '')}</h3>;
+        }
+        if (block.startsWith('#### ')) {
+             return (
+                <h3 key={`h3-${i}`} className="text-base font-bold mt-[-0.5rem] mb-4 text-gray-800 dark:text-gray-200">
+                    {block.replace(/\#### /g, '')}
+                </h3>
+            )
+        }
         return (
             <p key={`p-${i}`} className="mb-4">
                 {block}
