@@ -134,12 +134,8 @@ export default async function ArticlePage({ params }: Props) {
         
         if (block.startsWith('### ')) {
             renderedElements.push(<h3 key={`h3-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{block.replace('### ', '')}</h3>);
-            
-            // Check if the next block is a subheading (doesn't start with ### and is not empty)
-            if (i + 1 < contentBlocks.length && !contentBlocks[i + 1].startsWith('### ') && contentBlocks[i+1].trim() !== '') {
-                renderedElements.push(<h4 key={`h4-${i}`} className="text-xl font-bold mt-[-0.5rem] mb-4 text-gray-800 dark:text-gray-200">{contentBlocks[i + 1]}</h4>);
-                i++; // Increment i to skip rendering the subheading as a paragraph
-            }
+        } else if (block.startsWith('#### ')) {
+             renderedElements.push(<h4 key={`h4-${i}`} className="text-xl font-bold mt-[-0.5rem] mb-4 text-gray-800 dark:text-gray-200">{block.replace('#### ', '')}</h4>);
         } else {
             // Handle links within paragraphs
             const parts = block.split(urlRegex);
