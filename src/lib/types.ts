@@ -146,7 +146,7 @@ export interface User {
   whatsapp?: string;
   instagram?: string;
   avatarColor?: string;
-  categoryId?: string;
+  jobTitle?: string;
   description?: string;
   createdAt?: Timestamp;
   isAdmin?: boolean;

@@ -9,7 +9,6 @@ import { useAuth } from '@/context/auth-context';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { User, LogOut, ChevronLeft, Loader2, Settings as SettingsIcon, Newspaper, HelpCircle, Info, Mail, Shield, FileText, Facebook, UserPlus, LogIn as LogInIcon, MessageSquare, Bookmark, Flag } from 'lucide-react';
-import { getCategories } from '@/lib/data';
 import { UserAvatar } from '@/components/user-avatar';
 import { useToast } from '@/hooks/use-toast';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
@@ -84,7 +83,6 @@ const commonLinks = (
 );
 
 function LoggedInView({ userData, onLogout }: { userData: any, onLogout: () => void }) {
-    const categories = getCategories();
     return (
         <div className="space-y-6">
             <Card>
@@ -92,7 +90,7 @@ function LoggedInView({ userData, onLogout }: { userData: any, onLogout: () => v
                     <UserAvatar name={userData.name} color={userData.avatarColor} className="h-16 w-16 text-2xl" />
                     <div>
                         <h2 className="text-xl font-bold">{userData.name || 'مستخدم'}</h2>
-                        <p className="text-sm text-muted-foreground">{categories.find(c => c.id === userData.categoryId)?.name || 'لم تحدد الفئة'}</p>
+                        <p className="text-sm text-muted-foreground">{userData.jobTitle || 'لم تحدد المهنة'}</p>
                     </div>
                 </CardContent>
             </Card>

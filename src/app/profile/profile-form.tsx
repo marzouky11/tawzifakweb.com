@@ -8,7 +8,6 @@ import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from "@/hooks/use-toast"
 import type { User, Category } from '@/lib/types';
@@ -18,7 +17,7 @@ import { Loader2 } from 'lucide-react';
 
 const formSchema = z.object({
   name: z.string().min(1, { message: 'الاسم مطلوب.' }),
-  categoryId: z.string().optional(),
+  jobTitle: z.string().optional(),
   description: z.string().optional(),
   country: z.string().optional(),
   city: z.string().optional(),
@@ -41,7 +40,7 @@ export function ProfileForm({ categories, user }: ProfileFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: user?.name || '',
-      categoryId: user?.categoryId || '',
+      jobTitle: user?.jobTitle || '',
       description: user?.description || '',
       country: user?.country || '',
       city: user?.city || '',
@@ -83,21 +82,12 @@ export function ProfileForm({ categories, user }: ProfileFormProps) {
             </FormItem>
         )} />
 
-        <FormField control={form.control} name="categoryId" render={({ field }) => (
-          <FormItem>
-            <FormLabel>فئة العمل</FormLabel>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
-              <FormControl>
-                <SelectTrigger>
-                  <SelectValue placeholder="اختر فئة عملك الرئيسية" />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent>
-                {categories.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
-              </SelectContent>
-            </Select>
-            <FormMessage />
-          </FormItem>
+        <FormField control={form.control} name="jobTitle" render={({ field }) => (
+            <FormItem>
+                <FormLabel>المهنة</FormLabel>
+                <FormControl><Input placeholder="مثال: مطور ويب، نجار، مصمم جرافيك..." {...field} value={field.value ?? ''} /></FormControl>
+                <FormMessage />
+            </FormItem>
         )} />
 
         <FormField control={form.control} name="description" render={({ field }) => (
