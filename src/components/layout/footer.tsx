@@ -34,7 +34,6 @@ const importantLinks = [
 { label: 'العمال', href: '/workers', icon: Users },
 { label: 'نشر إعلان', href: '/post-job/select-type', icon: PlusCircle },
 { label: 'إنشاء سيرة ذاتية', href: '/cv-builder', icon: FileText },
-{ label: 'الإعدادات', href: '/profile', icon: Settings },
 ];
 
 const guestLinks = [
@@ -80,6 +79,7 @@ const MobileFooter = () => {
           <div className="space-y-1">  
             {!user && guestLinks.map((link) => <FooterLinkItem key={link.href} {...link} />)}
             {importantLinks.map((link) => <FooterLinkItem key={link.href} {...link} />)}  
+            {user && <FooterLinkItem href="/profile" icon={Settings} label="الإعدادات" />}
           </div>  
         </div>
         <Separator />
@@ -106,6 +106,7 @@ const MobileFooter = () => {
 };
 
 const DesktopFooter = () => {
+    const { user } = useAuth();
   return (
     <footer className="hidden md:block bg-card border-t mt-auto pt-12 pb-8">
       <div className="container mx-auto px-4">
@@ -121,13 +122,12 @@ const DesktopFooter = () => {
           <div className="space-y-4">
             <h4 className="font-bold text-lg">روابط مهمة</h4>
             <ul className="space-y-2">
-              <li><Link href="/articles" className="text-sm text-muted-foreground hover:text-primary">مقالات</Link></li>
-              <li><Link href="/jobs" className="text-sm text-muted-foreground hover:text-primary">الوظائف</Link></li>
-              <li><Link href="/immigration" className="text-sm text-muted-foreground hover:text-primary">فرص الهجرة</Link></li>
-              <li><Link href="/competitions" className="text-sm text-muted-foreground hover:text-primary">المباريات العمومية</Link></li>
-              <li><Link href="/workers" className="text-sm text-muted-foreground hover:text-primary">العمال</Link></li>
-              <li><Link href="/post-job/select-type" className="text-sm text-muted-foreground hover:text-primary">نشر إعلان</Link></li>
-              <li><Link href="/cv-builder" className="text-sm text-muted-foreground hover:text-primary">إنشاء سيرة ذاتية</Link></li>
+              {importantLinks.map(link => (
+                 <li key={link.href}><Link href={link.href} className="text-sm text-muted-foreground hover:text-primary">{link.label}</Link></li>
+              ))}
+              {user && (
+                 <li><Link href="/profile" className="text-sm text-muted-foreground hover:text-primary">الإعدادات</Link></li>
+              )}
             </ul>
           </div>
 
