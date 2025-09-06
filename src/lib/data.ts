@@ -773,6 +773,8 @@ export async function addArticle(articleData: Omit<Article, 'id' | 'createdAt' |
             slug: slugify(articleData.title),
             createdAt: serverTimestamp()
         });
+        revalidatePath('/articles');
+        revalidatePath(`/articles/${articleData.slug}`);
         return { id: docRef.id };
     } catch (e) {
         console.error("Error adding article: ", e);
@@ -795,6 +797,12 @@ export async function updateArticle(articleId: string, articleData: Partial<Omit
             }
         });
         await updateDoc(doc(db, 'articles', articleId), dataToUpdate);
+
+        revalidatePath('/articles');
+        if (dataToUpdate.slug) {
+            revalidatePath(`/articles/${dataToUpdate.slug}`);
+        }
+
     } catch (e) {
         console.error("Error updating article: ", e);
         throw new Error("Failed to update article");
@@ -804,6 +812,7 @@ export async function updateArticle(articleId: string, articleData: Partial<Omit
 export async function deleteArticle(articleId: string): Promise<void> {
     try {
         await deleteDoc(doc(db, 'articles', articleId));
+        revalidatePath('/articles');
     } catch (e) {
         console.error("Error deleting article: ", e);
         throw new Error("Failed to delete article");
@@ -931,4 +940,5 @@ export async function deleteContactMessage(messageId: string): Promise<void> {
     
 
     
+
 
