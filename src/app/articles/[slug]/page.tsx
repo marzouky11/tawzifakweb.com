@@ -114,6 +114,9 @@ export default async function ArticlePage({ params }: Props) {
   if (!article) {
     notFound();
   }
+  
+  // Distinguish between old and new articles based on the presence of `createdAt`
+  const isDbArticle = !!article.createdAt;
 
   const staticArticles = getStaticArticles();
   const dbArticles = await getDbArticles();
@@ -132,16 +135,36 @@ export default async function ArticlePage({ params }: Props) {
     for (let i = 0; i < contentBlocks.length; i++) {
         const block = contentBlocks[i];
         
-        if (block.startsWith('## ')) {
-            renderedElements.push(<h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{block.replace('## ', '')}</h2>);
-        } else if (block.startsWith('### ')) {
-             renderedElements.push(<h3 key={`h3-${i}`} className="text-xl font-bold mt-[-0.5rem] mb-4 text-gray-800 dark:text-gray-200">{block.replace('### ', '')}</h3>);
+        let isHeadline = false;
+        let isSubheadline = false;
+        let headlineText = '';
+
+        if (isDbArticle) {
+            // New articles logic (## and ###)
+            if (block.startsWith('## ')) {
+                isHeadline = true;
+                headlineText = block.replace('## ', '');
+            } else if (block.startsWith('### ')) {
+                isSubheadline = true;
+                headlineText = block.replace('### ', '');
+            }
+        } else {
+            // Old static articles logic (only ### for green headlines)
+            if (block.startsWith('### ')) {
+                isHeadline = true;
+                headlineText = block.replace('### ', '');
+            }
+        }
+
+        if (isHeadline) {
+             renderedElements.push(<h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{headlineText}</h2>);
+        } else if (isSubheadline) {
+             renderedElements.push(<h3 key={`h3-${i}`} className="text-xl font-bold mt-[-0.5rem] mb-4 text-gray-800 dark:text-gray-200">{headlineText}</h3>);
         } else {
             const parts = block.split(markdownLinkRegex);
             renderedElements.push(
                 <p key={`p-${i}`} className="mb-4">
                     {parts.map((part, partIndex) => {
-                        // Check if the part is a link text (every 4th element starting from 1)
                         if ((partIndex - 1) % 3 === 0) {
                             const url = parts[partIndex + 1];
                             return (
@@ -150,11 +173,9 @@ export default async function ArticlePage({ params }: Props) {
                                 </Link>
                             );
                         }
-                        // Check if the part is a URL (every 4th element starting from 2)
                         if ((partIndex - 2) % 3 === 0) {
-                            return null; // Skip the URL part as it's already used by the Link component
+                            return null; 
                         }
-                        // Render regular text
                         return part;
                     })}
                 </p>
