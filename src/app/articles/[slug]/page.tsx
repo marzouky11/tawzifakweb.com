@@ -142,12 +142,9 @@ export default async function ArticlePage({ params }: Props) {
             }
              // For old article subheadings
             if (block.includes('**')) {
-                const boldParts = block.split('**');
-                return (
-                    <p key={`p-${i}`} className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">
-                        {boldParts.map((boldPart, boldIndex) => 
-                            boldIndex % 2 !== 0 ? <strong key={boldIndex}>{boldPart}</strong> : boldPart
-                        )}
+                 return (
+                    <p key={`p-${i}`} className="text-xl text-gray-800 dark:text-gray-200 mb-4">
+                        {block.replace(/\*\*/g, '')}
                     </p>
                 )
             }
