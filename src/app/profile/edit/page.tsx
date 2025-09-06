@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ProfileForm } from '@/app/profile/profile-form';
-import { getCategories } from '@/lib/data';
 import { Loader2, User } from 'lucide-react';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
@@ -21,8 +20,6 @@ export default function EditProfilePage() {
     }
   }, [user, loading, router]);
   
-  const categories = getCategories();
-
   return (
     <>
       <MobilePageHeader title="تعديل الملف الشخصي">
@@ -39,10 +36,10 @@ export default function EditProfilePage() {
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
         ) : (
-            <div className="container mx-auto max-w-3xl px-4 pb-8">
+            <div className="container mx-auto max-w-xl px-4 pb-8">
                 <Card>
                     <CardContent className="pt-6">
-                        <ProfileForm categories={categories} user={userData} />
+                        <ProfileForm user={userData} />
                     </CardContent>
                 </Card>
             </div>

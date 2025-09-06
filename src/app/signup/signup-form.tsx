@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
@@ -12,55 +12,52 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
-import { Loader2, UserPlus, Mail, Lock, User, MapPin, Globe } from 'lucide-react';
+import { Loader2, UserPlus, Mail, Lock, User, Phone } from 'lucide-react';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+
+
+const signupSchema = z.object({
+  name: z.string().min(3, { message: 'الاسم يجب أن يكون 3 أحرف على الأقل.' }),
+  email: z.string().email({ message: 'الرجاء إدخال بريد إلكتروني صحيح.' }),
+  phone: z.string().min(1, { message: 'رقم الهاتف مطلوب' }),
+  password: z.string().min(6, { message: 'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل.' }),
+  confirmPassword: z.string(),
+  terms: z.boolean().refine(val => val === true, { message: 'يجب الموافقة على الشروط.' }),
+}).refine(data => data.password === data.confirmPassword, {
+  message: "كلمتا المرور غير متطابقتين.",
+  path: ["confirmPassword"],
+});
 
 export function SignupForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [country, setCountry] = useState('');
-  const [city, setCity] = useState('');
-  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password.length < 6) {
-        toast({
-            variant: "destructive",
-            title: "كلمة المرور ضعيفة",
-            description: "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل.",
-        });
-        return;
-    }
-    if (!country) {
-      toast({ variant: 'destructive', title: 'خطأ', description: 'الرجاء تحديد الدولة.' });
-      return;
-    }
-    if (!city) {
-      toast({ variant: 'destructive', title: 'خطأ', description: 'الرجاء تحديد المدينة.' });
-      return;
-    }
-    if (!agreedToTerms) {
-        toast({
-            variant: 'destructive',
-            title: 'مطلوب الموافقة على الشروط',
-            description: 'يجب عليك الموافقة على شروط الاستخدام وسياسة الخصوصية للمتابعة.',
-        });
-        return;
-    }
-    
+  const form = useForm<z.infer<typeof signupSchema>>({
+    resolver: zodResolver(signupSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      phone: '',
+      password: '',
+      confirmPassword: '',
+      terms: false,
+    },
+  });
+
+  const handleSignup = async (values: z.infer<typeof signupSchema>) => {
     setLoading(true);
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
       const user = userCredential.user;
 
-      await updateProfile(user, { displayName: name });
+      await updateProfile(user, { displayName: values.name });
 
       const colors = [
         '#ef4444', '#f97316', '#eab308', '#84cc16', '#22c55e', '#10b981', '#14b8a6', 
@@ -69,10 +66,9 @@ export function SignupForm() {
       const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
       await setDoc(doc(db, 'users', user.uid), {
-        name,
-        email,
-        country,
-        city,
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
         avatarColor: randomColor,
         createdAt: serverTimestamp(),
       });
@@ -112,97 +108,112 @@ export function SignupForm() {
             </CardDescription>
           </CardHeader>
           <CardContent className="pt-2 md:pt-6">
-            <form onSubmit={handleSignup} className="space-y-4">
-               <div className="space-y-2">
-                <Label htmlFor="name" className="flex items-center gap-2">
-                  <User className="h-4 w-4 text-muted-foreground" />
-                  الاسم الكامل
-                </Label>
-                <Input
-                  id="name"
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(handleSignup)} className="space-y-4">
+                 <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <User className="h-4 w-4 text-muted-foreground" />
+                        الاسم الكامل
+                      </FormLabel>
+                      <FormControl>
+                        <Input placeholder="اسمك الكامل" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email" className="flex items-center gap-2">
-                  <Mail className="h-4 w-4 text-muted-foreground" />
-                  البريد الإلكتروني
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
+                 <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <Mail className="h-4 w-4 text-muted-foreground" />
+                        البريد الإلكتروني
+                      </FormLabel>
+                      <FormControl>
+                         <Input type="email" placeholder="email@example.com" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-                <p className="text-xs text-muted-foreground pt-1">
-                    📩 استخدم بريدًا حقيقيًا لتلقي إشعارات الوظائف.
-                </p>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password" className="flex items-center gap-2">
-                  <Lock className="h-4 w-4 text-muted-foreground" />
-                  كلمة المرور
-                </Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
+                 <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <Phone className="h-4 w-4 text-muted-foreground" />
+                        رقم الهاتف
+                      </FormLabel>
+                      <FormControl>
+                        <Input placeholder="+xxxxxxxxxxx" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-                <p className="text-xs text-muted-foreground pt-1">
-                    🔐 اختر كلمة مرور قوية (6 أحرف على الأقل) لحماية حسابك.
-                </p>
-              </div>
+                 <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                       <FormLabel className="flex items-center gap-2">
+                          <Lock className="h-4 w-4 text-muted-foreground" />
+                          كلمة المرور
+                        </FormLabel>
+                      <FormControl>
+                        <Input type="password" placeholder="••••••••" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                 <FormField
+                  control={form.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                       <FormLabel className="flex items-center gap-2">
+                          <Lock className="h-4 w-4 text-muted-foreground" />
+                          تأكيد كلمة المرور
+                        </FormLabel>
+                      <FormControl>
+                        <Input type="password" placeholder="••••••••" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                 <FormField
+                  control={form.control}
+                  name="terms"
+                  render={({ field }) => (
+                    <FormItem className="flex items-start space-x-2 space-x-reverse pt-2">
+                       <FormControl>
+                         <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                      </FormControl>
+                      <div className="grid gap-1.5 leading-none">
+                        <FormLabel className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                           أوافق على <Link href="/terms" target="_blank" className="text-primary hover:underline">شروط الاستخدام</Link> و <Link href="/privacy" target="_blank" className="text-primary hover:underline">سياسة الخصوصية</Link>.
+                        </FormLabel>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
 
-              <div className="space-y-2">
-                <Label htmlFor="country" className="flex items-center gap-2">
-                  <Globe className="h-4 w-4 text-muted-foreground" />
-                  الدولة
-                </Label>
-                <Input
-                  id="country"
-                  type="text"
-                  value={country}
-                  onChange={(e) => setCountry(e.target.value)}
-                  required
-                  placeholder="الدولة التي تقيم بها"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="city" className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-muted-foreground" />
-                  المدينة
-                </Label>
-                <Input
-                  id="city"
-                  type="text"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  required
-                  placeholder="المدينة التي تقيم بها"
-                />
-              </div>
-              
-              <div className="flex items-start space-x-2 space-x-reverse pt-2">
-                <Checkbox id="terms" checked={agreedToTerms} onCheckedChange={(checked) => setAgreedToTerms(checked as boolean)} />
-                <div className="grid gap-1.5 leading-none">
-                  <Label htmlFor="terms" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                    أوافق على <Link href="/terms" target="_blank" className="text-primary hover:underline">شروط الاستخدام</Link> و <Link href="/privacy" target="_blank" className="text-primary hover:underline">سياسة الخصوصية</Link>.
-                  </Label>
-                </div>
-              </div>
-
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {loading ? 'جاري إنشاء الحساب...' : 'إنشاء حساب'}
-              </Button>
-            </form>
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {loading ? 'جاري إنشاء الحساب...' : 'إنشاء حساب'}
+                </Button>
+              </form>
+            </Form>
             <p className="text-center text-sm text-muted-foreground mt-4">
               لديك حساب بالفعل؟{' '}
               <Link href={`/login?${searchParams.toString()}`} className="text-primary hover:underline font-semibold">

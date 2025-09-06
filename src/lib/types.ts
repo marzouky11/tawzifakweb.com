@@ -140,14 +140,8 @@ export interface User {
   id:string;
   name: string;
   email: string;
-  country?: string;
-  city?: string;
   phone?: string;
-  whatsapp?: string;
-  instagram?: string;
   avatarColor?: string;
-  jobTitle?: string;
-  description?: string;
   createdAt?: Timestamp;
   isAdmin?: boolean;
 }
