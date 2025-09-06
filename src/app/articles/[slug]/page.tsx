@@ -140,7 +140,7 @@ export default async function ArticlePage({ params }: Props) {
             if (block.startsWith('### ')) {
                 return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{block.replace('### ', '')}</h2>;
             }
-            // Check for bold text for old article subheadings
+             // For old article subheadings
             if (block.includes('**')) {
                 const boldParts = block.split('**');
                 return (
