@@ -131,19 +131,24 @@ export default async function ArticlePage({ params }: Props) {
 
   const renderContent = () => {
     return contentBlocks.map((block, i) => {
-        if (block.startsWith('## ')) {
-            return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{block.replace('## ', '')}</h2>;
+        // Common styling for new DB articles
+        if (isDbArticle) {
+            if (block.startsWith('## ')) {
+                return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{block.replace('## ', '')}</h2>;
+            }
+            if (block.startsWith('### ')) {
+                 return <h3 key={`h3-${i}`} className="text-lg font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{block.replace('### ', '')}</h3>;
+            }
+        } else {
+            // Specific styling for old static articles
+            if (block.startsWith('### ')) {
+                 return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{block.replace('### ', '')}</h2>;
+            }
+             if (block.startsWith('#### ')) {
+                return <h3 key={`h3-${i}`} className="text-xl font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{block.replace('#### ', '')}</h3>;
+            }
         }
-        if (block.startsWith('### ')) {
-            return <h3 key={`h3-${i}`} className="text-base font-bold mt-[-0.5rem] mb-4 text-gray-800 dark:text-gray-200">{block.replace('### ', '')}</h3>;
-        }
-        if (block.startsWith('#### ')) {
-             return (
-                <h3 key={`h3-${i}`} className="text-base font-bold mt-[-0.5rem] mb-4 text-gray-800 dark:text-gray-200">
-                    {block.replace(/\#### /g, '')}
-                </h3>
-            )
-        }
+       
         return (
             <p key={`p-${i}`} className="mb-4">
                 {block}
