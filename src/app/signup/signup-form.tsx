@@ -9,10 +9,9 @@ import { auth, db } from '@/lib/firebase';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
-import { Loader2, UserPlus, Mail, Lock, User, Phone } from 'lucide-react';
+import { Loader2, UserPlus, Mail, Lock, User } from 'lucide-react';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useForm } from 'react-hook-form';
@@ -24,13 +23,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 const signupSchema = z.object({
   name: z.string().min(3, { message: 'الاسم يجب أن يكون 3 أحرف على الأقل.' }),
   email: z.string().email({ message: 'الرجاء إدخال بريد إلكتروني صحيح.' }),
-  phone: z.string().min(1, { message: 'رقم الهاتف مطلوب' }),
   password: z.string().min(6, { message: 'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل.' }),
-  confirmPassword: z.string(),
   terms: z.boolean().refine(val => val === true, { message: 'يجب الموافقة على الشروط.' }),
-}).refine(data => data.password === data.confirmPassword, {
-  message: "كلمتا المرور غير متطابقتين.",
-  path: ["confirmPassword"],
 });
 
 export function SignupForm() {
@@ -44,9 +38,7 @@ export function SignupForm() {
     defaultValues: {
       name: '',
       email: '',
-      phone: '',
       password: '',
-      confirmPassword: '',
       terms: false,
     },
   });
@@ -68,7 +60,6 @@ export function SignupForm() {
       await setDoc(doc(db, 'users', user.uid), {
         name: values.name,
         email: values.email,
-        phone: values.phone,
         avatarColor: randomColor,
         createdAt: serverTimestamp(),
       });
@@ -144,44 +135,12 @@ export function SignupForm() {
                 />
                  <FormField
                   control={form.control}
-                  name="phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="flex items-center gap-2">
-                        <Phone className="h-4 w-4 text-muted-foreground" />
-                        رقم الهاتف
-                      </FormLabel>
-                      <FormControl>
-                        <Input placeholder="+xxxxxxxxxxx" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                 <FormField
-                  control={form.control}
                   name="password"
                   render={({ field }) => (
                     <FormItem>
                        <FormLabel className="flex items-center gap-2">
                           <Lock className="h-4 w-4 text-muted-foreground" />
                           كلمة المرور
-                        </FormLabel>
-                      <FormControl>
-                        <Input type="password" placeholder="••••••••" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                 <FormField
-                  control={form.control}
-                  name="confirmPassword"
-                  render={({ field }) => (
-                    <FormItem>
-                       <FormLabel className="flex items-center gap-2">
-                          <Lock className="h-4 w-4 text-muted-foreground" />
-                          تأكيد كلمة المرور
                         </FormLabel>
                       <FormControl>
                         <Input type="password" placeholder="••••••••" {...field} />
