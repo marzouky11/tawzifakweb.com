@@ -103,7 +103,7 @@ export default function AdminArticlesPage() {
                   />
                 </div>
                 <CardHeader>
-                  <CardTitle className="line-clamp-2 h-12 leading-tight">{article.title}</CardTitle>
+                  <CardTitle className="line-clamp-2 leading-tight">{article.title}</CardTitle>
                 </CardHeader>
                 <CardContent className="flex-grow">
                   <p className="text-sm text-muted-foreground line-clamp-3">
@@ -113,12 +113,12 @@ export default function AdminArticlesPage() {
                 <div className="p-4 pt-0 mt-auto flex gap-2">
                     <Button asChild variant="outline" className="flex-1">
                         <Link href={`/admin/post-article?id=${article.id}`}>
-                            <Edit className="ml-2 h-4 w-4" />
+                            <Edit className="mr-2 h-4 w-4" />
                             تعديل
                         </Link>
                     </Button>
                     <Button variant="destructive" className="flex-1" onClick={() => setArticleToDelete(article)}>
-                        <Trash2 className="ml-2 h-4 w-4" />
+                        <Trash2 className="mr-2 h-4 w-4" />
                         حذف
                     </Button>
                 </div>
@@ -130,7 +130,7 @@ export default function AdminArticlesPage() {
             <p>لا توجد مقالات منشورة في قاعدة البيانات بعد.</p>
              <Button asChild className="mt-4">
                 <Link href="/admin/post-article">
-                    <Newspaper className="ml-2 h-4 w-4" />
+                    <Newspaper className="mr-2 h-4 w-4" />
                     نشر مقال جديد
                 </Link>
              </Button>
