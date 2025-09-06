@@ -32,8 +32,8 @@ async function AllArticles() {
     const dbArticles = await getDbArticles();
 
     const allArticles = [...staticArticles, ...dbArticles].sort((a, b) => {
-        const dateA = a.createdAt ? a.createdAt.toMillis() : new Date(a.date).getTime();
-        const dateB = b.createdAt ? b.createdAt.toMillis() : new Date(b.date).getTime();
+        const dateA = a.createdAt ? a.createdAt.toMillis() : (a.date ? new Date(a.date).getTime() : 0);
+        const dateB = b.createdAt ? b.createdAt.toMillis() : (b.date ? new Date(b.date).getTime() : 0);
         return dateB - dateA;
     });
 
