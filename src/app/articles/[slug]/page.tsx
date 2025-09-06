@@ -132,10 +132,10 @@ export default async function ArticlePage({ params }: Props) {
     for (let i = 0; i < contentBlocks.length; i++) {
         const block = contentBlocks[i];
         
-        if (block.startsWith('### ')) {
-            renderedElements.push(<h3 key={`h3-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{block.replace('### ', '')}</h3>);
-        } else if (block.startsWith('#### ')) {
-             renderedElements.push(<h4 key={`h4-${i}`} className="text-xl font-bold mt-[-0.5rem] mb-4 text-gray-800 dark:text-gray-200">{block.replace('#### ', '')}</h4>);
+        if (block.startsWith('## ')) {
+            renderedElements.push(<h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{block.replace('## ', '')}</h2>);
+        } else if (block.startsWith('### ')) {
+             renderedElements.push(<h3 key={`h3-${i}`} className="text-xl font-bold mt-[-0.5rem] mb-4 text-gray-800 dark:text-gray-200">{block.replace('### ', '')}</h3>);
         } else {
             // Handle links within paragraphs
             const parts = block.split(urlRegex);
