@@ -127,31 +127,32 @@ export default async function ArticlePage({ params }: Props) {
     .sort(() => 0.5 - Math.random())
     .slice(0, 3);
   
-  const contentBlocks = article.content.split('\n').map(paragraph => paragraph.trim()).filter(p => p.length > 0);
+  const contentBlocks = article.content.split('\n').map(p => p.trim()).filter(p => p.length > 0);
 
   const renderContent = () => {
     return contentBlocks.map((block, i) => {
-        // Common styling for new DB articles
+        const trimmedBlock = block.trim();
+        // New DB articles styling
         if (isDbArticle) {
-            if (block.startsWith('## ')) {
-                return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{block.replace('## ', '')}</h2>;
+            if (trimmedBlock.startsWith('## ')) {
+                return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{trimmedBlock.replace('## ', '')}</h2>;
             }
-            if (block.startsWith('### ')) {
-                 return <h3 key={`h3-${i}`} className="text-lg font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{block.replace('### ', '')}</h3>;
+            if (trimmedBlock.startsWith('### ')) {
+                 return <h3 key={`h3-${i}`} className="text-base font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{trimmedBlock.replace('### ', '')}</h3>;
             }
         } else {
-            // Specific styling for old static articles
-            if (block.startsWith('### ')) {
-                 return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{block.replace('### ', '')}</h2>;
+            // Old static articles styling
+            if (trimmedBlock.startsWith('### ')) {
+                 return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{trimmedBlock.replace('### ', '')}</h2>;
             }
-             if (block.startsWith('#### ')) {
-                return <h3 key={`h3-${i}`} className="text-xl font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{block.replace('#### ', '')}</h3>;
+             if (trimmedBlock.startsWith('#### ')) {
+                return <h3 key={`h3-${i}`} className="text-base font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{trimmedBlock.replace('#### ', '')}</h3>;
             }
         }
        
         return (
             <p key={`p-${i}`} className="mb-4">
-                {block}
+                {trimmedBlock}
             </p>
         );
     });
