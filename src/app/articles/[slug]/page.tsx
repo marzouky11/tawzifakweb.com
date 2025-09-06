@@ -105,36 +105,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-const markdownLinkRegex = /\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g;
-
-function renderParagraph(block: string, key: string | number) {
-    const parts = block.split(markdownLinkRegex);
+const renderParagraph = (block: string, key: string | number) => {
     return (
         <p key={`p-${key}`} className="mb-4">
-            {parts.map((part, partIndex) => {
-                if ((partIndex - 1) % 3 === 0) { // This is the link text
-                    const url = parts[partIndex + 1];
-                    return (
-                        <Link key={partIndex} href={url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline break-words">
-                            {part}
-                        </Link>
-                    );
-                }
-                if ((partIndex - 2) % 3 === 0) { // This is the URL, which we've already used
-                    return null; 
-                }
-                // Handle bold text in old articles
-                 if (part.includes('**')) {
-                    const boldParts = part.split('**');
-                    return boldParts.map((boldPart, boldIndex) => 
-                        boldIndex % 2 !== 0 ? <strong key={boldIndex}>{boldPart}</strong> : boldPart
-                    );
-                }
-                return part;
-            })}
+            {block}
         </p>
     );
-}
+};
 
 export default async function ArticlePage({ params }: Props) {
   const article = await getArticle(params.slug);
@@ -170,6 +147,16 @@ export default async function ArticlePage({ params }: Props) {
             // Old static articles logic (only ### for green headlines)
             if (block.startsWith('### ')) {
                 return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{block.replace('### ', '')}</h2>;
+            }
+            if (block.includes('**')) {
+                const boldParts = block.split('**');
+                return (
+                    <p key={`p-${i}`} className="mb-4 text-xl font-bold text-gray-800 dark:text-gray-200">
+                        {boldParts.map((boldPart, boldIndex) => 
+                            boldIndex % 2 !== 0 ? <strong key={boldIndex}>{boldPart}</strong> : boldPart
+                        )}
+                    </p>
+                )
             }
         }
         // Common logic for paragraphs and links for both types

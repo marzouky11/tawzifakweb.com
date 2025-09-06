@@ -51,11 +51,18 @@ export function PostArticleForm({ article }: PostArticleFormProps) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     try {
+       // Find the first non-heading line for the summary
+      const firstParagraph = values.content
+        .split('\n')
+        .find(line => line.trim() && !line.trim().startsWith('#'));
+      
+      const summary = firstParagraph ? firstParagraph.substring(0, 150) + '...' : values.content.substring(0, 150) + '...';
+
       const articleData = {
         title: values.title,
         imageUrl: values.imageUrl,
         content: values.content,
-        summary: values.content.substring(0, 150) + '...', // Auto-generate summary
+        summary: summary,
       };
 
       if (isEditing && article) {
@@ -92,7 +99,6 @@ export function PostArticleForm({ article }: PostArticleFormProps) {
                 <div className="text-xs text-muted-foreground space-y-1">
                     <p> - لإنشاء **عنوان رئيسي (أخضر)**، استخدم `##` قبل النص.</p>
                     <p> - لإنشاء **عنوان فرعي (أسود)**، استخدم `###` قبل النص.</p>
-                    <p> - لإضافة **رابط داخل النص**، استخدم الصيغة: `[النص الذي سيظهر](https://example.com)`.</p>
                 </div>
                 <FormControl><Textarea placeholder="اكتب محتوى المقال هنا..." rows={15} {...field} /></FormControl>
                 <FormMessage />
