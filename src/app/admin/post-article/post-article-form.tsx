@@ -93,9 +93,10 @@ export function PostArticleForm({ article }: PostArticleFormProps) {
         <FormField control={form.control} name="content" render={({ field }) => (
             <FormItem>
                 <FormLabelIcon icon={AlignLeft} label="المحتوى الكامل للمقال" />
-                <p className="text-xs text-muted-foreground">
-                    استخدم `###` قبل النص لإنشاء عنوان فرعي. سيظهر العنوان باللون الأخضر المميز.
-                </p>
+                <div className="text-xs text-muted-foreground space-y-1">
+                    <p> - استخدم `###` قبل النص لإنشاء عنوان رئيسي (سيظهر باللون الأخضر).</p>
+                    <p> - لكتابة عنوان فرعي (باللون الأسود)، اكتبه في السطر الذي يلي العنوان الرئيسي مباشرة.</p>
+                </div>
                 <FormControl><Textarea placeholder="اكتب محتوى المقال هنا..." rows={15} {...field} /></FormControl>
                 <FormMessage />
             </FormItem>
