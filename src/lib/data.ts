@@ -1,4 +1,5 @@
 
+
 import { db } from '@/lib/firebase';
 import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, Query, and, QueryConstraint, QueryFilterConstraint, documentId, increment } from 'firebase/firestore';
 import type { Job, Category, PostType, User, WorkType, Testimonial, Competition, Organizer, Article, Report, ContactMessage, ImmigrationPost } from './types';
@@ -701,16 +702,21 @@ export function getOrganizerByName(organizerName?: string): Organizer | undefine
 export async function getArticles(options: { count?: number } = {}): Promise<Article[]> {
   try {
     const articlesRef = collection(db, 'articles');
-    let q = query(articlesRef, orderBy('createdAt', 'desc'));
-    if (options.count) {
-      q = query(q, limit(options.count));
-    }
+    const q = query(articlesRef, orderBy('createdAt', 'desc'));
+    
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({
+    
+    let articles = querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
       postedAt: formatTimeAgo(doc.data().createdAt),
     } as Article));
+
+    if (options.count) {
+      return articles.slice(0, options.count);
+    }
+    
+    return articles;
   } catch (error) {
     console.error("Error fetching articles: ", error);
     return [];
@@ -925,3 +931,4 @@ export async function deleteContactMessage(messageId: string): Promise<void> {
     
 
     
+
