@@ -133,17 +133,16 @@ export default async function ArticlePage({ params }: Props) {
                 return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{block.replace('## ', '')}</h2>;
             }
             if (block.startsWith('### ')) {
-                return <h3 key={`h3-${i}`} className="text-lg font-bold mt-[-0.5rem] mb-4 text-gray-800 dark:text-gray-200">{block.replace('### ', '')}</h3>;
+                return <h3 key={`h3-${i}`} className="text-base font-bold mt-[-0.5rem] mb-4 text-gray-800 dark:text-gray-200">{block.replace('### ', '')}</h3>;
             }
         } else {
             // Old static articles logic
             if (block.startsWith('### ')) {
                 return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{block.replace('### ', '')}</h2>;
             }
-             // For old article subheadings, make them look like new ones
             if (block.includes('**')) {
                  return (
-                    <h3 key={`h3-${i}`} className="text-lg font-bold mt-[-0.5rem] mb-4 text-gray-800 dark:text-gray-200">
+                    <h3 key={`h3-${i}`} className="text-base font-bold mt-[-0.5rem] mb-4 text-gray-800 dark:text-gray-200">
                         {block.replace(/\*\*/g, '')}
                     </h3>
                 )
