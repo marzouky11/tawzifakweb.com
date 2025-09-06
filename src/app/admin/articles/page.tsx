@@ -103,7 +103,7 @@ export default function AdminArticlesPage() {
                   />
                 </div>
                 <CardHeader>
-                  <CardTitle className="line-clamp-2 leading-tight">{article.title}</CardTitle>
+                  <CardTitle className="line-clamp-2 leading-snug">{article.title}</CardTitle>
                 </CardHeader>
                 <CardContent className="flex-grow">
                   <p className="text-sm text-muted-foreground line-clamp-3">
