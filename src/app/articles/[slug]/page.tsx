@@ -105,8 +105,36 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-
 const markdownLinkRegex = /\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g;
+
+function renderParagraph(block: string, key: string | number) {
+    const parts = block.split(markdownLinkRegex);
+    return (
+        <p key={`p-${key}`} className="mb-4">
+            {parts.map((part, partIndex) => {
+                if ((partIndex - 1) % 3 === 0) { // This is the link text
+                    const url = parts[partIndex + 1];
+                    return (
+                        <Link key={partIndex} href={url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline break-words">
+                            {part}
+                        </Link>
+                    );
+                }
+                if ((partIndex - 2) % 3 === 0) { // This is the URL, which we've already used
+                    return null; 
+                }
+                // Handle bold text in old articles
+                 if (part.includes('**')) {
+                    const boldParts = part.split('**');
+                    return boldParts.map((boldPart, boldIndex) => 
+                        boldIndex % 2 !== 0 ? <strong key={boldIndex}>{boldPart}</strong> : boldPart
+                    );
+                }
+                return part;
+            })}
+        </p>
+    );
+}
 
 export default async function ArticlePage({ params }: Props) {
   const article = await getArticle(params.slug);
@@ -115,14 +143,12 @@ export default async function ArticlePage({ params }: Props) {
     notFound();
   }
   
-  // Distinguish between old and new articles based on the presence of `createdAt`
   const isDbArticle = !!article.createdAt;
 
   const staticArticles = getStaticArticles();
   const dbArticles = await getDbArticles();
   const allArticles = [...staticArticles, ...dbArticles];
 
-  // Filter out the current article, shuffle the rest, and take the first 3
   const relatedArticles = allArticles
     .filter(a => a.slug !== article.slug)
     .sort(() => 0.5 - Math.random())
@@ -131,60 +157,25 @@ export default async function ArticlePage({ params }: Props) {
   const contentBlocks = article.content.split('\n').map(paragraph => paragraph.trim()).filter(p => p.length > 0);
 
   const renderContent = () => {
-    const renderedElements: React.ReactNode[] = [];
-    for (let i = 0; i < contentBlocks.length; i++) {
-        const block = contentBlocks[i];
-        
-        let isHeadline = false;
-        let isSubheadline = false;
-        let headlineText = '';
-
+    return contentBlocks.map((block, i) => {
         if (isDbArticle) {
             // New articles logic (## and ###)
             if (block.startsWith('## ')) {
-                isHeadline = true;
-                headlineText = block.replace('## ', '');
-            } else if (block.startsWith('### ')) {
-                isSubheadline = true;
-                headlineText = block.replace('### ', '');
+                return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{block.replace('## ', '')}</h2>;
+            }
+            if (block.startsWith('### ')) {
+                return <h3 key={`h3-${i}`} className="text-xl font-bold mt-[-0.5rem] mb-4 text-gray-800 dark:text-gray-200">{block.replace('### ', '')}</h3>;
             }
         } else {
             // Old static articles logic (only ### for green headlines)
             if (block.startsWith('### ')) {
-                isHeadline = true;
-                headlineText = block.replace('### ', '');
+                return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{block.replace('### ', '')}</h2>;
             }
         }
-
-        if (isHeadline) {
-             renderedElements.push(<h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{headlineText}</h2>);
-        } else if (isSubheadline) {
-             renderedElements.push(<h3 key={`h3-${i}`} className="text-xl font-bold mt-[-0.5rem] mb-4 text-gray-800 dark:text-gray-200">{headlineText}</h3>);
-        } else {
-            const parts = block.split(markdownLinkRegex);
-            renderedElements.push(
-                <p key={`p-${i}`} className="mb-4">
-                    {parts.map((part, partIndex) => {
-                        if ((partIndex - 1) % 3 === 0) {
-                            const url = parts[partIndex + 1];
-                            return (
-                                <Link key={partIndex} href={url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline break-words">
-                                    {part}
-                                </Link>
-                            );
-                        }
-                        if ((partIndex - 2) % 3 === 0) {
-                            return null; 
-                        }
-                        return part;
-                    })}
-                </p>
-            );
-        }
-    }
-    return renderedElements;
+        // Common logic for paragraphs and links for both types
+        return renderParagraph(block, i);
+    });
   };
-
 
   return (
     <>
