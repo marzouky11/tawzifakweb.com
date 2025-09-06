@@ -1,22 +1,33 @@
-
-
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { getArticleBySlug, getArticles } from '@/lib/articles';
+import { getArticleBySlug as getDbArticleBySlug, getArticles as getDbArticles } from '@/lib/data';
+import { getArticleBySlug as getStaticArticleBySlug, getArticles as getStaticArticles } from '@/lib/articles';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Card, CardContent } from '@/components/ui/card';
-import { User, Newspaper } from 'lucide-react';
+import { User, Newspaper, Trash2, Edit } from 'lucide-react';
 import type { Metadata } from 'next';
 import { ArticleCard } from '../article-card';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
+import { DeleteArticleButton } from './delete-article-button';
+import { useAuth } from '@/context/auth-context'; // We need this for admin check, so component must be client
+import type { Article } from '@/lib/types';
+
 
 interface Props {
   params: { slug: string };
 }
 
+async function getArticle(slug: string): Promise<Article | null> {
+    let article = await getDbArticleBySlug(slug);
+    if (!article) {
+        article = getStaticArticleBySlug(slug) || null;
+    }
+    return article;
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const article = getArticleBySlug(params.slug);
+  const article = await getArticle(params.slug);
   const baseUrl = 'https://www.tawzifak.com';
   const siteThumbnail = 'https://i.postimg.cc/MH0BfvFB/og-image.jpg';
 
@@ -29,6 +40,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
   
+  const articleDate = article.createdAt ? article.createdAt.toDate() : new Date(article.date);
+
   const articleJsonLd = {
       '@context': 'https://schema.org',
       '@type': 'Article',
@@ -51,8 +64,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
               url: siteThumbnail,
           },
       },
-      datePublished: new Date(article.date).toISOString(),
-      dateModified: new Date(article.date).toISOString(),
+      datePublished: articleDate.toISOString(),
+      dateModified: articleDate.toISOString(),
   };
 
   return {
@@ -77,7 +90,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         url: `${baseUrl}/articles/${article.slug}`,
         siteName: 'توظيفك',
         type: 'article',
-        publishedTime: new Date(article.date).toISOString(),
+        publishedTime: articleDate.toISOString(),
         authors: [article.author],
     },
     twitter: {
@@ -95,14 +108,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 const urlRegex = /(https?:\/\/[^\s]+)/g;
 
-export default function ArticlePage({ params }: Props) {
-  const article = getArticleBySlug(params.slug);
+export default async function ArticlePage({ params }: Props) {
+  const article = await getArticle(params.slug);
 
   if (!article) {
     notFound();
   }
 
-  const allArticles = getArticles();
+  const staticArticles = getStaticArticles();
+  const dbArticles = await getDbArticles();
+  const allArticles = [...staticArticles, ...dbArticles];
+
   // Filter out the current article, shuffle the rest, and take the first 3
   const relatedArticles = allArticles
     .filter(a => a.slug !== article.slug)
@@ -211,9 +227,15 @@ export default function ArticlePage({ params }: Props) {
 }
 
 export async function generateStaticParams() {
-    const { getArticles } = await import('@/lib/articles');
-    const articles = getArticles();
-    return articles.map((article) => ({
+    const { getArticles: getStaticArticles } = await import('@/lib/articles');
+    const { getArticles: getDbArticles } = await import('@/lib/data');
+    
+    const staticArticles = getStaticArticles();
+    const dbArticles = await getDbArticles();
+    
+    const allArticles = [...staticArticles, ...dbArticles];
+    
+    return allArticles.map((article) => ({
         slug: article.slug,
     }));
 }

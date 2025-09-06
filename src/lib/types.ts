@@ -166,8 +166,9 @@ export interface Article {
     imageHint: string;
     summary: string;
     content: string;
-    createdAt: Timestamp;
-    postedAt: string;
+    createdAt?: Timestamp; // Optional for static articles
+    date?: string; // Optional for static articles
+    postedAt?: string;
 }
 
 export interface Report {
