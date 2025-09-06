@@ -729,7 +729,7 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
     return {
       id: docSnap.id,
       ...data,
- postedAt: formatTimeAgo(data.createdAt),
+      postedAt: formatTimeAgo(data.createdAt),
     } as Article;
   } catch (error) {
     console.error("Error fetching article by slug:", error);
@@ -737,7 +737,30 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
   }
 }
 
-export async function addArticle(articleData: Omit<Article, 'id' | 'createdAt' | 'postedAt'>): Promise<{ id: string }> {
+export async function getArticleById(articleId: string): Promise<Article | null> {
+  try {
+    const docRef = doc(db, 'articles', articleId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      return { 
+          id: docSnap.id, 
+          ...data,
+          postedAt: formatTimeAgo(data.createdAt),
+     } as Article;
+    } else {
+      console.log("No such article document!");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching article by ID: ", error);
+    return null;
+  }
+}
+
+
+export async function addArticle(articleData: Omit<Article, 'id' | 'createdAt' | 'postedAt' | 'slug' | 'date'>): Promise<{ id: string }> {
     try {
         const docRef = await addDoc(collection(db, 'articles'), {
             ...articleData,
@@ -751,7 +774,7 @@ export async function addArticle(articleData: Omit<Article, 'id' | 'createdAt' |
     }
 }
 
-export async function updateArticle(articleId: string, articleData: Partial<Article>): Promise<void> {
+export async function updateArticle(articleId: string, articleData: Partial<Omit<Article, 'id' | 'createdAt' | 'postedAt' | 'date'>>): Promise<void> {
     try {
         const dataToUpdate: { [key: string]: any } = {
             ...articleData,

@@ -131,26 +131,8 @@ export default async function ArticlePage({ params }: Props) {
     if (block.startsWith('### ')) {
       return <h3 key={index} className="text-2xl font-bold mt-6 mb-3 text-green-600">{block.replace('### ', '')}</h3>;
     }
-    if (block.startsWith('**') && block.endsWith('**')) {
-      return <p key={index} className="font-bold">{block.slice(2, -2)}</p>;
-    }
-    if (/^\d+\./.test(block)) {
-      const listItems = block.split('\n').filter(i => i.trim()).map(item => item.trim().replace(/^\d+\.\s*/, ''));
-      return (
-        <ol key={index} className="list-decimal pr-5 space-y-2 mb-4">
-          {listItems.map((item, i) => <li key={i}>{item}</li>)}
-        </ol>
-      );
-    }
-    if (/^-/.test(block) || /^\*/.test(block)) {
-      const listItems = block.split('\n').filter(i => i.trim()).map(item => item.trim().replace(/^[-*]\s*/, ''));
-      return (
-        <ul key={index} className="list-disc pr-5 space-y-2 mb-4">
-          {listItems.map((item, i) => <li key={i}>{item}</li>)}
-        </ul>
-      );
-    }
     
+    // Split block by URL regex to handle links within paragraphs
     const parts = block.split(urlRegex);
     
     return (

@@ -18,7 +18,6 @@ const formSchema = z.object({
   title: z.string().min(10, 'العنوان يجب أن يكون 10 أحرف على الأقل.'),
   imageUrl: z.string().url('الرجاء إدخال رابط صورة صحيح.'),
   imageHint: z.string().min(2, "تلميح الصورة مطلوب لوصفها."),
-  summary: z.string().min(20, 'الوصف المختصر يجب أن يكون 20 حرفًا على الأقل.'),
   content: z.string().min(50, 'المحتوى يجب أن يكون 50 حرفًا على الأقل.'),
 });
 
@@ -47,7 +46,6 @@ export function PostArticleForm({ article }: PostArticleFormProps) {
       title: article?.title || '',
       imageUrl: article?.imageUrl || '',
       imageHint: article?.imageHint || '',
-      summary: article?.summary || '',
       content: article?.content || '',
     },
   });
@@ -55,12 +53,20 @@ export function PostArticleForm({ article }: PostArticleFormProps) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     try {
+      const articleData = {
+        title: values.title,
+        imageUrl: values.imageUrl,
+        imageHint: values.imageHint,
+        content: values.content,
+        summary: values.content.substring(0, 150) + '...', // Auto-generate summary
+      };
+
       if (isEditing && article) {
-        await updateArticle(article.id, values);
+        await updateArticle(article.id, articleData);
         toast({ title: "تم تحديث المقال بنجاح!" });
         router.push(`/articles/${article.slug}`);
       } else {
-        const { id } = await addArticle({ ...values, author: 'فريق التحرير' });
+        const { id } = await addArticle({ ...articleData, author: 'فريق التحرير' });
         toast({ title: "تم نشر المقال بنجاح!" });
         router.push(`/articles`);
       }
@@ -84,12 +90,11 @@ export function PostArticleForm({ article }: PostArticleFormProps) {
         <FormField control={form.control} name="title" render={({ field }) => (<FormItem><FormLabelIcon icon={FileText} label="عنوان المقال" /><FormControl><Input placeholder="اكتب عنوانًا جذابًا للمقال..." {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="imageUrl" render={({ field }) => (<FormItem><FormLabelIcon icon={ImageIcon} label="رابط الصورة الرئيسية" /><FormControl><Input type="url" placeholder="https://example.com/image.jpg" {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="imageHint" render={({ field }) => (<FormItem><FormLabelIcon icon={ImageIcon} label="تلميح الصورة (للبحث)" /><FormControl><Input placeholder="مثال: job search" {...field} /></FormControl><FormMessage /></FormItem>)} />
-        <FormField control={form.control} name="summary" render={({ field }) => (<FormItem><FormLabelIcon icon={Info} label="وصف مختصر" /><FormControl><Textarea placeholder="اكتب وصفًا قصيرًا يظهر أسفل عنوان المقال..." rows={3} {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="content" render={({ field }) => (
             <FormItem>
                 <FormLabelIcon icon={AlignLeft} label="المحتوى الكامل للمقال" />
                 <p className="text-xs text-muted-foreground">
-                    استخدم `###` قبل النص لإنشاء عنوان فرعي (مثال: `### هذا عنوان فرعي`).
+                    استخدم `###` قبل النص لإنشاء عنوان فرعي. سيظهر العنوان باللون الأخضر المميز.
                 </p>
                 <FormControl><Textarea placeholder="اكتب محتوى المقال هنا..." rows={15} {...field} /></FormControl>
                 <FormMessage />
