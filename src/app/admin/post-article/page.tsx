@@ -12,6 +12,8 @@ import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import type { Article } from '@/lib/types';
 import { AnimatePresence } from 'framer-motion';
 
+export const dynamic = 'force-dynamic';
+
 export default function PostArticlePage() {
   const { user, userData, loading: authLoading } = useAuth();
   const router = useRouter();
@@ -35,7 +37,7 @@ export default function PostArticlePage() {
     if (isEditing && userData?.isAdmin) {
       const fetchArticle = async () => {
         setLoading(true);
-        const articleData = await getArticleById(articleId);
+        const articleData = await getArticleById(articleId!);
         if (!articleData) {
           router.push('/admin/post-article'); // Redirect if article not found
           return;
