@@ -134,13 +134,7 @@ export default async function ArticlePage({ params }: Props) {
     return contentBlocks.map((block, i) => {
       const trimmedBlock = block.trim();
       
-      // Main heading for new articles
-      if (trimmedBlock.startsWith('## ')) {
-        const headingText = trimmedBlock.replace(/^##\s/, '');
-        return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{headingText}</h2>;
-      }
-      
-      // Main heading for old articles
+      // Main heading for new articles & old articles
       if (trimmedBlock.startsWith('### ')) {
         const headingText = trimmedBlock.replace(/^###\s/, '');
         return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{headingText}</h2>;
@@ -149,7 +143,7 @@ export default async function ArticlePage({ params }: Props) {
       // Sub-heading for old articles
       if (trimmedBlock.startsWith('#### ')) {
         const headingText = trimmedBlock.replace(/^####\s/, '');
-        return <h3 key={`h3-${i}`} className="text-xl font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{headingText}</h3>;
+        return <h3 key={`h3-${i}`} className="text-lg font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{headingText}</h3>;
       }
       
       return (
@@ -229,4 +223,5 @@ export async function generateStaticParams() {
         slug: article.slug,
     }));
 }
+
 
