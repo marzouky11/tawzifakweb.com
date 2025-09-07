@@ -69,20 +69,24 @@ function AdGrid({
           <JobCard job={ad} />
           <div className="flex gap-2">
             {showEditButton && (
-              <Button asChild variant="outline" className="flex-1">
+              <Button
+                asChild
+                variant="outline"
+                className="flex-1 flex flex-row-reverse gap-2"
+              >
                 <Link href={`/edit-job/${ad.id}`}>
-                  تعديل
-                  <FileSignature className="rtl:mr-2 ltr:ml-2 h-4 w-4" />
+                  <FileSignature className="h-4 w-4" />
+                  <span>تعديل</span>
                 </Link>
               </Button>
             )}
             <Button
               variant="destructive"
-              className="flex-1"
+              className="flex-1 flex flex-row-reverse gap-2"
               onClick={() => onAdDelete(ad.id)}
             >
-              حذف
-              <Trash2 className="rtl:mr-2 ltr:ml-2 h-4 w-4" />
+              <Trash2 className="h-4 w-4" />
+              <span>حذف</span>
             </Button>
           </div>
         </div>
@@ -115,19 +119,23 @@ function ImmigrationGrid({
         <div key={post.id} className="flex flex-col gap-2">
           <ImmigrationCard post={post} />
           <div className="flex gap-2">
-            <Button asChild variant="outline" className="flex-1">
+            <Button
+              asChild
+              variant="outline"
+              className="flex-1 flex flex-row-reverse gap-2"
+            >
               <Link href={`/edit-immigration/${post.id}`}>
-                تعديل
-                <FileSignature className="rtl:mr-2 ltr:ml-2 h-4 w-4" />
+                <FileSignature className="h-4 w-4" />
+                <span>تعديل</span>
               </Link>
             </Button>
             <Button
               variant="destructive"
-              className="flex-1"
+              className="flex-1 flex flex-row-reverse gap-2"
               onClick={() => onAdDelete(post.id)}
             >
-              حذف
-              <Trash2 className="rtl:mr-2 ltr:ml-2 h-4 w-4" />
+              <Trash2 className="h-4 w-4" />
+              <span>حذف</span>
             </Button>
           </div>
         </div>
@@ -161,19 +169,23 @@ function CompetitionGrid({
         <div key={comp.id} className="flex flex-col gap-2">
           <CompetitionCard competition={comp} />
           <div className="flex gap-2">
-            <Button asChild variant="outline" className="flex-1">
+            <Button
+              asChild
+              variant="outline"
+              className="flex-1 flex flex-row-reverse gap-2"
+            >
               <Link href={`/edit-competition/${comp.id}`}>
-                تعديل
-                <FileSignature className="rtl:mr-2 ltr:ml-2 h-4 w-4" />
+                <FileSignature className="h-4 w-4" />
+                <span>تعديل</span>
               </Link>
             </Button>
             <Button
               variant="destructive"
-              className="flex-1"
+              className="flex-1 flex flex-row-reverse gap-2"
               onClick={() => onAdDelete(comp.id)}
             >
-              حذف
-              <Trash2 className="rtl:mr-2 ltr:ml-2 h-4 w-4" />
+              <Trash2 className="h-4 w-4" />
+              <span>حذف</span>
             </Button>
           </div>
         </div>
@@ -286,31 +298,32 @@ export default function MyAdsPage() {
     if (userData?.isAdmin) {
       return (
         <Tabs defaultValue="jobs" className="w-full">
+          {/* ✅ Tabs مع فواصل */}
           <TabsList
             dir="rtl"
-            className="grid w-full grid-cols-2 md:grid-cols-4 gap-2 mb-6 h-auto"
+            className="grid w-full grid-cols-2 md:grid-cols-4 gap-0 mb-6 h-auto border rounded-lg overflow-hidden divide-x"
           >
             <TabsTrigger
               value="jobs"
-              className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg p-3 w-full justify-center"
+              className="data-[state=active]:bg-primary data-[state=active]:text-white p-3 w-full justify-center border-none"
             >
               وظائف ({jobOffers.length})
             </TabsTrigger>
             <TabsTrigger
               value="migration"
-              className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg p-3 w-full justify-center"
+              className="data-[state=active]:bg-primary data-[state=active]:text-white p-3 w-full justify-center border-none"
             >
               فرص الهجرة ({immigrationPosts.length})
             </TabsTrigger>
             <TabsTrigger
               value="competitions"
-              className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg p-3 w-full justify-center"
+              className="data-[state=active]:bg-primary data-[state=active]:text-white p-3 w-full justify-center border-none"
             >
               مباريات عمومية ({competitions.length})
             </TabsTrigger>
             <TabsTrigger
               value="seekers"
-              className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg p-3 w-full justify-center"
+              className="data-[state=active]:bg-primary data-[state=active]:text-white p-3 w-full justify-center border-none"
             >
               باحثون عن عمل ({jobRequests.length})
             </TabsTrigger>
@@ -403,4 +416,4 @@ export default function MyAdsPage() {
       </AlertDialog>
     </>
   );
-}
+            }
