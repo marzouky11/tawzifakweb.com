@@ -23,7 +23,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
         </div>
       </Link>
       <CardHeader>
-        <h3 className="text-lg font-bold leading-snug">
+        <h3 className="text-xl font-bold leading-snug">
           <Link href={`/articles/${article.slug}`} className="hover:text-primary transition-colors">
             {article.title}
           </Link>
