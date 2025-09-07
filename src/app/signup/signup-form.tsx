@@ -153,7 +153,7 @@ export function SignupForm() {
                   control={form.control}
                   name="terms"
                   render={({ field }) => (
-                    <FormItem className="flex items-start space-x-2 space-x-reverse pt-2">
+               <FormItem className="flex items-center space-x-2 space-x-reverse pt-2">
                        <FormControl>
                          <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                       </FormControl>
@@ -184,4 +184,4 @@ export function SignupForm() {
       </div>
     </>
   );
-}
+              }
