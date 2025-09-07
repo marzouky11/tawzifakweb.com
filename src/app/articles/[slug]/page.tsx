@@ -8,8 +8,8 @@ import { User, Newspaper } from 'lucide-react';
 import type { Metadata } from 'next';
 import { ArticleCard } from '../article-card';
 import { Separator } from '@/components/ui/separator';
-import type { Article } from '@/lib/types';
 import Link from 'next/link';
+import type { Article } from '@/lib/types';
 
 interface Props {
   params: { slug: string };
@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: 'المقال غير موجود',
       description: 'لم نتمكن من العثور على المقال الذي تبحث عنه.',
       openGraph: { images: [{ url: siteThumbnail }] },
-      twitter: { images: [siteThumbnail] },
+      twitter: { images: [siteThumbnail] }
     };
   }
 
@@ -53,8 +53,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     headline: article.title,
     description: article.summary,
     image: article.imageUrl,
-    author: { '@type': 'Person', name: article.author },
-    publisher: { '@type': 'Organization', name: 'توظيفك', logo: { '@type': 'ImageObject', url: siteThumbnail } },
+    author: {
+      '@type': 'Person',
+      name: article.author,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'توظيفك',
+      logo: {
+        '@type': 'ImageObject',
+        url: siteThumbnail,
+      },
+    },
     datePublished: articleDate.toISOString(),
     dateModified: articleDate.toISOString(),
   };
@@ -63,12 +73,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: article.title,
     description: article.summary,
     metadataBase: new URL(baseUrl),
-    alternates: { canonical: `/articles/${article.slug}` },
+    alternates: {
+      canonical: `/articles/${article.slug}`,
+    },
     robots: 'index, follow',
     openGraph: {
       title: article.title,
       description: article.summary,
-      images: [{ url: article.imageUrl, width: 1200, height: 630, alt: article.title }],
+      images: [
+        {
+          url: article.imageUrl,
+          width: 1200,
+          height: 630,
+          alt: article.title,
+        },
+      ],
       url: `${baseUrl}/articles/${article.slug}`,
       siteName: 'توظيفك',
       type: 'article',
@@ -81,13 +100,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: article.summary,
       images: [article.imageUrl],
     },
-    other: { 'application/ld+json': JSON.stringify(articleJsonLd, null, 2) },
+    other: {
+      'application/ld+json': JSON.stringify(articleJsonLd, null, 2)
+    }
   };
 }
 
 export default async function ArticlePage({ params }: Props) {
   const article = await getArticle(params.slug);
-  if (!article) notFound();
+
+  if (!article) {
+    notFound();
+  }
 
   const staticArticles = getStaticArticles();
   const dbArticles = await getDbArticles();
@@ -98,74 +122,125 @@ export default async function ArticlePage({ params }: Props) {
     .sort(() => 0.5 - Math.random())
     .slice(0, 3);
 
-  const contentBlocks = article.content.split('\n').map(p => p.trim()).filter(p => p.length > 0);
+  const contentBlocks = article.content
+    .split('\n')
+    .map(p => p.trim())
+    .filter(() => true); // نحتفظ بالأسطر الفارغة
 
-  // تحويل الروابط في النص إلى رابط قابل للنقر
+  // تحويل أي رابط موجود في النص إلى رابط قابل للنقر
   const linkify = (text: string) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     return text.split(urlRegex).map((part, idx) => {
       if (part.match(urlRegex)) {
-        return (
-          <a key={idx} href={part} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
-            {part}
-          </a>
-        );
+        return <a key={idx} href={part} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{part}</a>;
+      } else {
+        return part;
       }
-      return part;
     });
   };
 
-  // تحويل النصوص إلى HTML مع دعم العناوين والقوائم
   const renderContent = () => {
-    const listItems: string[] = [];
-    return contentBlocks.map((block, i) => {
-      const trimmed = block.trim();
+    const elements: React.ReactNode[] = [];
+    let listItems: string[] = [];
 
-      // عنوان رئيسي
-      if (trimmed.startsWith('### ')) {
-        const headingText = trimmed.replace(/^###\s/, '');
-        return (
-          <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">
-            {headingText}
-          </h2>
-        );
-      }
+    contentBlocks.forEach((line, i) => {
+      const trimmed = line.trim();
 
-      // عنوان فرعي
-      if (trimmed.startsWith('#### ')) {
-        const headingText = trimmed.replace(/^####\s/, '');
-        return (
-          <h3 key={`h3-${i}`} className="text-lg font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">
-            {headingText}
-          </h3>
-        );
-      }
-
-      // عناصر قائمة
-      if (trimmed.startsWith('- ')) {
-        listItems.push(trimmed.replace(/^- /, ''));
-        const nextBlock = contentBlocks[i + 1]?.trim();
-        if (!nextBlock || !nextBlock.startsWith('- ')) {
-          const list = (
+      // سطر فارغ
+      if (!trimmed) {
+        if (listItems.length > 0) {
+          elements.push(
             <ul key={`ul-${i}`} className="list-disc list-inside mb-4">
               {listItems.map((item, idx) => (
                 <li key={idx}>{linkify(item)}</li>
               ))}
             </ul>
           );
-          listItems.length = 0;
-          return list;
+          listItems = [];
         }
-        return null;
+        elements.push(<br key={`br-${i}`} />);
+        return;
+      }
+
+      // عنوان رئيسي
+      if (trimmed.startsWith('### ')) {
+        if (listItems.length > 0) {
+          elements.push(
+            <ul key={`ul-${i}`} className="list-disc list-inside mb-4">
+              {listItems.map((item, idx) => (
+                <li key={idx}>{linkify(item)}</li>
+              ))}
+            </ul>
+          );
+          listItems = [];
+        }
+        const headingText = trimmed.replace(/^###\s/, '');
+        elements.push(
+          <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">
+            {headingText}
+          </h2>
+        );
+        return;
+      }
+
+      // عنوان فرعي
+      if (trimmed.startsWith('#### ')) {
+        if (listItems.length > 0) {
+          elements.push(
+            <ul key={`ul-${i}`} className="list-disc list-inside mb-4">
+              {listItems.map((item, idx) => (
+                <li key={idx}>{linkify(item)}</li>
+              ))}
+            </ul>
+          );
+          listItems = [];
+        }
+        const headingText = trimmed.replace(/^####\s/, '');
+        elements.push(
+          <h3 key={`h3-${i}`} className="text-lg font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">
+            {headingText}
+          </h3>
+        );
+        return;
+      }
+
+      // عناصر قائمة
+      if (trimmed.startsWith('- ')) {
+        listItems.push(trimmed.replace(/^- /, ''));
+        return;
+      }
+
+      // نهاية القائمة
+      if (listItems.length > 0) {
+        elements.push(
+          <ul key={`ul-${i}`} className="list-disc list-inside mb-4">
+            {listItems.map((item, idx) => (
+              <li key={idx}>{linkify(item)}</li>
+            ))}
+          </ul>
+        );
+        listItems = [];
       }
 
       // فقرة عادية
-      return (
+      elements.push(
         <p key={`p-${i}`} className="mb-4 text-base md:text-lg leading-relaxed">
           {linkify(trimmed)}
         </p>
       );
     });
+
+    if (listItems.length > 0) {
+      elements.push(
+        <ul key={`ul-end`} className="list-disc list-inside mb-4">
+          {listItems.map((item, idx) => (
+            <li key={idx}>{linkify(item)}</li>
+          ))}
+        </ul>
+      );
+    }
+
+    return elements;
   };
 
   return (
@@ -173,7 +248,6 @@ export default async function ArticlePage({ params }: Props) {
       <MobilePageHeader title="مقالات">
         <Newspaper className="h-5 w-5 text-primary" />
       </MobilePageHeader>
-
       <div className="container mx-auto max-w-5xl px-4 py-8">
         <article>
           <Card>
@@ -190,34 +264,38 @@ export default async function ArticlePage({ params }: Props) {
                 </div>
               </header>
 
-              <div className="relative h-64 md:h-80 w-full mb-8 rounded-lg overflow-hidden">
-                <Image
-                  src={article.imageUrl}
-                  alt={article.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover"
-                  priority
-                />
-              </div>
+              <div className="relative h-64 md:h-80 w-full mb-8 rounded-lg overflow-hidden">  
+                <Image  
+                  src={article.imageUrl}  
+                  alt={article.title}  
+                  fill  
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"  
+                  className="object-cover"  
+                  priority  
+                />  
+              </div>  
 
-              <div className="prose-p:leading-relaxed prose-lg max-w-none dark:prose-invert">{renderContent()}</div>
-            </CardContent>
-          </Card>
-        </article>
+              <div className="prose-p:leading-relaxed prose-lg max-w-none dark:prose-invert">  
+                {renderContent()}  
+              </div>  
+            </CardContent>  
+          </Card>  
+        </article>  
 
-        {relatedArticles.length > 0 && (
-          <section className="mt-12">
-            <Separator className="my-8" />
-            <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">مقالات قد تعجبك أيضاً</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {relatedArticles.map(ra => (
-                <ArticleCard key={ra.slug} article={ra} />
-              ))}
-            </div>
-          </section>
-        )}
-      </div>
+        {relatedArticles.length > 0 && (  
+          <section className="mt-12">  
+            <Separator className="my-8" />  
+            <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">  
+              مقالات قد تعجبك أيضاً  
+            </h2>  
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">  
+              {relatedArticles.map((relatedArticle) => (  
+                <ArticleCard key={relatedArticle.slug} article={relatedArticle} />  
+              ))}  
+            </div>  
+          </section>  
+        )}  
+      </div>  
     </>
   );
 }
@@ -228,7 +306,8 @@ export async function generateStaticParams() {
 
   const staticArticles = getStaticArticles();
   const dbArticles = await getDbArticles();
+
   const allArticles = [...staticArticles, ...dbArticles];
 
   return allArticles.map(article => ({ slug: article.slug }));
-}
+                              }
