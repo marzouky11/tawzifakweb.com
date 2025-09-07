@@ -11,9 +11,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from "@/hooks/use-toast";
 import { addArticle, updateArticle } from '@/lib/data';
 import { useRouter } from 'next/navigation';
-import { Loader2, FileText, Image as ImageIcon, Info, AlignLeft, Link2 } from 'lucide-react';
+import { Loader2, FileText, Image as ImageIcon, AlignLeft, Link2 } from 'lucide-react';
 import type { Article } from '@/lib/types';
-import { slugify } from '@/lib/utils';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 const formSchema = z.object({
   title: z.string().min(10, 'العنوان يجب أن يكون 10 أحرف على الأقل.'),
@@ -55,29 +56,51 @@ export function PostArticleForm({ article }: PostArticleFormProps) {
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
     form.setValue('title', newTitle);
-    
-    // Only auto-slug for new articles or if the slug field was manually cleared
-    if (!isEditing || !form.getValues('slug')) { 
-        const newSlug = slugify(newTitle);
-        form.setValue('slug', newSlug, { shouldValidate: true });
-    }
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    const slug = values.slug.trim();
+
+    if (!slug) {
+      toast({
+        variant: "destructive",
+        title: "حقل رابط المقال فارغ",
+        description: "الرجاء كتابة رابط المقال (slug) قبل النشر.",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     try {
+      // تحقق مباشرة من Firestore إذا الرابط موجود مسبقًا
+      const articlesRef = collection(db, 'articles');
+      const q = query(articlesRef, where('slug', '==', slug));
+      const querySnapshot = await getDocs(q);
+
+      if (!isEditing && !querySnapshot.empty) {
+        toast({
+          variant: "destructive",
+          title: "الرابط مستخدم بالفعل",
+          description: "هذا الرابط موجود بالفعل لمقال آخر. الرجاء استخدام رابط مختلف.",
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
       const firstParagraph = values.content
         .split('\n')
         .find(line => line.trim() && !line.trim().startsWith('#'));
-      
-      const summary = firstParagraph ? firstParagraph.substring(0, 150) + '...' : values.content.substring(0, 150) + '...';
+
+      const summary = firstParagraph
+        ? firstParagraph.substring(0, 150) + '...'
+        : values.content.substring(0, 150) + '...';
 
       const articleData = {
         title: values.title,
-        slug: values.slug,
+        slug,
         imageUrl: values.imageUrl,
         content: values.content,
-        summary: summary,
+        summary,
       };
 
       if (isEditing && article) {
@@ -106,19 +129,48 @@ export function PostArticleForm({ article }: PostArticleFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FormField control={form.control} name="title" render={({ field }) => (<FormItem><FormLabelIcon icon={FileText} label="عنوان المقال" /><FormControl><Input placeholder="اكتب عنوانًا جذابًا للمقال..." {...field} onChange={handleTitleChange} /></FormControl><FormMessage /></FormItem>)} />
-        <FormField control={form.control} name="slug" render={({ field }) => (<FormItem><FormLabelIcon icon={Link2} label="رابط المقال (Slug)" /><FormControl><Input placeholder="سيتم إنشاؤه تلقائيًا من العنوان" {...field} /></FormControl><FormMessage /></FormItem>)} />
-        <FormField control={form.control} name="imageUrl" render={({ field }) => (<FormItem><FormLabelIcon icon={ImageIcon} label="رابط الصورة الرئيسية" /><FormControl><Input type="url" placeholder="https://example.com/image.jpg" {...field} /></FormControl><FormMessage /></FormItem>)} />
+        <FormField control={form.control} name="title" render={({ field }) => (
+          <FormItem>
+            <FormLabelIcon icon={FileText} label="عنوان المقال" />
+            <FormControl>
+              <Input placeholder="اكتب عنوانًا جذابًا للمقال..." {...field} onChange={handleTitleChange} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+
+        <FormField control={form.control} name="slug" render={({ field }) => (
+          <FormItem>
+            <FormLabelIcon icon={Link2} label="رابط المقال (Slug)" />
+            <FormControl>
+              <Input placeholder="اكتب رابط المقال بنفسك، بالأحرف الصغيرة والأرقام وشرطات (-) فقط" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+
+        <FormField control={form.control} name="imageUrl" render={({ field }) => (
+          <FormItem>
+            <FormLabelIcon icon={ImageIcon} label="رابط الصورة الرئيسية" />
+            <FormControl>
+              <Input type="url" placeholder="https://example.com/image.jpg" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+
         <FormField control={form.control} name="content" render={({ field }) => (
-            <FormItem>
-                <FormLabelIcon icon={AlignLeft} label="المحتوى الكامل للمقال" />
-                <div className="text-xs text-muted-foreground space-y-1">
-                    <p> - لإنشاء **عنوان رئيسي (أخضر)**، استخدم `###` قبل النص.</p>
-                    <p> - لإنشاء **عنوان فرعي (أسود)**، استخدم `####` قبل النص.</p>
-                </div>
-                <FormControl><Textarea placeholder="اكتب محتوى المقال هنا..." rows={15} {...field} /></FormControl>
-                <FormMessage />
-            </FormItem>
+          <FormItem>
+            <FormLabelIcon icon={AlignLeft} label="المحتوى الكامل للمقال" />
+            <div className="text-xs text-muted-foreground space-y-1">
+              <p> - لإنشاء **عنوان رئيسي (أخضر)**، استخدم `###` قبل النص.</p>
+              <p> - لإنشاء **عنوان فرعي (أسود)**، استخدم `####` قبل النص.</p>
+            </div>
+            <FormControl>
+              <Textarea placeholder="اكتب محتوى المقال هنا..." rows={15} {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
         )} />
         
         <Button type="submit" disabled={isSubmitting} className="w-full mt-8" size="lg" style={{backgroundColor: sectionColor}}>
@@ -128,4 +180,4 @@ export function PostArticleForm({ article }: PostArticleFormProps) {
       </form>
     </Form>
   );
-}
+  }
