@@ -315,6 +315,7 @@ export async function updateUserProfile(uid: string, profileData: Partial<User>)
             ...profileData,
             updatedAt: serverTimestamp()
         });
+        revalidatePath('/profile');
     } catch (e) {
         console.error("Error updating user profile: ", e);
         throw new Error("Failed to update profile");
@@ -702,21 +703,19 @@ export function getOrganizerByName(organizerName?: string): Organizer | undefine
 export async function getArticles(options: { count?: number } = {}): Promise<Article[]> {
   try {
     const articlesRef = collection(db, 'articles');
-    const q = query(articlesRef, orderBy('createdAt', 'desc'));
+    let q = query(articlesRef, orderBy('createdAt', 'desc'));
+    
+    if (options.count) {
+      q = query(articlesRef, orderBy('createdAt', 'desc'), limit(options.count));
+    }
     
     const querySnapshot = await getDocs(q);
     
-    let articles = querySnapshot.docs.map(doc => ({
+    return querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
       postedAt: formatTimeAgo(doc.data().createdAt),
     } as Article));
-
-    if (options.count) {
-      return articles.slice(0, options.count);
-    }
-    
-    return articles;
   } catch (error) {
     console.error("Error fetching articles: ", error);
     return [];
@@ -890,12 +889,20 @@ export async function toggleSaveAd(userId: string, adId: string, adType: 'job' |
         const docSnap = await getDoc(savedAdRef);
         if (docSnap.exists()) {
             await deleteDoc(savedAdRef);
+            revalidatePath(`/profile/saved-ads`);
+            revalidatePath(`/jobs/${adId}`);
+            revalidatePath(`/competitions/${adId}`);
+            revalidatePath(`/immigration/${adId}`);
             return false; // Ad was unsaved
         } else {
             await setDoc(savedAdRef, {
                 savedAt: serverTimestamp(),
                 type: adType,
             });
+            revalidatePath(`/profile/saved-ads`);
+            revalidatePath(`/jobs/${adId}`);
+            revalidatePath(`/competitions/${adId}`);
+            revalidatePath(`/immigration/${adId}`);
             return true; // Ad was saved
         }
     } catch (error) {
@@ -943,6 +950,7 @@ export async function deleteContactMessage(messageId: string): Promise<void> {
     
 
     
+
 
 
 
