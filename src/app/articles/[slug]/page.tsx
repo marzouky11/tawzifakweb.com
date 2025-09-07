@@ -1,3 +1,4 @@
+
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { getArticleBySlug as getDbArticleBySlug, getArticles as getDbArticles } from '@/lib/data';
@@ -132,22 +133,15 @@ export default async function ArticlePage({ params }: Props) {
   const renderContent = () => {
     return contentBlocks.map((block, i) => {
         const trimmedBlock = block.trim();
-        // New DB articles styling
-        if (isDbArticle) {
-            if (trimmedBlock.startsWith('## ')) {
-                return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{trimmedBlock.replace('## ', '')}</h2>;
-            }
-            if (trimmedBlock.startsWith('### ')) {
-                 return <h3 key={`h3-${i}`} className="text-base font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{trimmedBlock.replace('### ', '')}</h3>;
-            }
-        } else {
-            // Old static articles styling
-            if (trimmedBlock.startsWith('### ')) {
-                 return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{trimmedBlock.replace('### ', '')}</h2>;
-            }
-             if (trimmedBlock.startsWith('#### ')) {
-                return <h3 key={`h3-${i}`} className="text-base font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{trimmedBlock.replace('#### ', '')}</h3>;
-            }
+        if (trimmedBlock.startsWith('## ')) {
+            return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{trimmedBlock.replace('## ', '')}</h2>;
+        }
+        if (trimmedBlock.startsWith('### ')) {
+                return <h3 key={`h3-${i}`} className="text-base font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{trimmedBlock.replace('### ', '')}</h3>;
+        }
+        // Legacy handling for old articles
+        if (trimmedBlock.startsWith('#### ')) {
+            return <h3 key={`h3-${i}`} className="text-base font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{trimmedBlock.replace('#### ', '')}</h3>;
         }
        
         return (
