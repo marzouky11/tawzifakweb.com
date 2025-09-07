@@ -62,26 +62,24 @@ export function PostArticleForm({ article }: PostArticleFormProps) {
     const slug = values.slug.trim();
 
     if (!slug) {
-      toast({
-        variant: "destructive",
-        title: "حقل رابط المقال فارغ",
-        description: "الرجاء كتابة رابط المقال (slug) قبل النشر.",
+      form.setError('slug', {
+        type: 'manual',
+        message: "الرجاء كتابة رابط المقال (slug) قبل النشر."
       });
       return;
     }
 
     setIsSubmitting(true);
     try {
-      // تحقق مباشرة من Firestore إذا الرابط موجود مسبقًا
+      // تحقق من Firestore إذا الرابط موجود مسبقًا
       const articlesRef = collection(db, 'articles');
       const q = query(articlesRef, where('slug', '==', slug));
       const querySnapshot = await getDocs(q);
 
       if (!isEditing && !querySnapshot.empty) {
-        toast({
-          variant: "destructive",
-          title: "الرابط مستخدم بالفعل",
-          description: "هذا الرابط موجود بالفعل لمقال آخر. الرجاء استخدام رابط مختلف.",
+        form.setError('slug', {
+          type: 'manual',
+          message: 'هذا الرابط مستخدم بالفعل. الرجاء اختيار رابط آخر.'
         });
         setIsSubmitting(false);
         return;
@@ -139,13 +137,34 @@ export function PostArticleForm({ article }: PostArticleFormProps) {
           </FormItem>
         )} />
 
-        <FormField control={form.control} name="slug" render={({ field }) => (
+        <FormField control={form.control} name="slug" render={({ field, formState }) => (
           <FormItem>
             <FormLabelIcon icon={Link2} label="رابط المقال (Slug)" />
             <FormControl>
-              <Input placeholder="اكتب رابط المقال بنفسك، بالأحرف الصغيرة والأرقام وشرطات (-) فقط" {...field} />
+              <Input
+                placeholder="اكتب رابط المقال بالأحرف الصغيرة والأرقام وشرطات (-) فقط"
+                {...field}
+                className={formState.errors.slug ? 'border-red-600 focus:border-red-600 focus:ring-red-600' : ''}
+                onBlur={async () => {
+                  const slug = field.value.trim();
+                  if (!slug) return;
+
+                  const articlesRef = collection(db, 'articles');
+                  const q = query(articlesRef, where('slug', '==', slug));
+                  const querySnapshot = await getDocs(q);
+
+                  if (!isEditing && !querySnapshot.empty) {
+                    form.setError('slug', {
+                      type: 'manual',
+                      message: 'هذا الرابط مستخدم بالفعل. الرجاء اختيار رابط آخر.'
+                    });
+                  } else {
+                    form.clearErrors('slug');
+                  }
+                }}
+              />
             </FormControl>
-            <FormMessage />
+            <FormMessage className="text-red-600" />
           </FormItem>
         )} />
 
@@ -180,4 +199,4 @@ export function PostArticleForm({ article }: PostArticleFormProps) {
       </form>
     </Form>
   );
-  }
+            }
