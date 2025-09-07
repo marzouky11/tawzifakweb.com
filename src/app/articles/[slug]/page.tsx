@@ -132,15 +132,17 @@ export default async function ArticlePage({ params }: Props) {
   const renderContent = () => {
     return contentBlocks.map((block, i) => {
         const trimmedBlock = block.trim();
+        // New articles use ## for main headings
         if (trimmedBlock.startsWith('## ')) {
             return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{trimmedBlock.replace('## ', '')}</h2>;
         }
-        if (trimmedBlock.startsWith('### ')) {
-                return <h3 key={`h3-${i}`} className="text-xl font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{trimmedBlock.replace('### ', '')}</h3>;
-        }
-        // Legacy handling for old articles
+        // Legacy articles used #### for main headings
         if (trimmedBlock.startsWith('#### ')) {
-            return <h3 key={`h3-${i}`} className="text-xl font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{trimmedBlock.replace('#### ', '')}</h3>;
+             return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{trimmedBlock.replace('#### ', '')}</h2>;
+        }
+        // Subheadings use ###
+        if (trimmedBlock.startsWith('### ')) {
+            return <h3 key={`h3-${i}`} className="text-xl font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{trimmedBlock.replace('### ', '')}</h3>;
         }
        
         return (
@@ -182,7 +184,7 @@ export default async function ArticlePage({ params }: Props) {
                   priority
                 />
               </div>
-              <div>
+              <div className="prose prose-lg dark:prose-invert max-w-none prose-p:leading-relaxed">
                 {renderContent()}
               </div>
             </CardContent>
