@@ -136,15 +136,15 @@ export default async function ArticlePage({ params }: Props) {
             return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{trimmedBlock.replace('## ', '')}</h2>;
         }
         if (trimmedBlock.startsWith('### ')) {
-                return <h3 key={`h3-${i}`} className="text-base font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{trimmedBlock.replace('### ', '')}</h3>;
+                return <h3 key={`h3-${i}`} className="text-xl font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{trimmedBlock.replace('### ', '')}</h3>;
         }
         // Legacy handling for old articles
         if (trimmedBlock.startsWith('#### ')) {
-            return <h3 key={`h3-${i}`} className="text-base font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{trimmedBlock.replace('#### ', '')}</h3>;
+            return <h3 key={`h3-${i}`} className="text-xl font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{trimmedBlock.replace('#### ', '')}</h3>;
         }
        
         return (
-            <p key={`p-${i}`} className="mb-4">
+            <p key={`p-${i}`} className="mb-4 text-base md:text-lg leading-relaxed">
                 {trimmedBlock}
             </p>
         );
@@ -182,9 +182,8 @@ export default async function ArticlePage({ params }: Props) {
                   priority
                 />
               </div>
-
-              <div className="prose prose-lg dark:prose-invert max-w-none prose-p:leading-relaxed prose-headings:text-green-600 prose-a:text-primary">
-                 {renderContent()}
+              <div>
+                {renderContent()}
               </div>
             </CardContent>
           </Card>
