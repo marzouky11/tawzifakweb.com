@@ -1,5 +1,4 @@
 
-
 import { db } from '@/lib/firebase';
 import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, Query, and, QueryConstraint, QueryFilterConstraint, documentId, increment } from 'firebase/firestore';
 import type { Job, Category, PostType, User, WorkType, Testimonial, Competition, Organizer, Article, Report, ContactMessage, ImmigrationPost } from './types';
@@ -765,17 +764,15 @@ export async function getArticleById(articleId: string): Promise<Article | null>
 }
 
 
-export async function addArticle(articleData: Omit<Article, 'id' | 'createdAt' | 'postedAt' | 'slug' | 'date'>): Promise<{ id: string }> {
+export async function addArticle(articleData: Omit<Article, 'id' | 'createdAt' | 'postedAt' | 'date'>): Promise<{ id: string }> {
     try {
-        const newSlug = slugify(articleData.title);
         const docRef = await addDoc(collection(db, 'articles'), {
             ...articleData,
-            slug: newSlug,
             createdAt: serverTimestamp()
         });
         
         revalidatePath('/articles');
-        revalidatePath(`/articles/${newSlug}`);
+        revalidatePath(`/articles/${articleData.slug}`);
 
         return { id: docRef.id };
     } catch (e) {
@@ -790,14 +787,13 @@ export async function updateArticle(articleId: string, articleData: Partial<Omit
             ...articleData,
             updatedAt: serverTimestamp()
         };
-        if(articleData.title) {
-            dataToUpdate.slug = slugify(articleData.title);
-        }
+        
         Object.keys(dataToUpdate).forEach(key => {
             if (dataToUpdate[key] === undefined) {
                 delete dataToUpdate[key];
             }
         });
+
         await updateDoc(doc(db, 'articles', articleId), dataToUpdate);
 
         revalidatePath('/articles');
@@ -950,6 +946,7 @@ export async function deleteContactMessage(messageId: string): Promise<void> {
     
 
     
+
 
 
 
