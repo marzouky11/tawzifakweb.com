@@ -126,7 +126,7 @@ const renderContent = (content: string) => {
   const flushList = (key: string) => {
     if (listItems.length > 0) {
       elements.push(
-        <ul key={key} className="list-disc list-inside mb-4 space-y-2">
+        <ul key={key} className="list-disc list-outside ms-6 mb-4 space-y-2">
           {listItems.map((item, idx) => (
             <li key={idx}>{linkify(item)}</li>
           ))}
