@@ -113,8 +113,8 @@ export function PostArticleForm({ article }: PostArticleFormProps) {
             <FormItem>
                 <FormLabelIcon icon={AlignLeft} label="المحتوى الكامل للمقال" />
                 <div className="text-xs text-muted-foreground space-y-1">
-                    <p> - لإنشاء **عنوان رئيسي (أخضر)**، استخدم `##` قبل النص.</p>
-                    <p> - لإنشاء **عنوان فرعي (أسود)**، استخدم `###` قبل النص.</p>
+                    <p> - لإنشاء **عنوان رئيسي (أخضر)**، استخدم `###` قبل النص.</p>
+                    <p> - لإنشاء **عنوان فرعي (أسود)**، استخدم `####` قبل النص.</p>
                 </div>
                 <FormControl><Textarea placeholder="اكتب محتوى المقال هنا..." rows={15} {...field} /></FormControl>
                 <FormMessage />
