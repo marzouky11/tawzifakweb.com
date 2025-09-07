@@ -123,47 +123,43 @@ const renderContent = (content: string) => {
   const elements: React.ReactNode[] = [];
   let listItems: string[] = [];
 
+  const flushList = (key: string) => {
+    if (listItems.length > 0) {
+      elements.push(
+        <ul key={key} className="list-disc list-inside mb-4 space-y-2">
+          {listItems.map((item, idx) => (
+            <li key={idx}>{linkify(item)}</li>
+          ))}
+        </ul>
+      );
+      listItems = [];
+    }
+  };
+
   contentBlocks.forEach((line, i) => {
     const trimmed = line.trim();
 
     if (!trimmed) {
-      if (listItems.length > 0) {
-        elements.push(
-          <ul key={`ul-${i}`} className="list-disc list-inside mb-4">
-            {listItems.map((item, idx) => <li key={idx}>{linkify(item)}</li>)}
-          </ul>
-        );
-        listItems = [];
-      }
+      flushList(`ul-${i}`);
       return;
     }
 
     if (trimmed.startsWith('### ')) {
-      if (listItems.length > 0) {
-        elements.push(
-          <ul key={`ul-${i}`} className="list-disc list-inside mb-4">
-            {listItems.map((item, idx) => <li key={idx}>{linkify(item)}</li>)}
-          </ul>
-        );
-        listItems = [];
-      }
+      flushList(`ul-${i}`);
       elements.push(
-        <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{trimmed.replace(/^###\s/, '')}</h2>
+        <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">
+          {trimmed.replace(/^###\s/, '')}
+        </h2>
       );
       return;
     }
 
     if (trimmed.startsWith('#### ')) {
-      if (listItems.length > 0) {
-        elements.push(
-          <ul key={`ul-${i}`} className="list-disc list-inside mb-4">
-            {listItems.map((item, idx) => <li key={idx}>{linkify(item)}</li>)}
-          </ul>
-        );
-        listItems = [];
-      }
+      flushList(`ul-${i}`);
       elements.push(
-        <h3 key={`h3-${i}`} className="text-lg font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{trimmed.replace(/^####\s/, '')}</h3>
+        <h3 key={`h3-${i}`} className="text-lg font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">
+          {trimmed.replace(/^####\s/, '')}
+        </h3>
       );
       return;
     }
@@ -173,28 +169,13 @@ const renderContent = (content: string) => {
       return;
     }
 
-    if (listItems.length > 0) {
-      elements.push(
-        <ul key={`ul-${i}`} className="list-disc list-inside mb-4">
-          {listItems.map((item, idx) => <li key={idx}>{linkify(item)}</li>)}
-        </ul>
-      );
-      listItems = [];
-    }
-
+    flushList(`ul-${i}`);
     elements.push(
       <p key={`p-${i}`} className="mb-4 text-base md:text-lg leading-relaxed">{linkify(trimmed)}</p>
     );
   });
 
-  if (listItems.length > 0) {
-    elements.push(
-      <ul key={`ul-end`} className="list-disc list-inside mb-4">
-        {listItems.map((item, idx) => <li key={idx}>{linkify(item)}</li>)}
-      </ul>
-    );
-  }
-
+  flushList('ul-end');
   return elements;
 };
 
@@ -281,4 +262,4 @@ export async function generateStaticParams() {
   const allArticles = [...staticArticles, ...dbArticles];
 
   return allArticles.map(article => ({ slug: article.slug }));
-          }
+      }
