@@ -9,7 +9,6 @@ import type { Metadata } from 'next';
 import { ArticleCard } from '../article-card';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
-import { useAuth } from '@/context/auth-context';
 import type { Article } from '@/lib/types';
 
 interface Props {
@@ -38,21 +37,34 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const articleDate = article.createdAt 
-    ? article.createdAt.toDate() 
-    : article.date 
-      ? new Date(article.date) 
-      : new Date();
+  const articleDate = article.createdAt
+    ? article.createdAt.toDate()
+    : article.date
+    ? new Date(article.date)
+    : new Date();
 
   const articleJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    mainEntityOfPage: { '@type': 'WebPage', '@id': `${baseUrl}/articles/${article.slug}` },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${baseUrl}/articles/${article.slug}`,
+    },
     headline: article.title,
     description: article.summary,
     image: article.imageUrl,
-    author: { '@type': 'Person', name: article.author },
-    publisher: { '@type': 'Organization', name: 'توظيفك', logo: { '@type': 'ImageObject', url: siteThumbnail } },
+    author: {
+      '@type': 'Person',
+      name: article.author,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'توظيفك',
+      logo: {
+        '@type': 'ImageObject',
+        url: siteThumbnail,
+      },
+    },
     datePublished: articleDate.toISOString(),
     dateModified: articleDate.toISOString(),
   };
@@ -61,12 +73,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: article.title,
     description: article.summary,
     metadataBase: new URL(baseUrl),
-    alternates: { canonical: `/articles/${article.slug}` },
+    alternates: {
+      canonical: `/articles/${article.slug}`,
+    },
     robots: 'index, follow',
     openGraph: {
       title: article.title,
       description: article.summary,
-      images: [{ url: article.imageUrl, width: 1200, height: 630, alt: article.title }],
+      images: [
+        {
+          url: article.imageUrl,
+          width: 1200,
+          height: 630,
+          alt: article.title,
+        },
+      ],
       url: `${baseUrl}/articles/${article.slug}`,
       siteName: 'توظيفك',
       type: 'article',
@@ -79,13 +100,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: article.summary,
       images: [article.imageUrl],
     },
-    other: { 'application/ld+json': JSON.stringify(articleJsonLd, null, 2) }
+    other: {
+      'application/ld+json': JSON.stringify(articleJsonLd, null, 2)
+    }
   };
 }
 
 export default async function ArticlePage({ params }: Props) {
   const article = await getArticle(params.slug);
-  if (!article) notFound();
+
+  if (!article) {
+    notFound();
+  }
 
   const staticArticles = getStaticArticles();
   const dbArticles = await getDbArticles();
@@ -96,30 +122,42 @@ export default async function ArticlePage({ params }: Props) {
     .sort(() => 0.5 - Math.random())
     .slice(0, 3);
 
-  const contentBlocks = article.content.split('\n').map(p => p.trim()).filter(p => p.length > 0);
+  const contentBlocks = article.content
+    .split('\n')
+    .map(p => p.trim())
+    .filter(p => p.length > 0);
+
+  // تحويل أي رابط موجود في النص إلى رابط قابل للنقر
+  const linkify = (text: string) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text.split(urlRegex).map((part, idx) => {
+      if (part.match(urlRegex)) {
+        return <a key={idx} href={part} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{part}</a>;
+      } else {
+        return part;
+      }
+    });
+  };
 
   const renderContent = () => {
-    const urlRegex = /(https?:\/\/[^\s]+)/g; // يبحث عن أي رابط يبدأ بـ http/https
     return contentBlocks.map((block, i) => {
       const trimmedBlock = block.trim();
 
       if (trimmedBlock.startsWith('### ')) {
-        return <h2 key={i} className="text-2xl font-bold mt-6 mb-3 text-green-600">{trimmedBlock.replace(/^###\s/, '')}</h2>;
+        const headingText = trimmedBlock.replace(/^###\s/, '');
+        return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{headingText}</h2>;
       }
 
       if (trimmedBlock.startsWith('#### ')) {
-        return <h3 key={i} className="text-lg font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{trimmedBlock.replace(/^####\s/, '')}</h3>;
+        const headingText = trimmedBlock.replace(/^####\s/, '');
+        return <h3 key={`h3-${i}`} className="text-lg font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{headingText}</h3>;
       }
 
-      // تحويل أي رابط إلى clickable link
-      const parts = trimmedBlock.split(urlRegex).map((part, idx) => {
-        if (part.match(urlRegex)) {
-          return <a key={idx} href={part} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{part}</a>;
-        }
-        return part;
-      });
-
-      return <p key={i} className="mb-4 text-base md:text-lg leading-relaxed">{parts}</p>;
+      return (
+        <p key={`p-${i}`} className="mb-4 text-base md:text-lg leading-relaxed">
+          {linkify(trimmedBlock)}
+        </p>
+      );
     });
   };
 
@@ -133,18 +171,30 @@ export default async function ArticlePage({ params }: Props) {
           <Card>
             <CardContent className="p-4 md:p-8">
               <header className="mb-6">
-                <h1 className="text-3xl md:text-4xl font-bold leading-tight text-red-600 dark:text-red-500 mb-4">{article.title}</h1>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <User className="h-4 w-4" />
-                  <span>{article.author}</span>
+                <h1 className="text-3xl md:text-4xl font-bold leading-tight text-red-600 dark:text-red-500 mb-4">
+                  {article.title}
+                </h1>
+                <div className="flex items-center space-x-4 space-x-reverse text-sm text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    <span>{article.author}</span>
+                  </div>
                 </div>
               </header>
 
               <div className="relative h-64 md:h-80 w-full mb-8 rounded-lg overflow-hidden">
-                <Image src={article.imageUrl} alt={article.title} fill className="object-cover" priority />
+                <Image
+                  src={article.imageUrl}
+                  alt={article.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover"
+                  priority
+                />
               </div>
-
-              <div className="prose-p:leading-relaxed prose-lg max-w-none dark:prose-invert">{renderContent()}</div>
+              <div className="prose-p:leading-relaxed prose-lg max-w-none dark:prose-invert">
+                {renderContent()}
+              </div>
             </CardContent>
           </Card>
         </article>
@@ -152,9 +202,13 @@ export default async function ArticlePage({ params }: Props) {
         {relatedArticles.length > 0 && (
           <section className="mt-12">
             <Separator className="my-8" />
-            <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">مقالات قد تعجبك أيضاً</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
+              مقالات قد تعجبك أيضاً
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {relatedArticles.map((ra) => <ArticleCard key={ra.slug} article={ra} />)}
+              {relatedArticles.map((relatedArticle) => (
+                <ArticleCard key={relatedArticle.slug} article={relatedArticle} />
+              ))}
             </div>
           </section>
         )}
@@ -167,7 +221,10 @@ export async function generateStaticParams() {
   const { getArticles: getStaticArticles } = await import('@/lib/articles');
   const { getArticles: getDbArticles } = await import('@/lib/data');
 
-  const allArticles = [...getStaticArticles(), ...getDbArticles()];
+  const staticArticles = getStaticArticles();
+  const dbArticles = await getDbArticles();
+
+  const allArticles = [...staticArticles, ...dbArticles];
 
   return allArticles.map(article => ({ slug: article.slug }));
-}
+    }
