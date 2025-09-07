@@ -53,10 +53,14 @@ export function PostArticleForm({ article }: PostArticleFormProps) {
   });
   
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      form.setValue('title', e.target.value);
-      if (!isEditing || !form.getValues('slug')) { // Only auto-slug for new articles or if slug is empty
-          form.setValue('slug', slugify(e.target.value));
-      }
+    const newTitle = e.target.value;
+    form.setValue('title', newTitle);
+    
+    // Only auto-slug for new articles or if the slug field was manually cleared
+    if (!isEditing || !form.getValues('slug')) { 
+        const newSlug = slugify(newTitle);
+        form.setValue('slug', newSlug, { shouldValidate: true });
+    }
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -103,7 +107,7 @@ export function PostArticleForm({ article }: PostArticleFormProps) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField control={form.control} name="title" render={({ field }) => (<FormItem><FormLabelIcon icon={FileText} label="عنوان المقال" /><FormControl><Input placeholder="اكتب عنوانًا جذابًا للمقال..." {...field} onChange={handleTitleChange} /></FormControl><FormMessage /></FormItem>)} />
-        <FormField control={form.control} name="slug" render={({ field }) => (<FormItem><FormLabelIcon icon={Link2} label="رابط المقال (Slug)" /><FormControl><Input placeholder="مثال: كيف-تكتب-سيرة-ذاتية" {...field} /></FormControl><FormMessage /></FormItem>)} />
+        <FormField control={form.control} name="slug" render={({ field }) => (<FormItem><FormLabelIcon icon={Link2} label="رابط المقال (Slug)" /><FormControl><Input placeholder="سيتم إنشاؤه تلقائيًا من العنوان" {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="imageUrl" render={({ field }) => (<FormItem><FormLabelIcon icon={ImageIcon} label="رابط الصورة الرئيسية" /><FormControl><Input type="url" placeholder="https://example.com/image.jpg" {...field} /></FormControl><FormMessage /></FormItem>)} />
         <FormField control={form.control} name="content" render={({ field }) => (
             <FormItem>
