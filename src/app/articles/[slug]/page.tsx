@@ -131,22 +131,21 @@ export default async function ArticlePage({ params }: Props) {
 
   const renderContent = () => {
     return contentBlocks.map((block, i) => {
-        const trimmedBlock = block.trim();
-        // New articles use ## for main headings, old use ####
-        if (trimmedBlock.startsWith('## ') || trimmedBlock.startsWith('#### ')) {
-            const headingText = trimmedBlock.replace(/^[#]+\s/, '');
-            return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{headingText}</h2>;
-        }
-        // Subheadings use ###
-        if (trimmedBlock.startsWith('### ')) {
-            return <h3 key={`h3-${i}`} className="text-xl font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{trimmedBlock.replace('### ', '')}</h3>;
-        }
-       
-        return (
-            <p key={`p-${i}`} className="mb-4 text-base md:text-lg leading-relaxed">
-                {trimmedBlock}
-            </p>
-        );
+      const trimmedBlock = block.trim();
+      // IMPORTANT: Check for ### (subheading) first, because '###' also starts with '##'
+      if (trimmedBlock.startsWith('### ')) {
+        return <h3 key={`h3-${i}`} className="text-xl font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{trimmedBlock.replace('### ', '')}</h3>;
+      }
+      // Then check for main headings (## for new, #### for old)
+      if (trimmedBlock.startsWith('## ') || trimmedBlock.startsWith('#### ')) {
+          const headingText = trimmedBlock.replace(/^[#]+\s/, '');
+          return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{headingText}</h2>;
+      }
+      return (
+        <p key={`p-${i}`} className="mb-4 text-base md:text-lg leading-relaxed">
+            {trimmedBlock}
+        </p>
+      );
     });
   };
 
@@ -181,7 +180,7 @@ export default async function ArticlePage({ params }: Props) {
                   priority
                 />
               </div>
-              <div className="prose prose-lg dark:prose-invert max-w-none prose-p:leading-relaxed">
+              <div className="prose-p:leading-relaxed prose-lg max-w-none dark:prose-invert">
                 {renderContent()}
               </div>
             </CardContent>
