@@ -72,7 +72,7 @@ function AdGrid({
               <Button
                 asChild
                 variant="outline"
-                className="flex-1 flex flex-row-reverse gap-2"
+                className="flex-1 flex items-center justify-center gap-2"
               >
                 <Link href={`/edit-job/${ad.id}`}>
                   <FileSignature className="h-4 w-4" />
@@ -82,7 +82,7 @@ function AdGrid({
             )}
             <Button
               variant="destructive"
-              className="flex-1 flex flex-row-reverse gap-2"
+              className="flex-1 flex items-center justify-center gap-2"
               onClick={() => onAdDelete(ad.id)}
             >
               <Trash2 className="h-4 w-4" />
@@ -122,7 +122,7 @@ function ImmigrationGrid({
             <Button
               asChild
               variant="outline"
-              className="flex-1 flex flex-row-reverse gap-2"
+              className="flex-1 flex items-center justify-center gap-2"
             >
               <Link href={`/edit-immigration/${post.id}`}>
                 <FileSignature className="h-4 w-4" />
@@ -131,7 +131,7 @@ function ImmigrationGrid({
             </Button>
             <Button
               variant="destructive"
-              className="flex-1 flex flex-row-reverse gap-2"
+              className="flex-1 flex items-center justify-center gap-2"
               onClick={() => onAdDelete(post.id)}
             >
               <Trash2 className="h-4 w-4" />
@@ -172,7 +172,7 @@ function CompetitionGrid({
             <Button
               asChild
               variant="outline"
-              className="flex-1 flex flex-row-reverse gap-2"
+              className="flex-1 flex items-center justify-center gap-2"
             >
               <Link href={`/edit-competition/${comp.id}`}>
                 <FileSignature className="h-4 w-4" />
@@ -181,7 +181,7 @@ function CompetitionGrid({
             </Button>
             <Button
               variant="destructive"
-              className="flex-1 flex flex-row-reverse gap-2"
+              className="flex-1 flex items-center justify-center gap-2"
               onClick={() => onAdDelete(comp.id)}
             >
               <Trash2 className="h-4 w-4" />
@@ -298,32 +298,36 @@ export default function MyAdsPage() {
     if (userData?.isAdmin) {
       return (
         <Tabs defaultValue="jobs" className="w-full">
-          {/* ✅ Tabs مع فواصل */}
+          {/* ✅ Tabs بخلفية وحواف */}
           <TabsList
             dir="rtl"
-            className="grid w-full grid-cols-2 md:grid-cols-4 gap-0 mb-6 h-auto border rounded-lg overflow-hidden divide-x"
+            className="grid w-full grid-cols-2 md:grid-cols-4 gap-2 mb-6 h-auto"
           >
             <TabsTrigger
               value="jobs"
-              className="data-[state=active]:bg-primary data-[state=active]:text-white p-3 w-full justify-center border-none"
+              className="data-[state=active]:bg-primary data-[state=active]:text-white 
+                         p-3 w-full justify-center border rounded-md bg-gray-50 hover:bg-gray-100"
             >
               وظائف ({jobOffers.length})
             </TabsTrigger>
             <TabsTrigger
               value="migration"
-              className="data-[state=active]:bg-primary data-[state=active]:text-white p-3 w-full justify-center border-none"
+              className="data-[state=active]:bg-primary data-[state=active]:text-white 
+                         p-3 w-full justify-center border rounded-md bg-gray-50 hover:bg-gray-100"
             >
               فرص الهجرة ({immigrationPosts.length})
             </TabsTrigger>
             <TabsTrigger
               value="competitions"
-              className="data-[state=active]:bg-primary data-[state=active]:text-white p-3 w-full justify-center border-none"
+              className="data-[state=active]:bg-primary data-[state=active]:text-white 
+                         p-3 w-full justify-center border rounded-md bg-gray-50 hover:bg-gray-100"
             >
               مباريات عمومية ({competitions.length})
             </TabsTrigger>
             <TabsTrigger
               value="seekers"
-              className="data-[state=active]:bg-primary data-[state=active]:text-white p-3 w-full justify-center border-none"
+              className="data-[state=active]:bg-primary data-[state=active]:text-white 
+                         p-3 w-full justify-center border rounded-md bg-gray-50 hover:bg-gray-100"
             >
               باحثون عن عمل ({jobRequests.length})
             </TabsTrigger>
@@ -416,4 +420,4 @@ export default function MyAdsPage() {
       </AlertDialog>
     </>
   );
-            }
+        }
