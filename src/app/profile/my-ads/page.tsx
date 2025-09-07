@@ -72,7 +72,7 @@ function AdGrid({
               <Button asChild variant="outline" className="flex-1">
                 <Link href={`/edit-job/${ad.id}`}>
                   تعديل
-                  <FileSignature className="ml-2 h-4 w-4" />
+                  <FileSignature className="rtl:mr-2 ltr:ml-2 h-4 w-4" />
                 </Link>
               </Button>
             )}
@@ -82,7 +82,7 @@ function AdGrid({
               onClick={() => onAdDelete(ad.id)}
             >
               حذف
-              <Trash2 className="ml-2 h-4 w-4" />
+              <Trash2 className="rtl:mr-2 ltr:ml-2 h-4 w-4" />
             </Button>
           </div>
         </div>
@@ -118,7 +118,7 @@ function ImmigrationGrid({
             <Button asChild variant="outline" className="flex-1">
               <Link href={`/edit-immigration/${post.id}`}>
                 تعديل
-                <FileSignature className="ml-2 h-4 w-4" />
+                <FileSignature className="rtl:mr-2 ltr:ml-2 h-4 w-4" />
               </Link>
             </Button>
             <Button
@@ -127,7 +127,7 @@ function ImmigrationGrid({
               onClick={() => onAdDelete(post.id)}
             >
               حذف
-              <Trash2 className="ml-2 h-4 w-4" />
+              <Trash2 className="rtl:mr-2 ltr:ml-2 h-4 w-4" />
             </Button>
           </div>
         </div>
@@ -164,7 +164,7 @@ function CompetitionGrid({
             <Button asChild variant="outline" className="flex-1">
               <Link href={`/edit-competition/${comp.id}`}>
                 تعديل
-                <FileSignature className="ml-2 h-4 w-4" />
+                <FileSignature className="rtl:mr-2 ltr:ml-2 h-4 w-4" />
               </Link>
             </Button>
             <Button
@@ -173,7 +173,7 @@ function CompetitionGrid({
               onClick={() => onAdDelete(comp.id)}
             >
               حذف
-              <Trash2 className="ml-2 h-4 w-4" />
+              <Trash2 className="rtl:mr-2 ltr:ml-2 h-4 w-4" />
             </Button>
           </div>
         </div>
@@ -288,29 +288,29 @@ export default function MyAdsPage() {
         <Tabs defaultValue="jobs" className="w-full">
           <TabsList
             dir="rtl"
-            className="grid w-full grid-cols-2 md:grid-cols-4 gap-2 mb-6"
+            className="grid w-full grid-cols-2 md:grid-cols-4 gap-2 mb-6 h-auto"
           >
             <TabsTrigger
               value="jobs"
-              className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg p-3"
+              className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg p-3 w-full justify-center"
             >
               وظائف ({jobOffers.length})
             </TabsTrigger>
             <TabsTrigger
               value="migration"
-              className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg p-3"
+              className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg p-3 w-full justify-center"
             >
               فرص الهجرة ({immigrationPosts.length})
             </TabsTrigger>
             <TabsTrigger
               value="competitions"
-              className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg p-3"
+              className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg p-3 w-full justify-center"
             >
               مباريات عمومية ({competitions.length})
             </TabsTrigger>
             <TabsTrigger
               value="seekers"
-              className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg p-3"
+              className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-lg p-3 w-full justify-center"
             >
               باحثون عن عمل ({jobRequests.length})
             </TabsTrigger>
