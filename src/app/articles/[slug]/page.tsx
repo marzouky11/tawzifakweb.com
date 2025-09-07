@@ -1,3 +1,4 @@
+
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { getArticleBySlug as getDbArticleBySlug, getArticles as getDbArticles } from '@/lib/data';
@@ -132,15 +133,16 @@ export default async function ArticlePage({ params }: Props) {
   const renderContent = () => {
     return contentBlocks.map((block, i) => {
       const trimmedBlock = block.trim();
-      // IMPORTANT: Check for ### (subheading) first, because '###' also starts with '##'
+      
       if (trimmedBlock.startsWith('### ')) {
         return <h3 key={`h3-${i}`} className="text-xl font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{trimmedBlock.replace('### ', '')}</h3>;
       }
-      // Then check for main headings (## for new, #### for old)
+      
       if (trimmedBlock.startsWith('## ') || trimmedBlock.startsWith('#### ')) {
           const headingText = trimmedBlock.replace(/^[#]+\s/, '');
           return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{headingText}</h2>;
       }
+      
       return (
         <p key={`p-${i}`} className="mb-4 text-base md:text-lg leading-relaxed">
             {trimmedBlock}
