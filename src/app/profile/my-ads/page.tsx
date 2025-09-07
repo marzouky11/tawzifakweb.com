@@ -27,6 +27,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
+// === بطاقات الإعلانات (الوظائف) ===
 function AdGrid({ ads, onAdDelete, showEditButton = false }: { ads: Job[], onAdDelete: (adId: string) => void, showEditButton?: boolean }) {
   if (ads.length === 0) {
     return (
@@ -46,14 +47,14 @@ function AdGrid({ ads, onAdDelete, showEditButton = false }: { ads: Job[], onAdD
             {showEditButton && (
               <Button asChild variant="outline" className="flex-1">
                 <Link href={`/edit-job/${ad.id}`}>
+                  <FileSignature className="w-4 h-4 ml-2" />
                   تعديل
-                  <FileSignature className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
             )}
             <Button variant="destructive" className="flex-1" onClick={() => onAdDelete(ad.id)}>
+              <Trash2 className="w-4 h-4 ml-2" />
               حذف
-              <Trash2 className="ml-2 h-4 w-4" />
             </Button>
           </div>
         </div>
@@ -62,6 +63,7 @@ function AdGrid({ ads, onAdDelete, showEditButton = false }: { ads: Job[], onAdD
   )
 }
 
+// === بطاقات المستخدم العادي ===
 function UserAdGrid({ ads, onAdDelete }: { ads: Job[], onAdDelete: (adId: string) => void }) {
   if (ads.length === 0) {
     return (
@@ -83,13 +85,13 @@ function UserAdGrid({ ads, onAdDelete }: { ads: Job[], onAdDelete: (adId: string
           <div className="flex gap-2">
             <Button asChild variant="outline" className="flex-1">
               <Link href={`/edit-job/${ad.id}`}>
+                <FileSignature className="w-4 h-4 ml-2" />
                 تعديل
-                <FileSignature className="ml-2 h-4 w-4" />
               </Link>
             </Button>
             <Button variant="destructive" className="flex-1" onClick={() => onAdDelete(ad.id)}>
+              <Trash2 className="w-4 h-4 ml-2" />
               حذف
-              <Trash2 className="ml-2 h-4 w-4" />
             </Button>
           </div>
         </div>
@@ -98,6 +100,7 @@ function UserAdGrid({ ads, onAdDelete }: { ads: Job[], onAdDelete: (adId: string
   )
 }
 
+// === بطاقات الهجرة ===
 function ImmigrationGrid({ posts, onAdDelete }: { posts: ImmigrationPost[], onAdDelete: (postId: string) => void }) {
   if (posts.length === 0) {
     return (
@@ -115,13 +118,13 @@ function ImmigrationGrid({ posts, onAdDelete }: { posts: ImmigrationPost[], onAd
           <div className="flex gap-2">
             <Button asChild variant="outline" className="flex-1">
               <Link href={`/edit-immigration/${post.id}`}>
+                <FileSignature className="w-4 h-4 ml-2" />
                 تعديل
-                <FileSignature className="ml-2 h-4 w-4" />
               </Link>
             </Button>
             <Button variant="destructive" className="flex-1" onClick={() => onAdDelete(post.id)}>
+              <Trash2 className="w-4 h-4 ml-2" />
               حذف
-              <Trash2 className="ml-2 h-4 w-4" />
             </Button>
           </div>
         </div>
@@ -130,6 +133,7 @@ function ImmigrationGrid({ posts, onAdDelete }: { posts: ImmigrationPost[], onAd
   );
 }
 
+// === بطاقات المباريات ===
 function CompetitionGrid({ competitions, onAdDelete }: { competitions: Competition[], onAdDelete: (adId: string) => void }) {
   if (competitions.length === 0) {
     return (
@@ -148,13 +152,13 @@ function CompetitionGrid({ competitions, onAdDelete }: { competitions: Competiti
           <div className="flex gap-2">
             <Button asChild variant="outline" className="flex-1">
               <Link href={`/edit-competition/${comp.id}`}>
+                <FileSignature className="w-4 h-4 ml-2" />
                 تعديل
-                <FileSignature className="ml-2 h-4 w-4" />
               </Link>
             </Button>
             <Button variant="destructive" className="flex-1" onClick={() => onAdDelete(comp.id)}>
+              <Trash2 className="w-4 h-4 ml-2" />
               حذف
-              <Trash2 className="ml-2 h-4 w-4" />
             </Button>
           </div>
         </div>
@@ -254,7 +258,8 @@ export default function MyAdsPage() {
     if (userData?.isAdmin) {
       return (
         <Tabs defaultValue="offers" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-6">
+          {/* هنا التغيير: موبايل = صفين (2 أعمدة)، كمبيوتر = صف واحد (4 أعمدة) */}
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-6">
             <TabsTrigger value="offers">الوظائف ({jobOffers.length})</TabsTrigger>
             <TabsTrigger value="competitions">المباريات ({competitions.length})</TabsTrigger>
             <TabsTrigger value="immigration">الهجرة ({immigrationPosts.length})</TabsTrigger>
@@ -314,4 +319,4 @@ export default function MyAdsPage() {
       </AlertDialog>
     </>
   );
-              }
+                  }
