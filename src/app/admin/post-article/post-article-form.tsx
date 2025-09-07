@@ -137,14 +137,13 @@ export function PostArticleForm({ article }: PostArticleFormProps) {
           </FormItem>
         )} />
 
-        <FormField control={form.control} name="slug" render={({ field, formState }) => (
+        <FormField control={form.control} name="slug" render={({ field }) => (
           <FormItem>
             <FormLabelIcon icon={Link2} label="رابط المقال (Slug)" />
             <FormControl>
               <Input
                 placeholder="اكتب رابط المقال بالأحرف الصغيرة والأرقام وشرطات (-) فقط"
                 {...field}
-                className={formState.errors.slug ? 'border-red-600 focus:border-red-600 focus:ring-red-600' : ''}
                 onBlur={async () => {
                   const slug = field.value.trim();
                   if (!slug) return;
@@ -199,4 +198,4 @@ export function PostArticleForm({ article }: PostArticleFormProps) {
       </form>
     </Form>
   );
-            }
+                          }
