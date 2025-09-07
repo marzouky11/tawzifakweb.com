@@ -93,10 +93,10 @@ export default async function ArticlePage({ params }: Props) {
   const renderContent = () => {
     return contentBlocks.map((block, i) => {
       const trimmed = block.trim();
-      if (!trimmed) return <div key={i} className="h-4" />; // سطر فارغ يظهر فقط إذا تركت فراغ
+      if (!trimmed) return <br key={i} />; // سطر فارغ يظهر فقط إذا تركت فراغ
       if (trimmed.startsWith('### ')) return <h2 key={i} className="text-2xl font-bold mt-6 mb-3 text-green-600">{trimmed.replace('### ', '')}</h2>;
       if (trimmed.startsWith('#### ')) return <h3 key={i} className="text-lg font-bold mt-4 mb-3 text-gray-800 dark:text-gray-200">{trimmed.replace('#### ', '')}</h3>;
-      if (trimmed.startsWith('- ')) return <p key={i} className="mb-2 ml-4 list-disc list-inside">{trimmed}</p>; // النقاط بمسافة طبيعية
+      if (trimmed.startsWith('- ')) return <li key={i} className="list-disc list-inside">{trimmed.replace('- ', '')}</li>; // النقاط بمسافة طبيعية
       return <p key={i} className="mb-4">{linkify(trimmed)}</p>;
     });
   };
@@ -119,7 +119,9 @@ export default async function ArticlePage({ params }: Props) {
                 <Image src={article.imageUrl} alt={article.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover" priority />
               </div>
 
-              <div className="prose prose-lg max-w-none dark:prose-invert">{renderContent()}</div>
+              <div className="prose prose-lg max-w-none dark:prose-invert">
+                <ul className="list-none">{renderContent()}</ul>
+              </div>
             </CardContent>
           </Card>
         </article>
@@ -147,4 +149,4 @@ export async function generateStaticParams() {
   const allArticles = [...staticArticles, ...dbArticles];
 
   return allArticles.map(a => ({ slug: a.slug }));
-}
+    }
