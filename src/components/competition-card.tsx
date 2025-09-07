@@ -21,8 +21,8 @@ const InfoBadge = ({ icon, text, variant, className, textColor }: { icon?: React
   if (!text) return null;
   const Icon = icon;
   return (
-    <Badge variant={variant} className={cn("flex items-center gap-1.5 font-normal text-xs py-1", className)}>
-      {Icon && <Icon className="h-3.5 w-3.5" />}
+    <Badge variant={variant} className={cn("flex items-center gap-1.5 font-normal text-xs py-1 max-w-full", className)}>
+      {Icon && <Icon className="h-3.5 w-3.5 flex-shrink-0" />}
       <span className={cn("truncate font-medium", textColor)}>{text}</span>
     </Badge>
   );
