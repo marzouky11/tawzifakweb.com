@@ -132,13 +132,10 @@ export default async function ArticlePage({ params }: Props) {
   const renderContent = () => {
     return contentBlocks.map((block, i) => {
         const trimmedBlock = block.trim();
-        // New articles use ## for main headings
-        if (trimmedBlock.startsWith('## ')) {
-            return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{trimmedBlock.replace('## ', '')}</h2>;
-        }
-        // Legacy articles used #### for main headings
-        if (trimmedBlock.startsWith('#### ')) {
-             return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{trimmedBlock.replace('#### ', '')}</h2>;
+        // New articles use ## for main headings, old use ####
+        if (trimmedBlock.startsWith('## ') || trimmedBlock.startsWith('#### ')) {
+            const headingText = trimmedBlock.replace(/^[#]+\s/, '');
+            return <h2 key={`h2-${i}`} className="text-2xl font-bold mt-6 mb-3 text-green-600">{headingText}</h2>;
         }
         // Subheadings use ###
         if (trimmedBlock.startsWith('### ')) {
