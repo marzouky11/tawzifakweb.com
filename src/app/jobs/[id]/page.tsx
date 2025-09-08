@@ -30,13 +30,6 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
     };
   }
   
-  const employmentTypeMapping: { [key in WorkType]: string } = {
-    'full_time': 'FULL_TIME',
-    'part_time': 'PART_TIME',
-    'freelance': 'CONTRACTOR',
-    'remote': 'OTHER',
-  };
-
   const jobTitle = job.title || 'إعلان وظيفة';
   const jobCity = job.city || 'مدينة غير محددة';
   const jobCountry = job.country || 'دولة غير محددة';
@@ -45,87 +38,28 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
     ? job.createdAt.toDate() 
     : new Date();
 
-  const expiryDate = new Date(createdAtDate);
-  expiryDate.setFullYear(expiryDate.getFullYear() + 1);
-
-  // Construct structured data
-  const jobPostingJsonLd: any = {
+  // Construct simplified and valid structured data
+  const jobPostingJsonLd = {
       '@context': 'https://schema.org',
       '@type': 'JobPosting',
       title: jobTitle,
+      description: metaDescription,
       datePosted: createdAtDate.toISOString(),
-      validThrough: expiryDate.toISOString(),
       hiringOrganization: {
         '@type': 'Organization',
         name: job.companyName || 'شركة غير محددة',
         sameAs: baseUrl,
       },
-  };
-
-  if(job.workType) {
-    jobPostingJsonLd.employmentType = employmentTypeMapping[job.workType];
-  }
-
-  if (job.salary) {
-    const salaryValue = parseFloat(job.salary.replace(/[^0-9.]/g, '')) || 0;
-    jobPostingJsonLd.baseSalary = {
-      '@type': 'MonetaryAmount',
-      currency: 'SAR', // Default currency
-      value: {
-        '@type': 'QuantitativeValue',
-        value: salaryValue,
-        unitText: 'MONTH', // Default unit
+      jobLocation: {
+          '@type': 'Place',
+          address: {
+              '@type': 'PostalAddress',
+              addressLocality: job.city,
+              addressCountry: job.country,
+          },
       },
-    };
-  }
-
-  if (job.country || job.city) {
-    jobPostingJsonLd.jobLocation = {
-        '@type': 'Place',
-        address: {
-            '@type': 'PostalAddress',
-            ...(job.country && { addressCountry: job.country }),
-            ...(job.city && { addressLocality: job.city }),
-        },
-    };
-  }
-  
-  if (job.workType === 'remote') {
-      jobPostingJsonLd.jobLocationType = 'TELECOMMUTE';
-  }
-
-  if (job.description) {
-      jobPostingJsonLd.description = job.description;
-  }
-  
-  if (job.conditions) {
-      jobPostingJsonLd.qualifications = job.conditions;
-  }
-  
-  if (job.qualifications) {
-      jobPostingJsonLd.educationRequirements = job.qualifications;
-  }
-  
-  if (job.experience) {
-      jobPostingJsonLd.experienceRequirements = job.experience;
-  }
-  
-  if (job.tasks) {
-      jobPostingJsonLd.responsibilities = job.tasks;
-  }
-
-  if (job.featuresAndOpportunities) {
-      jobPostingJsonLd.jobBenefits = job.featuresAndOpportunities;
-  }
-
-  if (job.howToApply) {
-      jobPostingJsonLd.applicationInstructions = job.howToApply;
-  }
-
-  if (job.applyUrl) {
-    jobPostingJsonLd.directApply = true;
-  }
-
+      employmentType: "FULL_TIME", // Using a general valid value
+  };
 
   const canonicalUrl = `${baseUrl}/jobs/${job.id}`;
 

@@ -34,69 +34,28 @@ export async function generateMetadata({ params }: CompetitionDetailPageProps): 
   const canonicalUrl = `${baseUrl}/competitions/${competition.id}`;
   const createdAtDate = competition.createdAt?.toDate ? competition.createdAt.toDate() : new Date();
 
-  // Structured Data
-  const jobPostingJsonLd: any = {
+  // Simplified and valid Structured Data
+  const jobPostingJsonLd = {
       '@context': 'https://schema.org',
       '@type': 'JobPosting',
       title: metaTitle,
+      description: metaDescription,
+      datePosted: createdAtDate.toISOString(),
       hiringOrganization: {
         '@type': 'Organization',
         name: competition.organizer,
       },
-      datePosted: createdAtDate.toISOString(),
-  };
-
-  if (competition.competitionType) {
-    jobPostingJsonLd.employmentType = competition.competitionType;
-  }
-  
-  if (competition.positionsAvailable) {
-    jobPostingJsonLd.totalJobOpenings = competition.positionsAvailable;
-  }
-
-  if (competition.location) {
-    jobPostingJsonLd.jobLocation = {
-      '@type': 'Place',
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: competition.location,
-        addressCountry: 'MA', // Assuming Morocco for now
+      jobLocation: {
+        '@type': 'Place',
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: competition.location || 'المغرب',
+          addressCountry: 'MA',
+        },
       },
-    };
-  }
+      employmentType: "FULL_TIME",
+  };
   
-  if (competition.description) {
-    jobPostingJsonLd.description = competition.description;
-  }
-  
-  if (competition.requirements) {
-    jobPostingJsonLd.qualifications = competition.requirements;
-  }
-  
-  if (competition.documentsNeeded) {
-    jobPostingJsonLd.educationRequirements = competition.documentsNeeded;
-  }
-  
-  if (competition.jobProspects) {
-      jobPostingJsonLd.experienceRequirements = competition.jobProspects;
-  }
-
-  if(competition.competitionStages) {
-      jobPostingJsonLd.responsibilities = competition.competitionStages;
-  }
-
-  if (competition.trainingFeatures) {
-      jobPostingJsonLd.jobBenefits = competition.trainingFeatures;
-  }
-
-  if (competition.howToApply) {
-    jobPostingJsonLd.applicationInstructions = competition.howToApply;
-  }
-  
-  if (competition.officialLink) {
-    jobPostingJsonLd.directApply = true;
-  }
-
   if (competition.deadline) {
     try {
         const deadlineDate = new Date(competition.deadline.split(' ')[0]);

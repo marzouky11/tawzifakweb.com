@@ -39,83 +39,29 @@ export async function generateMetadata({ params }: ImmigrationDetailPageProps): 
   const canonicalUrl = `${baseUrl}/immigration/${post.id}`;
   const createdAtDate = post.createdAt?.toDate ? post.createdAt.toDate() : new Date();
 
-  // Structured Data
-  const jobPostingJsonLd: any = {
+  // Simplified and valid Structured Data
+  const jobPostingJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'JobPosting',
     title: metaTitle,
+    description: metaDescription,
+    datePosted: createdAtDate.toISOString(),
     hiringOrganization: {
       '@type': 'Organization',
       name: 'توظيفك',
       sameAs: baseUrl,
     },
-    datePosted: createdAtDate.toISOString(),
-  };
-
-  if(post.programType) {
-    jobPostingJsonLd.employmentType = programDetails.label;
-  }
-  
-  if (post.positionsAvailable) {
-    jobPostingJsonLd.totalJobOpenings = post.positionsAvailable;
-  }
-
-  if (post.salary) {
-      const salaryValue = parseFloat(post.salary.replace(/[^0-9.]/g, '')) || 0;
-      jobPostingJsonLd.baseSalary = {
-          '@type': 'MonetaryAmount',
-          currency: 'USD',
-          value: {
-              '@type': 'QuantitativeValue',
-              value: salaryValue,
-              unitText: 'MONTH'
-          }
-      };
-  }
-  
-  if (post.targetCountry || post.city) {
-    jobPostingJsonLd.jobLocation = {
+    jobLocation: {
         '@type': 'Place',
         address: {
             '@type': 'PostalAddress',
             ...(post.targetCountry && { addressCountry: post.targetCountry }),
             ...(post.city && { addressLocality: post.city }),
         },
-    };
-  }
+    },
+    employmentType: "FULL_TIME", // Using a general valid value
+  };
 
-  if (post.description) {
-    jobPostingJsonLd.description = post.description;
-  }
-
-  if (post.requirements) {
-    jobPostingJsonLd.qualifications = post.requirements;
-  }
-
-  if (post.qualifications) {
-    jobPostingJsonLd.educationRequirements = post.qualifications;
-  }
-
-  if (post.experience) {
-    jobPostingJsonLd.experienceRequirements = post.experience;
-  }
-  
-  if (post.tasks) {
-      jobPostingJsonLd.responsibilities = post.tasks;
-  }
-  
-  if (post.featuresAndOpportunities) {
-      jobPostingJsonLd.jobBenefits = post.featuresAndOpportunities;
-  }
-  
-  if (post.howToApply) {
-      jobPostingJsonLd.applicationInstructions = post.howToApply;
-  }
-
-  if (post.applyUrl) {
-    jobPostingJsonLd.directApply = true;
-  }
-  
   const expiryDate = post.deadline ? new Date(post.deadline) : new Date(createdAtDate);
   if (!post.deadline) {
       expiryDate.setFullYear(expiryDate.getFullYear() + 1);
