@@ -15,6 +15,29 @@ interface ImmigrationDetailPageProps {
   params: { id: string };
 }
 
+interface JobPostingJsonLd {
+  '@context': string;
+  '@type': string;
+  title: string;
+  description: string;
+  datePosted: string;
+  validThrough?: string;
+  hiringOrganization: {
+    '@type': 'Organization';
+    name: string;
+    sameAs: string;
+  };
+  jobLocation: {
+    '@type': 'Place';
+    address: {
+      '@type': 'PostalAddress';
+      addressCountry?: string;
+      addressLocality?: string;
+    };
+  };
+  employmentType: string;
+}
+
 export async function generateMetadata({ params }: ImmigrationDetailPageProps): Promise<Metadata> {
   const post = await getImmigrationPostById(params.id);
   const baseUrl = 'https://www.tawzifak.com';
@@ -40,7 +63,7 @@ export async function generateMetadata({ params }: ImmigrationDetailPageProps): 
   const createdAtDate = post.createdAt?.toDate ? post.createdAt.toDate() : new Date();
 
   // Simplified and valid Structured Data
-  const jobPostingJsonLd = {
+  const jobPostingJsonLd: JobPostingJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'JobPosting',
     title: metaTitle,
