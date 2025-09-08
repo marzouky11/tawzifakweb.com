@@ -19,12 +19,22 @@ export function UserAvatar({ name, photoURL, color, className }: UserAvatarProps
 
   return (
     <Avatar className={cn('bg-muted', className)}>
-      {photoURL && <AvatarImage src={photoURL} alt={name || 'User Avatar'} />}
-      <AvatarFallback style={style} className={cn("text-white font-bold", !photoURL && color && "bg-transparent")}>
+      {photoURL ? (
+        <AvatarImage src={photoURL} alt={name || 'User Avatar'} />
+      ) : null}
+      <AvatarFallback 
+        style={style} 
+        className={cn(
+          "text-white font-bold", 
+          !photoURL && color && "bg-transparent",
+          // Add flex centering to ensure the initial is perfectly centered
+          "flex items-center justify-center"
+        )}
+      >
         {initials ? (
-          <div className="flex items-center justify-center h-full w-full text-xl">
-            {initials}
-          </div>
+          // The size of the initial will be controlled by the `className` prop on the component
+          // e.g., <UserAvatar className="h-16 w-16 text-2xl" />
+          <span>{initials}</span>
         ) : (
           <User className="h-[60%] w-[60%]" />
         )}

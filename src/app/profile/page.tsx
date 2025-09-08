@@ -87,7 +87,7 @@ function LoggedInView({ userData, onLogout }: { userData: any, onLogout: () => v
         <div className="space-y-6">
             <Card>
                 <CardContent className="p-4 flex items-center gap-4">
-                    <UserAvatar name={userData.name} color={userData.avatarColor} className="h-16 w-16 text-2xl shadow-inner" />
+                    <UserAvatar name={userData.name} color={userData.avatarColor} photoURL={userData.photoURL} className="h-16 w-16 text-2xl shadow-inner" />
                     <div>
                         <h2 className="text-xl font-bold">{userData.name || 'مستخدم'}</h2>
                         <p className="text-sm text-muted-foreground">{userData.email}</p>

@@ -82,6 +82,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
         };
         await updateUserProfile(authUser.uid, updatedData);
         
+        // Directly update the context state
         setUserData(prev => prev ? { ...prev, ...updatedData } : null);
 
         toast({
