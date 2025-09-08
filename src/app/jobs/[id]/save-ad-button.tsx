@@ -48,6 +48,7 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
   }, [user, adId]);
 
   const handleSaveToggle = async () => {
+    buttonRef.current?.blur();
     if (!user) {
       toast({
         variant: 'destructive',
@@ -57,8 +58,6 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
       router.push(`/login?redirect=${window.location.pathname}`);
       return;
     }
-
-    buttonRef.current?.blur();
     
     // Optimistically update the UI
     const newOptimisticState = !optimisticIsSaved;
