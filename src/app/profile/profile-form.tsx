@@ -78,7 +78,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
         const updatedData = { 
             name: values.name, 
             phone: values.phone,
-            photoURL: values.photoURL 
+            photoURL: values.photoURL || null,
         };
         await updateUserProfile(authUser.uid, updatedData);
 
