@@ -20,8 +20,12 @@ export function UserAvatar({ name, photoURL, color, className }: UserAvatarProps
   return (
     <Avatar className={cn('bg-muted', className)}>
       <AvatarImage src={photoURL || undefined} alt={name || 'User Avatar'} />
-      <AvatarFallback style={style} className="text-white font-bold">
-        {initials || <User className="h-[60%] w-[60%]" />}
+      <AvatarFallback style={style} className="text-white font-bold flex items-center justify-center">
+        {initials ? (
+          <span className="text-[55%]">{initials}</span>
+        ) : (
+          <User className="h-[60%] w-[60%]" />
+        )}
       </AvatarFallback>
     </Avatar>
   );

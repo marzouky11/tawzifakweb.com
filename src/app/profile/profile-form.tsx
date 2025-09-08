@@ -48,7 +48,7 @@ interface ProfileFormProps {
 
 export function ProfileForm({ user }: ProfileFormProps) {
   const { toast } = useToast();
-  const { user: authUser } = useAuth();
+  const { user: authUser, setUserData } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPasswordSubmitting, setIsPasswordSubmitting] = useState(false);
 
@@ -75,11 +75,16 @@ export function ProfileForm({ user }: ProfileFormProps) {
     if (!authUser) return;
     setIsSubmitting(true);
     try {
-        await updateUserProfile(authUser.uid, { 
+        const updatedData = { 
             name: values.name, 
             phone: values.phone,
             photoURL: values.photoURL 
-        });
+        };
+        await updateUserProfile(authUser.uid, updatedData);
+
+        // Manually update the context to reflect changes immediately
+        setUserData(prev => prev ? { ...prev, ...updatedData } : null);
+
         toast({
             title: "تم تحديث الملف الشخصي",
             description: "تم حفظ معلوماتك بنجاح.",
@@ -162,7 +167,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
                                   name={user?.name} 
                                   color={user?.avatarColor} 
                                   photoURL={photoURL}
-                                  className="h-20 w-20 text-2xl"
+                                  className="h-20 w-20 text-3xl"
                               />
                               <Input id="picture" type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
                               <div className="flex flex-col gap-2">
