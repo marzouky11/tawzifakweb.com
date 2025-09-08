@@ -37,7 +37,7 @@ export default function EditJobPage() {
           return;
         }
 
-        setJob(jobData);
+        setJob({ ...jobData, ownerPhotoURL: jobData.ownerPhotoURL || null });
       }
       setLoading(false);
     };

@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Share2 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface ShareButtonProps {
   title: string;
@@ -13,17 +13,16 @@ interface ShareButtonProps {
 export function ShareButton({ title, text }: ShareButtonProps) {
   const { toast } = useToast();
   const [canShare, setCanShare] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    // This effect runs only on the client, after the component has mounted
-    // Check if the Web Share API or Clipboard API is available
     if (typeof navigator !== 'undefined' && ('share' in navigator || 'clipboard' in navigator)) {
       setCanShare(true);
     }
   }, []);
 
   const handleShare = async () => {
-    // Use 'share' in navigator to check for the Web Share API's existence
+    buttonRef.current?.blur();
     if ('share' in navigator && navigator.share) {
       try {
         await navigator.share({
@@ -33,7 +32,7 @@ export function ShareButton({ title, text }: ShareButtonProps) {
         });
       } catch (error) {
         if (error instanceof DOMException && error.name === 'AbortError') {
-          return; // User cancelled the share
+          return;
         }
         console.error('Error sharing:', error);
         toast({
@@ -43,7 +42,6 @@ export function ShareButton({ title, text }: ShareButtonProps) {
         });
       }
     } else if ('clipboard' in navigator && navigator.clipboard) {
-      // Fallback for browsers that don't support Web Share API
       navigator.clipboard.writeText(window.location.href).then(() => {
         toast({
           title: 'تم نسخ الرابط!',
@@ -53,13 +51,12 @@ export function ShareButton({ title, text }: ShareButtonProps) {
     }
   };
 
-  // Only render the button if the functionality is available on the client
   if (!canShare) {
     return null;
   }
 
   return (
-    <Button onClick={handleShare} variant="outline" className="w-full">
+    <Button ref={buttonRef} onClick={handleShare} variant="outline" className="w-full active:scale-95 transition-transform">
       <Share2 className="ml-2 h-4 w-4" />
       مشاركة الإعلان
     </Button>

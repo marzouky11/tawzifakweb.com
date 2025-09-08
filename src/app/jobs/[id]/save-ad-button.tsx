@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -20,6 +20,7 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
   const { user, loading: authLoading } = useAuth();
   const { toast } = useToast();
   const router = useRouter();
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const [isSaved, setIsSaved] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -37,6 +38,7 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
   }, [user, adId]);
 
   const handleSaveToggle = async () => {
+    buttonRef.current?.blur();
     if (!user) {
       toast({
         variant: 'destructive',
@@ -68,10 +70,11 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
 
   return (
     <Button
+      ref={buttonRef}
       variant="outline"
       size="default"
       className={cn(
-        "h-10 px-4",
+        "h-10 px-4 active:scale-95 transition-transform",
         isSaved && "bg-primary/10 border-primary/20 text-primary"
       )}
       onClick={handleSaveToggle}

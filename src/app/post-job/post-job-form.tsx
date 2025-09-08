@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -151,7 +151,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
       title: job?.title || '',
       categoryId: job?.categoryId || '',
       customCategory: !job?.categoryId && job?.categoryName ? job.categoryName : '',
-      ownerPhotoURL: job?.ownerPhotoURL || userData?.photoURL || '',
+      ownerPhotoURL: job?.ownerPhotoURL || userData?.photoURL,
       country: job?.country || '',
       city: job?.city || '',
       salary: job?.salary || '',
@@ -259,7 +259,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
           userId: user.uid,
           ownerName: userData.name,
           ownerAvatarColor: userData.avatarColor,
-          ownerPhotoURL: values.ownerPhotoURL || null,
+          ownerPhotoURL: values.ownerPhotoURL,
           postType: values.postType,
           title: values.title,
           country: values.country,
@@ -382,7 +382,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                               />
                               <Input id="picture" type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
                               <div className="flex flex-col gap-2">
-                                  <Button type="button" variant="outline" onClick={() => document.getElementById('picture')?.click()}>
+                                  <Button type="button" variant="outline" className="active:scale-95 transition-transform" onClick={() => document.getElementById('picture')?.click()}>
                                       تحميل صورة
                                   </Button>
                                  {ownerPhotoURL && (
@@ -550,7 +550,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
             <div className="flex items-center gap-2"><Crop className="h-5 w-5" /><Slider value={[zoom]} onValueChange={(val) => setZoom(val[0])} min={1} max={3} step={0.1} /></div>
             <div className="flex items-center gap-2"><RotateCw className="h-5 w-5" /><Slider value={[rotation]} onValueChange={(val) => setRotation(val[0])} min={0} max={360} step={1} /></div>
           </div>
-          <DialogFooter><Button variant="outline" onClick={() => setImageSrc(null)}>إلغاء</Button><Button onClick={showCroppedImage}>قص وحفظ الصورة</Button></DialogFooter>
+          <DialogFooter><Button variant="outline" onClick={() => setImageSrc(null)}>إلغاء</Button><Button className="active:scale-95 transition-transform" onClick={showCroppedImage}>قص وحفظ الصورة</Button></DialogFooter>
         </DialogContent>
       </Dialog>
         <Form {...form}>
@@ -566,7 +566,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                         type="submit"
                         disabled={isSubmitting}
                         style={{ backgroundColor: getThemeColor() }}
-                        className="text-primary-foreground w-full !mt-12"
+                        className="text-primary-foreground w-full !mt-12 active:scale-95 transition-transform"
                         size="lg"
                     >
                         {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
@@ -598,14 +598,14 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
 
                     <div className="flex gap-4 items-center justify-between p-6 border-t bg-muted/50 rounded-b-lg mt-auto">
                         {currentStep > 0 ? (
-                            <Button type="button" variant="outline" onClick={prevStep}>
+                            <Button type="button" variant="outline" onClick={prevStep} className="active:scale-95 transition-transform">
                                 <ArrowRight className="ml-2 h-4 w-4" />
                                 السابق
                             </Button>
                         ) : <div />}
 
                         {currentStep < stepsContent.length - 1 && (
-                            <Button type="button" onClick={nextStep} style={{ backgroundColor: getThemeColor() }} className="text-primary-foreground">
+                            <Button type="button" onClick={nextStep} style={{ backgroundColor: getThemeColor() }} className="text-primary-foreground active:scale-95 transition-transform">
                                 التالي
                                 <ArrowLeft className="mr-2 h-4 w-4" />
                             </Button>
@@ -616,7 +616,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                                 type="submit"
                                 disabled={isSubmitting}
                                 style={{ backgroundColor: getThemeColor() }}
-                                className="text-primary-foreground"
+                                className="text-primary-foreground active:scale-95 transition-transform"
                             >
                                 {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                                 نشر الإعلان
