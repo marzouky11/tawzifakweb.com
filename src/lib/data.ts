@@ -252,16 +252,13 @@ export async function postJob(jobData: Omit<Job, 'id' | 'createdAt' | 'likes' | 
                 delete newJob[key];
             }
         });
-
-        // In a real app, upload base64 to Firebase Storage and get a URL.
-        // For now, we will save it directly, which is not ideal but will work for demo.
+        
         if (newJob.ownerPhotoURL && newJob.ownerPhotoURL.startsWith('data:image')) {
             // This is acceptable for Firestore if the string is not too large.
             // A better solution would be to use Firebase Storage.
         } else if (newJob.ownerPhotoURL === undefined) {
              newJob.ownerPhotoURL = null;
         }
-
 
         const newDocRef = await addDoc(adsCollection, newJob);
         
@@ -290,10 +287,8 @@ export async function updateAd(adId: string, adData: Partial<Job>) {
             }
         });
         
-        if (dataToUpdate.ownerPhotoURL && dataToUpdate.ownerPhotoURL.startsWith('data:image')) {
-            // Save base64 directly, not ideal but works for this scope.
-        } else if (dataToUpdate.ownerPhotoURL === undefined) {
-             dataToUpdate.ownerPhotoURL = null;
+        if (dataToUpdate.ownerPhotoURL === '') {
+            dataToUpdate.ownerPhotoURL = null;
         }
 
         await updateDoc(adRef, dataToUpdate);
@@ -333,12 +328,14 @@ export async function updateUserProfile(uid: string, profileData: Partial<User>)
             dataToUpdate.photoURL = null;
         }
 
+        // Update Firestore document first
         await updateDoc(userRef, {
             ...dataToUpdate,
             updatedAt: serverTimestamp()
         });
 
-        if (auth.currentUser) {
+        // Then, update Firebase Auth user profile
+        if (auth.currentUser && auth.currentUser.uid === uid) {
             await updateProfile(auth.currentUser, {
                 displayName: dataToUpdate.name,
                 photoURL: dataToUpdate.photoURL,
