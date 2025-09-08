@@ -1,10 +1,11 @@
 
-import { db } from '@/lib/firebase';
+import { db, auth } from '@/lib/firebase';
 import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, Query, and, QueryConstraint, QueryFilterConstraint, documentId, increment } from 'firebase/firestore';
 import type { Job, Category, PostType, User, WorkType, Testimonial, Competition, Organizer, Article, Report, ContactMessage, ImmigrationPost } from './types';
 import Fuse from 'fuse.js';
 import { getProgramTypeDetails, slugify } from './utils';
 import { revalidatePath } from './revalidate';
+import { updateProfile } from 'firebase/auth';
 
 
 const categories: Category[] = [
@@ -252,14 +253,15 @@ export async function postJob(jobData: Omit<Job, 'id' | 'createdAt' | 'likes' | 
             }
         });
 
-        // Ensure ownerPhotoURL is not a base64 string before saving to Firestore.
-        // This is a placeholder for a proper image upload service.
+        // In a real app, upload base64 to Firebase Storage and get a URL.
+        // For now, we will save it directly, which is not ideal but will work for demo.
         if (newJob.ownerPhotoURL && newJob.ownerPhotoURL.startsWith('data:image')) {
-            // In a real app, upload this to Firebase Storage and get a URL.
-            // For now, we will set it to null to avoid errors.
-            console.warn("Base64 image detected. In a real app, this should be uploaded to storage. Setting to null for now.");
-            newJob.ownerPhotoURL = null; 
+            // This is acceptable for Firestore if the string is not too large.
+            // A better solution would be to use Firebase Storage.
+        } else if (newJob.ownerPhotoURL === undefined) {
+             newJob.ownerPhotoURL = null;
         }
+
 
         const newDocRef = await addDoc(adsCollection, newJob);
         
@@ -289,8 +291,9 @@ export async function updateAd(adId: string, adData: Partial<Job>) {
         });
         
         if (dataToUpdate.ownerPhotoURL && dataToUpdate.ownerPhotoURL.startsWith('data:image')) {
-            console.warn("Base64 image detected. In a real app, this should be uploaded to storage. Setting to null for now.");
-            dataToUpdate.ownerPhotoURL = null;
+            // Save base64 directly, not ideal but works for this scope.
+        } else if (dataToUpdate.ownerPhotoURL === undefined) {
+             dataToUpdate.ownerPhotoURL = null;
         }
 
         await updateDoc(adRef, dataToUpdate);
@@ -326,15 +329,19 @@ export async function updateUserProfile(uid: string, profileData: Partial<User>)
         const userRef = doc(db, 'users', uid);
         const dataToUpdate = { ...profileData };
 
-        if (dataToUpdate.photoURL && dataToUpdate.photoURL.startsWith('data:image')) {
-             console.warn("Base64 image detected. In a real app, this should be uploaded to storage. Setting to null for now.");
-            dataToUpdate.photoURL = null;
-        }
-
         await updateDoc(userRef, {
             ...dataToUpdate,
             updatedAt: serverTimestamp()
         });
+
+        // Also update the user's profile in Firebase Auth if name or photoURL changed
+        if (auth.currentUser && (dataToUpdate.name || dataToUpdate.photoURL)) {
+             await updateProfile(auth.currentUser, {
+                displayName: dataToUpdate.name,
+                photoURL: dataToUpdate.photoURL,
+            });
+        }
+        
         revalidatePath('/profile');
     } catch (e) {
         console.error("Error updating user profile: ", e);
@@ -962,14 +969,3 @@ export async function getContactMessages(): Promise<ContactMessage[]> {
 export async function deleteContactMessage(messageId: string): Promise<void> {
   await deleteDoc(doc(db, 'contacts', messageId));
 }
-
-
-    
-
-    
-
-
-
-
-
-
