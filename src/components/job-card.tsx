@@ -68,7 +68,7 @@ export function JobCard({ job }: JobCardProps) {
 
   if (isSeekingJob) {
       return (
-        <Card className="flex flex-col h-full overflow-hidden rounded-xl shadow-md bg-card hover:shadow-xl transition-all duration-300">
+        <Card className="flex flex-col h-full overflow-hidden rounded-xl shadow-md bg-card transition-all duration-300">
           <CardHeader className="p-4 flex-row items-center gap-4">
               <UserAvatar 
                 name={job.ownerName} 
@@ -78,7 +78,7 @@ export function JobCard({ job }: JobCardProps) {
               />
               <div className="flex-grow overflow-hidden">
                 <h3 className="font-bold text-base leading-snug truncate">
-                  <Link href={detailUrl} className="text-foreground hover:text-primary transition-colors">
+                  <Link href={detailUrl} className="text-foreground hover:underline">
                     {job.title}
                   </Link>
                 </h3>
@@ -91,7 +91,7 @@ export function JobCard({ job }: JobCardProps) {
           </CardHeader>
           <Separator/>
           <CardContent className="p-4 pt-3 flex-grow space-y-3">
-              <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
                   <div className="flex items-center gap-2">
                       <MapPin className="h-4 w-4 text-primary/70" />
                       <span className="truncate">{job.city}, {job.country}</span>
@@ -103,7 +103,7 @@ export function JobCard({ job }: JobCardProps) {
               </div>
           </CardContent>
           <CardFooter className="p-3 pt-0 mt-auto">
-              <Button asChild size="sm" variant="secondary" className="w-full text-secondary-foreground hover:bg-secondary/80">
+              <Button asChild size="sm" variant="secondary" className="w-full text-secondary-foreground hover:bg-secondary/80 active:scale-95 transition-transform">
                   <Link href={detailUrl}>
                       عرض الملف
                       <ArrowRight className="mr-2 h-4 w-4" />
