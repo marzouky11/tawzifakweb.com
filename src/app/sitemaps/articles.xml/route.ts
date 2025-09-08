@@ -1,6 +1,8 @@
 import { getArticles as getStaticArticles } from '@/lib/articles';
 import { getArticles as getDbArticles } from '@/lib/data';
 
+export const dynamic = 'force-dynamic';
+
 const baseUrl = 'https://www.tawzifak.com';
 
 function generateSitemap(articles: any[]) {
