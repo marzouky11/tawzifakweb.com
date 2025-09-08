@@ -30,7 +30,7 @@ const profileSchema = z.object({
   name: z.string().min(3, { message: 'الاسم يجب أن يكون 3 أحرف على الأقل.' }),
   email: z.string().email(),
   phone: z.string().optional(),
-  photoURL: z.string().optional(),
+  photoURL: z.string().optional().nullable(),
 });
 
 const passwordSchema = z.object({
@@ -67,7 +67,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
       name: user?.name || '',
       email: user?.email || '',
       phone: user?.phone || '',
-      photoURL: user?.photoURL || '',
+      photoURL: user?.photoURL || null,
     },
   });
 
@@ -128,7 +128,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
         
         // Directly update the context state
         setUserData(prev => prev ? { ...prev, ...updatedData } : null);
-        profileForm.reset(values); // Resets the form's dirty state
+        profileForm.reset({ ...values, photoURL: updatedData.photoURL }); // Resets the form's dirty state
 
         toast({
             title: "تم تحديث الملف الشخصي",
@@ -235,7 +235,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
                                         تغيير الصورة
                                     </Button>
                                    {photoURL && (
-                                    <Button type="button" variant="ghost" size="sm" className="text-destructive hover:bg-destructive/10" onClick={() => profileForm.setValue('photoURL', '', { shouldDirty: true })}>
+                                    <Button type="button" variant="ghost" size="sm" className="text-destructive hover:bg-destructive/10" onClick={() => profileForm.setValue('photoURL', null, { shouldDirty: true })}>
                                         إزالة الصورة
                                     </Button>
                                    )}

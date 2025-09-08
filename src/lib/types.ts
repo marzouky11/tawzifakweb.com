@@ -38,7 +38,7 @@ export interface Job {
   createdAt: Timestamp;
   ownerName: string;
   ownerAvatarColor?: string;
-  ownerPhotoURL?: string;
+  ownerPhotoURL?: string | null;
   applyUrl?: string;
   qualifications?: string;
   conditions?: string;
@@ -142,7 +142,7 @@ export interface User {
   name: string;
   email: string;
   phone?: string;
-  photoURL?: string;
+  photoURL?: string | null;
   avatarColor?: string;
   createdAt?: Timestamp;
   isAdmin?: boolean;
