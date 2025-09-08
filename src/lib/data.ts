@@ -258,7 +258,13 @@ export async function postJob(jobData: Omit<Job, 'id' | 'createdAt' | 'likes' | 
             if (jobData.ownerName) {
                 updateData.displayName = jobData.ownerName;
             }
-             await updateProfile(auth.currentUser, updateData);
+             try {
+                await updateProfile(auth.currentUser, updateData);
+             } catch (e: any) {
+                if (e.code !== 'auth/invalid-profile-attribute') {
+                    throw e; // re-throw if it's not the error we want to ignore
+                }
+             }
         }
         
         revalidatePath('/');
@@ -347,7 +353,15 @@ export async function updateUserProfile(uid: string, profileData: Partial<User>)
             }
 
             if (Object.keys(updateData).length > 0) {
-                await updateProfile(currentUser, updateData);
+                 try {
+                    await updateProfile(currentUser, updateData);
+                } catch (e: any) {
+                    // Ignore the specific error about the photo URL being too long
+                    // because the primary storage (Firestore) has already been updated.
+                    if (e.code !== 'auth/invalid-profile-attribute') {
+                        throw e; // Re-throw any other errors
+                    }
+                }
             }
         }
         
@@ -974,4 +988,5 @@ export async function getContactMessages(): Promise<ContactMessage[]> {
 export async function deleteContactMessage(messageId: string): Promise<void> {
   await deleteDoc(doc(db, 'contacts', messageId));
 }
+
 
