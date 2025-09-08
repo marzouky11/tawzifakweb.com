@@ -9,7 +9,6 @@ import {
   Instagram, GraduationCap, Mail, LayoutGrid, FileText, Bookmark, Share2
 } from 'lucide-react';
 import type { Job, WorkType } from '@/lib/types';
-import { CategoryIcon } from '@/components/icons';
 import { ShareButton } from '@/app/jobs/[id]/share-button';
 import { ReportAdDialog } from '@/app/jobs/[id]/report-ad-dialog';
 import { JobCard } from '@/components/job-card';
@@ -17,6 +16,8 @@ import { SaveAdButton } from '@/app/jobs/[id]/save-ad-button';
 import { cn } from '@/lib/utils';
 import { getCategoryById } from '@/lib/data';
 import { Separator } from '@/components/ui/separator';
+import { UserAvatar } from '@/components/user-avatar';
+
 
 const workTypeTranslations: { [key in WorkType]: string } = {
   full_time: 'دوام كامل',
@@ -89,8 +90,6 @@ export function WorkerDesktopDetails({ job, similarJobs }: WorkerDesktopDetailsP
     const categoryName = category?.name || job.categoryName;
     const translatedWorkType = job.workType ? workTypeTranslations[job.workType] : undefined;
     const sectionColor = '#424242';
-    const categoryColor = category?.color || sectionColor;
-    const finalIconName = category?.iconName || 'Users';
 
     const contactButtons = [
         job.phone && { type: 'phone', href: `tel:${job.phone}`, label: 'اتصال', icon: Phone, className: 'bg-[#424242] hover:bg-[#424242]/90' },
@@ -109,43 +108,46 @@ export function WorkerDesktopDetails({ job, similarJobs }: WorkerDesktopDetailsP
     return (
         <div className="container mx-auto max-w-7xl px-4 pb-8 space-y-6">
             <Card 
-                className="overflow-hidden shadow-lg border-2 border-dashed"
-                style={{ borderColor: sectionColor }}
+                className="overflow-hidden shadow-lg"
             >
                 <CardHeader className="bg-muted/30 p-6">
-                   <div className="flex justify-between items-start gap-4">
+                   <div className="flex justify-between items-center gap-4">
                         <div className="flex-grow">
-                            <div className="flex items-center gap-4 mb-2">
-                                <div className="p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${categoryColor}1A` }}>
-                                     <CategoryIcon name={finalIconName} className="h-8 w-8" style={{ color: categoryColor }} />
+                            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
+                                {job.title || 'عنوان غير متوفر'}
+                            </h1>
+                           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-muted-foreground mt-2 text-sm">
+                               {categoryName && (
+                                   <div className="flex items-center gap-1.5">
+                                        <LayoutGrid className="h-4 w-4" />
+                                        <span>{categoryName}</span>
+                                    </div>
+                                )}
+                                <div className="flex items-center gap-1.5">
+                                    <MapPin className="h-4 w-4" />
+                                    <span>{job.city}, {job.country}</span>
                                 </div>
-                                <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
-                                    {job.title || 'عنوان غير متوفر'}
-                                </h1>
-                            </div>
-                           <div className="flex items-center gap-x-4 text-muted-foreground mt-2 text-sm">
-                                 <div className="flex items-center gap-1.5">
-                                    <UserIcon className="h-4 w-4" />
-                                    <span className="font-medium">{job.ownerName}</span>
-                                </div>
+                                {translatedWorkType && (
+                                    <div className="flex items-center gap-1.5">
+                                        <Clock className="h-4 w-4" />
+                                        <span>{translatedWorkType}</span>
+                                    </div>
+                                )}
                                 <div className="flex items-center gap-1.5">
                                     <CalendarDays className="h-4 w-4" />
                                     <span>نُشر: {job.postedAt}</span>
                                 </div>
                             </div>
                         </div>
+                         <div className="flex flex-col items-center gap-2 flex-shrink-0">
+                             <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-20 w-20 text-3xl"/>
+                             <h2 className="font-bold text-lg">{job.ownerName}</h2>
+                        </div>
                    </div>
                 </CardHeader>
                 <CardContent className="p-6 space-y-8">
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
-                        <SeekerInfoItem icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} color={categoryColor} />
-                        {categoryName && <SeekerInfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={categoryColor} />}
-                        {job.workType && <SeekerInfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={categoryColor} />}
-                    </div>
-
                     {descriptionSection && (
                         <>
-                            <Separator className="my-6" />
                             <DetailSectionCard 
                                 icon={descriptionSection.icon} 
                                 title={descriptionSection.title} 

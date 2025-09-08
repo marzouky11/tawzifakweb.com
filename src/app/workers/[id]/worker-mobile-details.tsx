@@ -9,7 +9,6 @@ import {
   Instagram, GraduationCap, Mail, LayoutGrid, FileText, Bookmark, Share2
 } from 'lucide-react';
 import type { Job, WorkType } from '@/lib/types';
-import { CategoryIcon } from '@/components/icons';
 import { ShareButton } from '@/app/jobs/[id]/share-button';
 import { Separator } from '@/components/ui/separator';
 import { ReportAdDialog } from '@/app/jobs/[id]/report-ad-dialog';
@@ -17,23 +16,14 @@ import { JobCard } from '@/components/job-card';
 import { SaveAdButton } from '@/app/jobs/[id]/save-ad-button';
 import { cn } from '@/lib/utils';
 import { getCategoryById } from '@/lib/data';
+import { UserAvatar } from '@/components/user-avatar';
+
 
 const workTypeTranslations: { [key in WorkType]: string } = {
   full_time: 'دوام كامل',
   part_time: 'دوام جزئي',
   freelance: 'عمل حر',
   remote: 'عن بعد',
-};
-
-const SeekerInfoItem = ({ icon: Icon, label, value, color }: { icon: React.ElementType; label: string; value: string | number | undefined; color?: string }) => {
-    if (!value) return null;
-    return (
-       <div className="flex flex-col gap-1 p-3 bg-muted/50 rounded-lg text-center">
-        <Icon className="h-6 w-6 mx-auto mb-1" style={{ color }} />
-        <dt className="text-xs text-muted-foreground">{label}</dt>
-        <dd className="font-semibold text-sm">{String(value)}</dd>
-      </div>
-    );
 };
 
 const FormattedText = ({ text }: { text?: string }) => {
@@ -82,8 +72,6 @@ export function WorkerMobileDetails({ job, similarJobs }: WorkerMobileDetailsPro
     const categoryName = category?.name || job.categoryName;
     const translatedWorkType = job.workType ? workTypeTranslations[job.workType] : undefined;
     const sectionColor = '#424242';
-    const categoryColor = category?.color || sectionColor;
-    const finalIconName = category?.iconName || 'Users';
 
     const contactButtons = [
         job.phone && { type: 'phone', href: `tel:${job.phone}`, label: 'اتصال', icon: Phone, className: 'bg-[#424242] hover:bg-[#424242]/90' },
@@ -105,56 +93,55 @@ export function WorkerMobileDetails({ job, similarJobs }: WorkerMobileDetailsPro
         <div className="container mx-auto max-w-7xl px-4 pb-8">
             <div className="space-y-6">
                 <Card 
-                    className="overflow-hidden shadow-lg border-2 border-dashed"
-                    style={{ borderColor: sectionColor }}
+                    className="overflow-hidden shadow-lg"
                 >
                     <CardHeader className="bg-muted/30 p-4">
-                        <div className="flex items-center gap-3 mb-2">
-                            <div className="p-2 rounded-xl flex-shrink-0" style={{ backgroundColor: `${categoryColor}1A` }}>
-                                <CategoryIcon name={finalIconName} className="h-6 w-6" style={{ color: categoryColor }} />
+                        <div className="flex items-center gap-4 mb-2">
+                             <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-16 w-16 text-2xl flex-shrink-0"/>
+                            <div className="flex-grow">
+                                <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
+                                    {job.ownerName}
+                                </h1>
+                                <p className="text-muted-foreground">{job.title}</p>
                             </div>
-                            <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
-                                {job.title || 'عنوان غير متوفر'}
-                            </h1>
                         </div>
-                        <div className="flex flex-wrap items-center gap-4 text-muted-foreground mt-2 text-sm">
+                        <Separator className="my-2"/>
+                        <div className="flex flex-col gap-2 text-muted-foreground text-sm">
+                           {categoryName && (
+                               <div className="flex items-center gap-1.5">
+                                    <LayoutGrid className="h-4 w-4" />
+                                    <span>{categoryName}</span>
+                                </div>
+                            )}
                             <div className="flex items-center gap-1.5">
-                                <UserIcon className="h-4 w-4" />
-                                <span className="font-medium">{job.ownerName}</span>
+                                <MapPin className="h-4 w-4" />
+                                <span>{job.city}, {job.country}</span>
                             </div>
-                            <div className="flex items-center gap-1.5">
-                                <CalendarDays className="h-4 w-4" />
-                                <span>نُشر: {job.postedAt}</span>
-                            </div>
+                            {translatedWorkType && (
+                                <div className="flex items-center gap-1.5">
+                                    <Clock className="h-4 w-4" />
+                                    <span>{translatedWorkType}</span>
+                                </div>
+                            )}
                         </div>
                     </CardHeader>
+                    {hasDetails && (
                     <CardContent className="p-4 space-y-6">
-                        <div className="grid grid-cols-2 gap-3">
-                            <SeekerInfoItem icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} color={categoryColor} />
-                            {categoryName && <SeekerInfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={categoryColor} />}
-                            {job.workType && <SeekerInfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={categoryColor} />}
+                        <div className="space-y-8">
+                            {descriptionSection && (
+                                <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
+                                    {descriptionSection.content}
+                                </DetailSection>
+                            )}
+                            {allOtherSections.map((section, index) => (
+                                <React.Fragment key={section.id}>
+                                    {(index > 0 || !!descriptionSection) && <Separator />}
+                                    <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
+                                </React.Fragment>
+                            ))}
                         </div>
-
-                        {hasDetails && (
-                            <>
-                                <Separator />
-                                <div className="space-y-8">
-                                    {descriptionSection && (
-                                        <DetailSection icon={descriptionSection.icon} title={descriptionSection.title} color={sectionColor}>
-                                            {descriptionSection.content}
-                                        </DetailSection>
-                                    )}
-
-                                    {allOtherSections.map((section, index) => (
-                                        <React.Fragment key={section.id}>
-                                            {(index > 0 || !!descriptionSection) && <Separator />}
-                                            <DetailSection icon={section.icon} title={section.title} color={sectionColor}>{section.content}</DetailSection>
-                                        </React.Fragment>
-                                    ))}
-                                </div>
-                            </>
-                        )}
                     </CardContent>
+                     )}
                 </Card>
 
                 <Card>
@@ -215,4 +202,3 @@ export function WorkerMobileDetails({ job, similarJobs }: WorkerMobileDetailsPro
         </div>
     );
 }
-

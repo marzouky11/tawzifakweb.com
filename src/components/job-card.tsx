@@ -68,30 +68,27 @@ export function JobCard({ job }: JobCardProps) {
 
   if (isSeekingJob) {
       return (
-        <Card className="flex flex-col h-full overflow-hidden rounded-xl shadow-md bg-gradient-to-br from-card to-muted/20 hover:shadow-xl transition-all duration-300 group">
+        <Card className="flex flex-col h-full overflow-hidden rounded-xl shadow-md bg-card hover:shadow-xl transition-all duration-300 group">
           <CardContent className="p-4 flex-grow flex flex-col">
-            <div className="flex items-center gap-4">
-                <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-16 w-16 text-2xl flex-shrink-0 shadow-inner" />
-                <div className="flex-grow overflow-hidden">
-                    <h3 className="font-bold text-lg leading-tight truncate text-foreground group-hover:text-primary transition-colors">
-                      <Link href={detailUrl}>{job.ownerName}</Link>
-                    </h3>
-                    <p className="text-sm text-muted-foreground truncate">{job.title}</p>
-                </div>
-            </div>
-            <Separator className="my-3" />
-            <div className="space-y-2 text-sm text-muted-foreground">
-                 {categoryName && (
-                    <div className="flex items-center gap-2">
-                        <LayoutGrid className="h-4 w-4 text-primary/70" />
-                        <span className="truncate">{categoryName}</span>
-                    </div>
-                )}
-                <div className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-primary/70" />
-                    <span className="truncate">{job.city}, {job.country}</span>
-                </div>
-            </div>
+              <div className="flex-grow">
+                  <h3 className="font-bold text-lg leading-tight text-foreground group-hover:text-primary transition-colors">
+                    <Link href={detailUrl}>{job.title}</Link>
+                  </h3>
+                  {categoryName && (
+                      <p className="text-sm text-muted-foreground">{categoryName}</p>
+                  )}
+              </div>
+              <Separator className="my-3" />
+              <div className="flex flex-wrap items-center justify-between text-sm text-muted-foreground gap-2">
+                 <div className="flex items-center gap-2">
+                      <MapPin className="h-4 w-4 text-primary/70" />
+                      <span className="truncate">{job.city}, {job.country}</span>
+                  </div>
+                   <div className="flex items-center gap-2">
+                      <UserIcon className="h-4 w-4 text-primary/70" />
+                      <span className="font-medium">{job.ownerName}</span>
+                  </div>
+              </div>
           </CardContent>
            <CardFooter className="p-3 pt-0 mt-auto">
               <Button asChild size="sm" variant="secondary" className="w-full text-secondary-foreground hover:bg-secondary/80">
