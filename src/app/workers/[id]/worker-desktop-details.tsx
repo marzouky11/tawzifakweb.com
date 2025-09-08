@@ -25,6 +25,17 @@ const workTypeTranslations: { [key in WorkType]: string } = {
   remote: 'عن بعد',
 };
 
+const InfoItem = ({ icon: Icon, label, value, color }: { icon: React.ElementType; label: string; value: string | number | undefined; color?: string }) => {
+    if (!value) return null;
+    return (
+      <div className="flex flex-col gap-1 p-3 bg-muted/50 rounded-lg text-center h-full">
+        <Icon className="h-6 w-6 mx-auto mb-1" style={{ color }} />
+        <dt className="text-xs text-muted-foreground">{label}</dt>
+        <dd className="font-semibold text-sm">{String(value)}</dd>
+      </div>
+    );
+};
+
 const FormattedText = ({ text }: { text?: string }) => {
     if (!text || text.trim() === '') return <p className="italic text-muted-foreground">غير محدد</p>;
 
@@ -94,46 +105,27 @@ export function WorkerDesktopDetails({ job, similarJobs }: WorkerDesktopDetailsP
 
     return (
         <div className="container mx-auto max-w-7xl px-4 pb-8 space-y-6">
-            <Card 
-                className="overflow-hidden shadow-lg"
-            >
+            <Card className="overflow-hidden shadow-lg">
                 <CardHeader className="bg-muted/30 p-6">
-                   <div className="flex justify-between items-center gap-4">
-                        <div className="flex-grow">
-                            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
-                                {job.title || 'عنوان غير متوفر'}
-                            </h1>
-                           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-muted-foreground mt-2 text-sm">
-                               {categoryName && (
-                                   <div className="flex items-center gap-1.5">
-                                        <span>{categoryName}</span>
-                                    </div>
-                                )}
-                                <div className="flex items-center gap-1.5">
-                                    <MapPin className="h-4 w-4" />
-                                    <span>{job.city}, {job.country}</span>
-                                </div>
-                                {translatedWorkType && (
-                                    <div className="flex items-center gap-1.5">
-                                        <Clock className="h-4 w-4" />
-                                        <span>{translatedWorkType}</span>
-                                    </div>
-                                )}
-                                <div className="flex items-center gap-1.5">
-                                    <CalendarDays className="h-4 w-4" />
-                                    <span>نُشر: {job.postedAt}</span>
-                                </div>
-                            </div>
-                        </div>
-                         <div className="flex flex-col items-center gap-2 flex-shrink-0">
-                             <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-20 w-20 text-3xl"/>
-                             <h2 className="font-bold text-lg">{job.ownerName}</h2>
-                        </div>
+                   <div className="flex items-center gap-4">
+                        <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-20 w-20 text-3xl flex-shrink-0"/>
+                        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
+                            {job.title || 'عنوان غير متوفر'}
+                        </h1>
                    </div>
                 </CardHeader>
                 <CardContent className="p-6 space-y-8">
+                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
+                        <InfoItem icon={UserIcon} label="صاحب الإعلان" value={job.ownerName} color={sectionColor} />
+                        {categoryName && <InfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={sectionColor} />}
+                        <InfoItem icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} color={sectionColor} />
+                        {translatedWorkType && <InfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={sectionColor} />}
+                        <InfoItem icon={CalendarDays} label="تاريخ النشر" value={job.postedAt} color={sectionColor} />
+                    </div>
+
                     {descriptionSection && (
                         <>
+                            <Separator className="my-6" />
                             <DetailSectionCard 
                                 icon={descriptionSection.icon} 
                                 title={descriptionSection.title} 
