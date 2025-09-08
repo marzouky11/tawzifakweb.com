@@ -112,12 +112,12 @@ export function WorkerDesktopDetails({ job, similarJobs }: WorkerDesktopDetailsP
                             <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
                                 {job.title || 'عنوان غير متوفر'}
                             </h1>
-                             <div className="flex items-center gap-1.5 text-muted-foreground text-sm mt-2">
-                                <CalendarDays className="h-4 w-4" />
-                                <span>نُشر: {job.postedAt}</span>
-                            </div>
                         </div>
                    </div>
+                    <div className="flex items-center gap-1.5 text-muted-foreground text-sm mt-2">
+                        <CalendarDays className="h-4 w-4" />
+                        <span>نُشر: {job.postedAt}</span>
+                    </div>
                 </CardHeader>
                 <CardContent className="p-6 space-y-8">
                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
