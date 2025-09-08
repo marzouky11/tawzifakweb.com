@@ -61,6 +61,7 @@ export function SignupForm() {
         name: values.name,
         email: values.email,
         avatarColor: randomColor,
+        photoURL: null,
         createdAt: serverTimestamp(),
       });
 

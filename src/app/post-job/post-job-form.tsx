@@ -19,19 +19,23 @@ import {
   Loader2, Briefcase, Users, FileText, FileSignature, 
   LayoutGrid, Globe, MapPin, Wallet, Phone, MessageSquare, Mail,
   Building2, Award, Users2, Info, Instagram, GraduationCap, Link as LinkIcon,
-  ClipboardList, ArrowLeft, ArrowRight, CheckSquare, Check, HelpCircle, Target,
+  ClipboardList, ArrowLeft, ArrowRight, CheckSquare, Check, HelpCircle, Target, Image as ImageIcon,
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
+import { UserAvatar } from '@/components/user-avatar';
+
+const MAX_IMAGE_SIZE_MB = 2;
+const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024;
 
 const formSchema = z.object({
   postType: z.enum(['seeking_worker', 'seeking_job'], { required_error: 'الرجاء تحديد نوع الإعلان.' }),
   title: z.string().min(1, { message: 'اسم الإعلان مطلوب.' }),
   categoryId: z.string().optional(),
   customCategory: z.string().optional(),
-  workType: z.enum(['full_time', 'part_time', 'freelance', 'remote']).optional(),
+  ownerPhotoURL: z.string().optional(),
   country: z.string().min(1, { message: 'الدولة مطلوبة.' }),
   city: z.string().min(1, { message: 'المدينة مطلوبة.' }),
   
@@ -60,7 +64,7 @@ const formSchema = z.object({
 });
 
 const stepFields = [
-  ['postType', 'title', 'categoryId', 'customCategory', 'workType', 'country', 'city'],
+  ['postType', 'title', 'categoryId', 'customCategory', 'ownerPhotoURL', 'country', 'city'],
   ['companyName', 'experience', 'description', 'availablePositions', 'qualifications', 'salary', 'openPositions', 'conditions', 'tasks', 'featuresAndOpportunities'],
   ['phone', 'whatsapp', 'email', 'instagram', 'applyUrl', 'howToApply'],
 ];
@@ -135,9 +139,9 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
       title: job?.title || '',
       categoryId: job?.categoryId || '',
       customCategory: !job?.categoryId && job?.categoryName ? job.categoryName : '',
+      ownerPhotoURL: job?.ownerPhotoURL || userData?.photoURL || '',
       country: job?.country || '',
       city: job?.city || '',
-      workType: job?.workType,
       salary: job?.salary || '',
       experience: job?.experience || '',
       description: job?.description || '',
@@ -222,7 +226,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
 
       if (customCategory) {
           dataToSave.categoryName = customCategory;
-          dataToSave.categoryId = null; // Use null to clear the field in Firestore
+          dataToSave.categoryId = null;
       } else if (values.categoryId) {
           const selectedCat = categories.find(c => c.id === values.categoryId);
           dataToSave.categoryName = selectedCat?.name;
@@ -243,11 +247,11 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
           userId: user.uid,
           ownerName: userData.name,
           ownerAvatarColor: userData.avatarColor,
+          ownerPhotoURL: values.ownerPhotoURL,
           postType: values.postType,
           title: values.title,
           country: values.country,
           city: values.city,
-          workType: values.workType,
           categoryId: dataToSave.categoryId,
           categoryName: dataToSave.categoryName,
           companyName: values.companyName,
@@ -286,6 +290,29 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
         setIsSubmitting(false);
     }
   }
+
+  const ownerPhotoURL = form.watch('ownerPhotoURL');
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > MAX_IMAGE_SIZE_BYTES) {
+        toast({
+            variant: "destructive",
+            title: "حجم الصورة كبير جدًا",
+            description: `الحد الأقصى لحجم الصورة هو ${MAX_IMAGE_SIZE_MB} ميجابايت.`
+        });
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const dataUrl = e.target?.result as string;
+        form.setValue('ownerPhotoURL', dataUrl, { shouldValidate: true });
+    };
+    reader.readAsDataURL(file);
+  };
   
   const FormLabelIcon = ({icon: Icon, label}: {icon: React.ElementType, label: string}) => (
     <FormLabel className="flex items-center gap-2 text-base md:text-lg">
@@ -305,6 +332,39 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
   
   const step1Content = (
     <div className="space-y-6">
+        {postType === 'seeking_job' && (
+          <FormField
+              control={form.control}
+              name="ownerPhotoURL"
+              render={({ field }) => (
+                  <FormItem>
+                      <FormLabelIcon icon={ImageIcon} label="الصورة الشخصية (اختياري)" />
+                      <FormControl>
+                          <div className="flex items-center gap-4">
+                              <UserAvatar 
+                                  name={userData?.name} 
+                                  color={userData?.avatarColor} 
+                                  photoURL={ownerPhotoURL}
+                                  className="h-20 w-20 text-2xl"
+                              />
+                              <Input id="picture" type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
+                              <div className="flex flex-col gap-2">
+                                  <Button type="button" variant="outline" onClick={() => document.getElementById('picture')?.click()}>
+                                      تحميل صورة
+                                  </Button>
+                                 {ownerPhotoURL && (
+                                  <Button type="button" variant="ghost" size="sm" className="text-destructive hover:bg-destructive/10" onClick={() => form.setValue('ownerPhotoURL', '')}>
+                                      إزالة الصورة
+                                  </Button>
+                                 )}
+                              </div>
+                          </div>
+                      </FormControl>
+                      <FormMessage />
+                  </FormItem>
+              )}
+          />
+        )}
         <FormField control={form.control} name="title" render={({ field }) => (
             <FormItem><FormLabelIcon icon={FileText} label="عنوان الإعلان" /><FormControl><Input placeholder={postType === 'seeking_job' ? "مثال: مصمم جرافيك يبحث عن فرصة..." : "مثال: مطلوب مهندس مدني..."} {...field} /></FormControl><FormMessage /></FormItem>
         )} />
@@ -375,9 +435,6 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
               </FormItem>
             )} />
         </div>
-        <FormField control={form.control} name="workType" render={({ field }) => (
-            <FormItem><FormLabelIcon icon={Briefcase} label="نوع العمل (اختياري)" /><Select onValueChange={field.onChange} value={field.value}><FormControl><SelectTrigger><SelectValue placeholder="اختر نوع العمل" /></SelectTrigger></FormControl><SelectContent><SelectItem value="full_time">دوام كامل</SelectItem><SelectItem value="part_time">دوام جزئي</SelectItem><SelectItem value="freelance">عمل حر</SelectItem><SelectItem value="remote">عن بعد</SelectItem></SelectContent></Select><FormMessage /></FormItem>
-        )} />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
              <FormField control={form.control} name="country" render={({ field }) => (
                 <FormItem><FormLabelIcon icon={Globe} label="الدولة" /><FormControl><Input placeholder="مثال: المغرب" {...field} /></FormControl><FormMessage /></FormItem>

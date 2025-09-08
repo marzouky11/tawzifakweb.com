@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from './ui/separator';
 import { UserAvatar } from './user-avatar';
+import Image from 'next/image';
 
 interface JobCardProps {
   job: Job | null;
@@ -68,42 +69,47 @@ export function JobCard({ job }: JobCardProps) {
   if (isSeekingJob) {
       return (
         <Card className="flex flex-col h-full overflow-hidden rounded-xl shadow-md bg-card hover:shadow-xl transition-all duration-300 group">
-            <CardHeader className="p-4 flex-row items-center gap-4">
-                 <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-12 w-12 text-lg flex-shrink-0"/>
-                 <div className="flex-grow overflow-hidden">
-                    <h3 className="font-bold text-base leading-snug truncate">
-                      <Link href={detailUrl} className="text-foreground group-hover:text-primary transition-colors">
-                        {job.title}
-                      </Link>
-                    </h3>
-                    {categoryName && (
-                        <p className="text-xs text-muted-foreground truncate">
-                            {categoryName}
-                        </p>
-                    )}
-                 </div>
-            </CardHeader>
-            <Separator />
-            <CardContent className="p-4 pt-3 flex-grow space-y-3">
-                <div className="space-y-2 text-sm">
-                    <div className="flex items-center text-muted-foreground gap-2">
-                        <MapPin className="h-4 w-4 text-primary/70" />
-                        <span className="truncate">{job.city}, {job.country}</span>
-                    </div>
-                    <div className="flex items-center text-muted-foreground gap-2">
-                        <UserIcon className="h-4 w-4 text-primary/70" />
-                        <span className="font-medium truncate">{job.ownerName}</span>
-                    </div>
-                </div>
-            </CardContent>
-            <CardFooter className="p-3 pt-0 mt-auto">
-                <Button asChild size="sm" variant="secondary" className="w-full text-secondary-foreground hover:bg-secondary/80">
-                    <Link href={detailUrl}>
-                        عرض الملف
-                        <ArrowRight className="mr-2 h-4 w-4" />
-                    </Link>
-                </Button>
-            </CardFooter>
+          <CardHeader className="p-4 flex-row items-center gap-4">
+              <UserAvatar 
+                name={job.ownerName} 
+                color={job.ownerAvatarColor} 
+                photoURL={job.ownerPhotoURL}
+                className="h-12 w-12 text-lg flex-shrink-0"
+              />
+              <div className="flex-grow overflow-hidden">
+                <h3 className="font-bold text-base leading-snug truncate">
+                  <Link href={detailUrl} className="text-foreground group-hover:text-primary transition-colors">
+                    {job.title}
+                  </Link>
+                </h3>
+                {categoryName && (
+                    <p className="text-sm text-muted-foreground truncate">
+                        {categoryName}
+                    </p>
+                )}
+              </div>
+          </CardHeader>
+          <Separator/>
+          <CardContent className="p-4 pt-3 flex-grow space-y-3">
+              <div className="space-y-2 text-sm">
+                  <div className="flex items-center text-muted-foreground gap-2">
+                      <MapPin className="h-4 w-4 text-primary/70" />
+                      <span className="truncate">{job.city}, {job.country}</span>
+                  </div>
+                   <div className="flex items-center text-muted-foreground gap-2">
+                      <UserIcon className="h-4 w-4 text-primary/70" />
+                      <span className="font-medium truncate">{job.ownerName}</span>
+                  </div>
+              </div>
+          </CardContent>
+          <CardFooter className="p-3 pt-0 mt-auto">
+              <Button asChild size="sm" variant="secondary" className="w-full text-secondary-foreground hover:bg-secondary/80">
+                  <Link href={detailUrl}>
+                      عرض الملف
+                      <ArrowRight className="mr-2 h-4 w-4" />
+                  </Link>
+              </Button>
+          </CardFooter>
         </Card>
       )
   }

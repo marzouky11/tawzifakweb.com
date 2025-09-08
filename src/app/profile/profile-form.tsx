@@ -12,7 +12,7 @@ import { useToast } from "@/hooks/use-toast"
 import type { User } from '@/lib/types';
 import { updateUserProfile } from '@/lib/data';
 import { useAuth } from '@/context/auth-context';
-import { Loader2, Lock } from 'lucide-react';
+import { Loader2, Lock, Image as ImageIcon } from 'lucide-react';
 import { reauthenticateWithCredential, EmailAuthProvider, updatePassword } from 'firebase/auth';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -20,11 +20,16 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
+import { UserAvatar } from '@/components/user-avatar';
+
+const MAX_IMAGE_SIZE_MB = 2;
+const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024;
 
 const profileSchema = z.object({
   name: z.string().min(3, { message: 'الاسم يجب أن يكون 3 أحرف على الأقل.' }),
   email: z.string().email(),
   phone: z.string().min(1, { message: 'رقم الهاتف مطلوب.' }),
+  photoURL: z.string().optional(),
 });
 
 const passwordSchema = z.object({
@@ -53,6 +58,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
       name: user?.name || '',
       email: user?.email || '',
       phone: user?.phone || '',
+      photoURL: user?.photoURL || '',
     },
   });
 
@@ -69,7 +75,11 @@ export function ProfileForm({ user }: ProfileFormProps) {
     if (!authUser) return;
     setIsSubmitting(true);
     try {
-        await updateUserProfile(authUser.uid, { name: values.name, phone: values.phone });
+        await updateUserProfile(authUser.uid, { 
+            name: values.name, 
+            phone: values.phone,
+            photoURL: values.photoURL 
+        });
         toast({
             title: "تم تحديث الملف الشخصي",
             description: "تم حفظ معلوماتك بنجاح.",
@@ -110,12 +120,67 @@ export function ProfileForm({ user }: ProfileFormProps) {
           setIsPasswordSubmitting(false);
       }
   }
+  
+  const photoURL = profileForm.watch('photoURL');
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > MAX_IMAGE_SIZE_BYTES) {
+        toast({
+            variant: "destructive",
+            title: "حجم الصورة كبير جدًا",
+            description: `الحد الأقصى لحجم الصورة هو ${MAX_IMAGE_SIZE_MB} ميجابايت.`
+        });
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const dataUrl = e.target?.result as string;
+        profileForm.setValue('photoURL', dataUrl, { shouldValidate: true });
+    };
+    reader.readAsDataURL(file);
+  };
+
 
   return (
     <div className="space-y-8">
       <Form {...profileForm}>
         <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-6">
           <h2 className="text-xl font-bold">المعلومات الشخصية</h2>
+          <FormField
+              control={profileForm.control}
+              name="photoURL"
+              render={({ field }) => (
+                  <FormItem>
+                      <FormLabel>الصورة الشخصية (اختياري)</FormLabel>
+                      <FormControl>
+                          <div className="flex items-center gap-4">
+                              <UserAvatar 
+                                  name={user?.name} 
+                                  color={user?.avatarColor} 
+                                  photoURL={photoURL}
+                                  className="h-20 w-20 text-2xl"
+                              />
+                              <Input id="picture" type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
+                              <div className="flex flex-col gap-2">
+                                  <Button type="button" variant="outline" onClick={() => document.getElementById('picture')?.click()}>
+                                      تغيير الصورة
+                                  </Button>
+                                 {photoURL && (
+                                  <Button type="button" variant="ghost" size="sm" className="text-destructive hover:bg-destructive/10" onClick={() => profileForm.setValue('photoURL', '')}>
+                                      إزالة الصورة
+                                  </Button>
+                                 )}
+                              </div>
+                          </div>
+                      </FormControl>
+                      <FormMessage />
+                  </FormItem>
+              )}
+          />
           <FormField control={profileForm.control} name="name" render={({ field }) => (
               <FormItem>
                   <FormLabel>الاسم الكامل</FormLabel>
