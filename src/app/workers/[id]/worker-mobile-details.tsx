@@ -159,7 +159,7 @@ export function WorkerMobileDetails({ job, similarJobs }: WorkerMobileDetailsPro
                                     key={button.type}
                                     asChild
                                     size="lg"
-                                    className={cn("text-primary-foreground font-semibold text-base py-6", button.className)}
+                                    className={cn("text-primary-foreground font-semibold text-base py-6", button.className, 'active:scale-95 transition-transform')}
                                 >
                                     <a href={button.href} target={button.type !== 'phone' ? '_blank' : undefined} rel="noopener noreferrer">
                                         <button.icon className="ml-2 h-5 w-5" />
