@@ -114,7 +114,7 @@ export function WorkerDesktopDetails({ job, similarJobs }: WorkerDesktopDetailsP
                             </h1>
                         </div>
                     </div>
-                    <div className="flex items-center gap-1.5 text-muted-foreground text-sm mt-4">
+                    <div className="flex items-center gap-1.5 text-muted-foreground text-sm mt-6">
                         <CalendarDays className="h-4 w-4" />
                         <span>نُشر: {job.postedAt}</span>
                     </div>
