@@ -68,7 +68,7 @@ export function JobCard({ job }: JobCardProps) {
 
   if (isSeekingJob) {
       return (
-        <Card className="flex flex-col h-full overflow-hidden rounded-xl shadow-md bg-card hover:shadow-xl transition-all duration-300 group border" style={{ borderColor: sectionColor }}>
+        <Card className="flex flex-col h-full overflow-hidden rounded-xl shadow-md bg-card hover:shadow-xl transition-all duration-300">
           <CardHeader className="p-4 flex-row items-center gap-4">
               <UserAvatar 
                 name={job.ownerName} 
@@ -78,7 +78,7 @@ export function JobCard({ job }: JobCardProps) {
               />
               <div className="flex-grow overflow-hidden">
                 <h3 className="font-bold text-base leading-snug truncate">
-                  <Link href={detailUrl} className="text-foreground group-hover:text-primary transition-colors">
+                  <Link href={detailUrl} className="text-foreground hover:text-primary transition-colors">
                     {job.title}
                   </Link>
                 </h3>
@@ -91,12 +91,12 @@ export function JobCard({ job }: JobCardProps) {
           </CardHeader>
           <Separator/>
           <CardContent className="p-4 pt-3 flex-grow space-y-3">
-              <div className="space-y-2 text-sm">
-                  <div className="flex items-center text-muted-foreground gap-2">
+              <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-2">
                       <MapPin className="h-4 w-4 text-primary/70" />
                       <span className="truncate">{job.city}, {job.country}</span>
                   </div>
-                   <div className="flex items-center text-muted-foreground gap-2">
+                   <div className="flex items-center gap-2">
                       <UserIcon className="h-4 w-4 text-primary/70" />
                       <span className="font-medium truncate">{job.ownerName}</span>
                   </div>
