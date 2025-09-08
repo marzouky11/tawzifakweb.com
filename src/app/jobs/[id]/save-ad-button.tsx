@@ -20,11 +20,10 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
   const router = useRouter();
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  // ✅ State محلي متزامن مع UI
   const [isSaved, setIsSaved] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // ✅ جلب البيانات أول مرة أو عند تغير user/adId
+  // جلب حالة الحفظ عند تحميل الصفحة أو تغير user/adId
   useEffect(() => {
     let mounted = true;
     if (user) {
@@ -55,13 +54,15 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
       return;
     }
 
-    // ✅ تحديث الفورم مباشرة قبل الطلب للسيرفر
-    setIsSaved(prev => !prev);
     setIsLoading(true);
 
     try {
+      // انتظار النتيجة من السيرفر أولًا
       const newSaveStatus = await toggleSaveAd(user.uid, adId, adType);
-      setIsSaved(newSaveStatus); // مزامنة مع السيرفر بعد الطلب
+
+      // تحديث UI حسب النتيجة الحقيقية
+      setIsSaved(newSaveStatus);
+
       toast({
         title: newSaveStatus ? 'تم الحفظ بنجاح!' : 'تمت إزالة الحفظ',
         description: newSaveStatus
@@ -69,8 +70,6 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
           : 'تمت إزالة الإعلان من قائمتك المحفوظة.',
       });
     } catch (error) {
-      // ✅ الرجوع للوضع السابق في حالة خطأ
-      setIsSaved(prev => !prev);
       toast({
         variant: 'destructive',
         title: 'خطأ',
@@ -78,6 +77,7 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
       });
     } finally {
       setIsLoading(false);
+      // إزالة أي حالة focus/active
       buttonRef.current?.blur();
     }
   };
@@ -85,11 +85,12 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
   return (
     <Button
       ref={buttonRef}
-      variant={isSaved ? 'secondary' : 'outline'} // استخدم variant للتغيير الفوري
+      variant={isSaved ? 'secondary' : 'outline'} // تغيير اللون فورًا حسب الحالة
       size="default"
       className="h-10 px-4 transition-all"
       onClick={handleSaveToggle}
       disabled={authLoading || isLoading}
+      onMouseUp={() => buttonRef.current?.blur()} // إزالة أي ضغط بصري بعد الضغط
     >
       {isLoading || authLoading ? (
         <Loader2 className="ml-2 h-4 w-4 animate-spin" />
