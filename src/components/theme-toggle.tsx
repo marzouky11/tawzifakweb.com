@@ -1,3 +1,4 @@
+
 'use client'
 
 import * as React from "react"
@@ -12,10 +13,11 @@ export function ThemeToggleButton({ className, ...props }: Omit<React.ComponentP
   const { setTheme, theme } = useTheme()
   const router = useRouter();
 
-  const toggleTheme = () => {
+  const toggleTheme = (e: React.MouseEvent<HTMLButtonElement>) => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
-    router.refresh(); // Force a re-render to update the UI everywhere
+    router.refresh();
+    (e.currentTarget as HTMLButtonElement).blur();
   };
 
   return (
@@ -40,7 +42,7 @@ export function ThemeToggleSwitch({ className, ...props }: React.ComponentProps<
     const handleCheckedChange = (checked: boolean) => {
         const newTheme = checked ? "dark" : "light";
         setTheme(newTheme);
-        router.refresh(); // Force a re-render to update the UI everywhere
+        router.refresh();
     };
 
     return (

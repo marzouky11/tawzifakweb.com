@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -20,6 +20,7 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
   const { user, loading: authLoading } = useAuth();
   const { toast } = useToast();
   const router = useRouter();
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const [isSaved, setIsSaved] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -55,7 +56,7 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
         title: newSaveStatus ? 'تم الحفظ بنجاح!' : 'تمت إزالة الحفظ',
         description: newSaveStatus ? 'يمكنك العثور على الإعلان في صفحة الإعلانات المحفوظة.' : 'تمت إزالة الإعلان من قائمتك المحفوظة.',
       });
-      router.refresh(); // Force a re-render to update the UI
+      router.refresh();
     } catch (error) {
       toast({
         variant: 'destructive',
@@ -64,11 +65,13 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
       });
     } finally {
       setIsLoading(false);
+      buttonRef.current?.blur();
     }
   };
 
   return (
     <Button
+      ref={buttonRef}
       variant="outline"
       size="default"
       className={cn(
@@ -92,4 +95,3 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
     </Button>
   );
 }
-

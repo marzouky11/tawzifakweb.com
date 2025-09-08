@@ -1,7 +1,8 @@
 
+
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -59,6 +60,8 @@ export function ProfileForm({ user }: ProfileFormProps) {
   const [rotation, setRotation] = useState(0);
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
+
+  const profileFormRef = useRef<HTMLFormElement>(null);
 
 
   const profileForm = useForm<z.infer<typeof profileSchema>>({
@@ -142,6 +145,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
         });
     } finally {
         setIsSubmitting(false);
+        profileFormRef.current?.querySelector<HTMLButtonElement>('button[type="submit"]')?.blur();
     }
   }
 
@@ -213,7 +217,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
     
       <div className="space-y-8">
         <Form {...profileForm}>
-          <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-6">
+          <form ref={profileFormRef} onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-6">
             <h2 className="text-xl font-bold">المعلومات الشخصية</h2>
             <FormField
                 control={profileForm.control}
