@@ -386,7 +386,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                                       تحميل صورة
                                   </Button>
                                  {ownerPhotoURL && (
-                                  <Button type="button" variant="ghost" size="sm" className="text-destructive hover:bg-destructive/10" onClick={() => form.setValue('ownerPhotoURL', '', { shouldDirty: true })}>
+                                  <Button type="button" variant="ghost" size="sm" className="text-destructive hover:bg-destructive/10 active:scale-95 transition-transform" onClick={() => form.setValue('ownerPhotoURL', '', { shouldDirty: true })}>
                                       إزالة الصورة
                                   </Button>
                                  )}

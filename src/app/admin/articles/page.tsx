@@ -132,7 +132,7 @@ export default function AdminArticlesPage() {
         ) : (
           <div className="text-center text-muted-foreground py-10">
             <p>لا توجد مقالات منشورة في قاعدة البيانات بعد.</p>
-             <Button asChild className="mt-4">
+             <Button asChild className="mt-4 active:scale-95 transition-transform">
                 <Link href="/admin/post-article">
                     <Newspaper className="mr-2 h-4 w-4" />
                     نشر مقال جديد

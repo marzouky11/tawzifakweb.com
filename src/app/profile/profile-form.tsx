@@ -210,7 +210,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setImageSrc(null)}>إلغاء</Button>
-            <Button onClick={showCroppedImage}>قص وحفظ الصورة</Button>
+            <Button onClick={showCroppedImage} className="active:scale-95 transition-transform">قص وحفظ الصورة</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -267,7 +267,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
             <FormField control={profileForm.control} name="phone" render={({ field }) => (
               <FormItem><FormLabel>رقم الهاتف (اختياري)</FormLabel><FormControl><Input placeholder="+xxxxxxxxxx" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
             )} />
-            <Button type="submit" size="lg" className="w-full" disabled={isSubmitting || !profileForm.formState.isDirty}>
+            <Button type="submit" size="lg" className="w-full active:scale-95 transition-transform" disabled={isSubmitting || !profileForm.formState.isDirty}>
                 {isSubmitting && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
                 حفظ التغييرات
             </Button>
@@ -307,7 +307,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
                               <FormMessage />
                           </FormItem>
                       )} />
-                      <Button type="submit" size="lg" className="w-full" variant="secondary" disabled={isPasswordSubmitting}>
+                      <Button type="submit" size="lg" className="w-full active:scale-95 transition-transform" variant="secondary" disabled={isPasswordSubmitting}>
                           {isPasswordSubmitting && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
                           تحديث كلمة المرور
                       </Button>

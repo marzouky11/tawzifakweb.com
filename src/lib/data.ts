@@ -252,6 +252,15 @@ export async function postJob(jobData: Omit<Job, 'id' | 'createdAt' | 'likes' | 
             }
         });
 
+        // Ensure ownerPhotoURL is not a base64 string before saving to Firestore.
+        // This is a placeholder for a proper image upload service.
+        if (newJob.ownerPhotoURL && newJob.ownerPhotoURL.startsWith('data:image')) {
+            // In a real app, upload this to Firebase Storage and get a URL.
+            // For now, we will set it to null to avoid errors.
+            console.warn("Base64 image detected. In a real app, this should be uploaded to storage. Setting to null for now.");
+            newJob.ownerPhotoURL = null; 
+        }
+
         const newDocRef = await addDoc(adsCollection, newJob);
         
         revalidatePath('/');
@@ -278,6 +287,11 @@ export async function updateAd(adId: string, adData: Partial<Job>) {
                  delete dataToUpdate[key];
             }
         });
+        
+        if (dataToUpdate.ownerPhotoURL && dataToUpdate.ownerPhotoURL.startsWith('data:image')) {
+            console.warn("Base64 image detected. In a real app, this should be uploaded to storage. Setting to null for now.");
+            dataToUpdate.ownerPhotoURL = null;
+        }
 
         await updateDoc(adRef, dataToUpdate);
 
@@ -310,8 +324,15 @@ export async function deleteAd(adId: string) {
 export async function updateUserProfile(uid: string, profileData: Partial<User>) {
     try {
         const userRef = doc(db, 'users', uid);
+        const dataToUpdate = { ...profileData };
+
+        if (dataToUpdate.photoURL && dataToUpdate.photoURL.startsWith('data:image')) {
+             console.warn("Base64 image detected. In a real app, this should be uploaded to storage. Setting to null for now.");
+            dataToUpdate.photoURL = null;
+        }
+
         await updateDoc(userRef, {
-            ...profileData,
+            ...dataToUpdate,
             updatedAt: serverTimestamp()
         });
         revalidatePath('/profile');
@@ -946,6 +967,7 @@ export async function deleteContactMessage(messageId: string): Promise<void> {
     
 
     
+
 
 
 

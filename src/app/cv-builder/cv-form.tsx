@@ -274,7 +274,7 @@ export function CVForm() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setImageSrc(null)}>إلغاء</Button>
-            <Button onClick={showCroppedImage}>قص وحفظ الصورة</Button>
+            <Button onClick={showCroppedImage} className="active:scale-95 transition-transform">قص وحفظ الصورة</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -344,7 +344,7 @@ export function CVForm() {
                       <Button type="button" variant="ghost" size="icon" onClick={() => removeExp(index)} className="absolute top-1 left-1 text-destructive hover:bg-destructive/10"><Trash2 className="h-4 w-4" /></Button>
                     </div>
                   ))}
-                  <Button type="button" variant="outline" onClick={() => appendExp({ title: '', company: '', date: '', description: '' })}><PlusCircle className="ml-2 h-4 w-4" /> إضافة خبرة</Button>
+                  <Button type="button" variant="outline" onClick={() => appendExp({ title: '', company: '', date: '', description: '' })} className="active:scale-95 transition-transform"><PlusCircle className="ml-2 h-4 w-4" /> إضافة خبرة</Button>
                 </CardContent>
               </Card>
 
@@ -361,7 +361,7 @@ export function CVForm() {
                       <Button type="button" variant="ghost" size="icon" onClick={() => removeEdu(index)} className="absolute top-1 left-1 text-destructive hover:bg-destructive/10"><Trash2 className="h-4 w-4" /></Button>
                     </div>
                   ))}
-                  <Button type="button" variant="outline" onClick={() => appendEdu({ degree: '', school: '', date: '' })}><PlusCircle className="ml-2 h-4 w-4" /> إضافة تعليم</Button>
+                  <Button type="button" variant="outline" onClick={() => appendEdu({ degree: '', school: '', date: '' })} className="active:scale-95 transition-transform"><PlusCircle className="ml-2 h-4 w-4" /> إضافة تعليم</Button>
                 </CardContent>
               </Card>
 
@@ -376,7 +376,7 @@ export function CVForm() {
                       </div>
                     ))}
                   </div>
-                  <Button type="button" variant="outline" onClick={() => appendSkill({ name: '' })}><PlusCircle className="ml-2 h-4 w-4" /> إضافة مهارة</Button>
+                  <Button type="button" variant="outline" onClick={() => appendSkill({ name: '' })} className="active:scale-95 transition-transform"><PlusCircle className="ml-2 h-4 w-4" /> إضافة مهارة</Button>
                 </CardContent>
               </Card>
               
@@ -391,7 +391,7 @@ export function CVForm() {
                       </div>
                     ))}
                   </div>
-                  <Button type="button" variant="outline" onClick={() => appendLang({ name: '' })}><PlusCircle className="ml-2 h-4 w-4" /> إضافة لغة</Button>
+                  <Button type="button" variant="outline" onClick={() => appendLang({ name: '' })} className="active:scale-95 transition-transform"><PlusCircle className="ml-2 h-4 w-4" /> إضافة لغة</Button>
                 </CardContent>
               </Card>
             </form>
