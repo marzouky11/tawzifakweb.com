@@ -105,9 +105,15 @@ export function WorkerMobileDetails({ job, similarJobs }: WorkerMobileDetailsPro
                     <CardHeader className="bg-muted/30 p-4">
                         <div className="flex items-center gap-4">
                              <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-16 w-16 text-2xl flex-shrink-0"/>
-                             <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
-                                {job.title || 'عنوان غير متوفر'}
-                            </h1>
+                             <div className="flex-grow">
+                                <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
+                                    {job.title || 'عنوان غير متوفر'}
+                                </h1>
+                                <div className="flex items-center gap-1.5 text-muted-foreground text-sm mt-1">
+                                    <CalendarDays className="h-4 w-4" />
+                                    <span>نُشر: {job.postedAt}</span>
+                                </div>
+                             </div>
                         </div>
                     </CardHeader>
                     <CardContent className="p-4 space-y-6">
@@ -116,7 +122,6 @@ export function WorkerMobileDetails({ job, similarJobs }: WorkerMobileDetailsPro
                             {categoryName && <InfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={sectionColor} />}
                             <InfoItem icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} color={sectionColor} />
                             {translatedWorkType && <InfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={sectionColor} />}
-                            <InfoItem icon={CalendarDays} label="تاريخ النشر" value={job.postedAt} color={sectionColor} />
                         </div>
                         
                         {hasDetails && (
