@@ -71,14 +71,20 @@ export function JobCard({ job }: JobCardProps) {
             <CardHeader className="p-4 flex-row items-center gap-4">
                  <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-12 w-12 text-lg flex-shrink-0"/>
                  <div className="flex-grow overflow-hidden">
-                    <h3 className="font-bold text-base leading-tight text-foreground group-hover:text-primary transition-colors truncate">
-                      <Link href={detailUrl}>{job.title}</Link>
+                    <h3 className="font-bold text-base leading-snug truncate">
+                      <Link href={detailUrl} className="text-foreground group-hover:text-primary transition-colors">
+                        {job.title}
+                      </Link>
                     </h3>
+                    {categoryName && (
+                        <p className="text-xs text-muted-foreground truncate">
+                            {categoryName}
+                        </p>
+                    )}
                  </div>
             </CardHeader>
-            <CardContent className="p-4 pt-0 flex-grow space-y-3">
-                {categoryName && <p className="text-sm text-muted-foreground truncate">{categoryName}</p>}
-                <Separator />
+            <Separator />
+            <CardContent className="p-4 pt-3 flex-grow space-y-3">
                 <div className="space-y-2 text-sm">
                     <div className="flex items-center text-muted-foreground gap-2">
                         <MapPin className="h-4 w-4 text-primary/70" />

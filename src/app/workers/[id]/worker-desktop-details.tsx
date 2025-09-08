@@ -112,7 +112,7 @@ export function WorkerDesktopDetails({ job, similarJobs }: WorkerDesktopDetailsP
                             <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
                                 {job.title || 'عنوان غير متوفر'}
                             </h1>
-                            <div className="mt-2 flex items-center gap-1.5 text-muted-foreground text-sm">
+                             <div className="mt-2 flex items-center gap-1.5 text-muted-foreground text-sm">
                                 <CalendarDays className="h-4 w-4" />
                                 <span>نُشر: {job.postedAt}</span>
                             </div>
