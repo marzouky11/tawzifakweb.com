@@ -134,6 +134,7 @@ const DesktopFooter = () => {
           <div className="space-y-4">
              <h4 className="font-bold text-lg">معلومات المنصة</h4>
             <ul className="space-y-2">
+                <li><Link href="/articles" className="text-sm text-muted-foreground hover:text-primary">مقالات</Link></li>
                 <li><Link href="/about" className="text-sm text-muted-foreground hover:text-primary">من نحن</Link></li>
                 <li><Link href="/faq" className="text-sm text-muted-foreground hover:text-primary">الأسئلة الشائعة</Link></li>
                 <li><Link href="/contact" className="text-sm text-muted-foreground hover:text-primary">اتصل بنا</Link></li>

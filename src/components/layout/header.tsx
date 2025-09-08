@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -113,7 +114,7 @@ function AuthSection() {
       <Button variant="outline" asChild>
         <Link href="/login">تسجيل الدخول</Link>
       </Button>
-      <Button asChild className="hidden sm:inline-flex">
+      <Button asChild className="hidden sm:inline-flex active:scale-95 transition-transform">
         <Link href="/signup">إنشاء حساب</Link>
       </Button>
     </div>
@@ -158,23 +159,13 @@ export function Header() {
 
         <div className="flex items-center gap-2 sm:gap-4">
           <ThemeToggleButton />
-          <Button asChild variant="outline" className="border-yellow-500/50 text-yellow-600 dark:text-yellow-400 hover:bg-yellow-500/10 hover:text-yellow-600 dark:hover:text-yellow-400 shrink-0">
-            <Link href="/cv-builder">
-              <FileText className="ml-2 h-4 w-4" />
-              <span className="hidden lg:inline">إنشاء سيرة ذاتية</span>
-              <span className="lg:hidden">CV</span>
+          <Button asChild className="shrink-0 active:scale-95 transition-transform">
+            <Link href="/post-job/select-type">
+              <Plus className="ml-2 h-4 w-4" />
+              <span className="hidden lg:inline">نشر إعلان</span>
+               <span className="lg:hidden">إعلان</span>
             </Link>
           </Button>
-          
-          {isMounted && !loading && user && (
-            <Button asChild className="shrink-0">
-              <Link href="/post-job/select-type">
-                <Plus className="ml-2 h-4 w-4" />
-                <span className="hidden lg:inline">نشر إعلان</span>
-                 <span className="lg:hidden">إعلان</span>
-              </Link>
-            </Button>
-          )}
 
           <AuthSection />
         </div>
