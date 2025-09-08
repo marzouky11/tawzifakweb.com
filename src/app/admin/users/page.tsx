@@ -130,7 +130,7 @@ export default function AdminUsersPage() {
                       <TableRow key={user.id}>
                         <TableCell>
                           <div className="flex items-center gap-3">
-                            <UserAvatar name={user.name} color={user.avatarColor} />
+                            <UserAvatar name={user.name} color={user.avatarColor} photoURL={user.photoURL} />
                             <div>
                                 <span className="font-medium">{user.name}</span>
                                 {user.isAdmin && <Badge variant="destructive" className="mr-2">مشرف</Badge>}

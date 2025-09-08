@@ -15,28 +15,26 @@ interface UserAvatarProps {
 
 export function UserAvatar({ name, photoURL, color, className }: UserAvatarProps) {
   const initials = getInitials(name);
-  const style = color && !photoURL ? { backgroundColor: color } : {};
+  const fallbackStyle = color && !photoURL ? { backgroundColor: color } : {};
 
   return (
     <Avatar className={cn('bg-muted', className)}>
-      {photoURL ? (
+      {photoURL && (
         <AvatarImage src={photoURL} alt={name || 'User Avatar'} />
-      ) : null}
+      )}
       <AvatarFallback 
-        style={style} 
+        style={fallbackStyle} 
         className={cn(
-          "text-white font-bold", 
-          !photoURL && color && "bg-transparent",
-          // Add flex centering to ensure the initial is perfectly centered
+          "font-bold text-white", // Always apply white color for text
+          !color && "bg-muted", // Use muted background if no color is provided
+           // Center content perfectly
           "flex items-center justify-center"
         )}
       >
         {initials ? (
-          // The size of the initial will be controlled by the `className` prop on the component
-          // e.g., <UserAvatar className="h-16 w-16 text-2xl" />
           <span>{initials}</span>
         ) : (
-          <User className="h-[60%] w-[60%]" />
+          <User className="h-[60%] w-[60%] text-muted-foreground" /> // Icon color for when there's no name
         )}
       </AvatarFallback>
     </Avatar>
