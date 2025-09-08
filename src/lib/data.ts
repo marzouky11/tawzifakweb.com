@@ -254,13 +254,19 @@ export async function postJob(jobData: Omit<Job, 'id' | 'createdAt' | 'likes' | 
         });
         
         if (newJob.ownerPhotoURL && newJob.ownerPhotoURL.startsWith('data:image')) {
-            // This is acceptable for Firestore if the string is not too large.
-            // A better solution would be to use Firebase Storage.
+            // Firestore can handle base64 strings, but for larger images, Firebase Storage is better.
         } else if (newJob.ownerPhotoURL === undefined) {
              newJob.ownerPhotoURL = null;
         }
 
         const newDocRef = await addDoc(adsCollection, newJob);
+        
+        // Update user profile if a new photo was uploaded during ad creation
+        if (auth.currentUser && newJob.ownerPhotoURL && newJob.ownerPhotoURL.startsWith('data:image')) {
+            await updateProfile(auth.currentUser, {
+                photoURL: newJob.ownerPhotoURL
+            });
+        }
         
         revalidatePath('/');
         revalidatePath(jobData.postType === 'seeking_job' ? '/workers' : '/jobs');
@@ -343,6 +349,7 @@ export async function updateUserProfile(uid: string, profileData: Partial<User>)
         }
         
         revalidatePath('/profile');
+        return; // Explicitly return to signify success
     } catch (e) {
         console.error("Error updating user profile: ", e);
         throw new Error("Failed to update profile");
