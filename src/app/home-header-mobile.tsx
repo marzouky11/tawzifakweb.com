@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -15,7 +16,7 @@ export function HomeHeaderMobile() {
   const renderAuthButton = () => {
     if (user && userData) {
       return (
-        <Button asChild variant="outline" className="h-10 w-auto px-3 rounded-full border-primary/50 text-primary bg-primary/10">
+        <Button asChild variant="outline" className="h-10 w-auto px-3 rounded-full border-primary/50 text-primary bg-primary/10 active:scale-95 transition-transform">
             <Link href="/profile">
                 <Settings className="h-4 w-4" />
                 <span className="mr-1.5 font-semibold text-sm">حسابي</span>
@@ -24,7 +25,7 @@ export function HomeHeaderMobile() {
       );
     }
     return (
-      <Button asChild variant="outline" className="h-10 w-auto px-3 rounded-full border-primary/50 text-primary bg-primary/10">
+      <Button asChild variant="outline" className="h-10 w-auto px-3 rounded-full border-primary/50 text-primary bg-primary/10 active:scale-95 transition-transform">
         <Link href="/login">
           <LogIn className="h-4 w-4" />
           <span className="mr-1.5 font-semibold text-sm">دخول</span>

@@ -182,10 +182,10 @@ function TestimonialsSection({ initialTestimonials }: { initialTestimonials: Tes
         )}  
 
         <div className="mt-10 text-center flex flex-col sm:flex-row justify-center items-center gap-4">  
-          <Button asChild variant="outline" size="lg">  
+          <Button asChild variant="outline" size="lg" className="active:scale-95 transition-transform">  
             <Link href="/testimonials">عرض كل الآراء</Link>  
           </Button>  
-          <Button asChild size="lg">  
+          <Button asChild size="lg" className="active:scale-95 transition-transform">  
             <Link href="/add-testimonial">أضف رأيك</Link>  
           </Button>  
         </div>  

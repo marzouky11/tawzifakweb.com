@@ -1,5 +1,4 @@
 
-
 import type { Metadata } from 'next';
 import { UserPlus } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';

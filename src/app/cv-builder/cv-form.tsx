@@ -304,11 +304,11 @@ export function CVForm() {
                             </div>
                             <Input id="picture" type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
                             <div className="flex flex-col gap-2">
-                                <Button type="button" variant="outline" onClick={() => document.getElementById('picture')?.click()}>
+                                <Button type="button" variant="outline" className="active:scale-95 transition-transform" onClick={() => document.getElementById('picture')?.click()}>
                                     تحميل صورة
                                 </Button>
                                {profilePictureValue && (
-                                <Button type="button" variant="destructive" size="sm" onClick={() => form.setValue('profilePicture', '')}>
+                                <Button type="button" variant="destructive" size="sm" className="active:scale-95 transition-transform" onClick={() => form.setValue('profilePicture', '')}>
                                     إزالة الصورة
                                 </Button>
                                )}
@@ -424,7 +424,7 @@ export function CVForm() {
                                 <Button
                                     onClick={handleDownload}
                                     disabled={isGenerating}
-                                    className="w-full"
+                                    className="w-full active:scale-95 transition-transform"
                                 >
                                     {isGenerating ? <Loader2 className="ml-2 h-4 w-4 animate-spin" /> : <Download className="ml-2 h-4 w-4" />}
                                     تحميل
@@ -463,7 +463,7 @@ export function CVForm() {
                                 <Button
                                     onClick={handleDownload}
                                     disabled={isGenerating}
-                                    className="w-full bg-green-600 hover:bg-green-700"
+                                    className="w-full bg-green-600 hover:bg-green-700 active:scale-95 transition-transform"
                                 >
                                     {isGenerating ? <Loader2 className="ml-2 h-4 w-4 animate-spin" /> : <Download className="ml-2 h-4 w-4" />}
                                     تحميل

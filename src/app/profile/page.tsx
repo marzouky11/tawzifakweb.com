@@ -144,7 +144,7 @@ function LoggedInView({ userData, onLogout }: { userData: any, onLogout: () => v
             
             <Card>
                 <CardContent className="p-4">
-                    <Button variant="destructive" className="w-full" onClick={onLogout}>
+                    <Button variant="destructive" className="w-full active:scale-95 transition-transform" onClick={onLogout}>
                         <LogOut className="mr-2 h-4 w-4" />
                         تسجيل الخروج
                     </Button>
@@ -163,13 +163,13 @@ function LoggedOutView() {
                     <CardDescription>سجّل دخولك أو أنشئ حسابًا جديدًا لإدارة إعلاناتك وملفك الشخصي.</CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-col sm:flex-row gap-4 p-4">
-                    <Button asChild size="lg" className="flex-1 py-6">
+                    <Button asChild size="lg" className="flex-1 py-6 active:scale-95 transition-transform">
                         <Link href="/login">
                             <LogInIcon className="mr-2 h-4 w-4" />
                             تسجيل الدخول
                         </Link>
                     </Button>
-                    <Button asChild size="lg" variant="outline" className="flex-1 py-6">
+                    <Button asChild size="lg" variant="outline" className="flex-1 py-6 active:scale-95 transition-transform">
                         <Link href="/signup">
                             <UserPlus className="mr-2 h-4 w-4" />
                             إنشاء حساب

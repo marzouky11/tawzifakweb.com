@@ -33,6 +33,8 @@ export default function AdminArticlesPage() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [articleToDelete, setArticleToDelete] = useState<Article | null>(null);
+  const deleteButtonRef = React.useRef<HTMLButtonElement>(null);
+  const cancelButtonRef = React.useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!authLoading && !userData?.isAdmin) {
@@ -67,6 +69,8 @@ export default function AdminArticlesPage() {
       toast({ variant: 'destructive', title: 'فشل حذف المقال' });
     } finally {
       setArticleToDelete(null);
+      deleteButtonRef.current?.blur();
+      cancelButtonRef.current?.blur();
     }
   };
 
@@ -111,13 +115,13 @@ export default function AdminArticlesPage() {
                   </p>
                 </CardContent>
                 <div className="p-4 pt-0 mt-auto flex gap-2">
-                    <Button asChild variant="outline" className="flex-1">
+                    <Button asChild variant="outline" className="flex-1 active:scale-95 transition-transform">
                         <Link href={`/admin/post-article?id=${article.id}`}>
                             <Edit className="mr-2 h-4 w-4" />
                             تعديل
                         </Link>
                     </Button>
-                    <Button variant="destructive" className="flex-1" onClick={() => setArticleToDelete(article)}>
+                    <Button variant="destructive" className="flex-1 active:scale-95 transition-transform" onClick={() => setArticleToDelete(article)}>
                         <Trash2 className="mr-2 h-4 w-4" />
                         حذف
                     </Button>
@@ -147,8 +151,8 @@ export default function AdminArticlesPage() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setArticleToDelete(null)}>إلغاء</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} className="bg-destructive hover:bg-destructive/90 text-destructive-foreground">تأكيد الحذف</AlertDialogAction>
+            <AlertDialogCancel ref={cancelButtonRef} onClick={() => setArticleToDelete(null)}>إلغاء</AlertDialogCancel>
+            <AlertDialogAction ref={deleteButtonRef} onClick={handleDelete} className="bg-destructive hover:bg-destructive/90 text-destructive-foreground">تأكيد الحذف</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

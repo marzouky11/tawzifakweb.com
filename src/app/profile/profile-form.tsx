@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import React, { useState, useCallback, useRef } from 'react';
@@ -236,11 +235,11 @@ export function ProfileForm({ user }: ProfileFormProps) {
                                 />
                                 <Input id="picture" type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
                                 <div className="flex flex-col gap-2">
-                                    <Button type="button" variant="outline" onClick={() => document.getElementById('picture')?.click()}>
+                                    <Button type="button" variant="outline" className="active:scale-95 transition-transform" onClick={() => document.getElementById('picture')?.click()}>
                                         تغيير الصورة
                                     </Button>
                                    {photoURL && (
-                                    <Button type="button" variant="ghost" size="sm" className="text-destructive hover:bg-destructive/10" onClick={() => profileForm.setValue('photoURL', null, { shouldDirty: true })}>
+                                    <Button type="button" variant="ghost" size="sm" className="text-destructive hover:bg-destructive/10 active:scale-95 transition-transform" onClick={() => profileForm.setValue('photoURL', null, { shouldDirty: true })}>
                                         إزالة الصورة
                                     </Button>
                                    )}
@@ -279,7 +278,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
           
         <Collapsible>
           <CollapsibleTrigger asChild>
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full active:scale-95 transition-transform">
                   <Lock className="ml-2 h-4 w-4" />
                   تغيير كلمة المرور
               </Button>

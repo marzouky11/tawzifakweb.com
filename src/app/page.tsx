@@ -1,5 +1,4 @@
 
-
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { JobCard } from '@/components/job-card';
@@ -178,7 +177,7 @@ function SectionHeader({ icon: Icon, title, description, href, iconColor }: Sect
           <p className="text-muted-foreground">{description}</p>
         </div>
       </div>
-      <Button asChild variant="outline" className="shrink-0">
+      <Button asChild variant="outline" className="shrink-0 active:scale-95 transition-transform">
         <Link href={href}>
           عرض الكل
           <ArrowLeft className="mr-2 h-4 w-4" />
@@ -202,7 +201,7 @@ function CVBuilderSection() {
             <p className="text-muted-foreground mt-2 mb-6 max-w-2xl mx-auto">
                 استخدم أداة إنشاء السيرة الذاتية المجانية لدينا للحصول على سيرة ذاتية احترافية في دقائق. اختر من بين عدة قوالب مصممة لجذب انتباه أصحاب العمل.
             </p>
-            <Button asChild size="lg">
+            <Button asChild size="lg" className="active:scale-95 transition-transform">
                 <Link href="/cv-builder">
                 ابدأ الآن مجانًا
                 <ArrowLeft className="mr-2 h-4 w-4" />
