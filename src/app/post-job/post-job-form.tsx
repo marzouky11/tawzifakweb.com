@@ -139,7 +139,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
       title: job?.title || '',
       categoryId: job?.categoryId || '',
       customCategory: !job?.categoryId && job?.categoryName ? job.categoryName : '',
-      ownerPhotoURL: job?.ownerPhotoURL || userData?.photoURL,
+      ownerPhotoURL: job?.ownerPhotoURL ?? userData?.photoURL ?? '',
       country: job?.country || '',
       city: job?.city || '',
       salary: job?.salary || '',
