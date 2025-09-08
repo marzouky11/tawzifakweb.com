@@ -84,8 +84,8 @@ export function WorkerMobileDetails({ job, similarJobs }: WorkerMobileDetailsPro
 
     const contactButtons = [
         job.phone && { type: 'phone', href: `tel:${job.phone}`, label: 'اتصال', icon: Phone, className: 'bg-[#424242] hover:bg-[#424242]/90' },
-        job.whatsapp && { type: 'whatsapp', href: `https://wa.me/${job.whatsapp.replace(/\+/g, '')}`, label: 'واتساب', icon: MessageSquare, className: 'bg-green-600 hover:bg-green-700' },
-        job.email && { type: 'email', href: `mailto:${job.email}`, label: 'البريد الإلكتروني', icon: Mail, className: 'bg-gray-600 hover:bg-gray-700' },
+        job.whatsapp && { type: 'whatsapp', href: `https://wa.me/${job.whatsapp.replace(/\+/g, '')}`, label: 'واتساب', icon: MessageSquare, className: 'bg-green-600' },
+        job.email && { type: 'email', href: `mailto:${job.email}`, label: 'البريد الإلكتروني', icon: Mail, className: 'bg-gray-600' },
         job.instagram && { type: 'instagram', href: `https://instagram.com/${job.instagram.replace(/@/g, '')}`, label: 'إنستغرام', icon: Instagram, className: 'bg-gradient-to-r from-pink-500 to-orange-500' },
     ].filter(Boolean);
 
@@ -114,7 +114,7 @@ export function WorkerMobileDetails({ job, similarJobs }: WorkerMobileDetailsPro
                     </CardHeader>
                      <Separator/>
                     <CardContent className="p-4 space-y-6">
-                        <div className="flex items-center gap-1.5 text-muted-foreground text-sm mt-8">
+                        <div className="flex items-center gap-1.5 text-muted-foreground text-sm">
                             <CalendarDays className="h-4 w-4" />
                             <span>نُشر: {job.postedAt}</span>
                         </div>
@@ -122,7 +122,7 @@ export function WorkerMobileDetails({ job, similarJobs }: WorkerMobileDetailsPro
                             <InfoItem icon={UserIcon} label="صاحب الإعلان" value={job.ownerName} color={primaryColor} />
                             {categoryName && <InfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={primaryColor} />}
                             <InfoItem icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} color={primaryColor} />
-                            {translatedWorkType && <InfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={sectionColor} />}
+                            {translatedWorkType && <InfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={primaryColor} />}
                         </div>
                         
                         {hasDetails && (
