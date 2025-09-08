@@ -1,5 +1,3 @@
-
-
 'use client'
 
 import * as React from "react"
@@ -37,20 +35,25 @@ export function ThemeToggleButton({ className, ...props }: Omit<React.ComponentP
 }
 
 export function ThemeToggleSwitch({ className, ...props }: React.ComponentProps<typeof Switch>) {
-    const { setTheme, theme } = useTheme()
-    const router = useRouter();
+  const { setTheme, theme } = useTheme()
+  const [checked, setChecked] = React.useState(theme === "dark")
 
-    const handleCheckedChange = (checked: boolean) => {
-        const newTheme = checked ? "dark" : "light";
-        setTheme(newTheme);
-    };
+  // تحديث الحالة كلما تغيّر theme
+  React.useEffect(() => {
+    setChecked(theme === "dark")
+  }, [theme])
 
-    return (
-        <Switch
-          checked={theme === "dark"}
-          onCheckedChange={handleCheckedChange}
-          className={className}
-          {...props}
-        />
-    )
+  const handleCheckedChange = (newChecked: boolean) => {
+    setChecked(newChecked)
+    setTheme(newChecked ? "dark" : "light")
+  }
+
+  return (
+    <Switch
+      checked={checked}
+      onCheckedChange={handleCheckedChange}
+      className={className}
+      {...props}
+    />
+  )
 }
