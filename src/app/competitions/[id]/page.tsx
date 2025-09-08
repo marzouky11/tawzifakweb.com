@@ -15,6 +15,28 @@ interface CompetitionDetailPageProps {
   params: { id: string };
 }
 
+interface JobPostingJsonLd {
+  '@context': string;
+  '@type': string;
+  title: string;
+  description: string;
+  datePosted: string;
+  validThrough?: string;
+  hiringOrganization: {
+    '@type': 'Organization';
+    name: string;
+  };
+  jobLocation: {
+    '@type': 'Place';
+    address: {
+      '@type': 'PostalAddress';
+      addressLocality: string;
+      addressCountry: string;
+    };
+  };
+  employmentType: string;
+}
+
 export async function generateMetadata({ params }: CompetitionDetailPageProps): Promise<Metadata> {
   const competition = await getCompetitionById(params.id);
   const baseUrl = 'https://www.tawzifak.com';
@@ -35,7 +57,7 @@ export async function generateMetadata({ params }: CompetitionDetailPageProps): 
   const createdAtDate = competition.createdAt?.toDate ? competition.createdAt.toDate() : new Date();
 
   // Simplified and valid Structured Data
-  const jobPostingJsonLd = {
+  const jobPostingJsonLd: JobPostingJsonLd = {
       '@context': 'https://schema.org',
       '@type': 'JobPosting',
       title: metaTitle,
