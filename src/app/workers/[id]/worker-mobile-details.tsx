@@ -110,9 +110,11 @@ export function WorkerMobileDetails({ job, similarJobs }: WorkerMobileDetailsPro
                                 </h1>
                             </div>
                         </div>
-                       <div className="flex items-center gap-1.5">
+                       div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground text-sm">
+                            <div className="flex items-center gap-1.5">
                                 <CalendarDays className="h-4 w-4" />
                                 <span>نُشر: {job.postedAt}</span>
+                            </div>
                         </div>
                     </CardHeader>
                     <CardContent className="p-4 space-y-6">
