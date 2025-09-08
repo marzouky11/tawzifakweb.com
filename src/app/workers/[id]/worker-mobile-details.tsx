@@ -15,7 +15,6 @@ import { ReportAdDialog } from '@/app/jobs/[id]/report-ad-dialog';
 import { JobCard } from '@/components/job-card';
 import { SaveAdButton } from '@/app/jobs/[id]/save-ad-button';
 import { cn } from '@/lib/utils';
-import { getCategoryById } from '@/lib/data';
 import { UserAvatar } from '@/components/user-avatar';
 
 
@@ -68,8 +67,7 @@ interface WorkerMobileDetailsProps {
 }
 
 export function WorkerMobileDetails({ job, similarJobs }: WorkerMobileDetailsProps) {
-    const category = getCategoryById(job.categoryId || '');
-    const categoryName = category?.name || job.categoryName;
+    const categoryName = job.categoryName;
     const translatedWorkType = job.workType ? workTypeTranslations[job.workType] : undefined;
     const sectionColor = '#424242';
 
@@ -109,7 +107,6 @@ export function WorkerMobileDetails({ job, similarJobs }: WorkerMobileDetailsPro
                         <div className="flex flex-col gap-2 text-muted-foreground text-sm">
                            {categoryName && (
                                <div className="flex items-center gap-1.5">
-                                    <LayoutGrid className="h-4 w-4" />
                                     <span>{categoryName}</span>
                                 </div>
                             )}

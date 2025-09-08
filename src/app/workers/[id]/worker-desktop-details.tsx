@@ -14,7 +14,6 @@ import { ReportAdDialog } from '@/app/jobs/[id]/report-ad-dialog';
 import { JobCard } from '@/components/job-card';
 import { SaveAdButton } from '@/app/jobs/[id]/save-ad-button';
 import { cn } from '@/lib/utils';
-import { getCategoryById } from '@/lib/data';
 import { Separator } from '@/components/ui/separator';
 import { UserAvatar } from '@/components/user-avatar';
 
@@ -24,17 +23,6 @@ const workTypeTranslations: { [key in WorkType]: string } = {
   part_time: 'دوام جزئي',
   freelance: 'عمل حر',
   remote: 'عن بعد',
-};
-
-const SeekerInfoItem = ({ icon: Icon, label, value, color }: { icon: React.ElementType; label: string; value: string | number | undefined; color?: string }) => {
-    if (!value) return null;
-    return (
-       <div className="flex flex-col gap-1 p-3 bg-muted/50 rounded-lg text-center">
-        <Icon className="h-6 w-6 mx-auto mb-1" style={{ color }} />
-        <dt className="text-xs text-muted-foreground">{label}</dt>
-        <dd className="font-semibold text-sm">{String(value)}</dd>
-      </div>
-    );
 };
 
 const FormattedText = ({ text }: { text?: string }) => {
@@ -86,8 +74,7 @@ interface WorkerDesktopDetailsProps {
 }
 
 export function WorkerDesktopDetails({ job, similarJobs }: WorkerDesktopDetailsProps) {
-    const category = getCategoryById(job.categoryId || '');
-    const categoryName = category?.name || job.categoryName;
+    const categoryName = job.categoryName;
     const translatedWorkType = job.workType ? workTypeTranslations[job.workType] : undefined;
     const sectionColor = '#424242';
 
@@ -119,7 +106,6 @@ export function WorkerDesktopDetails({ job, similarJobs }: WorkerDesktopDetailsP
                            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-muted-foreground mt-2 text-sm">
                                {categoryName && (
                                    <div className="flex items-center gap-1.5">
-                                        <LayoutGrid className="h-4 w-4" />
                                         <span>{categoryName}</span>
                                     </div>
                                 )}
