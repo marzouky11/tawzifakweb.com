@@ -4,9 +4,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/context/auth-context';
 import { Button } from '@/components/ui/button';
-import { UserAvatar } from '@/components/user-avatar';
 import { Skeleton } from '@/components/ui/skeleton';
-import { User as UserIcon, LogIn, Settings, Sun, Moon } from 'lucide-react';
+import { LogIn, Settings } from 'lucide-react';
 import { ThemeToggleButton } from '@/components/theme-toggle';
 import { Separator } from '@/components/ui/separator';
 
@@ -34,10 +33,6 @@ export function HomeHeaderMobile() {
     );
   };
 
-  const renderThemeToggle = () => {
-    return <ThemeToggleButton className="text-primary bg-background/50 hover:bg-background/70 h-10 w-10 rounded-full border border-primary/20" />;
-  };
-
   return (
       <div 
         className="md:hidden bg-card text-card-foreground p-4 rounded-b-3xl shadow-md border-b-4 border-primary"
@@ -48,7 +43,7 @@ export function HomeHeaderMobile() {
               <Image src="/LOGO2.png" alt="شعار توظيفك" width={130} height={32} priority />
             </Link>
             <div className="flex items-center gap-2">
-                {renderThemeToggle()}
+                <ThemeToggleButton className="text-primary bg-background/50 hover:bg-background/70 h-10 w-10 rounded-full border border-primary/20" />
                 <Separator orientation="vertical" className="h-6" />
                 {loading ? <Skeleton className="h-10 w-24 rounded-full" /> : renderAuthButton()}
             </div>

@@ -16,9 +16,8 @@ export function ShareButton({ title, text }: ShareButtonProps) {
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    if (typeof navigator !== 'undefined' && ('share' in navigator || 'clipboard' in navigator)) {
-      setCanShare(true);
-    }
+    // Ensure this runs only on the client
+    setCanShare(typeof navigator !== 'undefined' && ('share' in navigator || 'clipboard' in navigator));
   }, []);
 
   const handleShare = async () => {
@@ -43,12 +42,20 @@ export function ShareButton({ title, text }: ShareButtonProps) {
         });
       }
     } else if ('clipboard' in navigator && navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href).then(() => {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
         toast({
           title: 'تم نسخ الرابط!',
           description: 'تم نسخ رابط الإعلان إلى الحافظة لمشاركته.',
         });
-      });
+      } catch (error) {
+        console.error('Error copying to clipboard:', error);
+        toast({
+          variant: 'destructive',
+          title: 'فشل النسخ',
+          description: 'حدث خطأ أثناء محاولة نسخ الرابط.',
+        });
+      }
     }
   };
 
