@@ -1,7 +1,8 @@
 
+
 'use client';
 
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
@@ -121,7 +122,6 @@ function AuthSection() {
   );
 }
 
-const MemoizedAuthSection = memo(AuthSection);
 
 export function Header() {
   const pathname = usePathname();
@@ -178,7 +178,7 @@ export function Header() {
             </Button>
           )}
 
-          <MemoizedAuthSection />
+          <AuthSection />
         </div>
       </nav>
     </header>

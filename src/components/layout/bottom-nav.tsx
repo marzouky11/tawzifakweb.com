@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Briefcase, Plus, Plane, Landmark } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { memo } from 'react';
 
 const mainNavItems = [
   { href: '/', label: 'الرئيسية', icon: Home },
@@ -81,12 +80,10 @@ function BottomNavContent() {
 }
 
 
-export const BottomNav = memo(function BottomNav() {
+export function BottomNav() {
   return (
     <footer className="fixed bottom-0 left-0 z-40 w-full h-20 bg-transparent md:hidden">
       <BottomNavContent />
     </footer>
   );
-});
-
-BottomNav.displayName = 'BottomNav';
+}
