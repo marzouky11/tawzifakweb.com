@@ -106,19 +106,17 @@ export function WorkerDesktopDetails({ job, similarJobs }: WorkerDesktopDetailsP
         <div className="container mx-auto max-w-7xl px-4 pb-8 space-y-6">
             <Card className="overflow-hidden shadow-lg">
                  <CardHeader className="bg-muted/30 p-6">
-                    <div className="flex items-start justify-between">
-                        <div className="flex items-start gap-4">
-                            <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-20 w-20 text-3xl flex-shrink-0"/>
-                            <div className="flex-grow">
-                                <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
-                                    {job.title || 'عنوان غير متوفر'}
-                                </h1>
-                            </div>
+                    <div className="flex items-start gap-4">
+                        <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-20 w-20 text-3xl flex-shrink-0"/>
+                        <div className="flex-grow">
+                            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
+                                {job.title || 'عنوان غير متوفر'}
+                            </h1>
                         </div>
-                        <div className="text-muted-foreground text-sm flex-shrink-0">
-                            <span>نُشر: {job.postedAt}</span>
-                        </div>
-                   </div>
+                    </div>
+                    <div className="text-left text-xs text-muted-foreground mt-2">
+                        <span>نُشر: {job.postedAt}</span>
+                    </div>
                 </CardHeader>
                 <CardContent className="p-6 space-y-8">
                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
