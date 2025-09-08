@@ -108,11 +108,11 @@ export function WorkerMobileDetails({ job, similarJobs }: WorkerMobileDetailsPro
                                 <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
                                     {job.title || 'عنوان غير متوفر'}
                                 </h1>
+                                 <div className="mt-2 flex items-center gap-1.5 text-muted-foreground text-sm">
+                                    <CalendarDays className="h-4 w-4" />
+                                    <span>نُشر: {job.postedAt}</span>
+                                </div>
                              </div>
-                        </div>
-                        <div className="flex items-center gap-1.5 text-muted-foreground text-sm mt-2">
-                            <CalendarDays className="h-4 w-4" />
-                            <span>نُشر: {job.postedAt}</span>
                         </div>
                     </CardHeader>
                     <CardContent className="p-4 space-y-6">
