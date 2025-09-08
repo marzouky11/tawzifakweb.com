@@ -15,16 +15,16 @@ interface UserAvatarProps {
 
 export function UserAvatar({ name, photoURL, color, className }: UserAvatarProps) {
   const initials = getInitials(name);
-  const style = color ? { backgroundColor: color } : {};
+  const style = color && !photoURL ? { backgroundColor: color } : {};
 
   return (
     <Avatar className={cn('bg-muted', className)}>
-      {photoURL ? (
-         <AvatarImage src={photoURL} alt={name || 'User Avatar'} />
-      ) : null}
-      <AvatarFallback style={style} className="text-white font-bold">
+      {photoURL && <AvatarImage src={photoURL} alt={name || 'User Avatar'} />}
+      <AvatarFallback style={style} className={cn("text-white font-bold", !photoURL && color && "bg-transparent")}>
         {initials ? (
-          <span className="text-[55%]">{initials}</span>
+          <div className="flex items-center justify-center h-full w-full text-xl">
+            {initials}
+          </div>
         ) : (
           <User className="h-[60%] w-[60%]" />
         )}

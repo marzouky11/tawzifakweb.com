@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
@@ -47,6 +47,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } else {
           setUserData(null);
         }
+        setLoading(false);
+      }, (error) => {
+        console.error("Error fetching user data:", error);
         setLoading(false);
       });
       return () => unsubscribeSnapshot();

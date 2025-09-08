@@ -48,7 +48,7 @@ interface ProfileFormProps {
 
 export function ProfileForm({ user }: ProfileFormProps) {
   const { toast } = useToast();
-  const { user: authUser, setUserData } = useAuth();
+  const { user: authUser, setUserData, userData } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPasswordSubmitting, setIsPasswordSubmitting] = useState(false);
 
@@ -81,8 +81,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
             photoURL: values.photoURL || null,
         };
         await updateUserProfile(authUser.uid, updatedData);
-
-        // Manually update the context to reflect changes immediately
+        
         setUserData(prev => prev ? { ...prev, ...updatedData } : null);
 
         toast({
@@ -164,8 +163,8 @@ export function ProfileForm({ user }: ProfileFormProps) {
                       <FormControl>
                           <div className="flex items-center gap-4">
                               <UserAvatar 
-                                  name={user?.name} 
-                                  color={user?.avatarColor} 
+                                  name={userData?.name} 
+                                  color={userData?.avatarColor} 
                                   photoURL={photoURL}
                                   className="h-20 w-20 text-3xl"
                               />
