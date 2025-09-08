@@ -45,7 +45,7 @@ interface ProfileFormProps {
 
 export function ProfileForm({ user }: ProfileFormProps) {
   const { toast } = useToast();
-  const { user: authUser, setUserData, userData } = useAuth();
+  const { user: authUser, userData } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPasswordSubmitting, setIsPasswordSubmitting] = useState(false);
   
@@ -93,8 +93,6 @@ export function ProfileForm({ user }: ProfileFormProps) {
         };
         await updateUserProfile(authUser.uid, updatedData);
         
-        // Directly update the context state
-        setUserData(prev => prev ? { ...prev, ...updatedData } : null);
         profileForm.reset({ ...values, photoURL: updatedData.photoURL }); // Resets the form's dirty state
 
         toast({
