@@ -974,3 +974,4 @@ export async function getContactMessages(): Promise<ContactMessage[]> {
 export async function deleteContactMessage(messageId: string): Promise<void> {
   await deleteDoc(doc(db, 'contacts', messageId));
 }
+

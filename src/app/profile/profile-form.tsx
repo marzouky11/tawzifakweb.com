@@ -45,7 +45,7 @@ interface ProfileFormProps {
 
 export function ProfileForm({ user }: ProfileFormProps) {
   const { toast } = useToast();
-  const { user: authUser, userData, setUserData } = useAuth();
+  const { user: authUser, userData } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPasswordSubmitting, setIsPasswordSubmitting] = useState(false);
   
@@ -99,11 +99,11 @@ export function ProfileForm({ user }: ProfileFormProps) {
             title: "تم تحديث الملف الشخصي",
             description: result.message,
         });
-    } catch (error) {
+    } catch (error: any) {
          toast({
             variant: "destructive",
             title: "خطأ",
-            description: "فشل تحديث الملف الشخصي.",
+            description: error.message || "فشل تحديث الملف الشخصي.",
         });
     } finally {
         setIsSubmitting(false);
