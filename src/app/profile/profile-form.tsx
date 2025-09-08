@@ -45,7 +45,7 @@ interface ProfileFormProps {
 
 export function ProfileForm({ user }: ProfileFormProps) {
   const { toast } = useToast();
-  const { user: authUser, userData } = useAuth();
+  const { user: authUser, userData, setUserData } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPasswordSubmitting, setIsPasswordSubmitting] = useState(false);
   
@@ -91,13 +91,13 @@ export function ProfileForm({ user }: ProfileFormProps) {
             phone: values.phone || '',
             photoURL: values.photoURL,
         };
-        await updateUserProfile(authUser.uid, updatedData);
+        const result = await updateUserProfile(authUser.uid, updatedData);
         
-        profileForm.reset({ ...values, photoURL: updatedData.photoURL }); // Resets the form's dirty state
+        profileForm.reset({ ...values, photoURL: updatedData.photoURL });
 
         toast({
             title: "تم تحديث الملف الشخصي",
-            description: "تم حفظ معلوماتك بنجاح.",
+            description: result.message,
         });
     } catch (error) {
          toast({

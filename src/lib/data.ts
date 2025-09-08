@@ -1,3 +1,4 @@
+
 import { db, auth } from '@/lib/firebase';
 import { collection, getDocs, getDoc, doc, query, where, orderBy, limit, addDoc, serverTimestamp, updateDoc, deleteDoc, setDoc, Query, and, QueryConstraint, QueryFilterConstraint, documentId, increment } from 'firebase/firestore';
 import type { Job, Category, PostType, User, WorkType, Testimonial, Competition, Organizer, Article, Report, ContactMessage, ImmigrationPost } from './types';
@@ -245,9 +246,7 @@ export async function postJob(jobData: Omit<Job, 'id' | 'createdAt' | 'likes' | 
             }
         });
         
-        if (newJob.ownerPhotoURL && newJob.ownerPhotoURL.startsWith('data:image')) {
-            // Firestore can handle base64 strings, but for larger images, Firebase Storage is better.
-        } else if (newJob.ownerPhotoURL === undefined) {
+        if (newJob.ownerPhotoURL === undefined) {
              newJob.ownerPhotoURL = null;
         }
 
@@ -255,9 +254,11 @@ export async function postJob(jobData: Omit<Job, 'id' | 'createdAt' | 'likes' | 
         
         // Update user profile if a new photo was uploaded during ad creation
         if (auth.currentUser && newJob.ownerPhotoURL && newJob.ownerPhotoURL.startsWith('data:image')) {
-            await updateProfile(auth.currentUser, {
-                photoURL: newJob.ownerPhotoURL
-            });
+            const updateData: { displayName?: string; photoURL?: string | null } = { photoURL: newJob.ownerPhotoURL };
+            if (jobData.ownerName) {
+                updateData.displayName = jobData.ownerName;
+            }
+             await updateProfile(auth.currentUser, updateData);
         }
         
         revalidatePath('/');
@@ -322,18 +323,17 @@ export async function updateUserProfile(uid: string, profileData: Partial<User>)
         const userRef = doc(db, 'users', uid);
         const dataToUpdate: { [key: string]: any } = { ...profileData };
 
-        // معالجة photoURL بشكل صحيح
         if (dataToUpdate.photoURL === '' || dataToUpdate.photoURL === undefined) {
             dataToUpdate.photoURL = null;
         }
 
-        // تحديث Firestore أولاً
+        // Update Firestore first
         await updateDoc(userRef, {
             ...dataToUpdate,
             updatedAt: serverTimestamp()
         });
 
-        // ثم تحديث Firebase Auth (بشرط وجود مستخدم حالي)
+        // Then update Firebase Auth (only if a currentUser exists)
         const currentUser = auth.currentUser;
         if (currentUser && currentUser.uid === uid) {
             const updateData: { displayName?: string; photoURL?: string | null } = {};
