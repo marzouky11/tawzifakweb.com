@@ -2,16 +2,17 @@
 'use client'
 
 import Link from 'next/link';
-import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, Clock, Wallet, User as UserIcon, Briefcase, CalendarDays } from 'lucide-react';
+import { MapPin, Clock, Wallet, User as UserIcon, Briefcase, CalendarDays, ArrowRight, LayoutGrid } from 'lucide-react';
 import type { Job, WorkType } from '@/lib/types';
 import { getCategoryById } from '@/lib/data';
 import { CategoryIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from './ui/separator';
+import { UserAvatar } from './user-avatar';
 
 interface JobCardProps {
   job: Job | null;
@@ -64,13 +65,49 @@ export function JobCard({ job }: JobCardProps) {
   const categoryIcon = category?.iconName || defaultIcon;
 
   const salaryText = !isSeekingJob ? (job.salary || 'عند الطلب') : undefined;
+
+  if (isSeekingJob) {
+      return (
+        <Card className="flex flex-col h-full overflow-hidden rounded-xl shadow-md bg-gradient-to-br from-card to-muted/20 hover:shadow-xl transition-all duration-300 group">
+          <CardContent className="p-4 flex-grow flex flex-col">
+            <div className="flex items-center gap-4">
+                <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-16 w-16 text-2xl flex-shrink-0 shadow-inner" />
+                <div className="flex-grow overflow-hidden">
+                    <h3 className="font-bold text-lg leading-tight truncate text-foreground group-hover:text-primary transition-colors">
+                      <Link href={detailUrl}>{job.ownerName}</Link>
+                    </h3>
+                    <p className="text-sm text-muted-foreground truncate">{job.title}</p>
+                </div>
+            </div>
+            <Separator className="my-3" />
+            <div className="space-y-2 text-sm text-muted-foreground">
+                 {categoryName && (
+                    <div className="flex items-center gap-2">
+                        <LayoutGrid className="h-4 w-4 text-primary/70" />
+                        <span className="truncate">{categoryName}</span>
+                    </div>
+                )}
+                <div className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-primary/70" />
+                    <span className="truncate">{job.city}, {job.country}</span>
+                </div>
+            </div>
+          </CardContent>
+           <CardFooter className="p-3 pt-0 mt-auto">
+              <Button asChild size="sm" variant="secondary" className="w-full text-secondary-foreground hover:bg-secondary/80">
+                <Link href={detailUrl}>
+                  عرض الملف
+                  <ArrowRight className="mr-2 h-4 w-4" />
+                </Link>
+              </Button>
+          </CardFooter>
+        </Card>
+      )
+  }
   
   return (
     <Card 
-        className={cn(
-            "flex flex-col rounded-lg bg-card shadow-md h-full transition-all hover:shadow-xl w-full overflow-hidden",
-            isSeekingJob ? "border" : "border-t-4"
-        )}
+        className="flex flex-col rounded-lg bg-card shadow-md h-full transition-all hover:shadow-xl w-full overflow-hidden border-t-4"
         style={{ borderColor: sectionColor }}
     >
        <CardHeader className="p-4">
@@ -98,20 +135,6 @@ export function JobCard({ job }: JobCardProps) {
       <Separator />
 
       <CardContent className="p-4 flex-grow flex flex-wrap items-start gap-2">
-        {isSeekingJob ? (
-          <>
-            <InfoBadge
-                icon={MapPin}
-                text={`${job.country}, ${job.city}`}
-                className="bg-gray-100/60 dark:bg-gray-900/40 text-gray-700/80 dark:text-gray-300/80 border-gray-200/50 dark:border-gray-800/50"
-            />
-            <InfoBadge
-                icon={UserIcon}
-                text={job.ownerName}
-                className="bg-gray-100/60 dark:bg-gray-900/40 text-gray-700/80 dark:text-gray-300/80 border-gray-200/50 dark:border-gray-800/50"
-            />
-          </>
-        ) : (
           <>
             <InfoBadge
                 icon={MapPin}
@@ -126,7 +149,6 @@ export function JobCard({ job }: JobCardProps) {
                 />
             )}
           </>
-        )}
       </CardContent>
 
       <CardFooter className="p-4 pt-0 mt-auto flex items-center justify-between">
