@@ -29,7 +29,7 @@ import { getCroppedImg } from '@/app/cv-builder/crop-image';
 const profileSchema = z.object({
   name: z.string().min(3, { message: 'الاسم يجب أن يكون 3 أحرف على الأقل.' }),
   email: z.string().email(),
-  phone: z.string().min(1, { message: 'رقم الهاتف مطلوب.' }),
+  phone: z.string().optional(),
   photoURL: z.string().optional(),
 });
 
@@ -98,7 +98,6 @@ export function ProfileForm({ user }: ProfileFormProps) {
     try {
       const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels, rotation);
       if (croppedImage) {
-        // Convert blob URL to data URL to store in Firestore
         const response = await fetch(croppedImage);
         const blob = await response.blob();
         const reader = new FileReader();
@@ -111,7 +110,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
       setImageSrc(null); // Close the dialog
     } catch (e) {
       console.error(e);
-      toast({ variant: 'destructive', title: 'خطأ في قص الصورة', description: 'حدث خطأ أثناء معالجة الصورة. يرجى المحاولة مرة أخرى.' });
+      toast({ variant: 'destructive', title: 'خطأ في قص الصورة', description: 'حدث خطأ أثناء معالجة الصورة.' });
     }
   }, [imageSrc, croppedAreaPixels, rotation, profileForm, toast]);
 
@@ -122,7 +121,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
     try {
         const updatedData = { 
             name: values.name, 
-            phone: values.phone,
+            phone: values.phone || '',
             photoURL: values.photoURL || null,
         };
         await updateUserProfile(authUser.uid, updatedData);
@@ -262,7 +261,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
               </FormItem>
             )} />
             <FormField control={profileForm.control} name="phone" render={({ field }) => (
-              <FormItem><FormLabel>رقم الهاتف</FormLabel><FormControl><Input placeholder="+xxxxxxxxxx" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
+              <FormItem><FormLabel>رقم الهاتف (اختياري)</FormLabel><FormControl><Input placeholder="+xxxxxxxxxx" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
             )} />
             <Button type="submit" size="lg" className="w-full" disabled={isSubmitting || !profileForm.formState.isDirty}>
                 {isSubmitting && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
