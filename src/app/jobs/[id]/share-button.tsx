@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Share2 } from 'lucide-react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 interface ShareButtonProps {
   title: string;
@@ -13,15 +13,17 @@ interface ShareButtonProps {
 export function ShareButton({ title, text }: ShareButtonProps) {
   const { toast } = useToast();
   const [canShare, setCanShare] = useState(false);
-  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    // Ensure this runs only on the client
-    setCanShare(typeof navigator !== 'undefined' && ('share' in navigator || 'clipboard' in navigator));
+    // This effect runs only on the client, after the component has mounted
+    // Check if the Web Share API or Clipboard API is available
+    if (typeof navigator !== 'undefined' && ('share' in navigator || 'clipboard' in navigator)) {
+      setCanShare(true);
+    }
   }, []);
 
   const handleShare = async () => {
-    
+    // Use 'share' in navigator to check for the Web Share API's existence
     if ('share' in navigator && navigator.share) {
       try {
         await navigator.share({
@@ -31,7 +33,6 @@ export function ShareButton({ title, text }: ShareButtonProps) {
         });
       } catch (error) {
         if (error instanceof DOMException && error.name === 'AbortError') {
-          buttonRef.current?.blur();
           return; // User cancelled the share
         }
         console.error('Error sharing:', error);
@@ -42,33 +43,25 @@ export function ShareButton({ title, text }: ShareButtonProps) {
         });
       }
     } else if ('clipboard' in navigator && navigator.clipboard) {
-      try {
-        await navigator.clipboard.writeText(window.location.href);
+      // Fallback for browsers that don't support Web Share API
+      navigator.clipboard.writeText(window.location.href).then(() => {
         toast({
           title: 'تم نسخ الرابط!',
           description: 'تم نسخ رابط الإعلان إلى الحافظة لمشاركته.',
         });
-      } catch (error) {
-        console.error('Error copying to clipboard:', error);
-        toast({
-          variant: 'destructive',
-          title: 'فشل النسخ',
-          description: 'حدث خطأ أثناء محاولة نسخ الرابط.',
-        });
-      }
+      });
     }
-
-    buttonRef.current?.blur();
   };
 
+  // Only render the button if the functionality is available on the client
   if (!canShare) {
     return null;
   }
 
   return (
-    <Button ref={buttonRef} onClick={handleShare} variant="outline" size="lg" className="w-full h-auto py-3">
-      <Share2 className="ml-2 h-5 w-5" />
-      <span className="text-base">مشاركة الإعلان</span>
+    <Button onClick={handleShare} variant="outline" className="w-full">
+      <Share2 className="ml-2 h-4 w-4" />
+      مشاركة الإعلان
     </Button>
   );
 }
