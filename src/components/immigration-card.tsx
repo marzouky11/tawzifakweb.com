@@ -57,7 +57,7 @@ export function ImmigrationCard({ post }: ImmigrationCardProps) {
 
 
   return (
-    <Card className="flex flex-col h-full overflow-hidden rounded-xl shadow-md border-double bg-card hover:shadow-2xl transition-all duration-300 border-[3px]" style={{ borderColor: sectionColor }}>
+    <Card className="flex flex-col h-full overflow-hidden rounded-xl shadow-md bg-card hover:shadow-2xl transition-all duration-300 border-2" style={{ borderColor: sectionColor }}>
       <CardHeader className="p-4">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-lg" style={{ backgroundColor: `${iconColor}1A` }}>
@@ -95,5 +95,3 @@ export function ImmigrationCard({ post }: ImmigrationCardProps) {
     </Card>
   );
 }
-
-    

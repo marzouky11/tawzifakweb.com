@@ -101,7 +101,7 @@ export function CompetitionMobileDetails({ competition, similarCompetitions }: C
 
     return (
         <div className="container mx-auto max-w-7xl px-4 pb-8 space-y-6">
-            <Card className="overflow-hidden shadow-lg border-t-4" style={{borderColor: sectionColor}}>
+            <Card className="overflow-hidden shadow-lg border-2 border-dashed" style={{borderColor: sectionColor}}>
                  <CardHeader className="bg-muted/30 p-4">
                     <div className="flex items-center gap-4 mb-2">
                         <div className="p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${organizerColor}1A` }}>
@@ -217,4 +217,3 @@ export function CompetitionMobileDetails({ competition, similarCompetitions }: C
         </div>
     );
 }
-

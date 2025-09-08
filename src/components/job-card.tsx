@@ -68,7 +68,7 @@ export function JobCard({ job }: JobCardProps) {
 
   if (isSeekingJob) {
       return (
-        <Card className="flex flex-col h-full overflow-hidden rounded-xl shadow-md bg-card hover:shadow-xl transition-all duration-300 group">
+        <Card className="flex flex-col h-full overflow-hidden rounded-xl shadow-md bg-card hover:shadow-xl transition-all duration-300 group border" style={{ borderColor: sectionColor }}>
           <CardHeader className="p-4 flex-row items-center gap-4">
               <UserAvatar 
                 name={job.ownerName} 
