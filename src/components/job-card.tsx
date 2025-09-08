@@ -83,7 +83,7 @@ export function JobCard({ job }: JobCardProps) {
               </div>
           </CardHeader>
           <CardContent className="p-4 pt-0 flex-grow">
-              <div className="flex flex-wrap items-center text-sm text-muted-foreground gap-x-4 gap-y-1">
+              <div className="flex flex-col text-sm text-muted-foreground gap-1">
                  <div className="flex items-center gap-1.5">
                       <MapPin className="h-4 w-4 text-primary/70" />
                       <span className="truncate">{job.city}, {job.country}</span>
