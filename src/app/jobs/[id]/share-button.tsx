@@ -1,9 +1,10 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Share2 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface ShareButtonProps {
   title: string;
@@ -13,6 +14,7 @@ interface ShareButtonProps {
 export function ShareButton({ title, text }: ShareButtonProps) {
   const { toast } = useToast();
   const [canShare, setCanShare] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     // This effect runs only on the client, after the component has mounted
@@ -51,6 +53,7 @@ export function ShareButton({ title, text }: ShareButtonProps) {
         });
       });
     }
+    buttonRef.current?.blur();
   };
 
   // Only render the button if the functionality is available on the client
@@ -59,7 +62,7 @@ export function ShareButton({ title, text }: ShareButtonProps) {
   }
 
   return (
-    <Button onClick={handleShare} variant="outline" className="w-full">
+    <Button ref={buttonRef} onClick={handleShare} variant="outline" className="w-full">
       <Share2 className="ml-2 h-4 w-4" />
       مشاركة الإعلان
     </Button>

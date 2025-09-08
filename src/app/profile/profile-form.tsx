@@ -62,7 +62,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
   const profileFormRef = useRef<HTMLFormElement>(null);
-
+  const passwordFormRef = useRef<HTMLFormElement>(null);
 
   const profileForm = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),
@@ -125,7 +125,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
         const updatedData = { 
             name: values.name, 
             phone: values.phone || '',
-            photoURL: values.photoURL || null,
+            photoURL: values.photoURL,
         };
         await updateUserProfile(authUser.uid, updatedData);
         
@@ -172,6 +172,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
           });
       } finally {
           setIsPasswordSubmitting(false);
+          passwordFormRef.current?.querySelector<HTMLButtonElement>('button[type="submit"]')?.blur();
       }
   }
   
@@ -285,7 +286,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
           </CollapsibleTrigger>
           <CollapsibleContent>
               <Form {...passwordForm}>
-                  <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-6 mt-6 border p-6 rounded-lg">
+                  <form ref={passwordFormRef} onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-6 mt-6 border p-6 rounded-lg">
                        <FormField control={passwordForm.control} name="currentPassword" render={({ field }) => (
                           <FormItem>
                               <FormLabel>كلمة المرور الحالية</FormLabel>
