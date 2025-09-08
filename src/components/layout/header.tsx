@@ -78,7 +78,7 @@ function AuthSection() {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="secondary" size="icon" className="rounded-full">
-            <UserAvatar name={userData.name} color={userData.avatarColor} className="h-8 w-8" />
+            <UserAvatar name={userData.name} color={userData.avatarColor} photoURL={userData.photoURL} className="h-8 w-8" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -123,7 +123,7 @@ function AuthSection() {
 }
 
 
-export function Header() {
+export const Header = React.memo(function Header() {
   const pathname = usePathname();
   const { user, loading } = useAuth();
   const [isMounted, setIsMounted] = useState(false);
@@ -183,4 +183,5 @@ export function Header() {
       </nav>
     </header>
   );
-}
+});
+

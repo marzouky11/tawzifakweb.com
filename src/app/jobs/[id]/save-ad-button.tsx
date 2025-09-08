@@ -55,6 +55,7 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
         title: newSaveStatus ? 'تم الحفظ بنجاح!' : 'تمت إزالة الحفظ',
         description: newSaveStatus ? 'يمكنك العثور على الإعلان في صفحة الإعلانات المحفوظة.' : 'تمت إزالة الإعلان من قائمتك المحفوظة.',
       });
+      router.refresh(); // Force a re-render to update the UI
     } catch (error) {
       toast({
         variant: 'destructive',
@@ -91,3 +92,4 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
     </Button>
   );
 }
+

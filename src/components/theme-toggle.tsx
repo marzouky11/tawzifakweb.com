@@ -3,19 +3,27 @@
 import * as React from "react"
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
+import { useRouter } from 'next/navigation';
 
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 
 export function ThemeToggleButton({ className, ...props }: Omit<React.ComponentProps<typeof Button>, 'onClick'>) {
   const { setTheme, theme } = useTheme()
+  const router = useRouter();
+
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    router.refresh(); // Force a re-render to update the UI everywhere
+  };
 
   return (
     <Button
       variant="ghost"
       size="icon"
       className={className}
-      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+      onClick={toggleTheme}
       {...props}
     >
       <Sun className="h-6 w-6 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
@@ -27,11 +35,18 @@ export function ThemeToggleButton({ className, ...props }: Omit<React.ComponentP
 
 export function ThemeToggleSwitch({ className, ...props }: React.ComponentProps<typeof Switch>) {
     const { setTheme, theme } = useTheme()
+    const router = useRouter();
+
+    const handleCheckedChange = (checked: boolean) => {
+        const newTheme = checked ? "dark" : "light";
+        setTheme(newTheme);
+        router.refresh(); // Force a re-render to update the UI everywhere
+    };
 
     return (
         <Switch
           checked={theme === "dark"}
-          onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
+          onCheckedChange={handleCheckedChange}
           className={className}
           {...props}
         />
