@@ -327,16 +327,19 @@ export async function deleteAd(adId: string) {
 export async function updateUserProfile(uid: string, profileData: Partial<User>) {
     try {
         const userRef = doc(db, 'users', uid);
-        const dataToUpdate = { ...profileData };
+        const dataToUpdate: { [key: string]: any } = { ...profileData };
+
+        if (dataToUpdate.photoURL === '') {
+            dataToUpdate.photoURL = null;
+        }
 
         await updateDoc(userRef, {
             ...dataToUpdate,
             updatedAt: serverTimestamp()
         });
 
-        // Also update the user's profile in Firebase Auth if name or photoURL changed
-        if (auth.currentUser && (dataToUpdate.name || dataToUpdate.photoURL)) {
-             await updateProfile(auth.currentUser, {
+        if (auth.currentUser) {
+            await updateProfile(auth.currentUser, {
                 displayName: dataToUpdate.name,
                 photoURL: dataToUpdate.photoURL,
             });

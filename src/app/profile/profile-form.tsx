@@ -12,7 +12,7 @@ import { useToast } from "@/hooks/use-toast"
 import type { User } from '@/lib/types';
 import { updateUserProfile } from '@/lib/data';
 import { useAuth } from '@/context/auth-context';
-import { Loader2, Lock, Image as ImageIcon, Crop, RotateCw } from 'lucide-react';
+import { Loader2, Lock, Image as ImageIcon } from 'lucide-react';
 import { reauthenticateWithCredential, EmailAuthProvider, updatePassword } from 'firebase/auth';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -21,10 +21,6 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 import { UserAvatar } from '@/components/user-avatar';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import Cropper, { type Area } from 'react-easy-crop';
-import { Slider } from '@/components/ui/slider';
-import { getCroppedImg } from '@/app/cv-builder/crop-image';
 
 const profileSchema = z.object({
   name: z.string().min(3, { message: 'الاسم يجب أن يكون 3 أحرف على الأقل.' }),
@@ -53,13 +49,6 @@ export function ProfileForm({ user }: ProfileFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPasswordSubmitting, setIsPasswordSubmitting] = useState(false);
   
-  // Image crop state
-  const [imageSrc, setImageSrc] = useState<string | null>(null);
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [rotation, setRotation] = useState(0);
-  const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
-
   const profileFormRef = useRef<HTMLFormElement>(null);
   const passwordFormRef = useRef<HTMLFormElement>(null);
 
@@ -82,40 +71,16 @@ export function ProfileForm({ user }: ProfileFormProps) {
     },
   });
 
-  const onCropComplete = useCallback((croppedArea: Area, croppedAreaPixels: Area) => {
-    setCroppedAreaPixels(croppedAreaPixels);
-  }, []);
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       const reader = new FileReader();
-      reader.addEventListener('load', () => setImageSrc(reader.result as string));
+      reader.addEventListener('load', () => {
+        profileForm.setValue('photoURL', reader.result as string, { shouldValidate: true, shouldDirty: true });
+      });
       reader.readAsDataURL(file);
     }
   };
-
-  const showCroppedImage = useCallback(async () => {
-    if (!imageSrc || !croppedAreaPixels) return;
-    try {
-      const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels, rotation);
-      if (croppedImage) {
-        const response = await fetch(croppedImage);
-        const blob = await response.blob();
-        const reader = new FileReader();
-        reader.readAsDataURL(blob);
-        reader.onloadend = () => {
-          const base64data = reader.result as string;
-          profileForm.setValue('photoURL', base64data, { shouldValidate: true, shouldDirty: true });
-        };
-      }
-      setImageSrc(null); // Close the dialog
-    } catch (e) {
-      console.error(e);
-      toast({ variant: 'destructive', title: 'خطأ في قص الصورة', description: 'حدث خطأ أثناء معالجة الصورة.' });
-    }
-  }, [imageSrc, croppedAreaPixels, rotation, profileForm, toast]);
-
 
   async function onProfileSubmit(values: z.infer<typeof profileSchema>) {
     if (!authUser) return;
@@ -179,143 +144,106 @@ export function ProfileForm({ user }: ProfileFormProps) {
 
 
   return (
-    <>
-      <Dialog open={!!imageSrc} onOpenChange={(isOpen) => !isOpen && setImageSrc(null)}>
-        <DialogContent className="max-w-xl">
-          <DialogHeader>
-            <DialogTitle>قص الصورة</DialogTitle>
-          </DialogHeader>
-          <div className="relative h-96 w-full bg-muted">
-            <Cropper
-              image={imageSrc || ''}
-              crop={crop}
-              rotation={rotation}
-              zoom={zoom}
-              aspect={1}
-              onCropChange={setCrop}
-              onRotationChange={setRotation}
-              onCropComplete={onCropComplete}
-              onZoomChange={setZoom}
-            />
-          </div>
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <Crop className="h-5 w-5" />
-              <Slider value={[zoom]} onValueChange={(val) => setZoom(val[0])} min={1} max={3} step={0.1} />
-            </div>
-            <div className="flex items-center gap-2">
-              <RotateCw className="h-5 w-5" />
-              <Slider value={[rotation]} onValueChange={(val) => setRotation(val[0])} min={0} max={360} step={1} />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setImageSrc(null)}>إلغاء</Button>
-            <Button onClick={showCroppedImage} className="active:scale-95 transition-transform">قص وحفظ الصورة</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    
-      <div className="space-y-8">
-        <Form {...profileForm}>
-          <form ref={profileFormRef} onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-6">
-            <h2 className="text-xl font-bold">المعلومات الشخصية</h2>
-            <FormField
-                control={profileForm.control}
-                name="photoURL"
-                render={({ field }) => (
-                    <FormItem>
-                        <FormLabel>الصورة الشخصية (اختياري)</FormLabel>
-                        <FormControl>
-                            <div className="flex items-center gap-4">
-                                <UserAvatar 
-                                    name={userData?.name} 
-                                    color={userData?.avatarColor} 
-                                    photoURL={photoURL}
-                                    className="h-20 w-20 text-3xl"
-                                />
-                                <Input id="picture" type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
-                                <div className="flex flex-col gap-2">
-                                    <Button type="button" variant="outline" className="active:scale-95 transition-transform" onClick={() => document.getElementById('picture')?.click()}>
-                                        تغيير الصورة
-                                    </Button>
-                                   {photoURL && (
-                                    <Button type="button" variant="ghost" size="sm" className="text-destructive hover:bg-destructive/10 active:scale-95 transition-transform" onClick={() => profileForm.setValue('photoURL', null, { shouldDirty: true })}>
-                                        إزالة الصورة
-                                    </Button>
-                                   )}
-                                </div>
-                            </div>
-                        </FormControl>
-                        <FormMessage />
-                    </FormItem>
-                )}
-            />
-            <FormField control={profileForm.control} name="name" render={({ field }) => (
-                <FormItem>
-                    <FormLabel>الاسم الكامل</FormLabel>
-                    <FormControl><Input placeholder="اسمك الكامل" {...field} /></FormControl>
-                    <FormMessage />
-                </FormItem>
-            )} />
-            <FormField control={profileForm.control} name="email" render={({ field }) => (
+    <div className="space-y-8">
+      <Form {...profileForm}>
+        <form ref={profileFormRef} onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-6">
+          <h2 className="text-xl font-bold">المعلومات الشخصية</h2>
+          <FormField
+              control={profileForm.control}
+              name="photoURL"
+              render={({ field }) => (
+                  <FormItem>
+                      <FormLabel>الصورة الشخصية (اختياري)</FormLabel>
+                      <FormControl>
+                          <div className="flex items-center gap-4">
+                              <UserAvatar 
+                                  name={userData?.name} 
+                                  color={userData?.avatarColor} 
+                                  photoURL={photoURL}
+                                  className="h-20 w-20 text-3xl"
+                              />
+                              <Input id="picture" type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
+                              <div className="flex flex-col gap-2">
+                                  <Button type="button" variant="outline" className="active:scale-95 transition-transform" onClick={() => document.getElementById('picture')?.click()}>
+                                      تغيير الصورة
+                                  </Button>
+                                 {photoURL && (
+                                  <Button type="button" variant="ghost" size="sm" className="text-destructive hover:bg-destructive/10 active:scale-95 transition-transform" onClick={() => profileForm.setValue('photoURL', null, { shouldDirty: true })}>
+                                      إزالة الصورة
+                                  </Button>
+                                 )}
+                              </div>
+                          </div>
+                      </FormControl>
+                      <FormMessage />
+                  </FormItem>
+              )}
+          />
+          <FormField control={profileForm.control} name="name" render={({ field }) => (
               <FormItem>
-                  <FormLabel>البريد الإلكتروني</FormLabel>
-                  <FormControl><Input disabled {...field} /></FormControl>
+                  <FormLabel>الاسم الكامل</FormLabel>
+                  <FormControl><Input placeholder="اسمك الكامل" {...field} /></FormControl>
                   <FormMessage />
               </FormItem>
-            )} />
-            <FormField control={profileForm.control} name="phone" render={({ field }) => (
-              <FormItem><FormLabel>رقم الهاتف (اختياري)</FormLabel><FormControl><Input placeholder="+xxxxxxxxxx" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
-            )} />
-            <Button type="submit" size="lg" className="w-full active:scale-95 transition-transform" disabled={isSubmitting || !profileForm.formState.isDirty}>
-                {isSubmitting && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
-                حفظ التغييرات
-            </Button>
-          </form>
-        </Form>
+          )} />
+          <FormField control={profileForm.control} name="email" render={({ field }) => (
+            <FormItem>
+                <FormLabel>البريد الإلكتروني</FormLabel>
+                <FormControl><Input disabled {...field} /></FormControl>
+                <FormMessage />
+            </FormItem>
+          )} />
+          <FormField control={profileForm.control} name="phone" render={({ field }) => (
+            <FormItem><FormLabel>رقم الهاتف (اختياري)</FormLabel><FormControl><Input placeholder="+xxxxxxxxxx" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>
+          )} />
+          <Button type="submit" size="lg" className="w-full active:scale-95 transition-transform" disabled={isSubmitting || !profileForm.formState.isDirty}>
+              {isSubmitting && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
+              حفظ التغييرات
+          </Button>
+        </form>
+      </Form>
 
-        <Separator />
-          
-        <Collapsible>
-          <CollapsibleTrigger asChild>
-              <Button variant="outline" className="w-full active:scale-95 transition-transform">
-                  <Lock className="ml-2 h-4 w-4" />
-                  تغيير كلمة المرور
-              </Button>
-          </CollapsibleTrigger>
-          <CollapsibleContent>
-              <Form {...passwordForm}>
-                  <form ref={passwordFormRef} onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-6 mt-6 border p-6 rounded-lg">
-                       <FormField control={passwordForm.control} name="currentPassword" render={({ field }) => (
-                          <FormItem>
-                              <FormLabel>كلمة المرور الحالية</FormLabel>
-                              <FormControl><Input type="password" {...field} /></FormControl>
-                              <FormMessage />
-                          </FormItem>
-                      )} />
-                       <FormField control={passwordForm.control} name="newPassword" render={({ field }) => (
-                          <FormItem>
-                              <FormLabel>كلمة المرور الجديدة</FormLabel>
-                              <FormControl><Input type="password" {...field} /></FormControl>
-                              <FormMessage />
-                          </FormItem>
-                      )} />
-                      <FormField control={passwordForm.control} name="confirmPassword" render={({ field }) => (
-                          <FormItem>
-                              <FormLabel>تأكيد كلمة المرور الجديدة</FormLabel>
-                              <FormControl><Input type="password" {...field} /></FormControl>
-                              <FormMessage />
-                          </FormItem>
-                      )} />
-                      <Button type="submit" size="lg" className="w-full active:scale-95 transition-transform" variant="secondary" disabled={isPasswordSubmitting}>
-                          {isPasswordSubmitting && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
-                          تحديث كلمة المرور
-                      </Button>
-                  </form>
-              </Form>
-          </CollapsibleContent>
-        </Collapsible>
-      </div>
-    </>
+      <Separator />
+        
+      <Collapsible>
+        <CollapsibleTrigger asChild>
+            <Button variant="outline" className="w-full active:scale-95 transition-transform">
+                <Lock className="ml-2 h-4 w-4" />
+                تغيير كلمة المرور
+            </Button>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+            <Form {...passwordForm}>
+                <form ref={passwordFormRef} onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-6 mt-6 border p-6 rounded-lg">
+                     <FormField control={passwordForm.control} name="currentPassword" render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>كلمة المرور الحالية</FormLabel>
+                            <FormControl><Input type="password" {...field} /></FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )} />
+                     <FormField control={passwordForm.control} name="newPassword" render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>كلمة المرور الجديدة</FormLabel>
+                            <FormControl><Input type="password" {...field} /></FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )} />
+                    <FormField control={passwordForm.control} name="confirmPassword" render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>تأكيد كلمة المرور الجديدة</FormLabel>
+                            <FormControl><Input type="password" {...field} /></FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )} />
+                    <Button type="submit" size="lg" className="w-full active:scale-95 transition-transform" variant="secondary" disabled={isPasswordSubmitting}>
+                        {isPasswordSubmitting && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
+                        تحديث كلمة المرور
+                    </Button>
+                </form>
+            </Form>
+        </CollapsibleContent>
+      </Collapsible>
+    </div>
   );
 }

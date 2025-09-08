@@ -10,7 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlusCircle, Trash2, Loader2, Download, Image as ImageIcon, RotateCw, Crop, User, Briefcase, Mail, Phone, MapPin, GraduationCap, Award, Star, Info, MessageSquare, Instagram, Link as LinkIcon, Building2, Users2, ClipboardList, FileText, Globe, Type, CheckCircle, Palette } from 'lucide-react';
+import { PlusCircle, Trash2, Loader2, Download, Image as ImageIcon, User, Briefcase, Mail, Phone, MapPin, GraduationCap, Award, Star, Info, MessageSquare, Instagram, Link as LinkIcon, Building2, Users2, ClipboardList, FileText, Globe, Type, CheckCircle, Palette } from 'lucide-react';
 import { templates } from './templates/templates';
 import Image from 'next/image';
 import { useAuth } from '@/context/auth-context';
@@ -18,17 +18,6 @@ import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { jsPDF } from 'jspdf';
 import { toPng } from 'html-to-image';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from '@/components/ui/dialog';
-import Cropper from 'react-easy-crop';
-import type { Area } from 'react-easy-crop';
-import { getCroppedImg } from './crop-image';
-import { Slider } from '@/components/ui/slider';
 import { Separator } from '@/components/ui/separator';
 
 
@@ -81,13 +70,6 @@ export function CVForm() {
   const [isGenerating, setIsGenerating] = useState(false);
   const printRef = useRef<HTMLDivElement>(null);
 
-  // Image crop state
-  const [imageSrc, setImageSrc] = useState<string | null>(null);
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [rotation, setRotation] = useState(0);
-  const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
-
   const form = useForm<CVData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -112,41 +94,16 @@ export function CVForm() {
   
   const profilePictureValue = form.watch('profilePicture');
 
-  const onCropComplete = useCallback((croppedArea: Area, croppedAreaPixels: Area) => {
-    setCroppedAreaPixels(croppedAreaPixels);
-  }, []);
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       const reader = new FileReader();
-      reader.addEventListener('load', () => setImageSrc(reader.result as string));
+      reader.addEventListener('load', () => {
+        form.setValue('profilePicture', reader.result as string);
+      });
       reader.readAsDataURL(file);
     }
   };
-
-  const showCroppedImage = useCallback(async () => {
-    if (!imageSrc || !croppedAreaPixels) return;
-    try {
-      const croppedImage = await getCroppedImg(
-        imageSrc,
-        croppedAreaPixels,
-        rotation
-      );
-      if(croppedImage) {
-        form.setValue('profilePicture', croppedImage);
-      }
-      setImageSrc(null); // Close the dialog
-    } catch (e) {
-      console.error(e);
-      toast({
-        variant: 'destructive',
-        title: 'خطأ في قص الصورة',
-        description: 'حدث خطأ أثناء معالجة الصورة. يرجى المحاولة مرة أخرى.',
-      });
-    }
-  }, [imageSrc, croppedAreaPixels, rotation, form, toast]);
-
 
   const handleDownload = async () => {
     // Validate the form before generating PDF
@@ -215,7 +172,7 @@ export function CVForm() {
     return (
       <div className="text-center py-12">
         <p className="mb-4">يجب عليك تسجيل الدخول لإنشاء سيرة ذاتية.</p>
-        <Button onClick={() => router.push('/login?redirect=/cv-builder')}>تسجيل الدخول</Button>
+        <Button onClick={() => router.push('/login?redirect=/cv-builder')} className="active:scale-95 transition-transform">تسجيل الدخول</Button>
       </div>
     );
   }
@@ -243,42 +200,6 @@ export function CVForm() {
               <TemplateComponent data={form.getValues()} />
           </div>
       </div>
-      
-      <Dialog open={!!imageSrc} onOpenChange={(isOpen) => !isOpen && setImageSrc(null)}>
-        <DialogContent className="max-w-xl">
-          <DialogHeader>
-            <DialogTitle>قص الصورة</DialogTitle>
-          </DialogHeader>
-          <div className="relative h-96 w-full bg-muted">
-            <Cropper
-              image={imageSrc || ''}
-              crop={crop}
-              rotation={rotation}
-              zoom={zoom}
-              aspect={1}
-              onCropChange={setCrop}
-              onRotationChange={setRotation}
-              onCropComplete={onCropComplete}
-              onZoomChange={setZoom}
-            />
-          </div>
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <Crop className="h-5 w-5" />
-              <Slider value={[zoom]} onValueChange={(val) => setZoom(val[0])} min={1} max={3} step={0.1} />
-            </div>
-            <div className="flex items-center gap-2">
-              <RotateCw className="h-5 w-5" />
-              <Slider value={[rotation]} onValueChange={(val) => setRotation(val[0])} min={0} max={360} step={1} />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setImageSrc(null)}>إلغاء</Button>
-            <Button onClick={showCroppedImage} className="active:scale-95 transition-transform">قص وحفظ الصورة</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
 
       <div className="grid md:grid-cols-3 gap-8 items-start">
         <div className="md:col-span-2">
@@ -341,7 +262,7 @@ export function CVForm() {
                       </div>
                       <FormField control={form.control} name={`experiences.${index}.date`} render={({ field }) => (<FormItem><FormLabel>التاريخ</FormLabel><FormControl><Input placeholder="مثال: يناير 2020 - الحالي" {...field} /></FormControl><FormMessage /></FormItem>)} />
                       <FormField control={form.control} name={`experiences.${index}.description`} render={({ field }) => (<FormItem><FormLabel>الوصف</FormLabel><FormControl><Textarea placeholder="صف مهامك وإنجازاتك الرئيسية في هذه الوظيفة..." {...field} /></FormControl><FormMessage /></FormItem>)} />
-                      <Button type="button" variant="ghost" size="icon" onClick={() => removeExp(index)} className="absolute top-1 left-1 text-destructive hover:bg-destructive/10"><Trash2 className="h-4 w-4" /></Button>
+                      <Button type="button" variant="ghost" size="icon" onClick={() => removeExp(index)} className="absolute top-1 left-1 text-destructive hover:bg-destructive/10 active:scale-95 transition-transform"><Trash2 className="h-4 w-4" /></Button>
                     </div>
                   ))}
                   <Button type="button" variant="outline" onClick={() => appendExp({ title: '', company: '', date: '', description: '' })} className="active:scale-95 transition-transform"><PlusCircle className="ml-2 h-4 w-4" /> إضافة خبرة</Button>
@@ -358,7 +279,7 @@ export function CVForm() {
                         <FormField control={form.control} name={`educations.${index}.school`} render={({ field }) => (<FormItem><FormLabel>المؤسسة التعليمية</FormLabel><FormControl><Input placeholder="اسم الجامعة أو المعهد" {...field} /></FormControl><FormMessage /></FormItem>)} />
                       </div>
                       <FormField control={form.control} name={`educations.${index}.date`} render={({ field }) => (<FormItem><FormLabel>التاريخ</FormLabel><FormControl><Input placeholder="مثال: 2016 - 2020" {...field} /></FormControl><FormMessage /></FormItem>)} />
-                      <Button type="button" variant="ghost" size="icon" onClick={() => removeEdu(index)} className="absolute top-1 left-1 text-destructive hover:bg-destructive/10"><Trash2 className="h-4 w-4" /></Button>
+                      <Button type="button" variant="ghost" size="icon" onClick={() => removeEdu(index)} className="absolute top-1 left-1 text-destructive hover:bg-destructive/10 active:scale-95 transition-transform"><Trash2 className="h-4 w-4" /></Button>
                     </div>
                   ))}
                   <Button type="button" variant="outline" onClick={() => appendEdu({ degree: '', school: '', date: '' })} className="active:scale-95 transition-transform"><PlusCircle className="ml-2 h-4 w-4" /> إضافة تعليم</Button>
@@ -372,7 +293,7 @@ export function CVForm() {
                     {skillFields.map((field, index) => (
                       <div key={field.id} className="relative">
                         <FormField control={form.control} name={`skills.${index}.name`} render={({ field }) => (<FormItem><FormControl><Input placeholder="مثال: Photoshop" {...field} /></FormControl><FormMessage /></FormItem>)} />
-                        <Button type="button" variant="ghost" size="icon" className="absolute -top-3 -left-3 h-6 w-6 text-destructive" onClick={() => removeSkill(index)}><Trash2 className="h-4 w-4" /></Button>
+                        <Button type="button" variant="ghost" size="icon" className="absolute -top-3 -left-3 h-6 w-6 text-destructive active:scale-95 transition-transform" onClick={() => removeSkill(index)}><Trash2 className="h-4 w-4" /></Button>
                       </div>
                     ))}
                   </div>
@@ -387,7 +308,7 @@ export function CVForm() {
                     {langFields.map((field, index) => (
                       <div key={field.id} className="relative">
                         <FormField control={form.control} name={`languages.${index}.name`} render={({ field }) => (<FormItem><FormControl><Input placeholder="مثال: الإنجليزية" {...field} /></FormControl><FormMessage /></FormItem>)} />
-                        <Button type="button" variant="ghost" size="icon" className="absolute -top-3 -left-3 h-6 w-6 text-destructive" onClick={() => removeLang(index)}><Trash2 className="h-4 w-4" /></Button>
+                        <Button type="button" variant="ghost" size="icon" className="absolute -top-3 -left-3 h-6 w-6 text-destructive active:scale-95 transition-transform" onClick={() => removeLang(index)}><Trash2 className="h-4 w-4" /></Button>
                       </div>
                     ))}
                   </div>

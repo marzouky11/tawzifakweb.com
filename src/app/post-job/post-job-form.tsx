@@ -19,18 +19,13 @@ import {
   Loader2, Briefcase, Users, FileText, FileSignature, 
   LayoutGrid, Globe, MapPin, Wallet, Phone, MessageSquare, Mail,
   Building2, Award, Users2, Info, Instagram, GraduationCap, Link as LinkIcon,
-  ClipboardList, ArrowLeft, ArrowRight, CheckSquare, Check, HelpCircle, Target, Image as ImageIcon,
-  RotateCw, Crop
+  ClipboardList, ArrowLeft, ArrowRight, CheckSquare, Check, HelpCircle, Target, Image as ImageIcon
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
 import { UserAvatar } from '@/components/user-avatar';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import Cropper, { type Area } from 'react-easy-crop';
-import { Slider } from '@/components/ui/slider';
-import { getCroppedImg } from '@/app/cv-builder/crop-image';
 
 const MAX_IMAGE_SIZE_MB = 2;
 const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024;
@@ -103,7 +98,7 @@ const StepsIndicator = ({ currentStep, steps, onStepClick, themeColor }: { curre
                 className={cn(
                   "relative z-10 w-10 h-10 flex items-center justify-center rounded-full font-bold text-lg transition-all duration-300 border-2",
                   isCurrent ? "scale-110" : "bg-muted text-muted-foreground border-border",
-                  "hover:scale-105"
+                  "hover:scale-105 active:scale-95 transition-transform"
                 )}
                  style={{
                     backgroundColor: isCurrent || isCompleted ? themeColor : undefined,
@@ -136,13 +131,6 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
   const router = useRouter();
   const isEditing = !!job;
   const [currentStep, setCurrentStep] = useState(0);
-
-  // Image crop state
-  const [imageSrc, setImageSrc] = useState<string | null>(null);
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [rotation, setRotation] = useState(0);
-  const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -305,10 +293,6 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
 
   const ownerPhotoURL = form.watch('ownerPhotoURL');
 
-  const onCropComplete = useCallback((croppedArea: Area, croppedAreaPixels: Area) => {
-    setCroppedAreaPixels(croppedAreaPixels);
-  }, []);
-
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -322,30 +306,11 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
         return;
     }
     const reader = new FileReader();
-    reader.addEventListener('load', () => setImageSrc(reader.result as string));
+    reader.addEventListener('load', () => {
+        form.setValue('ownerPhotoURL', reader.result as string, { shouldValidate: true, shouldDirty: true });
+    });
     reader.readAsDataURL(file);
   };
-  
-  const showCroppedImage = useCallback(async () => {
-    if (!imageSrc || !croppedAreaPixels) return;
-    try {
-      const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels, rotation);
-      if (croppedImage) {
-        const response = await fetch(croppedImage);
-        const blob = await response.blob();
-        const reader = new FileReader();
-        reader.readAsDataURL(blob);
-        reader.onloadend = () => {
-          const base64data = reader.result as string;
-          form.setValue('ownerPhotoURL', base64data, { shouldValidate: true, shouldDirty: true });
-        };
-      }
-      setImageSrc(null); // Close the dialog
-    } catch (e) {
-      console.error(e);
-      toast({ variant: 'destructive', title: 'خطأ في قص الصورة', description: 'حدث خطأ أثناء معالجة الصورة.' });
-    }
-  }, [imageSrc, croppedAreaPixels, rotation, form, toast]);
   
   const FormLabelIcon = ({icon: Icon, label}: {icon: React.ElementType, label: string}) => (
     <FormLabel className="flex items-center gap-2 text-base md:text-lg">
@@ -409,7 +374,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                         type="button" 
                         variant="ghost" 
                         size="sm"
-                        className="h-auto p-1 text-xs"
+                        className="h-auto p-1 text-xs active:scale-95 transition-transform"
                         onClick={() => {
                             form.setValue('categoryId', '');
                             form.setValue('customCategory', '');
@@ -540,19 +505,6 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
 
   return (
     <>
-      <Dialog open={!!imageSrc} onOpenChange={(isOpen) => !isOpen && setImageSrc(null)}>
-        <DialogContent className="max-w-xl">
-          <DialogHeader><DialogTitle>قص الصورة</DialogTitle></DialogHeader>
-          <div className="relative h-96 w-full bg-muted">
-            <Cropper image={imageSrc || ''} crop={crop} rotation={rotation} zoom={zoom} aspect={1} onCropChange={setCrop} onRotationChange={setRotation} onCropComplete={onCropComplete} onZoomChange={setZoom} />
-          </div>
-          <div className="space-y-4">
-            <div className="flex items-center gap-2"><Crop className="h-5 w-5" /><Slider value={[zoom]} onValueChange={(val) => setZoom(val[0])} min={1} max={3} step={0.1} /></div>
-            <div className="flex items-center gap-2"><RotateCw className="h-5 w-5" /><Slider value={[rotation]} onValueChange={(val) => setRotation(val[0])} min={0} max={360} step={1} /></div>
-          </div>
-          <DialogFooter><Button variant="outline" onClick={() => setImageSrc(null)}>إلغاء</Button><Button className="active:scale-95 transition-transform" onClick={showCroppedImage}>قص وحفظ الصورة</Button></DialogFooter>
-        </DialogContent>
-      </Dialog>
         <Form {...form}>
            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full">
             {isEditing ? (
