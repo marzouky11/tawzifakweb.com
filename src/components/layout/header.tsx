@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -123,7 +121,7 @@ function AuthSection() {
 }
 
 
-export const Header = React.memo(function Header() {
+export function Header() {
   const pathname = usePathname();
   const { user, loading } = useAuth();
   const [isMounted, setIsMounted] = useState(false);
@@ -183,5 +181,4 @@ export const Header = React.memo(function Header() {
       </nav>
     </header>
   );
-});
-
+}

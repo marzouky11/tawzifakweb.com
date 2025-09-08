@@ -1,7 +1,6 @@
-
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -47,6 +46,7 @@ export function ReportAdDialog({ adId }: ReportAdDialogProps) {
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const form = useForm<z.infer<typeof reportSchema>>({
     resolver: zodResolver(reportSchema),
@@ -81,6 +81,7 @@ export function ReportAdDialog({ adId }: ReportAdDialogProps) {
       });
     } finally {
       setIsSubmitting(false);
+      formRef.current?.querySelector<HTMLButtonElement>('button[type="submit"]')?.blur();
     }
   };
 
@@ -99,7 +100,7 @@ export function ReportAdDialog({ adId }: ReportAdDialogProps) {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form ref={formRef} onSubmit={form.handleSubmit(onSubmit)}>
             <AlertDialogHeader>
               <AlertDialogTitle>الإبلاغ عن إعلان</AlertDialogTitle>
               <AlertDialogDescription>

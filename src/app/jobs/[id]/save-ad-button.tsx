@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useOptimistic } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -23,14 +23,20 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
   const [isSaved, setIsSaved] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // جلب حالة الحفظ عند تحميل الصفحة أو تغير user/adId
+  // Use useOptimistic for instant UI feedback
+  const [optimisticIsSaved, setOptimisticIsSaved] = useOptimistic(
+    isSaved,
+    (currentState, optimisticValue: boolean) => optimisticValue
+  );
+
   useEffect(() => {
     let mounted = true;
     if (user) {
       setIsLoading(true);
       getSavedAdIds(user.uid).then(savedIds => {
         if (mounted) {
-          setIsSaved(savedIds.includes(adId));
+          const savedStatus = savedIds.includes(adId);
+          setIsSaved(savedStatus);
           setIsLoading(false);
         }
       });
@@ -38,9 +44,7 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
       setIsSaved(false);
       setIsLoading(false);
     }
-    return () => {
-      mounted = false; // لتجنب تحديث state بعد unmount
-    };
+    return () => { mounted = false; };
   }, [user, adId]);
 
   const handleSaveToggle = async () => {
@@ -54,13 +58,16 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
       return;
     }
 
-    setIsLoading(true);
+    buttonRef.current?.blur();
+    
+    // Optimistically update the UI
+    const newOptimisticState = !optimisticIsSaved;
+    setOptimisticIsSaved(newOptimisticState);
 
     try {
-      // انتظار النتيجة من السيرفر أولًا
       const newSaveStatus = await toggleSaveAd(user.uid, adId, adType);
-
-      // تحديث UI حسب النتيجة الحقيقية
+      
+      // Sync the real state
       setIsSaved(newSaveStatus);
 
       toast({
@@ -70,39 +77,36 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
           : 'تمت إزالة الإعلان من قائمتك المحفوظة.',
       });
     } catch (error) {
+      // Revert the optimistic update on error
+      setOptimisticIsSaved(isSaved);
       toast({
         variant: 'destructive',
         title: 'خطأ',
         description: 'حدث خطأ أثناء محاولة حفظ الإعلان. يرجى المحاولة مرة أخرى.',
       });
-    } finally {
-      setIsLoading(false);
-      // إزالة أي حالة focus/active
-      buttonRef.current?.blur();
     }
   };
 
   return (
     <Button
       ref={buttonRef}
-      variant={isSaved ? 'secondary' : 'outline'} // تغيير اللون فورًا حسب الحالة
-      size="default"
-      className="h-10 px-4 transition-all"
+      variant={optimisticIsSaved ? 'secondary' : 'outline'}
+      size="lg"
+      className="h-auto py-3 transition-all w-full"
       onClick={handleSaveToggle}
       disabled={authLoading || isLoading}
-      onMouseUp={() => buttonRef.current?.blur()} // إزالة أي ضغط بصري بعد الضغط
     >
       {isLoading || authLoading ? (
         <Loader2 className="ml-2 h-4 w-4 animate-spin" />
       ) : (
         <Bookmark
           className={cn(
-            'ml-2 h-4 w-4 transition-colors',
-            isSaved ? 'fill-current text-primary' : 'text-muted-foreground'
+            'ml-2 h-5 w-5 transition-colors',
+            optimisticIsSaved ? 'fill-current text-primary' : 'text-muted-foreground'
           )}
         />
       )}
-      <span>{isSaved ? 'تم الحفظ' : 'حفظ الإعلان'}</span>
+      <span className="text-base">{optimisticIsSaved ? 'تم الحفظ' : 'حفظ الإعلان'}</span>
     </Button>
   );
 }

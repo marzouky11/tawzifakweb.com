@@ -1,4 +1,4 @@
-
+'use client';
 
 import React from 'react';
 import Link from 'next/link';
@@ -193,7 +193,7 @@ export function JobDesktopDetails({ job, similarJobs }: JobDesktopDetailsProps) 
                                     key={button.type}
                                     asChild
                                     size="lg"
-                                    className={cn("text-primary-foreground font-semibold text-base py-6", button.className)}
+                                    className={cn("h-auto py-3 text-primary-foreground font-semibold text-base", button.className)}
                                 >
                                     <a href={button.href} target={button.type !== 'phone' ? '_blank' : undefined} rel="noopener noreferrer">
                                         <button.icon className="ml-2 h-5 w-5" />
