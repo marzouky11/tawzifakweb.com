@@ -1,5 +1,3 @@
-
-
 'use client';
 import { Header } from '@/components/layout/header';
 import { BottomNav } from '@/components/layout/bottom-nav';
@@ -18,7 +16,6 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       <main className={cn(
           "flex-1",
           noMobilePaddingOnMain ? 'pb-0' : 'pb-16',
-          addMobilePaddingOnMain ? 'pb-28' : '',
            "md:pb-0"
         )}>
         {children}

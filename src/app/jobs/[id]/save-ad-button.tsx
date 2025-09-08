@@ -44,7 +44,6 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
   }, [user, adId]);
 
   const handleSaveToggle = async () => {
-    buttonRef.current?.blur();
     if (!user) {
       toast({
         variant: 'destructive',
@@ -75,6 +74,7 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
       });
     } finally {
         setIsProcessing(false);
+        buttonRef.current?.blur(); // Remove focus after action
     }
   };
 
@@ -87,7 +87,7 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
       onClick={handleSaveToggle}
       disabled={authLoading || isLoading || isProcessing}
     >
-      {isLoading || authLoading || isProcessing ? (
+      {authLoading || isLoading || isProcessing ? (
         <Loader2 className="ml-2 h-4 w-4 animate-spin" />
       ) : (
         <Bookmark

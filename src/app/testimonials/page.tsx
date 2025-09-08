@@ -1,21 +1,23 @@
-
+'use client';
 
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { getTestimonials } from '@/lib/data';
 import { MessageSquare } from 'lucide-react';
 import { TestimonialCard } from './testimonial-card';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
-import type { Metadata } from 'next';
+import type { Testimonial } from '@/lib/types';
+import { useEffect, useState } from 'react';
 
-export const metadata: Metadata = {
-    title: 'آراء المستخدمين',
-    description: 'شاهد ماذا يقول المستخدمون عن تجاربهم مع منصة توظيفك.',
-};
+async function fetchTestimonials(): Promise<Testimonial[]> {
+    return getTestimonials();
+}
 
-export const revalidate = 0; // Force dynamic rendering
+export default function TestimonialsPage() {
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
 
-export default async function TestimonialsPage() {
-  const testimonials = await getTestimonials();
+  useEffect(() => {
+    fetchTestimonials().then(data => setTestimonials(data));
+  }, []);
 
   return (
     <>
@@ -29,7 +31,7 @@ export default async function TestimonialsPage() {
         description="نحن نقدر جميع الآراء ونسعى دائمًا لتحسين خدماتنا بناءً على ملاحظاتكم."
       />
         
-      <div className="container mx-auto max-w-7xl px-4 pb-8">
+      <div className="container mx-auto max-w-7xl px-4 pb-28">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {testimonials.map((testimonial) => (
             <TestimonialCard key={testimonial.id} testimonial={testimonial} />

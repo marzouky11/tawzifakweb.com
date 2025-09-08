@@ -21,7 +21,6 @@ export function ShareButton({ title, text }: ShareButtonProps) {
   }, []);
 
   const handleShare = async () => {
-    buttonRef.current?.blur();
     
     if ('share' in navigator && navigator.share) {
       try {
@@ -32,6 +31,7 @@ export function ShareButton({ title, text }: ShareButtonProps) {
         });
       } catch (error) {
         if (error instanceof DOMException && error.name === 'AbortError') {
+          buttonRef.current?.blur();
           return; // User cancelled the share
         }
         console.error('Error sharing:', error);
@@ -57,6 +57,8 @@ export function ShareButton({ title, text }: ShareButtonProps) {
         });
       }
     }
+
+    buttonRef.current?.blur();
   };
 
   if (!canShare) {
