@@ -80,6 +80,7 @@ export function WorkerMobileDetails({ job, similarJobs }: WorkerMobileDetailsPro
     const categoryName = job.categoryName;
     const translatedWorkType = job.workType ? workTypeTranslations[job.workType] : undefined;
     const sectionColor = '#424242';
+    const primaryColor = 'hsl(var(--primary))';
 
     const contactButtons = [
         job.phone && { type: 'phone', href: `tel:${job.phone}`, label: 'اتصال', icon: Phone, className: 'bg-[#424242] hover:bg-[#424242]/90' },
@@ -113,14 +114,14 @@ export function WorkerMobileDetails({ job, similarJobs }: WorkerMobileDetailsPro
                     </CardHeader>
                      <Separator/>
                     <CardContent className="p-4 space-y-6">
-                        <div className="flex items-center gap-1.5 text-muted-foreground text-sm">
+                        <div className="flex items-center gap-1.5 text-muted-foreground text-sm mt-8">
                             <CalendarDays className="h-4 w-4" />
                             <span>نُشر: {job.postedAt}</span>
                         </div>
                          <div className="grid grid-cols-2 gap-3">
-                            <InfoItem icon={UserIcon} label="صاحب الإعلان" value={job.ownerName} color={sectionColor} />
-                            {categoryName && <InfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={sectionColor} />}
-                            <InfoItem icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} color={sectionColor} />
+                            <InfoItem icon={UserIcon} label="صاحب الإعلان" value={job.ownerName} color={primaryColor} />
+                            {categoryName && <InfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={primaryColor} />}
+                            <InfoItem icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} color={primaryColor} />
                             {translatedWorkType && <InfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={sectionColor} />}
                         </div>
                         
@@ -160,7 +161,7 @@ export function WorkerMobileDetails({ job, similarJobs }: WorkerMobileDetailsPro
                                     key={button.type}
                                     asChild
                                     size="lg"
-                                    className={cn("text-primary-foreground font-semibold text-base py-6", button.className, 'active:scale-95 transition-transform')}
+                                    className={cn("text-primary-foreground font-semibold text-base py-6 active:scale-95 transition-transform", button.className)}
                                 >
                                     <a href={button.href} target={button.type !== 'phone' ? '_blank' : undefined} rel="noopener noreferrer">
                                         <button.icon className="ml-2 h-5 w-5" />
