@@ -102,17 +102,18 @@ export function WorkerMobileDetails({ job, similarJobs }: WorkerMobileDetailsPro
             <div className="space-y-6">
                 <Card className="overflow-hidden shadow-lg">
                     <CardHeader className="bg-muted/30 p-4">
-                        <div className="flex items-start gap-4">
+                        <div className="flex items-center gap-4 mb-2">
                             <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-16 w-16 text-2xl flex-shrink-0"/>
-                            <div className="flex-grow">
-                                <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
-                                    {job.title || 'عنوان غير متوفر'}
-                                </h1>
+                            <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
+                                {job.title || 'عنوان غير متوفر'}
+                            </h1>
+                        </div>
+                         <div className="flex items-center gap-x-4 text-muted-foreground text-sm">
+                            <div className="flex items-center gap-1.5">
+                                <CalendarDays className="h-4 w-4" />
+                                <span>نُشر: {job.postedAt}</span>
                             </div>
                         </div>
-                         <div className="text-left text-xs text-muted-foreground mt-2">
-                             <span>نُشر: {job.postedAt}</span>
-                         </div>
                     </CardHeader>
                     <CardContent className="p-4 space-y-6">
                          <div className="grid grid-cols-2 gap-3">

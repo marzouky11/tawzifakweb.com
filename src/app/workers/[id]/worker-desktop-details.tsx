@@ -106,16 +106,17 @@ export function WorkerDesktopDetails({ job, similarJobs }: WorkerDesktopDetailsP
         <div className="container mx-auto max-w-7xl px-4 pb-8 space-y-6">
             <Card className="overflow-hidden shadow-lg">
                  <CardHeader className="bg-muted/30 p-6">
-                    <div className="flex items-start gap-4">
+                    <div className="flex items-center gap-4 mb-2">
                         <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} className="h-20 w-20 text-3xl flex-shrink-0"/>
-                        <div className="flex-grow">
-                            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
-                                {job.title || 'عنوان غير متوفر'}
-                            </h1>
-                        </div>
+                        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
+                            {job.title || 'عنوان غير متوفر'}
+                        </h1>
                     </div>
-                    <div className="text-left text-xs text-muted-foreground mt-2">
-                        <span>نُشر: {job.postedAt}</span>
+                     <div className="flex items-center gap-x-4 text-muted-foreground text-sm">
+                        <div className="flex items-center gap-1.5">
+                            <CalendarDays className="h-4 w-4" />
+                            <span>نُشر: {job.postedAt}</span>
+                        </div>
                     </div>
                 </CardHeader>
                 <CardContent className="p-6 space-y-8">
