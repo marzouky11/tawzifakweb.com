@@ -15,8 +15,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       <Header />
       <main className={cn(
           "flex-1",
-          noMobilePaddingOnMain ? 'pb-0' : 'pb-16',
-           "md:pb-0"
+          noMobilePaddingOnMain ? 'pb-0' : 'pb-16'
         )}>
         {children}
       </main>
