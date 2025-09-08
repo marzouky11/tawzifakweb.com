@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -22,19 +20,28 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
   const router = useRouter();
   const buttonRef = useRef<HTMLButtonElement>(null);
 
+  // ✅ State محلي متزامن مع UI
   const [isSaved, setIsSaved] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  // ✅ جلب البيانات أول مرة أو عند تغير user/adId
   useEffect(() => {
+    let mounted = true;
     if (user) {
       setIsLoading(true);
       getSavedAdIds(user.uid).then(savedIds => {
-        setIsSaved(savedIds.includes(adId));
-        setIsLoading(false);
+        if (mounted) {
+          setIsSaved(savedIds.includes(adId));
+          setIsLoading(false);
+        }
       });
     } else {
+      setIsSaved(false);
       setIsLoading(false);
     }
+    return () => {
+      mounted = false; // لتجنب تحديث state بعد unmount
+    };
   }, [user, adId]);
 
   const handleSaveToggle = async () => {
@@ -48,15 +55,22 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
       return;
     }
 
+    // ✅ تحديث الفورم مباشرة قبل الطلب للسيرفر
+    setIsSaved(prev => !prev);
     setIsLoading(true);
+
     try {
       const newSaveStatus = await toggleSaveAd(user.uid, adId, adType);
-      setIsSaved(newSaveStatus);
+      setIsSaved(newSaveStatus); // مزامنة مع السيرفر بعد الطلب
       toast({
         title: newSaveStatus ? 'تم الحفظ بنجاح!' : 'تمت إزالة الحفظ',
-        description: newSaveStatus ? 'يمكنك العثور على الإعلان في صفحة الإعلانات المحفوظة.' : 'تمت إزالة الإعلان من قائمتك المحفوظة.',
+        description: newSaveStatus
+          ? 'يمكنك العثور على الإعلان في صفحة الإعلانات المحفوظة.'
+          : 'تمت إزالة الإعلان من قائمتك المحفوظة.',
       });
     } catch (error) {
+      // ✅ الرجوع للوضع السابق في حالة خطأ
+      setIsSaved(prev => !prev);
       toast({
         variant: 'destructive',
         title: 'خطأ',
@@ -71,12 +85,9 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
   return (
     <Button
       ref={buttonRef}
-      variant="outline"
+      variant={isSaved ? 'secondary' : 'outline'} // استخدم variant للتغيير الفوري
       size="default"
-      className={cn(
-        "h-10 px-4",
-        isSaved && "bg-primary/10 border-primary/20 text-primary"
-      )}
+      className="h-10 px-4 transition-all"
       onClick={handleSaveToggle}
       disabled={authLoading || isLoading}
     >
@@ -85,8 +96,8 @@ export function SaveAdButton({ adId, adType }: SaveAdButtonProps) {
       ) : (
         <Bookmark
           className={cn(
-            "ml-2 h-4 w-4 transition-colors",
-            isSaved && "fill-current"
+            'ml-2 h-4 w-4 transition-colors',
+            isSaved ? 'fill-current text-primary' : 'text-muted-foreground'
           )}
         />
       )}
