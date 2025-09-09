@@ -1,6 +1,7 @@
 
 
 
+
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { JobCard } from '@/components/job-card';
@@ -191,36 +192,44 @@ function SectionHeader({ icon: Icon, title, description, href, iconColor }: Sect
 }
 
 function ArticlesSection() {
-    const articleSectionColor = '#00897B'; // A distinct green color for articles
-    return (
-        <section>
-            <Card className="overflow-hidden border-2" style={{ borderColor: articleSectionColor, backgroundColor: `${articleSectionColor}0D`}}>
-                <CardContent className="p-6 md:p-10">
-                    <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 text-center md:text-right">
-                        <div className="flex-shrink-0">
-                            <div className="p-4 rounded-full w-fit mx-auto md:mx-0" style={{ backgroundColor: `${articleSectionColor}1A` }}>
-                                <Newspaper className="h-10 w-10 md:h-12 md:w-12" style={{ color: articleSectionColor }} />
-                            </div>
-                        </div>
-                        <div className="flex-grow">
-                            <h2 className="text-2xl md:text-3xl font-bold text-foreground">مقالات لنموك المهني</h2>
-                            <p className="text-muted-foreground mt-2 mb-6 max-w-2xl mx-auto md:mx-0">
-                                نصائح للتوظيف، كتابة السيرة الذاتية، وفرص الربح من الإنترنت. محتوى موجه للعرب الباحثين عن الاستقرار المهني أو الحرية المالية.
-                            </p>
-                        </div>
-                        <div className="flex-shrink-0 w-full md:w-auto">
-                            <Button asChild size="lg" className="w-full md:w-auto font-semibold text-base py-6 active:scale-95 transition-transform" style={{ backgroundColor: articleSectionColor }}>
-                                <Link href="/articles">
-                                    اكتشف المقالات
-                                    <ArrowLeft className="mr-2 h-4 w-4" />
-                                </Link>
-                            </Button>
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
-        </section>
-    );
+  const articleSectionColor = '#00897B';
+  return (
+    <section>
+      <Card
+        className="overflow-hidden border"
+        style={{
+          '--article-primary': articleSectionColor,
+          '--article-primary-light': `${articleSectionColor}1A`, // ~10% opacity for bg
+          'borderColor': `${articleSectionColor}33`, // ~20% opacity for border
+          'background': `linear-gradient(to bottom right, var(--article-primary-light), hsl(var(--background)))`,
+        } as React.CSSProperties}
+      >
+        <CardContent className="p-8 md:p-12 text-center">
+            <div className="flex justify-center mb-4">
+                <div 
+                    className="p-3 rounded-full w-fit"
+                    style={{ backgroundColor: 'var(--article-primary-light)' }}
+                >
+                    <Newspaper 
+                        className="h-8 w-8" 
+                        style={{ color: 'var(--article-primary)' }} 
+                    />
+                </div>
+            </div>
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground">مقالات لنموك المهني</h2>
+            <p className="text-muted-foreground mt-2 mb-6 max-w-2xl mx-auto">
+                نصائح للتوظيف، كتابة السيرة الذاتية، وفرص الربح من الإنترنت. محتوى موجه للعرب الباحثين عن الاستقرار المهني أو الحرية المالية.
+            </p>
+            <Button asChild size="lg" style={{ backgroundColor: 'var(--article-primary)' }}>
+                <Link href="/articles">
+                اكتشف المقالات
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                </Link>
+            </Button>
+        </CardContent>
+      </Card>
+    </section>
+  )
 }
 
 
@@ -289,4 +298,5 @@ export default function HomePage() {
     </>
   );
 }
+
 
