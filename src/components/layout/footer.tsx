@@ -25,7 +25,6 @@ Plane,
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/context/auth-context';
-import { getArticles } from '@/lib/articles';
 
 const importantLinks = [
 { label: 'الوظائف', href: '/jobs', icon: Briefcase },
@@ -33,7 +32,6 @@ const importantLinks = [
 { label: 'المباريات العمومية', href: '/competitions', icon: Landmark },
 { label: 'العمال', href: '/workers', icon: Users },
 { label: 'نشر إعلان', href: '/post-job/select-type', icon: PlusCircle },
-{ label: 'إنشاء سيرة ذاتية', href: '/cv-builder', icon: FileText },
 ];
 
 const guestLinks = [

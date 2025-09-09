@@ -107,7 +107,6 @@ function LoggedInView({ userData, onLogout }: { userData: any, onLogout: () => v
                         <SettingItem icon={User} label="تعديل الملف الشخصي" href="/profile/edit" />
                         <SettingItem icon={Bookmark} label="الإعلانات المحفوظة" href="/profile/saved-ads" />
                         {!userData?.isAdmin && <SettingItem icon={FileText} label="إعلاناتي" href="/profile/my-ads" />}
-                        <SettingItem icon={FileText} label="إنشاء سيرة ذاتية" href="/cv-builder" />
                         <li className="flex items-center justify-between p-4">
                             <div className="flex items-center gap-4">
                                 <SettingsIcon className="h-5 w-5 text-primary" />

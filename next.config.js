@@ -1,3 +1,4 @@
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -25,6 +26,12 @@ const nextConfig = {
       {
           protocol: 'https',
           hostname: 'lh3.googleusercontent.com',
+          port: '',
+          pathname: '/**',
+      },
+      {
+          protocol: 'https',
+          hostname: 'picsum.photos',
           port: '',
           pathname: '/**',
       }
