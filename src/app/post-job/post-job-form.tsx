@@ -72,9 +72,9 @@ const formSchema = z.object({
 });
 
 const stepFields = [
-  ['postType', 'title', 'categoryId', 'customCategory', 'ownerPhotoURL', 'country', 'city', 'companyName', 'salary', 'openPositions', 'workType'],
-  ['experience', 'description', 'availablePositions', 'qualifications', 'conditions', 'tasks', 'featuresAndOpportunities'],
-  ['phone', 'whatsapp', 'email', 'instagram', 'applyUrl', 'howToApply'],
+  ['postType', 'title', 'companyName', 'categoryId', 'customCategory', 'country', 'city', 'openPositions', 'workType', 'salary'],
+  ['experience', 'description', 'availablePositions', 'qualifications', 'conditions', 'tasks', 'featuresAndOpportunities', 'howToApply'],
+  ['phone', 'whatsapp', 'email', 'instagram', 'applyUrl'],
 ];
 
 interface PostJobFormProps {
@@ -344,10 +344,9 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
           <FormItem><FormLabelIcon icon={FileText} label="عنوان الإعلان" /><FormControl><Input placeholder={postType === 'seeking_job' ? "مثال: مصمم جرافيك يبحث عن فرصة..." : "مثال: مطلوب مهندس مدني..."} {...field} /></FormControl><FormMessage /></FormItem>
       )} />
 
-      {postType === 'seeking_worker' && (
+      {postType === 'seeking_worker' ? (
         <>
           <FormField control={form.control} name="companyName" render={({ field }) => (<FormItem><FormLabelIcon icon={Building2} label="اسم الشركة (اختياري)" /><FormControl><Input placeholder="اسم الشركة أو الجهة" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
-          
           <div className="space-y-4">
             <FormLabelIcon icon={LayoutGrid} label="مجال الوظيفة (اختياري)" />
             <p className="text-sm text-muted-foreground -mt-2">اختر من القائمة أو أدخل فئة مخصصة. لا يمكن اختيار الاثنين معاً.</p>
@@ -355,35 +354,27 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
             <div className="relative flex items-center"><div className="flex-grow border-t border-border"></div><span className="flex-shrink mx-4 text-xs text-muted-foreground">أو</span><div className="flex-grow border-t border-border"></div></div>
             <FormField control={form.control} name="customCategory" render={({ field }) => (<FormItem><FormControl><Input placeholder="أدخل فئة مخصصة إذا لم تجدها في القائمة" {...field} onChange={(e) => {field.onChange(e); if (e.target.value) {form.setValue('categoryId', '');}}} disabled={!!categoryId}/></FormControl><FormMessage /></FormItem>)} />
           </div>
-        </>
-      )}
-      
-      <div className="space-y-4">
-        <FormLabelIcon icon={MapPin} label="الموقع" />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField control={form.control} name="country" render={({ field }) => (
-                <FormItem><FormLabel>الدولة</FormLabel><FormControl><Input placeholder="مثال: المغرب" {...field} /></FormControl><FormMessage /></FormItem>
-            )} />
-            <FormField control={form.control} name="city" render={({ field }) => (
-                <FormItem><FormLabel>المدينة</FormLabel><FormControl><Input placeholder="مثال: الرباط" {...field} /></FormControl><FormMessage /></FormItem>
-            )} />
-        </div>
-      </div>
-      
-      {postType === 'seeking_worker' && (
-         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-           <FormField control={form.control} name="openPositions" render={({ field }) => (<FormItem><FormLabelIcon icon={Users2Icon} label="عدد المناصب (اختياري)" /><FormControl><Input type="number" placeholder="مثال: 3" {...field} value={field.value ?? ''} onChange={e => field.onChange(e.target.value === '' ? undefined : +e.target.value)} /></FormControl><FormMessage /></FormItem>)} />
-           <FormField control={form.control} name="workType" render={({ field }) => (
+          <div className="space-y-4">
+            <FormLabelIcon icon={MapPin} label="الموقع" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField control={form.control} name="country" render={({ field }) => (
+                    <FormItem><FormLabel>الدولة</FormLabel><FormControl><Input placeholder="مثال: المغرب" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="city" render={({ field }) => (
+                    <FormItem><FormLabel>المدينة</FormLabel><FormControl><Input placeholder="مثال: الرباط" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+            </div>
+          </div>
+          <FormField control={form.control} name="openPositions" render={({ field }) => (<FormItem><FormLabelIcon icon={Users2Icon} label="عدد المناصب (اختياري)" /><FormControl><Input type="number" placeholder="مثال: 3" {...field} value={field.value ?? ''} onChange={e => field.onChange(e.target.value === '' ? undefined : +e.target.value)} /></FormControl><FormMessage /></FormItem>)} />
+          <FormField control={form.control} name="workType" render={({ field }) => (
              <FormItem><FormLabelIcon icon={Clock} label="نوع الدوام" /><Select onValueChange={field.onChange} value={field.value}><FormControl><SelectTrigger><SelectValue placeholder="اختر نوع الدوام" /></SelectTrigger></FormControl><SelectContent>{workTypeOptions.map(opt => (<SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>))}</SelectContent></Select><FormMessage /></FormItem>
            )} />
            <FormField control={form.control} name="salary" render={({ field }) => (<FormItem><FormLabelIcon icon={Wallet} label="الأجر (اختياري)" /><FormControl><Input placeholder="مثال: 5000 درهم / شهري" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
-        </div>
-      )}
-
-      {postType === 'seeking_job' && (
+        </>
+      ) : (
         <>
            <FormField
-                control={profileForm.control}
+                control={form.control}
                 name="ownerPhotoURL"
                 render={({ field }) => (
                     <FormItem>
@@ -463,6 +454,17 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                   <FormMessage />
                 </FormItem>
               )} />
+            </div>
+            <div className="space-y-4">
+              <FormLabelIcon icon={MapPin} label="الموقع" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField control={form.control} name="country" render={({ field }) => (
+                      <FormItem><FormLabel>الدولة</FormLabel><FormControl><Input placeholder="مثال: المغرب" {...field} /></FormControl><FormMessage /></FormItem>
+                  )} />
+                  <FormField control={form.control} name="city" render={({ field }) => (
+                      <FormItem><FormLabel>المدينة</FormLabel><FormControl><Input placeholder="مثال: الرباط" {...field} /></FormControl><FormMessage /></FormItem>
+                  )} />
+              </div>
             </div>
         </>
       )}
@@ -605,4 +607,3 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
       </>
   );
 }
-
