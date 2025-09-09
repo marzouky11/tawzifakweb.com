@@ -340,11 +340,10 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
   
   const step1ContentWorker = (
      <div className="space-y-6">
-      <FormField control={form.control} name="title" render={({ field }) => (
+        <FormField control={form.control} name="title" render={({ field }) => (
           <FormItem><FormLabelIcon icon={FileText} label="عنوان الإعلان" /><FormControl><Input placeholder="مثال: مطلوب مهندس مدني..." {...field} /></FormControl><FormMessage /></FormItem>
-      )} />
-       <FormField control={form.control} name="companyName" render={({ field }) => (<FormItem><FormLabelIcon icon={Building2} label="اسم الشركة (اختياري)" /><FormControl><Input placeholder="اسم الشركة أو الجهة" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
-          
+        )} />
+        <FormField control={form.control} name="companyName" render={({ field }) => (<FormItem><FormLabelIcon icon={Building2} label="اسم الشركة (اختياري)" /><FormControl><Input placeholder="اسم الشركة أو الجهة" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
         <div className="space-y-4">
             <div className="flex justify-between items-center">
                 <FormLabelIcon icon={LayoutGrid} label="مجال الوظيفة (اختياري)" />
@@ -369,7 +368,6 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
             <div className="relative flex items-center"><div className="flex-grow border-t border-border"></div><span className="flex-shrink mx-4 text-xs text-muted-foreground">أو</span><div className="flex-grow border-t border-border"></div></div>
             <FormField control={form.control} name="customCategory" render={({ field }) => (<FormItem><FormControl><Input placeholder="أدخل فئة مخصصة إذا لم تجدها في القائمة" {...field} onChange={(e) => {field.onChange(e); if (e.target.value) {form.setValue('categoryId', '');}}} disabled={!!categoryId}/></FormControl><FormMessage /></FormItem>)} />
         </div>
-
         <div className="space-y-4">
             <FormLabelIcon icon={MapPin} label="الموقع" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -381,19 +379,16 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                 )} />
             </div>
         </div>
-          <FormField control={form.control} name="openPositions" render={({ field }) => (<FormItem><FormLabelIcon icon={Users2Icon} label="عدد المناصب (اختياري)" /><FormControl><Input type="number" placeholder="مثال: 3" {...field} value={field.value ?? ''} onChange={e => field.onChange(e.target.value === '' ? undefined : +e.target.value)} /></FormControl><FormMessage /></FormItem>)} />
-          <FormField control={form.control} name="workType" render={({ field }) => (
-             <FormItem><FormLabelIcon icon={Clock} label="نوع الدوام" /><Select onValueChange={field.onChange} value={field.value}><FormControl><SelectTrigger><SelectValue placeholder="اختر نوع الدوام" /></SelectTrigger></FormControl><SelectContent>{workTypeOptions.map(opt => (<SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>))}</SelectContent></Select><FormMessage /></FormItem>
-           )} />
-           <FormField control={form.control} name="salary" render={({ field }) => (<FormItem><FormLabelIcon icon={Wallet} label="الأجر (اختياري)" /><FormControl><Input placeholder="مثال: 5000 درهم / شهري" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
+        <FormField control={form.control} name="openPositions" render={({ field }) => (<FormItem><FormLabelIcon icon={Users2Icon} label="عدد المناصب (اختياري)" /><FormControl><Input type="number" placeholder="مثال: 3" {...field} value={field.value ?? ''} onChange={e => field.onChange(e.target.value === '' ? undefined : +e.target.value)} /></FormControl><FormMessage /></FormItem>)} />
+        <FormField control={form.control} name="workType" render={({ field }) => (
+           <FormItem><FormLabelIcon icon={Clock} label="نوع الدوام" /><Select onValueChange={field.onChange} value={field.value}><FormControl><SelectTrigger><SelectValue placeholder="اختر نوع الدوام" /></SelectTrigger></FormControl><SelectContent>{workTypeOptions.map(opt => (<SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>))}</SelectContent></Select><FormMessage /></FormItem>
+         )} />
+         <FormField control={form.control} name="salary" render={({ field }) => (<FormItem><FormLabelIcon icon={Wallet} label="الأجر (اختياري)" /><FormControl><Input placeholder="مثال: 5000 درهم / شهري" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
     </div>
   );
 
   const step1ContentSeeker = (
     <div className="space-y-6">
-        <FormField control={form.control} name="title" render={({ field }) => (
-            <FormItem><FormLabelIcon icon={FileText} label="عنوان الإعلان" /><FormControl><Input placeholder={"مثال: مصمم جرافيك يبحث عن فرصة..."} {...field} /></FormControl><FormMessage /></FormItem>
-        )} />
         <FormField control={form.control} name="ownerPhotoURL" render={({ field }) => (
             <FormItem>
                 <FormLabelIcon icon={ImageIcon} label="الصورة الشخصية (اختياري)" />
@@ -420,6 +415,9 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
                 </FormControl>
                 <FormMessage />
             </FormItem>
+        )} />
+        <FormField control={form.control} name="title" render={({ field }) => (
+            <FormItem><FormLabelIcon icon={FileText} label="عنوان الإعلان" /><FormControl><Input placeholder={"مثال: مصمم جرافيك يبحث عن فرصة..."} {...field} /></FormControl><FormMessage /></FormItem>
         )} />
         <div className="space-y-4">
             <div className="flex justify-between items-center">
