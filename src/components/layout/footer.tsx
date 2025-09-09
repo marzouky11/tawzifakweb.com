@@ -32,6 +32,7 @@ const importantLinks = [
 { label: 'المباريات العمومية', href: '/competitions', icon: Landmark },
 { label: 'العمال', href: '/workers', icon: Users },
 { label: 'نشر إعلان', href: '/post-job/select-type', icon: PlusCircle },
+{ label: 'مقالات', href: '/articles', icon: Newspaper },
 ];
 
 const guestLinks = [
@@ -40,7 +41,6 @@ const guestLinks = [
 ];
 
 const platformLinks = [
-{ label: 'مقالات', href: '/articles', icon: Newspaper },
 { label: 'من نحن', href: '/about', icon: Info },
 { label: 'اتصل بنا', href: '/contact', icon: Mail },
 { label: 'سياسة الخصوصية', href: '/privacy', icon: Shield },
@@ -132,10 +132,9 @@ const DesktopFooter = () => {
           <div className="space-y-4">
              <h4 className="font-bold text-lg">معلومات المنصة</h4>
             <ul className="space-y-2">
-                <li><Link href="/articles" className="text-sm text-muted-foreground hover:text-primary">مقالات</Link></li>
-                <li><Link href="/about" className="text-sm text-muted-foreground hover:text-primary">من نحن</Link></li>
-                <li><Link href="/faq" className="text-sm text-muted-foreground hover:text-primary">الأسئلة الشائعة</Link></li>
-                <li><Link href="/contact" className="text-sm text-muted-foreground hover:text-primary">اتصل بنا</Link></li>
+                {platformLinks.map(link => (
+                    <li key={link.href}><Link href={link.href} className="text-sm text-muted-foreground hover:text-primary">{link.label}</Link></li>
+                ))}
                 <li>
                     <a href="https://www.facebook.com/profile.php?id=61578748771269" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 justify-center lg:justify-start text-sm text-muted-foreground hover:text-primary">
                         <Facebook className="h-4 w-4" />
