@@ -1,5 +1,6 @@
 
 
+
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { JobCard } from '@/components/job-card';
@@ -194,10 +195,10 @@ function ArticlesSection() {
     return (
         <section>
             <Card className="overflow-hidden border-2" style={{ borderColor: articleSectionColor, backgroundColor: `${articleSectionColor}0D`}}>
-                <CardContent className="p-8 md:p-10">
-                    <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8 text-center md:text-right">
+                <CardContent className="p-6 md:p-10">
+                    <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 text-center md:text-right">
                         <div className="flex-shrink-0">
-                            <div className="p-4 rounded-full w-fit mx-auto" style={{ backgroundColor: `${articleSectionColor}1A` }}>
+                            <div className="p-4 rounded-full w-fit mx-auto md:mx-0" style={{ backgroundColor: `${articleSectionColor}1A` }}>
                                 <Newspaper className="h-10 w-10 md:h-12 md:w-12" style={{ color: articleSectionColor }} />
                             </div>
                         </div>
@@ -288,3 +289,4 @@ export default function HomePage() {
     </>
   );
 }
+
