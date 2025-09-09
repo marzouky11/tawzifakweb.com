@@ -190,30 +190,38 @@ function SectionHeader({ icon: Icon, title, description, href, iconColor }: Sect
 }
 
 function ArticlesSection() {
-  return (
-    <section>
-      <Card className="bg-gradient-to-br from-green-50 via-background to-background overflow-hidden border-green-200/50 dark:from-green-950/50 dark:border-green-800/20">
-        <CardContent className="p-8 md:p-12 text-center">
-            <div className="flex justify-center mb-4">
-                <div className="p-3 bg-green-500/10 rounded-full w-fit">
-                    <Newspaper className="h-8 w-8 text-green-600 dark:text-green-400" />
-                </div>
-            </div>
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground">مقالات لنموك المهني</h2>
-            <p className="text-muted-foreground mt-2 mb-6 max-w-2xl mx-auto">
-                نصائح للتوظيف، كتابة السيرة الذاتية، وفرص الربح من الإنترنت. محتوى موجه للعرب الباحثين عن الاستقرار المهني أو الحرية المالية.
-            </p>
-            <Button asChild size="lg" className="bg-green-600 hover:bg-green-700 text-white font-semibold">
-                <Link href="/articles">
-                اكتشف المقالات
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                </Link>
-            </Button>
-        </CardContent>
-      </Card>
-    </section>
-  )
+    const articleSectionColor = '#00897B'; // A distinct green color for articles
+    return (
+        <section>
+            <Card className="overflow-hidden border-2" style={{ borderColor: articleSectionColor, backgroundColor: `${articleSectionColor}0D`}}>
+                <CardContent className="p-8 md:p-10">
+                    <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8 text-center md:text-right">
+                        <div className="flex-shrink-0">
+                            <div className="p-4 rounded-full w-fit mx-auto" style={{ backgroundColor: `${articleSectionColor}1A` }}>
+                                <Newspaper className="h-10 w-10 md:h-12 md:w-12" style={{ color: articleSectionColor }} />
+                            </div>
+                        </div>
+                        <div className="flex-grow">
+                            <h2 className="text-2xl md:text-3xl font-bold text-foreground">مقالات لنموك المهني</h2>
+                            <p className="text-muted-foreground mt-2 mb-6 max-w-2xl mx-auto md:mx-0">
+                                نصائح للتوظيف، كتابة السيرة الذاتية، وفرص الربح من الإنترنت. محتوى موجه للعرب الباحثين عن الاستقرار المهني أو الحرية المالية.
+                            </p>
+                        </div>
+                        <div className="flex-shrink-0 w-full md:w-auto">
+                            <Button asChild size="lg" className="w-full md:w-auto font-semibold text-base py-6 active:scale-95 transition-transform" style={{ backgroundColor: articleSectionColor }}>
+                                <Link href="/articles">
+                                    اكتشف المقالات
+                                    <ArrowLeft className="mr-2 h-4 w-4" />
+                                </Link>
+                            </Button>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+        </section>
+    );
 }
+
 
 export default function HomePage() {
   return (
