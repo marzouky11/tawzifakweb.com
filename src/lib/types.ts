@@ -32,8 +32,8 @@ export interface Job {
   whatsapp?: string;
   email?: string;
   instagram?: string;
-  rating: number;
-  likes: number;
+  rating?: number;
+  likes?: number;
   postedAt: string; // This is a derived string like "2 days ago"
   createdAt: Timestamp;
   ownerName: string;
@@ -54,7 +54,7 @@ export interface Competition {
   id: string;
   title: string;
   organizer: string;
-  positionsAvailable: string | number | null;
+  positionsAvailable?: string | number | null;
   availablePositions?: string;
   deadline: string; // last day for registration
   officialLink: string;
@@ -103,13 +103,13 @@ export type ImmigrationProgramType =
 export interface ImmigrationPost {
   id: string;
   title: string;
-  slug: string;
+  slug?: string;
   targetCountry: string;
   city?: string;
   positionsAvailable?: string;
   availablePositions?: string;
   programType: ImmigrationProgramType;
-  iconName: string;
+  iconName?: string;
   targetAudience: string;
   salary?: string;
   deadline?: string;

@@ -9,11 +9,48 @@ import { Briefcase } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 import { JobDesktopDetails } from './job-desktop-details';
 import { JobMobileDetails } from './job-mobile-details';
-import type { WorkType } from '@/lib/types';
+import type { Job, WorkType } from '@/lib/types';
 
 
 interface JobDetailPageProps {
   params: { id: string };
+}
+
+interface JobPostingJsonLd {
+  '@context': string;
+  '@type': string;
+  title: string;
+  description: string;
+  identifier?: {
+    '@type': 'PropertyValue';
+    name: string;
+    value: string;
+  };
+  datePosted: string;
+  validThrough?: string;
+  hiringOrganization: {
+    '@type': 'Organization';
+    name: string;
+    sameAs: string;
+  };
+  jobLocation: {
+      '@type': 'Place';
+      address: {
+          '@type': 'PostalAddress';
+          addressLocality: string;
+          addressCountry: string;
+      };
+  };
+  employmentType?: string;
+  baseSalary?: {
+    '@type': 'MonetaryAmount';
+    currency: string;
+    value: {
+      '@type': 'QuantitativeValue';
+      value: string;
+      unitText: string;
+    };
+  };
 }
 
 export async function generateMetadata({ params }: JobDetailPageProps): Promise<Metadata> {
@@ -39,7 +76,7 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
     : new Date();
 
   // Construct simplified and valid structured data
-  const jobPostingJsonLd = {
+  const jobPostingJsonLd: JobPostingJsonLd = {
       '@context': 'https://schema.org',
       '@type': 'JobPosting',
       title: jobTitle,
@@ -47,7 +84,7 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
       datePosted: createdAtDate.toISOString(),
       hiringOrganization: {
         '@type': 'Organization',
-        name: job.companyName || 'شركة غير محددة',
+        name: job.companyName || 'توظيفك',
         sameAs: baseUrl,
       },
       jobLocation: {
@@ -58,8 +95,23 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
               addressCountry: job.country,
           },
       },
-      employmentType: "FULL_TIME", // Using a general valid value
   };
+
+  const workTypeMapping: { [key in WorkType]: string } = {
+    full_time: 'FULL_TIME',
+    part_time: 'PART_TIME',
+    freelance: 'CONTRACTOR',
+    remote: 'REMOTE'
+  };
+
+  if (job.workType && workTypeMapping[job.workType]) {
+      jobPostingJsonLd.employmentType = workTypeMapping[job.workType];
+  }
+  
+  const expiryDate = new Date(createdAtDate);
+  expiryDate.setFullYear(expiryDate.getFullYear() + 1); // Set expiry to 1 year from posting
+  jobPostingJsonLd.validThrough = expiryDate.toISOString();
+
 
   const canonicalUrl = `${baseUrl}/jobs/${job.id}`;
 

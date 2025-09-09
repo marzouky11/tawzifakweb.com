@@ -25,6 +25,7 @@ interface JobPostingJsonLd {
   hiringOrganization: {
     '@type': 'Organization';
     name: string;
+    sameAs: string;
   };
   jobLocation: {
     '@type': 'Place';
@@ -66,6 +67,7 @@ export async function generateMetadata({ params }: CompetitionDetailPageProps): 
       hiringOrganization: {
         '@type': 'Organization',
         name: competition.organizer,
+        sameAs: baseUrl,
       },
       jobLocation: {
         '@type': 'Place',
