@@ -210,6 +210,10 @@ export default function MyAdsPage() {
     id: string;
     type: "ad" | "competition" | "immigration";
   } | null>(null);
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     if (!authLoading && !user) {

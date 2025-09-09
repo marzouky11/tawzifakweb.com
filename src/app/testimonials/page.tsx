@@ -16,6 +16,7 @@ export default function TestimonialsPage() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetchTestimonials().then(data => setTestimonials(data));
   }, []);
 

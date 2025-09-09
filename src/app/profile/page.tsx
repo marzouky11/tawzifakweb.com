@@ -140,7 +140,9 @@ function LoggedInView({ userData, onLogout }: { userData: any, onLogout: () => v
             </Card>
             )}
 
-            {commonLinks}
+            <div className="block md:hidden">
+              {commonLinks}
+            </div>
             
             <Card>
                 <CardContent className="p-4">
