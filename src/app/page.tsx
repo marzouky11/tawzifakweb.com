@@ -17,6 +17,7 @@ import { CompetitionCard } from '@/components/competition-card';
 import { ImmigrationCard } from '@/components/immigration-card';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { CategoryIcon } from '@/components/icons';
 
 export const revalidate = 3600; // Revalidate every hour
 
