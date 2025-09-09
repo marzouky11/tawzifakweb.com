@@ -6,10 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Frown, ArrowLeft } from 'lucide-react';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
+import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 
 export default function NotFoundPage() {
   return (
     <>
+      <MobilePageHeader title="الصفحة غير موجودة">
+        <Frown className="h-5 w-5 text-primary" />
+      </MobilePageHeader>
       <DesktopPageHeader
         icon={Frown}
         title="خطأ 404 - الصفحة غير موجودة"
