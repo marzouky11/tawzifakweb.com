@@ -36,8 +36,9 @@ const formSchema = z.object({
   categoryId: z.string().optional(),
   customCategory: z.string().optional(),
   ownerPhotoURL: z.string().optional(),
-  country: z.string().min(1, { message: 'الدولة مطلوبة.' }),
-  city: z.string().min(1, { message: 'المدينة مطلوبة.' }),
+  location: z.string().min(1, { message: 'الموقع مطلوب.' }).refine(value => value.includes(','), { message: 'الرجاء إدخال الموقع بصيغة: الدولة, المدينة' }),
+  country: z.string().optional(),
+  city: z.string().optional(),
   
   companyName: z.string().optional(),
   experience: z.string().optional(),
@@ -64,7 +65,7 @@ const formSchema = z.object({
 });
 
 const stepFields = [
-  ['postType', 'title', 'categoryId', 'customCategory', 'ownerPhotoURL', 'country', 'city'],
+  ['postType', 'title', 'categoryId', 'customCategory', 'ownerPhotoURL', 'location'],
   ['companyName', 'experience', 'description', 'availablePositions', 'qualifications', 'salary', 'openPositions', 'conditions', 'tasks', 'featuresAndOpportunities'],
   ['phone', 'whatsapp', 'email', 'instagram', 'applyUrl', 'howToApply'],
 ];
@@ -140,6 +141,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
       categoryId: job?.categoryId || '',
       customCategory: !job?.categoryId && job?.categoryName ? job.categoryName : '',
       ownerPhotoURL: job?.ownerPhotoURL ?? userData?.photoURL ?? '',
+      location: job ? `${job.country}, ${job.city}` : '',
       country: job?.country || '',
       city: job?.city || '',
       salary: job?.salary || '',
@@ -220,9 +222,10 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
 
     setIsSubmitting(true);
     try {
-      const { customCategory, ...restOfValues } = values;
+      const { customCategory, location, ...restOfValues } = values;
+      const [country, city] = location.split(',').map(s => s.trim());
 
-      const dataToSave: { [key: string]: any } = { ...restOfValues };
+      const dataToSave: { [key: string]: any } = { ...restOfValues, country, city };
 
       if (customCategory) {
           dataToSave.categoryName = customCategory;
@@ -250,8 +253,8 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
           ownerPhotoURL: values.ownerPhotoURL,
           postType: values.postType,
           title: values.title,
-          country: values.country,
-          city: values.city,
+          country: dataToSave.country,
+          city: dataToSave.city,
           categoryId: dataToSave.categoryId,
           categoryName: dataToSave.categoryName,
           companyName: values.companyName,
@@ -422,14 +425,9 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
         </div>
         <div>
             <FormLabelIcon icon={MapPin} label="الموقع"/>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
-                 <FormField control={form.control} name="country" render={({ field }) => (
-                    <FormItem><FormControl><Input placeholder="الدولة" {...field} /></FormControl><FormMessage /></FormItem>
-                )} />
-                <FormField control={form.control} name="city" render={({ field }) => (
-                    <FormItem><FormControl><Input placeholder="المدينة" {...field} /></FormControl><FormMessage /></FormItem>
-                )} />
-            </div>
+             <FormField control={form.control} name="location" render={({ field }) => (
+                <FormItem className="mt-2"><FormControl><Input placeholder="مثال: المغرب, الرباط" {...field} /></FormControl><FormMessage /></FormItem>
+            )} />
         </div>
     </div>
   );

@@ -37,7 +37,11 @@ export default function EditJobPage() {
           return;
         }
 
-        setJob({ ...jobData, ownerPhotoURL: jobData.ownerPhotoURL || null });
+        setJob({ 
+          ...jobData, 
+          ownerPhotoURL: jobData.ownerPhotoURL || null,
+          location: `${jobData.country}, ${jobData.city}`
+        });
       }
       setLoading(false);
     };

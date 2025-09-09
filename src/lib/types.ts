@@ -21,6 +21,7 @@ export interface Job {
   categoryName?: string;
   country: string;
   city: string;
+  location?: string; // For form use only
   workType?: WorkType;
   description?: string;
   experience?: string;
