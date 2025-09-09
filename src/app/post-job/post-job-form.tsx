@@ -338,58 +338,6 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
     { id: 3, name: "التواصل", description: "كيف يمكن للمهتمين التواصل معك.", icon: Phone },
   ];
   
-  const step1Content = (
-    <div className="space-y-6">
-      <FormField control={form.control} name="title" render={({ field }) => (
-          <FormItem><FormLabelIcon icon={FileText} label="عنوان الإعلان" /><FormControl><Input placeholder={postType === 'seeking_job' ? "مثال: مصمم جرافيك يبحث عن فرصة..." : "مثال: مطلوب مهندس مدني..."} {...field} /></FormControl><FormMessage /></FormItem>
-      )} />
-
-       <FormField control={form.control} name="companyName" render={({ field }) => (<FormItem><FormLabelIcon icon={Building2} label="اسم الشركة (اختياري)" /><FormControl><Input placeholder="اسم الشركة أو الجهة" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
-          
-        <div className="space-y-4">
-            <div className="flex justify-between items-center">
-                <FormLabelIcon icon={LayoutGrid} label="مجال الوظيفة (اختياري)" />
-                {(categoryId || customCategory) && (
-                    <Button 
-                        type="button" 
-                        variant="ghost" 
-                        size="sm" 
-                        className="h-auto p-1 text-xs text-destructive hover:bg-destructive/10"
-                        onClick={() => {
-                            form.setValue('categoryId', '');
-                            form.setValue('customCategory', '');
-                        }}
-                    >
-                        <X className="ml-1 h-3 w-3" />
-                        مسح
-                    </Button>
-                )}
-            </div>
-            <p className="text-sm text-muted-foreground -mt-2">اختر من القائمة أو أدخل فئة مخصصة. لا يمكن اختيار الاثنين معاً.</p>
-            <FormField control={form.control} name="categoryId" render={({ field }) => (<FormItem><Select onValueChange={(value) => {field.onChange(value); if (value) {form.setValue('customCategory', '');}}} value={field.value} disabled={!!customCategory}><FormControl><SelectTrigger><SelectValue placeholder="اختر فئة العمل من القائمة" /></SelectTrigger></FormControl><SelectContent><ScrollArea className="h-[250px]">{categories.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</ScrollArea></SelectContent></Select><FormMessage /></FormItem>)} />
-            <div className="relative flex items-center"><div className="flex-grow border-t border-border"></div><span className="flex-shrink mx-4 text-xs text-muted-foreground">أو</span><div className="flex-grow border-t border-border"></div></div>
-            <FormField control={form.control} name="customCategory" render={({ field }) => (<FormItem><FormControl><Input placeholder="أدخل فئة مخصصة إذا لم تجدها في القائمة" {...field} onChange={(e) => {field.onChange(e); if (e.target.value) {form.setValue('categoryId', '');}}} disabled={!!categoryId}/></FormControl><FormMessage /></FormItem>)} />
-        </div>
-
-          <div className="space-y-4">
-            <FormLabelIcon icon={MapPin} label="الموقع" />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField control={form.control} name="country" render={({ field }) => (
-                    <FormItem><FormLabel>الدولة</FormLabel><FormControl><Input placeholder="مثال: المغرب" {...field} /></FormControl><FormMessage /></FormItem>
-                )} />
-                <FormField control={form.control} name="city" render={({ field }) => (
-                    <FormItem><FormLabel>المدينة</FormLabel><FormControl><Input placeholder="مثال: الرباط" {...field} /></FormControl><FormMessage /></FormItem>
-                )} />
-            </div>
-          </div>
-          <FormField control={form.control} name="openPositions" render={({ field }) => (<FormItem><FormLabelIcon icon={Users2Icon} label="عدد المناصب (اختياري)" /><FormControl><Input type="number" placeholder="مثال: 3" {...field} value={field.value ?? ''} onChange={e => field.onChange(e.target.value === '' ? undefined : +e.target.value)} /></FormControl><FormMessage /></FormItem>)} />
-          <FormField control={form.control} name="workType" render={({ field }) => (
-             <FormItem><FormLabelIcon icon={Clock} label="نوع الدوام" /><Select onValueChange={field.onChange} value={field.value}><FormControl><SelectTrigger><SelectValue placeholder="اختر نوع الدوام" /></SelectTrigger></FormControl><SelectContent>{workTypeOptions.map(opt => (<SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>))}</SelectContent></Select><FormMessage /></FormItem>
-           )} />
-           <FormField control={form.control} name="salary" render={({ field }) => (<FormItem><FormLabelIcon icon={Wallet} label="الأجر (اختياري)" /><FormControl><Input placeholder="مثال: 5000 درهم / شهري" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
-    </div>
-  );
-  
   const step1ContentWorker = (
      <div className="space-y-6">
       <FormField control={form.control} name="title" render={({ field }) => (
