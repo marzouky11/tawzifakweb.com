@@ -2,6 +2,7 @@
 
 
 
+
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { JobCard } from '@/components/job-card';
@@ -192,44 +193,44 @@ function SectionHeader({ icon: Icon, title, description, href, iconColor }: Sect
 }
 
 function ArticlesSection() {
-  const articleSectionColor = '#00897B';
+  const articleSectionColor = '#00897B'; // Teal color
+  const articlePrimaryLight = `${articleSectionColor}1A`; // ~10% opacity for bg
+
   return (
     <section>
       <Card
         className="overflow-hidden border"
         style={{
           '--article-primary': articleSectionColor,
-          '--article-primary-light': `${articleSectionColor}1A`, // ~10% opacity for bg
-          'borderColor': `${articleSectionColor}33`, // ~20% opacity for border
-          'background': `linear-gradient(to bottom right, var(--article-primary-light), hsl(var(--background)))`,
+          '--article-primary-light': articlePrimaryLight,
+          borderColor: `${articleSectionColor}33`,
+          background: `linear-gradient(to bottom right, var(--article-primary-light), hsl(var(--background)))`,
         } as React.CSSProperties}
       >
-        <CardContent className="p-8 md:p-12 text-center">
-            <div className="flex justify-center mb-4">
-                <div 
-                    className="p-3 rounded-full w-fit"
-                    style={{ backgroundColor: 'var(--article-primary-light)' }}
-                >
-                    <Newspaper 
-                        className="h-8 w-8" 
-                        style={{ color: 'var(--article-primary)' }} 
-                    />
+        <CardContent className="p-6 md:p-10 flex flex-col md:flex-row items-center justify-between text-center md:text-right gap-4 md:gap-8">
+            <div className="flex-shrink-0">
+                 <div className="p-4 rounded-full w-fit mx-auto md:mx-0" style={{ backgroundColor: 'var(--article-primary-light)' }}>
+                    <Newspaper className="h-10 w-10 md:h-12 md:w-12" style={{ color: 'var(--article-primary)' }} />
                 </div>
             </div>
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground">مقالات لنموك المهني</h2>
-            <p className="text-muted-foreground mt-2 mb-6 max-w-2xl mx-auto">
-                نصائح للتوظيف، كتابة السيرة الذاتية، وفرص الربح من الإنترنت. محتوى موجه للعرب الباحثين عن الاستقرار المهني أو الحرية المالية.
-            </p>
-            <Button asChild size="lg" style={{ backgroundColor: 'var(--article-primary)' }}>
-                <Link href="/articles">
-                اكتشف المقالات
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                </Link>
-            </Button>
+            <div className="flex-grow">
+                <h2 className="text-2xl md:text-3xl font-bold text-foreground">مقالات لنموك المهني</h2>
+                <p className="text-muted-foreground mt-2 mb-6 max-w-2xl mx-auto md:mx-0">
+                    نصائح للتوظيف، كتابة السيرة الذاتية، وفرص الربح من الإنترنت. محتوى موجه للعرب الباحثين عن الاستقرار المهني أو الحرية المالية.
+                </p>
+            </div>
+            <div className="flex-shrink-0">
+                <Button asChild size="lg" style={{ backgroundColor: 'var(--article-primary)' }} className="w-full md:w-auto">
+                    <Link href="/articles">
+                    اكتشف المقالات
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    </Link>
+                </Button>
+            </div>
         </CardContent>
       </Card>
     </section>
-  )
+  );
 }
 
 
@@ -298,5 +299,6 @@ export default function HomePage() {
     </>
   );
 }
+
 
 
