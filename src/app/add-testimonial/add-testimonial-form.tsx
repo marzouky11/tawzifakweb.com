@@ -89,8 +89,7 @@ export function AddTestimonialForm() {
               <FormLabel>تقييمك للمنصة</FormLabel>
               <FormControl>
                  <div 
-                    dir="ltr"
-                    className="flex justify-center items-center gap-2" 
+                    className="flex flex-row-reverse justify-center items-center gap-2" 
                     onMouseLeave={() => setHoveredRating(0)}
                   >
                     {[1, 2, 3, 4, 5].map((star) => (
