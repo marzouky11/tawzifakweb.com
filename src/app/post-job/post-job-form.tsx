@@ -421,7 +421,7 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
             )} />
         </div>
         <div>
-            <FormLabelIcon icon={MapPin} label="الموقع"/>
+            <FormLabelIcon icon={MapPin} label="بلد الإقامة"/>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
                  <FormField control={form.control} name="country" render={({ field }) => (
                     <FormItem><FormControl><Input placeholder="الدولة" {...field} /></FormControl><FormMessage /></FormItem>
