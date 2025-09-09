@@ -94,7 +94,7 @@ export function JobCard({ job }: JobCardProps) {
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
                   <div className="flex items-center gap-2">
                       <MapPin className="h-4 w-4 text-primary/70" />
-                      <span className="truncate">{job.city}, {job.country}</span>
+                      <span className="truncate">{job.country}, {job.city}</span>
                   </div>
                    <div className="flex items-center gap-2">
                       <UserIcon className="h-4 w-4 text-primary/70" />

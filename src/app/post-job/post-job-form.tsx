@@ -331,59 +331,46 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
   const step1Content = (
     <div className="space-y-6">
         {postType === 'seeking_job' && (
-          <FormField
-              control={form.control}
-              name="ownerPhotoURL"
-              render={({ field }) => (
-                  <FormItem>
-                      <FormLabelIcon icon={ImageIcon} label="الصورة الشخصية (اختياري)" />
-                      <FormControl>
-                          <div className="flex items-center gap-4">
-                              <UserAvatar 
-                                  name={userData?.name} 
-                                  color={userData?.avatarColor} 
-                                  photoURL={ownerPhotoURL}
-                                  className="h-20 w-20 text-2xl"
-                              />
-                              <Input id="picture" type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
-                              <div className="flex flex-col gap-2">
-                                  <Button type="button" variant="outline" className="active:scale-95 transition-transform" onClick={() => document.getElementById('picture')?.click()}>
-                                      تحميل صورة
-                                  </Button>
-                                 {ownerPhotoURL && (
-                                  <Button type="button" variant="ghost" size="sm" className="text-destructive hover:bg-destructive/10 active:scale-95 transition-transform" onClick={() => form.setValue('ownerPhotoURL', '', { shouldDirty: true })}>
-                                      إزالة الصورة
-                                  </Button>
-                                 )}
-                              </div>
-                          </div>
-                      </FormControl>
-                      <FormMessage />
-                  </FormItem>
-              )}
-          />
-        )}
-        <FormField control={form.control} name="title" render={({ field }) => (
-            <FormItem><FormLabelIcon icon={FileText} label="عنوان الإعلان" /><FormControl><Input placeholder={postType === 'seeking_job' ? "مثال: مصمم جرافيك يبحث عن فرصة..." : "مثال: مطلوب مهندس مدني..."} {...field} /></FormControl><FormMessage /></FormItem>
-        )} />
-        <div className="space-y-4">
-            <div className="flex justify-between items-center">
-                <FormLabelIcon icon={LayoutGrid} label="الفئة (اختياري)"/>
-                {(categoryId || customCategory) && (
-                    <Button 
-                        type="button" 
-                        variant="ghost" 
-                        size="sm"
-                        className="h-auto p-1 text-xs active:scale-95 transition-transform"
-                        onClick={() => {
-                            form.setValue('categoryId', '');
-                            form.setValue('customCategory', '');
-                        }}
-                    >
-                        مسح الاختيار
-                    </Button>
+          <>
+            <FormField
+                control={form.control}
+                name="ownerPhotoURL"
+                render={({ field }) => (
+                    <FormItem>
+                        <FormLabelIcon icon={ImageIcon} label="الصورة الشخصية (اختياري)" />
+                        <FormControl>
+                            <div className="flex items-center gap-4">
+                                <UserAvatar 
+                                    name={userData?.name} 
+                                    color={userData?.avatarColor} 
+                                    photoURL={ownerPhotoURL}
+                                    className="h-20 w-20 text-2xl"
+                                />
+                                <Input id="picture" type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
+                                <div className="flex flex-col gap-2">
+                                    <Button type="button" variant="outline" className="active:scale-95 transition-transform" onClick={() => document.getElementById('picture')?.click()}>
+                                        تحميل صورة
+                                    </Button>
+                                   {ownerPhotoURL && (
+                                    <Button type="button" variant="ghost" size="sm" className="text-destructive hover:bg-destructive/10 active:scale-95 transition-transform" onClick={() => form.setValue('ownerPhotoURL', '', { shouldDirty: true })}>
+                                        إزالة الصورة
+                                    </Button>
+                                   )}
+                                </div>
+                            </div>
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
                 )}
-            </div>
+            />
+            <FormField control={form.control} name="title" render={({ field }) => (
+                <FormItem><FormLabelIcon icon={FileText} label="عنوان الإعلان" /><FormControl><Input placeholder={postType === 'seeking_job' ? "مثال: مصمم جرافيك يبحث عن فرصة..." : "مثال: مطلوب مهندس مدني..."} {...field} /></FormControl><FormMessage /></FormItem>
+            )} />
+          </>
+        )}
+
+        <div className="space-y-4">
+            <FormLabelIcon icon={LayoutGrid} label="مجال العمل (اختياري)"/>
              <p className="text-sm text-muted-foreground -mt-2">
                 اختر من القائمة أو أدخل فئة مخصصة. لا يمكن اختيار الاثنين معاً.
             </p>
@@ -433,13 +420,16 @@ export function PostJobForm({ categories, job, preselectedType }: PostJobFormPro
               </FormItem>
             )} />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-             <FormField control={form.control} name="country" render={({ field }) => (
-                <FormItem><FormLabelIcon icon={Globe} label="الدولة" /><FormControl><Input placeholder="مثال: المغرب" {...field} /></FormControl><FormMessage /></FormItem>
-            )} />
-            <FormField control={form.control} name="city" render={({ field }) => (
-                <FormItem><FormLabelIcon icon={MapPin} label="المدينة"/><FormControl><Input placeholder="مثال: الدار البيضاء" {...field} /></FormControl><FormMessage /></FormItem>
-            )} />
+        <div>
+            <FormLabelIcon icon={MapPin} label="الموقع"/>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
+                 <FormField control={form.control} name="country" render={({ field }) => (
+                    <FormItem><FormControl><Input placeholder="الدولة" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="city" render={({ field }) => (
+                    <FormItem><FormControl><Input placeholder="المدينة" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+            </div>
         </div>
     </div>
   );
