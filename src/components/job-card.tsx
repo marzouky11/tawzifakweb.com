@@ -106,7 +106,6 @@ export function JobCard({ job }: JobCardProps) {
               <Button asChild size="sm" variant="secondary" className="w-full text-secondary-foreground hover:bg-secondary/80 active:scale-95 transition-transform">
                   <Link href={detailUrl}>
                       عرض الملف
-                      <ArrowRight className="mr-2 h-4 w-4" />
                   </Link>
               </Button>
           </CardFooter>
