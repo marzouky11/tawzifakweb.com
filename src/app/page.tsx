@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { getJobs, getTestimonials, getCompetitions, getImmigrationPosts } from '@/lib/data';
 import React, { Suspense } from 'react';
-import { Newspaper, Briefcase, Users, ArrowLeft, Landmark, Plane } from 'lucide-react';
+import { Newspaper, Briefcase, Users, ArrowLeft, Landmark, Plane, FileText } from 'lucide-react';
 import { HomePageFilters } from './home-page-filters';
 import { HomeCarousel } from './home-carousel';
 import { HomeExtraSections } from './home-extra-sections';
@@ -190,34 +190,29 @@ function SectionHeader({ icon: Icon, title, description, href, iconColor }: Sect
 }
 
 function ArticlesSection() {
-    return (
-        <section>
-            <Card className="relative w-full h-64 md:h-80 rounded-2xl overflow-hidden shadow-lg group">
-                 <Image 
-                    src="https://picsum.photos/1200/400"
-                    alt="مقالات ونصائح مهنية"
-                    fill
-                    sizes="100vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    data-ai-hint="library books"
-                 />
-                 <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/20" />
-                 <div className="absolute inset-0 flex items-center p-8 md:p-12">
-                    <div className="w-full md:w-1/2 text-white space-y-4">
-                        <h2 className="text-3xl md:text-5xl font-bold leading-tight drop-shadow-md">
-                           مقالات لنموك المهني
-                        </h2>
-                        <p className="text-base md:text-lg text-white/90 drop-shadow-sm">
-                           نصائح للتوظيف، كتابة السيرة الذاتية، وفرص الربح من الإنترنت.
-                        </p>
-                        <Button asChild size="lg" className="bg-white text-black hover:bg-white/90 active:scale-95 transition-transform font-semibold">
-                            <Link href="/articles">اكتشف المقالات</Link>
-                        </Button>
-                    </div>
+  return (
+    <section>
+      <Card className="bg-gradient-to-br from-green-50 via-background to-background overflow-hidden border-green-200/50 dark:from-green-950/50 dark:border-green-800/20">
+        <CardContent className="p-8 md:p-12 text-center">
+            <div className="flex justify-center mb-4">
+                <div className="p-3 bg-green-500/10 rounded-full w-fit">
+                    <Newspaper className="h-8 w-8 text-green-600 dark:text-green-400" />
                 </div>
-            </Card>
-        </section>
-    )
+            </div>
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground">مقالات لنموك المهني</h2>
+            <p className="text-muted-foreground mt-2 mb-6 max-w-2xl mx-auto">
+                نصائح للتوظيف، كتابة السيرة الذاتية، وفرص الربح من الإنترنت. محتوى موجه للعرب الباحثين عن الاستقرار المهني أو الحرية المالية.
+            </p>
+            <Button asChild size="lg" className="bg-green-600 hover:bg-green-700 text-white font-semibold">
+                <Link href="/articles">
+                اكتشف المقالات
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                </Link>
+            </Button>
+        </CardContent>
+      </Card>
+    </section>
+  )
 }
 
 export default function HomePage() {
