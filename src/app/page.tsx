@@ -3,6 +3,7 @@
 
 
 
+
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { JobCard } from '@/components/job-card';
@@ -193,8 +194,8 @@ function SectionHeader({ icon: Icon, title, description, href, iconColor }: Sect
 }
 
 function ArticlesSection() {
-  const articleSectionColor = '#00897B'; // Teal color
-  const articlePrimaryLight = `${articleSectionColor}1A`; // ~10% opacity for bg
+  const articleSectionColor = '#00897B';
+  const articlePrimaryLight = `${articleSectionColor}1A`;
 
   return (
     <section>
@@ -220,7 +221,7 @@ function ArticlesSection() {
                 </p>
             </div>
             <div className="flex-shrink-0">
-                <Button asChild size="lg" style={{ backgroundColor: 'var(--article-primary)' }} className="w-full md:w-auto">
+                <Button asChild size="lg" style={{ backgroundColor: 'var(--article-primary)' }} className="w-full md:w-auto active:scale-95 transition-transform">
                     <Link href="/articles">
                     اكتشف المقالات
                     <ArrowLeft className="mr-2 h-4 w-4" />
@@ -299,6 +300,7 @@ export default function HomePage() {
     </>
   );
 }
+
 
 
 

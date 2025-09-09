@@ -31,8 +31,8 @@ const importantLinks = [
 { label: 'فرص الهجرة', href: '/immigration', icon: Plane },
 { label: 'المباريات العمومية', href: '/competitions', icon: Landmark },
 { label: 'العمال', href: '/workers', icon: Users },
-{ label: 'نشر إعلان', href: '/post-job/select-type', icon: PlusCircle },
 { label: 'مقالات', href: '/articles', icon: Newspaper },
+{ label: 'نشر إعلان', href: '/post-job/select-type', icon: PlusCircle },
 ];
 
 const guestLinks = [
