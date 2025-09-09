@@ -38,30 +38,44 @@ const InfoItem = ({ icon: Icon, label, value, color }: { icon: React.ElementType
 };
 
 const FormattedText = ({ text }: { text?: string }) => {
-    if (!text || text.trim() === '') return <p className="italic text-muted-foreground">غير محدد</p>;
+  if (!text || text.trim() === '') return <p className="italic text-muted-foreground">غير محدد</p>;
 
-    const paragraphs = text.split(/\n{2,}/);
+  const contentBlocks = text.split('\n').filter(line => line.trim() !== '');
+  const elements: React.ReactNode[] = [];
+  let listItems: string[] = [];
 
-    return (
-        <div className="prose prose-lg dark:prose-invert max-w-none text-foreground">
-            {paragraphs.map((paragraph, pIndex) => {
-                const listItems = paragraph.trim().startsWith('- ') || paragraph.trim().startsWith('* ')
-                    ? paragraph.split('\n').filter(i => i.trim()).map(item => item.trim().replace(/^[-*]\s*/, ''))
-                    : [];
+  const flushList = (key: string) => {
+    if (listItems.length > 0) {
+      elements.push(
+        <ul key={key} className="list-disc list-outside ms-6 my-4 space-y-2">
+          {listItems.map((item, idx) => (
+            <li key={idx}>{item}</li>
+          ))}
+        </ul>
+      );
+      listItems = [];
+    }
+  };
 
-                if (listItems.length > 0) {
-                    return (
-                        <ul key={pIndex} className="list-disc pr-5 space-y-2 mb-4">
-                            {listItems.map((item, i) => <li key={i}>{item}</li>)}
-                        </ul>
-                    );
-                }
+  contentBlocks.forEach((line, i) => {
+    const trimmed = line.trim();
+    if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+      listItems.push(trimmed.replace(/^[-*]\s*/, ''));
+    } else {
+      flushList(`ul-${i}`);
+      elements.push(<p key={`p-${i}`} className="mb-4 last:mb-0">{trimmed}</p>);
+    }
+  });
 
-                return <p key={pIndex} className="mb-4 last:mb-0">{paragraph}</p>;
-            })}
-        </div>
-    );
-}
+  flushList('ul-end'); 
+
+  return (
+    <div className="prose prose-lg dark:prose-invert max-w-none text-foreground">
+      {elements}
+    </div>
+  );
+};
+
 
 const DetailSection = ({ icon: Icon, title, color, children }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode }) => (
     <div>
