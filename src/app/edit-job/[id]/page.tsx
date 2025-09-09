@@ -40,7 +40,6 @@ export default function EditJobPage() {
         setJob({ 
           ...jobData, 
           ownerPhotoURL: jobData.ownerPhotoURL || null,
-          location: `${jobData.country}, ${jobData.city}`
         });
       }
       setLoading(false);
