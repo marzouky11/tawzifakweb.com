@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useRef } from 'react';
@@ -89,10 +90,9 @@ export function AddTestimonialForm() {
               <FormControl>
                  <div 
                     className="flex justify-center items-center gap-2" 
-                    dir="ltr"
                     onMouseLeave={() => setHoveredRating(0)}
                   >
-                    {[1, 2, 3, 4, 5].map((star) => (
+                    {[5, 4, 3, 2, 1].map((star) => (
                       <Star
                         key={star}
                         className={cn(
