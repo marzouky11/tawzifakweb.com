@@ -22,12 +22,7 @@ import {
   Plus,
   LogOut,
   User as UserIcon,
-  Newspaper,
   Settings,
-  FileText,
-  Landmark,
-  Plane,
-  Users,
   Briefcase
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -104,7 +99,7 @@ function AuthSection() {
 
   return (
     <div className="flex items-center gap-2">
-      <Button variant="outline" asChild>
+      <Button variant="outline" asChild className="active:scale-95 transition-transform">
         <Link href="/login">تسجيل الدخول</Link>
       </Button>
       <Button asChild className="hidden sm:inline-flex active:scale-95 transition-transform">
