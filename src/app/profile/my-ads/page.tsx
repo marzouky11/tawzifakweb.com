@@ -70,7 +70,7 @@ function AdGrid({
           <div className="flex-grow">
             <JobCard job={ad} />
           </div>
-          <CardFooter className="p-4 pt-0 flex gap-2">
+          <CardFooter className="p-4 flex gap-2">
             {showEditButton && (
               <Button
                 asChild
@@ -123,7 +123,7 @@ function ImmigrationGrid({
           <div className="flex-grow">
             <ImmigrationCard post={post} />
           </div>
-          <CardFooter className="p-4 pt-0 flex gap-2">
+          <CardFooter className="p-4 flex gap-2">
             <Button
               asChild
               variant="outline"
@@ -175,7 +175,7 @@ function CompetitionGrid({
           <div className="flex-grow">
             <CompetitionCard competition={comp} />
           </div>
-          <CardFooter className="p-4 pt-0 flex gap-2">
+          <CardFooter className="p-4 flex gap-2">
             <Button
               asChild
               variant="outline"
@@ -397,7 +397,7 @@ export default function MyAdsPage() {
             : "هنا يمكنك إدارة جميع إعلاناتك، تعديلها، أو حذفها."
         }
       />
-      <div className="flex-grow">
+      <div className="flex-grow pt-4">
         <div className="container mx-auto max-w-7xl px-4 pb-8">
           <Card>
             <CardContent className="pt-6">{renderContent()}</CardContent>
