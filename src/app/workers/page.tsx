@@ -70,7 +70,7 @@ export default function WorkersPage({
         title="باحثون عن عمل"
         description="استعرض ملفات الباحثين عن عمل واعثر على الكفاءات التي تحتاجها."
       />
-      <div className="container py-6">
+      <div className="container pb-6">
         <div className="mb-6">
            <Suspense fallback={<JobFiltersSkeleton />}>
             <JobFilters />
