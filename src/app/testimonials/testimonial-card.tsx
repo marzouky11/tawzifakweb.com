@@ -30,7 +30,7 @@ export function TestimonialCard({ testimonial }: TestimonialCardProps) {
           />
         ))}
       </div>
-      <blockquote className="text-muted-foreground text-base leading-relaxed mt-2 flex-grow">
+      <blockquote className="text-muted-foreground text-base leading-relaxed mt-2 flex-grow border-r-2 border-primary pr-4">
         {testimonial.content}
       </blockquote>
     </CardContent>
