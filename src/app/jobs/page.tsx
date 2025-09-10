@@ -67,13 +67,13 @@ export default async function JobsPage({
         title="عروض العمل"
         description="تصفح أحدث عروض العمل المتاحة في مختلف المجالات والقطاعات."
       />
-       <div className="sticky top-0 md:top-20 z-30 bg-background/95 backdrop-blur-sm">
-        <div className="container py-3 md:pt-0">
+       <div className="sticky top-0 md:top-[124px] z-30 bg-background/95 backdrop-blur-sm">
+        <div className="container py-3">
            <Suspense fallback={<JobFiltersSkeleton />}>
             <JobFilters />
           </Suspense>
         </div>
-      </div>
+       </div>
       <div className="container pt-6 pb-6">
         <Suspense fallback={<JobListSkeleton />}>
           <JobList jobs={jobs} />

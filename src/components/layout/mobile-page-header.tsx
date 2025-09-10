@@ -14,7 +14,7 @@ export function MobilePageHeader({ title, children }: MobilePageHeaderProps) {
   const router = useRouter();
 
   return (
-    <div className="md:hidden flex items-center gap-4 p-4 border-b bg-card">
+    <div className="md:hidden flex items-center gap-4 p-4 border-b bg-card mb-4">
       <Button variant="ghost" size="icon" className="h-10 w-10 shrink-0" onClick={() => router.back()}>
         <ArrowRight className="h-5 w-5" />
       </Button>
