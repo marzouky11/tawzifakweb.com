@@ -4,6 +4,7 @@
 
 
 
+
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { JobCard } from '@/components/job-card';
@@ -246,60 +247,77 @@ export default function HomePage() {
         </Suspense>
       </div>
       
-      <div className="container space-y-12 mt-6 md:mt-8 mb-12">
-          <HomeCarousel />
+      <div className="container mt-6 md:mt-8 mb-12">
+        <div className="space-y-12">
+            <HomeCarousel />
 
-          <section>
-            <SectionHeader 
-              icon={Briefcase}
-              title="عروض العمل"
-              description="اكتشف آخر فرص الشغل التي أضافها أصحاب العمل في مختلف المجالات."
-              href="/jobs"
-              iconColor="#0D47A1"
-            />
-            <Suspense fallback={<JobSectionSkeleton />}>
-              <JobOffersSection />
-            </Suspense>
-          </section>
+            <section>
+                <SectionHeader 
+                icon={Briefcase}
+                title="عروض العمل"
+                description="اكتشف آخر فرص الشغل التي أضافها أصحاب العمل في مختلف المجالات."
+                href="/jobs"
+                iconColor="#0D47A1"
+                />
+                <Suspense fallback={<JobSectionSkeleton />}>
+                <JobOffersSection />
+                </Suspense>
+            </section>
 
-          <Separator />
-          
-          <Suspense>
-              <ImmigrationSection />
-          </Suspense>
+            <div>
+                <Separator />
+                <div className="pt-12">
+                    <Suspense>
+                        <ImmigrationSection />
+                    </Suspense>
+                </div>
+            </div>
 
-          <Separator />
+            <div>
+                <Separator />
+                <div className="pt-12">
+                    <Suspense>
+                        <CompetitionsSection />
+                    </Suspense>
+                </div>
+            </div>
+            
+            <div>
+                <Separator />
+                <div className="pt-12">
+                    <section>
+                        <SectionHeader
+                        icon={Users}
+                        title="باحثون عن عمل"
+                        description="تصفح ملفات المرشحين والمهنيين المستعدين للانضمام إلى فريقك."
+                        href="/workers"
+                        iconColor="#424242"
+                        />
+                        <Suspense fallback={<JobSectionSkeleton />}>
+                        <JobSeekersSection />
+                        </Suspense>
+                    </section>
+                </div>
+            </div>
 
-          <Suspense>
-              <CompetitionsSection />
-          </Suspense>
-          
-          <Separator />
-
-          <section>
-            <SectionHeader
-              icon={Users}
-              title="باحثون عن عمل"
-              description="تصفح ملفات المرشحين والمهنيين المستعدين للانضمام إلى فريقك."
-              href="/workers"
-              iconColor="#424242"
-            />
-            <Suspense fallback={<JobSectionSkeleton />}>
-              <JobSeekersSection />
-            </Suspense>
-          </section>
-
-          <Separator />
-
-          <ArticlesSection />
-          
-          <Suspense>
-            <ExtraSections />
-          </Suspense>
+            <div>
+                <Separator />
+                <div className="pt-12">
+                    <ArticlesSection />
+                </div>
+            </div>
+            
+            <div className="pt-0">
+                <Suspense>
+                    <ExtraSections />
+                </Suspense>
+            </div>
+        </div>
       </div>
     </>
   );
 }
+
 
 
 
