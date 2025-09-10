@@ -1,4 +1,3 @@
-
 import type { Metadata } from 'next';
 import { JobCard } from '@/components/job-card';
 import { getJobs } from '@/lib/data';
@@ -71,7 +70,7 @@ export default function WorkersPage({
         title="باحثون عن عمل"
         description="استعرض ملفات الباحثين عن عمل واعثر على الكفاءات التي تحتاجها."
       />
-      <div className="container py-6">
+      <div className="container py-6 pt-0 md:py-6">
         <div className="mb-6">
            <Suspense fallback={<JobFiltersSkeleton />}>
             <JobFilters />
