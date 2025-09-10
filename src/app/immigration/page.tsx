@@ -41,7 +41,7 @@ export default async function ImmigrationPage({
         title="فرص الهجرة حول العالم"
         description="استكشف أحدث إعلانات الهجرة للعمل، الدراسة، أو التدريب في مختلف الدول."
       />
-      <div className="container py-6 pt-0 md:py-6 space-y-6">
+      <div className="container space-y-6 py-6">
         <Suspense fallback={<ImmigrationFiltersSkeleton />}>
           <ImmigrationFilters />
         </Suspense>
