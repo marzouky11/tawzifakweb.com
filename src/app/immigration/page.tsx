@@ -43,23 +43,14 @@ export default async function ImmigrationPage({
         description="استكشف أحدث إعلانات الهجرة للعمل، الدراسة، أو التدريب في مختلف الدول."
       />
       <div className="sticky top-0 z-30 bg-background/95 backdrop-blur-sm md:top-20">
-        <div className="md:hidden py-3">
-          <div className="container">
+        <div className="container py-3">
            <Suspense fallback={<ImmigrationFiltersSkeleton />}>
             <ImmigrationFilters />
           </Suspense>
-          </div>
-        </div>
-         <div className="hidden md:block py-2">
-           <div className="container">
-            <Suspense fallback={<ImmigrationFiltersSkeleton />}>
-              <ImmigrationFilters />
-            </Suspense>
-           </div>
         </div>
       </div>
 
-      <div className="container pt-4 md:pt-8 pb-6">
+      <div className="container pt-8 pb-6">
         {immigrationPosts.length > 0 ? (
            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {immigrationPosts.map((post) => <ImmigrationCard key={post.id} post={post} />)}
