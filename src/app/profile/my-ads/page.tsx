@@ -311,73 +311,71 @@ export default function MyAdsPage() {
             : "هنا يمكنك إدارة جميع إعلاناتك، تعديلها، أو حذفها."
         }
       />
-      <div className="flex-grow">
-        <div className="container mx-auto max-w-7xl px-4 pb-8">
-          {authLoading || adsLoading ? (
+      <div className="flex-grow container mx-auto max-w-7xl px-4 pb-8">
+        {authLoading || adsLoading ? (
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex justify-center p-8">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+            </CardContent>
+          </Card>
+        ) : userData?.isAdmin ? (
+          <Tabs defaultValue="jobs" className="w-full space-y-4">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-2 h-auto">
+              <TabsTrigger value="migration">
+                هجرة ({immigrationPosts.length})
+              </TabsTrigger>
+              <TabsTrigger value="jobs">وظائف ({jobOffers.length})</TabsTrigger>
+              <TabsTrigger value="seekers">
+                باحثون ({jobRequests.length})
+              </TabsTrigger>
+              <TabsTrigger value="competitions">
+                مباريات ({competitions.length})
+              </TabsTrigger>
+            </TabsList>
             <Card>
               <CardContent className="pt-6">
-                <div className="flex justify-center p-8">
-                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                </div>
+                <TabsContent value="jobs" className="mt-0">
+                  <AdGrid
+                    ads={jobOffers}
+                    onAdDelete={(id) => handleDeleteTrigger(id, "ad")}
+                    showEditButton={true}
+                  />
+                </TabsContent>
+                <TabsContent value="migration" className="mt-0">
+                  <ImmigrationGrid
+                    posts={immigrationPosts}
+                    onAdDelete={(id) => handleDeleteTrigger(id, "immigration")}
+                  />
+                </TabsContent>
+                <TabsContent value="competitions" className="mt-0">
+                  <CompetitionGrid
+                    competitions={competitions}
+                    onAdDelete={(id) => handleDeleteTrigger(id, "competition")}
+                  />
+                </TabsContent>
+                <TabsContent value="seekers" className="mt-0">
+                  <AdGrid
+                    ads={jobRequests}
+                    onAdDelete={(id) => handleDeleteTrigger(id, "ad")}
+                    showEditButton={false}
+                  />
+                </TabsContent>
               </CardContent>
             </Card>
-          ) : userData?.isAdmin ? (
-            <Tabs defaultValue="jobs" className="w-full">
-              <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-2 h-auto mb-6">
-                <TabsTrigger value="jobs">وظائف ({jobOffers.length})</TabsTrigger>
-                <TabsTrigger value="migration">
-                  هجرة ({immigrationPosts.length})
-                </TabsTrigger>
-                <TabsTrigger value="competitions">
-                  مباريات ({competitions.length})
-                </TabsTrigger>
-                <TabsTrigger value="seekers">
-                  باحثون ({jobRequests.length})
-                </TabsTrigger>
-              </TabsList>
-              <Card>
-                <CardContent className="pt-6">
-                  <TabsContent value="jobs" className="mt-0">
-                    <AdGrid
-                      ads={jobOffers}
-                      onAdDelete={(id) => handleDeleteTrigger(id, "ad")}
-                      showEditButton={true}
-                    />
-                  </TabsContent>
-                  <TabsContent value="migration" className="mt-0">
-                    <ImmigrationGrid
-                      posts={immigrationPosts}
-                      onAdDelete={(id) => handleDeleteTrigger(id, "immigration")}
-                    />
-                  </TabsContent>
-                  <TabsContent value="competitions" className="mt-0">
-                    <CompetitionGrid
-                      competitions={competitions}
-                      onAdDelete={(id) => handleDeleteTrigger(id, "competition")}
-                    />
-                  </TabsContent>
-                  <TabsContent value="seekers" className="mt-0">
-                    <AdGrid
-                      ads={jobRequests}
-                      onAdDelete={(id) => handleDeleteTrigger(id, "ad")}
-                      showEditButton={false}
-                    />
-                  </TabsContent>
-                </CardContent>
-              </Card>
-            </Tabs>
-          ) : (
-            <Card>
-              <CardContent className="pt-6">
-                <AdGrid
-                  ads={allAds}
-                  onAdDelete={(id) => handleDeleteTrigger(id, "ad")}
-                  showEditButton={true}
-                />
-              </CardContent>
-            </Card>
-          )}
-        </div>
+          </Tabs>
+        ) : (
+          <Card>
+            <CardContent className="pt-6">
+              <AdGrid
+                ads={allAds}
+                onAdDelete={(id) => handleDeleteTrigger(id, "ad")}
+                showEditButton={true}
+              />
+            </CardContent>
+          </Card>
+        )}
       </div>
       <AlertDialog
         open={!!adToDelete}
