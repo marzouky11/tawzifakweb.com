@@ -94,8 +94,8 @@ export default function AdminTestimonialsPage() {
                 <div className="flex-grow">
                   <TestimonialCard testimonial={testimonial} />
                 </div>
-                <CardFooter className="p-4 pt-0">
-                  <Button variant="destructive" className="w-full" onClick={() => setTestimonialToDelete(testimonial)}>
+                <CardFooter className="p-4 border-t">
+                  <Button variant="destructive" className="w-full active:scale-95 transition-transform" onClick={() => setTestimonialToDelete(testimonial)}>
                       <Trash2 className="ml-2 h-4 w-4" />
                       حذف
                   </Button>
