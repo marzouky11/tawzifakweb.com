@@ -68,7 +68,7 @@ export default async function JobsPage({
         description="تصفح أحدث عروض العمل المتاحة في مختلف المجالات والقطاعات."
       />
       <div className="sticky top-0 z-30 bg-background/95 backdrop-blur-sm md:top-20">
-        <div className="md:hidden pt-6 pb-4">
+        <div className="md:hidden py-3">
           <div className="container">
            <Suspense fallback={<JobFiltersSkeleton />}>
             <JobFilters />
