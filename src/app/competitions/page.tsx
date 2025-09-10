@@ -43,14 +43,17 @@ export default async function CompetitionsPage({
         icon={Landmark}
         title="المباريات العمومية"
         description="تصفح أحدث إعلانات التوظيف والمباريات في القطاع العام."
+        className="mb-6"
       />
-      <div className="container pb-6">
-        <div className="mb-6">
+      <div className="sticky top-16 md:top-20 z-30 bg-background/95 backdrop-blur-sm -mb-2">
+        <div className="container py-4">
           <Suspense fallback={<CompetitionFiltersSkeleton />}>
             <CompetitionFilters />
           </Suspense>
         </div>
-        
+      </div>
+      
+      <div className="container pt-8 pb-6">
         {competitions.length > 0 ? (
            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {competitions.map((comp) => <CompetitionCard key={comp.id} competition={comp} />)}
@@ -58,7 +61,6 @@ export default async function CompetitionsPage({
         ) : (
           <p className="col-span-full text-center text-muted-foreground py-10">لا توجد مباريات تطابق بحثك.</p>
         )}
-
       </div>
     </>
   );
