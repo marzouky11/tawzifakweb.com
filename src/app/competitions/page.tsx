@@ -46,14 +46,14 @@ export default async function CompetitionsPage({
         description="تصفح أحدث إعلانات التوظيف والمباريات في القطاع العام."
       />
       <div className="sticky top-16 md:top-20 z-30 bg-background/95 backdrop-blur-sm">
-        <div className="container py-4">
+        <div className="container py-2">
           <Suspense fallback={<CompetitionFiltersSkeleton />}>
             <CompetitionFilters />
           </Suspense>
         </div>
       </div>
       
-      <div className="container pt-8 pb-6">
+      <div className="container pt-4 pb-6">
         {competitions.length > 0 ? (
            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {competitions.map((comp) => <CompetitionCard key={comp.id} competition={comp} />)}
