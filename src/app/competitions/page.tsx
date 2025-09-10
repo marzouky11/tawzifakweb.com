@@ -44,10 +44,12 @@ export default async function CompetitionsPage({
         title="المباريات العمومية"
         description="تصفح أحدث إعلانات التوظيف والمباريات في القطاع العام."
       />
-      <div className="container space-y-6 py-6">
-        <Suspense fallback={<CompetitionFiltersSkeleton />}>
-          <CompetitionFilters />
-        </Suspense>
+      <div className="container py-6">
+        <div className="mb-6">
+          <Suspense fallback={<CompetitionFiltersSkeleton />}>
+            <CompetitionFilters />
+          </Suspense>
+        </div>
         
         {competitions.length > 0 ? (
            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">

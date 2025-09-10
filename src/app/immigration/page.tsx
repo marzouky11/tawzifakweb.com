@@ -41,10 +41,12 @@ export default async function ImmigrationPage({
         title="فرص الهجرة حول العالم"
         description="استكشف أحدث إعلانات الهجرة للعمل، الدراسة، أو التدريب في مختلف الدول."
       />
-      <div className="container space-y-6 py-6">
-        <Suspense fallback={<ImmigrationFiltersSkeleton />}>
-          <ImmigrationFilters />
-        </Suspense>
+      <div className="container py-6">
+        <div className="mb-6">
+          <Suspense fallback={<ImmigrationFiltersSkeleton />}>
+            <ImmigrationFilters />
+          </Suspense>
+        </div>
 
         {immigrationPosts.length > 0 ? (
            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
