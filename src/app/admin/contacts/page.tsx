@@ -24,6 +24,7 @@ import type { ContactMessage } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
+import { Separator } from '@/components/ui/separator';
 
 export default function AdminContactsPage() {
   const { userData, loading: authLoading } = useAuth();
@@ -93,35 +94,36 @@ export default function AdminContactsPage() {
         title="رسائل التواصل"
         description="عرض وحذف الرسائل الواردة من صفحة اتصل بنا."
       />
-      <div className="container mx-auto max-w-4xl px-4 pb-8 space-y-4">
+      <div className="container mx-auto max-w-4xl px-4 pb-8 space-y-8">
         {messages.length > 0 ? (
             messages.map((message) => (
-                <Card key={message.id}>
+              <div key={message.id} className="flex flex-col gap-2">
+                <Card>
                     <CardHeader>
-                        <div className="flex justify-between items-start">
+                        <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
                             <div>
                                 <CardTitle>{message.name}</CardTitle>
-                                <CardDescription className="text-primary hover:underline">
+                                <CardDescription className="text-primary hover:underline pt-1">
                                     <a href={`mailto:${message.email}`}>{message.email}</a>
                                 </CardDescription>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <Badge variant="secondary">{formatDate(message.createdAt)}</Badge>
-                                <Button
-                                    variant="ghost" 
-                                    size="icon" 
-                                    className="text-destructive hover:bg-destructive/10"
-                                    onClick={() => setMessageToDelete(message)}
-                                >
-                                    <Trash2 className="h-4 w-4" />
-                                </Button>
-                            </div>
+                            <Badge variant="secondary" className="shrink-0">{formatDate(message.createdAt)}</Badge>
                         </div>
                     </CardHeader>
-                    <CardContent>
+                    <Separator />
+                    <CardContent className="pt-6">
                         <p className="whitespace-pre-wrap">{message.message}</p>
                     </CardContent>
                 </Card>
+                 <Button
+                    variant="destructive"
+                    className="w-full active:scale-95 transition-transform"
+                    onClick={() => setMessageToDelete(message)}
+                >
+                    <Trash2 className="ml-2 h-4 w-4" />
+                    حذف الرسالة
+                </Button>
+              </div>
             ))
         ) : (
              <div className="text-center text-muted-foreground py-10">

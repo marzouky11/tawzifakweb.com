@@ -25,7 +25,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { format } from 'date-fns';
-
+import { Separator } from '@/components/ui/separator';
 
 export default function AdminReportsPage() {
   const { userData, loading: authLoading } = useAuth();
@@ -95,38 +95,39 @@ export default function AdminReportsPage() {
         title="إدارة البلاغات"
         description="مراجعة وحذف بلاغات المستخدمين حول الإعلانات المخالفة."
       />
-      <div className="container mx-auto max-w-4xl px-4 pb-8 space-y-4">
+      <div className="container mx-auto max-w-4xl px-4 pb-8 space-y-8">
          {reports.length > 0 ? (
             reports.map((report) => (
-                <Card key={report.id}>
+              <div key={report.id} className="flex flex-col gap-2">
+                <Card>
                     <CardHeader>
-                        <div className="flex justify-between items-start">
+                        <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
                             <div>
                                 <CardTitle>بلاغ حول إعلان</CardTitle>
-                                <CardDescription>
+                                <CardDescription className="pt-1">
                                     <Link href={report.adUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                                       {`ID: ${report.adId}`}
+                                       {`عرض الإعلان (ID: ${report.adId})`}
                                     </Link>
                                 </CardDescription>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <Badge variant="secondary">{formatDate(report.createdAt)}</Badge>
-                                <Button
-                                    variant="ghost" 
-                                    size="icon" 
-                                    className="text-destructive hover:bg-destructive/10"
-                                    onClick={() => setReportToDelete(report)}
-                                >
-                                    <Trash2 className="h-4 w-4" />
-                                </Button>
-                            </div>
+                            <Badge variant="secondary" className="shrink-0">{formatDate(report.createdAt)}</Badge>
                         </div>
                     </CardHeader>
-                    <CardContent className="space-y-2">
+                    <Separator />
+                    <CardContent className="pt-6 space-y-2">
                         <p><strong>السبب:</strong> {report.reason}</p>
                         {report.details && <p className="whitespace-pre-wrap"><strong>التفاصيل:</strong> {report.details}</p>}
                     </CardContent>
                 </Card>
+                <Button
+                    variant="destructive"
+                    className="w-full active:scale-95 transition-transform"
+                    onClick={() => setReportToDelete(report)}
+                >
+                    <Trash2 className="ml-2 h-4 w-4" />
+                    حذف البلاغ
+                </Button>
+              </div>
             ))
          ) : (
             <div className="text-center text-muted-foreground py-10">
