@@ -71,16 +71,14 @@ export default function WorkersPage({
         title="باحثون عن عمل"
         description="استعرض ملفات الباحثين عن عمل واعثر على الكفاءات التي تحتاجها."
       />
-      <div className="mt-4 md:mt-6">
-        <div className="sticky top-0 z-30 bg-background/95 backdrop-blur-sm md:static">
-          <div className="container py-2 md:py-0">
+      <div className="sticky top-0 md:top-20 z-30 bg-background/95 backdrop-blur-sm md:mt-6">
+        <div className="container py-2 md:py-4">
            <Suspense fallback={<JobFiltersSkeleton />}>
             <JobFilters />
           </Suspense>
-          </div>
         </div>
        </div>
-      <div className="container pt-4 pb-6">
+      <div className="container pt-4 md:pt-8 pb-6">
         <Suspense fallback={<WorkerListSkeleton />}>
           <WorkerList searchParams={searchParams} />
         </Suspense>
