@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import { JobCard } from '@/components/job-card';
 import { getJobs } from '@/lib/data';
@@ -65,9 +66,8 @@ export default async function JobsPage({
         icon={Briefcase}
         title="عروض العمل"
         description="تصفح أحدث عروض العمل المتاحة في مختلف المجالات والقطاعات."
-        className="mb-6"
       />
-      <div className="sticky top-16 md:top-20 z-30 bg-background/95 backdrop-blur-sm -mb-2">
+      <div className="sticky top-16 md:top-20 z-30 bg-background/95 backdrop-blur-sm">
         <div className="container py-4">
           <Suspense fallback={<JobFiltersSkeleton />}>
             <JobFilters />

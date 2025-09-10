@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import { getCompetitions } from '@/lib/data';
 import { Landmark } from 'lucide-react';
@@ -43,9 +44,8 @@ export default async function CompetitionsPage({
         icon={Landmark}
         title="المباريات العمومية"
         description="تصفح أحدث إعلانات التوظيف والمباريات في القطاع العام."
-        className="mb-6"
       />
-      <div className="sticky top-16 md:top-20 z-30 bg-background/95 backdrop-blur-sm -mb-2">
+      <div className="sticky top-16 md:top-20 z-30 bg-background/95 backdrop-blur-sm">
         <div className="container py-4">
           <Suspense fallback={<CompetitionFiltersSkeleton />}>
             <CompetitionFilters />

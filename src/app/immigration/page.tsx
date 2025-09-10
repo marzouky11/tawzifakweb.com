@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import { getImmigrationPosts } from '@/lib/data';
 import { Plane } from 'lucide-react';
@@ -40,9 +41,8 @@ export default async function ImmigrationPage({
         icon={Plane}
         title="فرص الهجرة حول العالم"
         description="استكشف أحدث إعلانات الهجرة للعمل، الدراسة، أو التدريب في مختلف الدول."
-        className="mb-6"
       />
-      <div className="sticky top-16 md:top-20 z-30 bg-background/95 backdrop-blur-sm -mb-2">
+      <div className="sticky top-16 md:top-20 z-30 bg-background/95 backdrop-blur-sm">
         <div className="container py-4">
           <Suspense fallback={<ImmigrationFiltersSkeleton />}>
             <ImmigrationFilters />
