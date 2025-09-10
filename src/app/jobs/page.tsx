@@ -74,7 +74,7 @@ export default async function JobsPage({
           </Suspense>
         </div>
       </div>
-      <div className="container pt-8 pb-6">
+      <div className="container pt-4 pb-6">
         <Suspense fallback={<JobListSkeleton />}>
           <JobList jobs={jobs} />
         </Suspense>

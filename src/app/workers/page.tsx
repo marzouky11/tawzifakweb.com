@@ -78,7 +78,7 @@ export default function WorkersPage({
           </Suspense>
         </div>
        </div>
-      <div className="container pt-8 pb-6">
+      <div className="container pt-4 pb-6">
         <Suspense fallback={<WorkerListSkeleton />}>
           <WorkerList searchParams={searchParams} />
         </Suspense>
