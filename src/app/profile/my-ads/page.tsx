@@ -322,8 +322,8 @@ export default function MyAdsPage() {
               </CardContent>
             </Card>
           ) : userData?.isAdmin ? (
-            <Tabs defaultValue="jobs" className="w-full space-y-6">
-              <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-2 h-auto">
+            <Tabs defaultValue="jobs" className="w-full">
+              <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-2 h-auto mb-6">
                 <TabsTrigger value="jobs">وظائف ({jobOffers.length})</TabsTrigger>
                 <TabsTrigger value="migration">
                   هجرة ({immigrationPosts.length})
