@@ -323,14 +323,14 @@ export default function MyAdsPage() {
         ) : userData?.isAdmin ? (
           <Tabs defaultValue="jobs" className="w-full space-y-4">
             <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-2 h-auto">
-              <TabsTrigger value="migration">
+              <TabsTrigger value="migration" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:font-bold data-[state=active]:shadow-sm">
                 هجرة ({immigrationPosts.length})
               </TabsTrigger>
-              <TabsTrigger value="jobs">وظائف ({jobOffers.length})</TabsTrigger>
-              <TabsTrigger value="seekers">
+              <TabsTrigger value="jobs" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:font-bold data-[state=active]:shadow-sm">وظائف ({jobOffers.length})</TabsTrigger>
+              <TabsTrigger value="seekers" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:font-bold data-[state=active]:shadow-sm">
                 باحثون ({jobRequests.length})
               </TabsTrigger>
-              <TabsTrigger value="competitions">
+              <TabsTrigger value="competitions" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:font-bold data-[state=active]:shadow-sm">
                 مباريات ({competitions.length})
               </TabsTrigger>
             </TabsList>
