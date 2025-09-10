@@ -18,7 +18,7 @@ export function MobilePageHeader({ title, children, sticky = true }: MobilePageH
   return (
     <div
       className={cn(
-        'md:hidden flex items-center gap-4 p-4 border-b bg-card',
+        'md:hidden flex items-center gap-4 p-4 border-b bg-card mb-4',
         sticky && 'sticky top-0 z-40'
       )}
     >

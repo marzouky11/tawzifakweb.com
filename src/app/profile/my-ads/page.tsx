@@ -397,7 +397,7 @@ export default function MyAdsPage() {
             : "هنا يمكنك إدارة جميع إعلاناتك، تعديلها، أو حذفها."
         }
       />
-      <div className="flex-grow pt-4">
+      <div className="flex-grow">
         <div className="container mx-auto max-w-7xl px-4 pb-8">
           <Card>
             <CardContent className="pt-6">{renderContent()}</CardContent>
