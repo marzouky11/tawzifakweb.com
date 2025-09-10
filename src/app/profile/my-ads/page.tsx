@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useEffect, useState, useMemo } from "react";
@@ -37,7 +38,7 @@ import { CompetitionCard } from "@/components/competition-card";
 import { ImmigrationCard } from "@/components/immigration-card";
 import { useToast } from "@/hooks/use-toast";
 import { MobilePageHeader } from "@/components/layout/mobile-page-header";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { DesktopPageHeader } from "@/components/layout/desktop-page-header";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
@@ -65,9 +66,11 @@ function AdGrid({
       className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
     >
       {ads.map((ad) => (
-        <div key={ad.id} className="flex flex-col gap-2">
-          <JobCard job={ad} />
-          <div className="flex gap-2">
+        <Card key={ad.id} className="flex flex-col">
+          <div className="flex-grow">
+            <JobCard job={ad} />
+          </div>
+          <CardFooter className="p-2 pt-0 flex gap-2">
             {showEditButton && (
               <Button
                 asChild
@@ -88,8 +91,8 @@ function AdGrid({
               <Trash2 className="h-4 w-4" />
               <span>حذف</span>
             </Button>
-          </div>
-        </div>
+          </CardFooter>
+        </Card>
       ))}
     </div>
   );
@@ -116,9 +119,11 @@ function ImmigrationGrid({
       className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
     >
       {posts.map((post) => (
-        <div key={post.id} className="flex flex-col gap-2">
-          <ImmigrationCard post={post} />
-          <div className="flex gap-2">
+         <Card key={post.id} className="flex flex-col">
+          <div className="flex-grow">
+            <ImmigrationCard post={post} />
+          </div>
+          <CardFooter className="p-2 pt-0 flex gap-2">
             <Button
               asChild
               variant="outline"
@@ -137,8 +142,8 @@ function ImmigrationGrid({
               <Trash2 className="h-4 w-4" />
               <span>حذف</span>
             </Button>
-          </div>
-        </div>
+          </CardFooter>
+        </Card>
       ))}
     </div>
   );
@@ -166,9 +171,11 @@ function CompetitionGrid({
       className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
     >
       {competitions.map((comp) => (
-        <div key={comp.id} className="flex flex-col gap-2">
-          <CompetitionCard competition={comp} />
-          <div className="flex gap-2">
+         <Card key={comp.id} className="flex flex-col">
+          <div className="flex-grow">
+            <CompetitionCard competition={comp} />
+          </div>
+          <CardFooter className="p-2 pt-0 flex gap-2">
             <Button
               asChild
               variant="outline"
@@ -187,8 +194,8 @@ function CompetitionGrid({
               <Trash2 className="h-4 w-4" />
               <span>حذف</span>
             </Button>
-          </div>
-        </div>
+          </CardFooter>
+        </Card>
       ))}
     </div>
   );

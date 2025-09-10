@@ -1,6 +1,6 @@
 
 import type { Testimonial } from '@/lib/types';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { UserAvatar } from '@/components/user-avatar';
 import { Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -11,7 +11,7 @@ interface TestimonialCardProps {
 
 export function TestimonialCard({ testimonial }: TestimonialCardProps) {
   return (
-    <Card className="relative p-6 h-full flex flex-col bg-gradient-to-br from-card to-muted/30 shadow-lg hover:shadow-2xl transition-all duration-300 border-border/50 hover:border-primary/50">
+    <CardContent className="relative p-6 h-full flex flex-col bg-gradient-to-br from-card to-muted/30 shadow-lg hover:shadow-2xl transition-all duration-300 border-border/50 hover:border-primary/50 rounded-lg">
       <div className="flex items-center gap-4 mb-4">
         <UserAvatar name={testimonial.userName} color={testimonial.userAvatarColor} className="h-12 w-12 text-xl shadow-inner" />
         <div>
@@ -33,6 +33,6 @@ export function TestimonialCard({ testimonial }: TestimonialCardProps) {
       <blockquote className="text-muted-foreground text-base leading-relaxed mt-2 flex-grow border-r-2 border-primary pr-4">
         {testimonial.content}
       </blockquote>
-    </Card>
+    </CardContent>
   );
 }

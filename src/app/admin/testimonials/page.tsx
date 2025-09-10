@@ -6,7 +6,7 @@ import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Loader2, MessageSquare, Trash2 } from 'lucide-react';
 import {
   AlertDialog,
@@ -90,13 +90,17 @@ export default function AdminTestimonialsPage() {
       <div className="container mx-auto max-w-7xl px-4 pb-8">
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {testimonials.map((testimonial) => (
-            <div key={testimonial.id} className="flex flex-col gap-2">
-                <TestimonialCard testimonial={testimonial} />
-                <Button variant="destructive" className="flex-1" onClick={() => setTestimonialToDelete(testimonial)}>
-                    <Trash2 className="ml-2 h-4 w-4" />
-                    حذف
-                </Button>
-            </div>
+            <Card key={testimonial.id} className="flex flex-col">
+                <div className="flex-grow">
+                  <TestimonialCard testimonial={testimonial} />
+                </div>
+                <CardFooter className="p-4 pt-0">
+                  <Button variant="destructive" className="w-full" onClick={() => setTestimonialToDelete(testimonial)}>
+                      <Trash2 className="ml-2 h-4 w-4" />
+                      حذف
+                  </Button>
+                </CardFooter>
+            </Card>
           ))}
         </div>
       </div>
