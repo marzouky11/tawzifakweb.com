@@ -70,7 +70,7 @@ function AdGrid({
           <div className="flex-grow">
             <JobCard job={ad} />
           </div>
-          <CardFooter className="p-2 pt-0 flex gap-2">
+          <CardFooter className="p-4 pt-0 flex gap-2">
             {showEditButton && (
               <Button
                 asChild
@@ -123,7 +123,7 @@ function ImmigrationGrid({
           <div className="flex-grow">
             <ImmigrationCard post={post} />
           </div>
-          <CardFooter className="p-2 pt-0 flex gap-2">
+          <CardFooter className="p-4 pt-0 flex gap-2">
             <Button
               asChild
               variant="outline"
@@ -175,7 +175,7 @@ function CompetitionGrid({
           <div className="flex-grow">
             <CompetitionCard competition={comp} />
           </div>
-          <CardFooter className="p-2 pt-0 flex gap-2">
+          <CardFooter className="p-4 pt-0 flex gap-2">
             <Button
               asChild
               variant="outline"
