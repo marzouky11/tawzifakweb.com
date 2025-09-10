@@ -45,7 +45,7 @@ export default async function CompetitionsPage({
         title="المباريات العمومية"
         description="تصفح أحدث إعلانات التوظيف والمباريات في القطاع العام."
       />
-      <div className="sticky top-0 z-30 bg-background/95 backdrop-blur-sm md:top-20 md:mt-6">
+      <div className="sticky top-0 md:top-20 z-30 bg-background/95 backdrop-blur-sm">
         <div className="container py-2">
           <Suspense fallback={<CompetitionFiltersSkeleton />}>
             <CompetitionFilters />
