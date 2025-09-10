@@ -63,7 +63,7 @@ export default function WorkersPage({
 }) {
   return (
     <>
-      <MobilePageHeader title="باحثون عن عمل">
+      <MobilePageHeader title="باحثون عن عمل" sticky={false}>
         <Users className="h-5 w-5 text-primary" />
       </MobilePageHeader>
       <DesktopPageHeader
@@ -71,7 +71,7 @@ export default function WorkersPage({
         title="باحثون عن عمل"
         description="استعرض ملفات الباحثين عن عمل واعثر على الكفاءات التي تحتاجها."
       />
-       <div className="sticky top-0 md:top-[124px] z-30 bg-background/95 backdrop-blur-sm">
+       <div className="sticky top-0 z-30 bg-background/95 backdrop-blur-sm md:top-20">
         <div className="container py-3">
            <Suspense fallback={<JobFiltersSkeleton />}>
             <JobFilters />

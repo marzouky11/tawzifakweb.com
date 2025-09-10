@@ -34,7 +34,7 @@ export default async function ImmigrationPage({
 
   return (
     <>
-      <MobilePageHeader title="فرص الهجرة">
+      <MobilePageHeader title="فرص الهجرة" sticky={false}>
         <Plane className="h-5 w-5 text-primary" />
       </MobilePageHeader>
       <DesktopPageHeader
@@ -42,7 +42,7 @@ export default async function ImmigrationPage({
         title="فرص الهجرة حول العالم"
         description="استكشف أحدث إعلانات الهجرة للعمل، الدراسة، أو التدريب في مختلف الدول."
       />
-       <div className="sticky top-0 md:top-[124px] z-30 bg-background/95 backdrop-blur-sm">
+       <div className="sticky top-0 z-30 bg-background/95 backdrop-blur-sm md:top-20">
         <div className="container py-3">
            <Suspense fallback={<ImmigrationFiltersSkeleton />}>
             <ImmigrationFilters />

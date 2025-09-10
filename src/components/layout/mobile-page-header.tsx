@@ -3,18 +3,25 @@
 
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react'; // Using ArrowRight for RTL 'back'
+import { ArrowRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface MobilePageHeaderProps {
   title: string;
-  children?: React.ReactNode; // For the icon
+  children?: React.ReactNode;
+  sticky?: boolean;
 }
 
-export function MobilePageHeader({ title, children }: MobilePageHeaderProps) {
+export function MobilePageHeader({ title, children, sticky = true }: MobilePageHeaderProps) {
   const router = useRouter();
 
   return (
-    <div className="md:hidden flex items-center gap-4 p-4 border-b bg-card mb-4">
+    <div
+      className={cn(
+        'md:hidden flex items-center gap-4 p-4 border-b bg-card',
+        sticky && 'sticky top-0 z-40'
+      )}
+    >
       <Button variant="ghost" size="icon" className="h-10 w-10 shrink-0" onClick={() => router.back()}>
         <ArrowRight className="h-5 w-5" />
       </Button>

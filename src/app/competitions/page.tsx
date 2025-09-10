@@ -37,7 +37,7 @@ export default async function CompetitionsPage({
 
   return (
     <>
-      <MobilePageHeader title="المباريات العمومية">
+      <MobilePageHeader title="المباريات العمومية" sticky={false}>
         <Landmark className="h-5 w-5 text-primary" />
       </MobilePageHeader>
       <DesktopPageHeader
@@ -45,7 +45,7 @@ export default async function CompetitionsPage({
         title="المباريات العمومية"
         description="تصفح أحدث إعلانات التوظيف والمباريات في القطاع العام."
       />
-       <div className="sticky top-0 md:top-[124px] z-30 bg-background/95 backdrop-blur-sm">
+       <div className="sticky top-0 z-30 bg-background/95 backdrop-blur-sm md:top-20">
         <div className="container py-3">
           <Suspense fallback={<CompetitionFiltersSkeleton />}>
             <CompetitionFilters />
