@@ -110,7 +110,7 @@ const linkify = (text: string) => {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   return text.split(urlRegex).map((part, idx) => {
     if (part.match(urlRegex)) {
-      return <a key={idx} href={part} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{part}</a>;
+      return <a key={idx} href={part} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline break-all">{part}</a>;
     } else {
       return part;
     }
@@ -128,7 +128,7 @@ const renderContent = (content: string) => {
       elements.push(
         <ul key={key} className="list-disc list-outside ms-6 mb-4 space-y-2">
           {listItems.map((item, idx) => (
-            <li key={idx}>{linkify(item)}</li>
+            <li key={idx} className="break-words">{linkify(item)}</li>
           ))}
         </ul>
       );
@@ -171,7 +171,7 @@ const renderContent = (content: string) => {
 
     flushList(`ul-${i}`);
     elements.push(
-      <p key={`p-${i}`} className="mb-4 text-base md:text-lg leading-relaxed">{linkify(trimmed)}</p>
+      <p key={`p-${i}`} className="mb-4 text-base md:text-lg leading-relaxed break-words">{linkify(trimmed)}</p>
     );
   });
 
