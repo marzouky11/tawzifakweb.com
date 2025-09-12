@@ -16,7 +16,7 @@ export default function AddTestimonialPage() {
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push('/login?redirect=/add-testimonial');
+      router.replace('/login?redirect=/add-testimonial');
     }
   }, [user, loading, router]);
 
