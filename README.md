@@ -1,3 +1,4 @@
+
 git pull origin main --rebase# Firebase Studio
 
 This is a NextJS starter in starter Studio.

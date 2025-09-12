@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -35,6 +34,10 @@ export default function SavedAdsPage() {
 
   const [savedItems, setSavedItems] = useState<(Job | Competition | ImmigrationPost)[]>([]);
   const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     if (!authLoading) {
