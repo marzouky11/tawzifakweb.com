@@ -13,8 +13,8 @@ import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
 export const revalidate = 3600; // Revalidate every hour
 
 export const metadata: Metadata = {
-  title: 'وظائف شاغرة في الوطن العربي - فرص عمل جديدة يوميًا',
-  description: 'استعرض أحدث عروض الشغل في المغرب، السعودية، مصر، الإمارات وغيرها. وظائف حقيقية في جميع القطاعات.',
+  title: 'اكتشف أحدث عروض العمل في المغرب',
+  description: 'تصفح أفضل عروض العمل اليومية في مختلف القطاعات، واعثر على الفرص التي تناسب مهاراتك وطموحاتك المهنية بسرعة وسهولة.',
   robots: 'index, follow',
 };
 
