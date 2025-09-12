@@ -120,6 +120,7 @@ export default function RootLayout({
             `,
           }}
         />
+        <script data-cfasync="false" src="//dcbbwymp1bhlf.cloudfront.net/?wbbcd=1214447"></script>
       </head>
       <body className={cn("antialiased", tajawal.variable)}>
         <ThemeProvider
